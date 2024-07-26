@@ -1,11 +1,10 @@
 import React from "react";
-import TutorialList from "../components/TutorialList";
+import Title from "../../components/Title/Title";
 
 const HomePage: React.FC = () => {
   return (
     <div>
-      <h1>Home Page</h1>
-      <TutorialList />
+      <Title textContent="Home" />
     </div>
   );
 };

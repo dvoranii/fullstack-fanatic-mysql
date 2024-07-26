@@ -27,4 +27,26 @@ router.post("/", (req, res) => {
   );
 });
 
+router.put("/:id", (req, res) => {
+  const { id } = req.params;
+  const { content } = req.body;
+
+  db.query(
+    "UPDATE comments SET content = ? WHERE id = ?",
+    [content, id],
+    (err, results) => {
+      if (err) throw err;
+      res.json({ id, content });
+    }
+  );
+});
+
+router.delete("/:id", (req, res) => {
+  const { id } = req.params;
+  db.query("DELETE FROM comments WHERE id = ?", [id], (err, results) => {
+    if (err) throw err;
+    res.json({ id });
+  });
+});
+
 export default router;

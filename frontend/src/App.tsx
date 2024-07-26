@@ -1,15 +1,14 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import TutorialPage from "./pages/TutorialPage";
+import { BrowserRouter as Router } from "react-router-dom";
+import Navigation from "./components/Navigation";
+import NavBar from "./components/NavBar/NavBar";
+import "./App.css";
 
 const App: React.FC = () => {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/tutorial/:id" element={<TutorialPage />} />
-      </Routes>
+      <NavBar />
+      <Navigation />
     </Router>
   );
 };
