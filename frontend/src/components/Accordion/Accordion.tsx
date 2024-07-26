@@ -17,10 +17,14 @@ interface AccordionProps {
 }
 
 const Accordion: React.FC<AccordionProps> = ({ steps }) => {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [activeIndices, setActiveIndices] = useState<number[]>([]);
 
   const toggleAccordion = (index: number) => {
-    setActiveIndex(activeIndex === index ? null : index);
+    if (activeIndices.includes(index)) {
+      setActiveIndices(activeIndices.filter((i) => i !== index));
+    } else {
+      setActiveIndices([...activeIndices, index]);
+    }
   };
 
   return (
@@ -30,7 +34,7 @@ const Accordion: React.FC<AccordionProps> = ({ steps }) => {
           <AccordionTitle onClick={() => toggleAccordion(index)}>
             {step.title}
           </AccordionTitle>
-          {activeIndex === index && (
+          {activeIndices.includes(index) && (
             <AccordionContent>
               <div>{step.content}</div>
               {/* Render custom components based on the step.component value */}

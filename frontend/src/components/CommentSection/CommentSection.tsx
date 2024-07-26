@@ -171,7 +171,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({ tutorialId }) => {
               )}
             </Comment>
             <LikesWrapper>
-              {" "}
               <img
                 src={likeIcon}
                 alt="like icon"
