@@ -1,7 +1,10 @@
 import express from "express";
 import cors from "cors";
-import tutorialsRouter from "./routes/tutorials.js";
-import commentsRouter from "./routes/comments.js";
+import tutorialsRouter from "./routes/tutorials";
+import commentsRouter from "./routes/comments";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 app.use(cors());
