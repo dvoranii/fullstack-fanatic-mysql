@@ -5,13 +5,16 @@ export const CommentSectionTitle = styled.h3`
   color: #333333;
 `;
 
-export const Comment = styled.ul`
+export const Comment = styled.li`
   list-style: none;
   padding: 1.2rem;
   margin-top: 1.2rem;
-  border: 1px solid black;
   display: flex;
   justify-content: space-between;
+`;
+
+export const CommentWrapper = styled.div`
+  border: 1px solid black;
 `;
 
 export const CommentSectionWrapperOuter = styled.div`
@@ -21,15 +24,41 @@ export const CommentSectionWrapperOuter = styled.div`
 
 export const CommentSectionWrapperInner = styled.ul`
   padding-left: 0px;
+  margin-top: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+`;
+
+export const LikesWrapper = styled.div`
+  padding: 0 0 1.2rem 1.8rem;
+  display: flex;
+  align-items: center;
+
+  img {
+    cursor: pointer;
+    margin-right: 0.5rem;
+    width: 25px;
+  }
+
+  .liked {
+    filter: invert(1);
+  }
+
+  .unliked {
+    filter: none;
+  }
 `;
 
 export const FormWrapper = styled.form`
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
 `;
 
 export const FormTextArea = styled.textarea`
-  width: 300px;
+  width: 50%;
+  height: 100px;
   margin-top: 1.2rem;
 `;
 

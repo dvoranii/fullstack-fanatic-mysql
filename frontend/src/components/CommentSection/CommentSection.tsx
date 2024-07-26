@@ -4,6 +4,8 @@ import {
   CommentSectionWrapperOuter,
   CommentSectionWrapperInner,
   Comment,
+  CommentWrapper,
+  LikesWrapper,
   FormWrapper,
   FormButton,
   FormTextArea,
@@ -11,12 +13,15 @@ import {
   CommentContentWrapper,
   CommentButtonsWrapper,
 } from "./CommentSection.styled";
+import likeIcon from "../../assets/images/like-icon.png";
+// import LikeIcon from "../../assets/images/like-icon.png";
 
 interface Comment {
   id: number;
   tutorial_id: number;
   content: string;
   created_at: string;
+  likes: number;
 }
 
 interface CommentSectionProps {
@@ -109,44 +114,73 @@ const CommentSection: React.FC<CommentSectionProps> = ({ tutorialId }) => {
       });
   };
 
+  const handleLike = (id: number) => {
+    fetch(`/api/comments/${id}/toggle-like`, {
+      method: "PUT",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setComments(
+          comments.map((comment) =>
+            comment.id === id ? { ...comment, likes: data.likes } : comment
+          )
+        );
+      });
+  };
+
   return (
     <CommentSectionWrapperOuter>
       <CommentSectionTitle>Comments</CommentSectionTitle>
       <CommentSectionWrapperInner>
         {comments.map((comment) => (
-          <Comment key={comment.id}>
-            {editingCommentId === comment.id ? (
-              <>
-                <FormTextArea
-                  value={editedComment}
-                  onChange={handleEditCommentChange}
-                />
-                <FormButton onClick={() => handleUpdate(comment.id)}>
-                  Save
-                </FormButton>
-                <FormButton onClick={() => setEditingCommentId(null)}>
-                  Cancel
-                </FormButton>
-              </>
-            ) : (
-              <>
-                <CommentContentWrapper>{comment.content}</CommentContentWrapper>
-                <CommentButtonsWrapper>
-                  <FormButton
-                    onClick={() => {
-                      setEditingCommentId(comment.id);
-                      setEditedComment(comment.content);
-                    }}
-                  >
-                    Edit
+          <CommentWrapper>
+            <Comment key={comment.id}>
+              {editingCommentId === comment.id ? (
+                <>
+                  <FormTextArea
+                    value={editedComment}
+                    onChange={handleEditCommentChange}
+                  />
+                  <FormButton onClick={() => handleUpdate(comment.id)}>
+                    Save
                   </FormButton>
-                  <FormButton onClick={() => handleDelete(comment.id)}>
-                    Delete
+                  <FormButton onClick={() => setEditingCommentId(null)}>
+                    Cancel
                   </FormButton>
-                </CommentButtonsWrapper>
-              </>
-            )}
-          </Comment>
+                </>
+              ) : (
+                <>
+                  <CommentContentWrapper>
+                    {comment.content}
+                  </CommentContentWrapper>
+
+                  <CommentButtonsWrapper>
+                    <FormButton
+                      onClick={() => {
+                        setEditingCommentId(comment.id);
+                        setEditedComment(comment.content);
+                      }}
+                    >
+                      Edit
+                    </FormButton>
+                    <FormButton onClick={() => handleDelete(comment.id)}>
+                      Delete
+                    </FormButton>
+                  </CommentButtonsWrapper>
+                </>
+              )}
+            </Comment>
+            <LikesWrapper>
+              {" "}
+              <img
+                src={likeIcon}
+                alt="like icon"
+                onClick={() => handleLike(comment.id)}
+                className={comment.likes % 2 === 1 ? "liked" : "unliked"}
+              />
+              {comment.likes}
+            </LikesWrapper>
+          </CommentWrapper>
         ))}
       </CommentSectionWrapperInner>
       <FormWrapper onSubmit={handleCommentSubmit}>

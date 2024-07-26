@@ -41,6 +41,24 @@ router.put("/:id", (req, res) => {
   );
 });
 
+router.put("/:id/toggle-like", (req, res) => {
+  const { id } = req.params;
+  db.query("SELECT likes FROM comments WHERE id = ?", [id], (err, results) => {
+    if (err) throw err;
+    const currentLikes = results[0].likes;
+    const newLikes =
+      currentLikes % 2 === 0 ? currentLikes + 1 : currentLikes - 1;
+    db.query(
+      "UPDATE comments SET likes = ? WHERE id = ?",
+      [newLikes, id],
+      (err, results) => {
+        if (err) throw err;
+        res.json({ id, likes: newLikes });
+      }
+    );
+  });
+});
+
 router.delete("/:id", (req, res) => {
   const { id } = req.params;
   db.query("DELETE FROM comments WHERE id = ?", [id], (err, results) => {
