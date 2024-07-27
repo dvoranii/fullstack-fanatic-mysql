@@ -14,7 +14,7 @@ export const NavList = styled.ul`
   justify-content: space-around;
   margin: 0;
   padding: 0;
-  width: 50%;
+  width: 25%;
 `;
 
 export const NavItem = styled.li`
@@ -28,4 +28,8 @@ export const NavLink = styled(Link)`
   &:hover {
     text-decoration: underline;
   }
+`;
+
+export const SmallFontSpan = styled.span`
+  font-size: 0.75em;
 `;

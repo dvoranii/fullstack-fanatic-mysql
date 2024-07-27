@@ -30,7 +30,7 @@ const TutorialDetail: React.FC = () => {
     <TutorialDetailWrapper>
       <Title textContent={tutorial.title}></Title>
       <Accordion steps={content.steps} />
-      <CommentSection tutorialId={tutorial.id} />
+      <CommentSection contentId={tutorial.id} contentType="tutorial" />
     </TutorialDetailWrapper>
   );
 };

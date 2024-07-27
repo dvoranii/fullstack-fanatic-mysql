@@ -6,23 +6,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const db_1 = __importDefault(require("../db"));
 const router = express_1.default.Router();
-router.get("/", (req, res) => {
-    db_1.default.query("SELECT * FROM tutorials", (err, results) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
+router.get("/", async (req, res) => {
+    try {
+        const connection = await db_1.default;
+        const [results] = await connection.query("SELECT * FROM tutorials");
         res.json(results);
-    });
+    }
+    catch (err) {
+        const error = err;
+        res.status(500).json({ error: error.message });
+    }
 });
-router.get("/:id", (req, res) => {
+router.get("/:id", async (req, res) => {
     const { id } = req.params;
-    db_1.default.query("SELECT * FROM tutorials WHERE id = ?", [id], (err, results) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
+    try {
+        const connection = await db_1.default;
+        const [results] = await connection.query("SELECT * FROM tutorials WHERE id = ?", [id]);
         res.json(results[0]);
-    });
+    }
+    catch (err) {
+        const error = err;
+        res.status(500).json({ error: error.message });
+    }
 });
 exports.default = router;

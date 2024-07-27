@@ -13,22 +13,27 @@ import {
   CommentContentWrapper,
   CommentButtonsWrapper,
 } from "./CommentSection.styled";
-import likeIcon from "../../assets/images/like-icon.png";
-// import LikeIcon from "../../assets/images/like-icon.png";
+import like1 from "../../assets/images/like-1.png";
+import like2 from "../../assets/images/like-2.png";
 
 interface Comment {
   id: number;
-  tutorial_id: number;
+  content_id: number;
+  content_type: "tutorial" | "blog";
   content: string;
   created_at: string;
   likes: number;
 }
 
 interface CommentSectionProps {
-  tutorialId: number;
+  contentId: number;
+  contentType: "tutorial" | "blog";
 }
 
-const CommentSection: React.FC<CommentSectionProps> = ({ tutorialId }) => {
+const CommentSection: React.FC<CommentSectionProps> = ({
+  contentId,
+  contentType,
+}) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
@@ -36,10 +41,19 @@ const CommentSection: React.FC<CommentSectionProps> = ({ tutorialId }) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`/api/comments/${tutorialId}`)
-      .then((response) => response.json())
-      .then((data: Comment[]) => setComments(data));
-  }, [tutorialId]);
+    fetch(`/api/comments/${contentType}/${contentId}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data: Comment[]) => setComments(data))
+      .catch((error) => {
+        console.error("Fetch error:", error);
+        setError("Failed to fetch comments");
+      });
+  }, [contentId, contentType]);
 
   const handleCommentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,13 +68,21 @@ const CommentSection: React.FC<CommentSectionProps> = ({ tutorialId }) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ tutorial_id: tutorialId, content: newComment }),
+      body: JSON.stringify({
+        content_id: contentId,
+        content_type: contentType,
+        content: newComment,
+      }),
     })
       .then((response) => response.json())
       .then((data: Comment) => {
         setComments([...comments, data]);
         setNewComment("");
         setError(null);
+      })
+      .catch((error) => {
+        console.error("Fetch error:", error);
+        setError("Failed to submit comment");
       });
   };
 
@@ -101,6 +123,10 @@ const CommentSection: React.FC<CommentSectionProps> = ({ tutorialId }) => {
         setEditingCommentId(null);
         setEditedComment("");
         setError(null);
+      })
+      .catch((error) => {
+        console.error("Fetch error:", error);
+        setError("Failed to update comment");
       });
   };
 
@@ -111,6 +137,10 @@ const CommentSection: React.FC<CommentSectionProps> = ({ tutorialId }) => {
       .then((response) => response.json())
       .then(() => {
         setComments(comments.filter((comment) => comment.id !== id));
+      })
+      .catch((error) => {
+        console.error("Fetch error:", error);
+        setError("Failed to delete comment");
       });
   };
 
@@ -125,16 +155,21 @@ const CommentSection: React.FC<CommentSectionProps> = ({ tutorialId }) => {
             comment.id === id ? { ...comment, likes: data.likes } : comment
           )
         );
+      })
+      .catch((error) => {
+        console.error("Fetch error:", error);
+        setError("Failed to toggle like");
       });
   };
 
   return (
     <CommentSectionWrapperOuter>
       <CommentSectionTitle>Comments</CommentSectionTitle>
+      {error && <ErrorMessage>{error}</ErrorMessage>}
       <CommentSectionWrapperInner>
         {comments.map((comment) => (
-          <CommentWrapper>
-            <Comment key={comment.id}>
+          <CommentWrapper key={comment.id}>
+            <Comment>
               {editingCommentId === comment.id ? (
                 <>
                   <FormTextArea
@@ -172,10 +207,9 @@ const CommentSection: React.FC<CommentSectionProps> = ({ tutorialId }) => {
             </Comment>
             <LikesWrapper>
               <img
-                src={likeIcon}
+                src={comment.likes % 2 === 1 ? like2 : like1}
                 alt="like icon"
                 onClick={() => handleLike(comment.id)}
-                className={comment.likes % 2 === 1 ? "liked" : "unliked"}
               />
               {comment.likes}
             </LikesWrapper>
@@ -185,7 +219,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({ tutorialId }) => {
       <FormWrapper onSubmit={handleCommentSubmit}>
         <FormTextArea value={newComment} onChange={handleCommentChange} />
         <FormButton type="submit">Add Comment</FormButton>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
       </FormWrapper>
     </CommentSectionWrapperOuter>
   );

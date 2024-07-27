@@ -6,19 +6,24 @@ const router = express.Router();
 
 interface Comment {
   id: number;
-  tutorial_id: number;
+  content_id: number;
+  content_type: "tutorial" | "blog";
   content: string;
   created_at: string;
   likes: number;
 }
 
-router.get("/:tutorialId", async (req: Request, res: Response) => {
-  const { tutorialId } = req.params as { tutorialId: string };
+router.get("/:contentType/:contentId", async (req: Request, res: Response) => {
+  const { contentType, contentId } = req.params as {
+    contentType: string;
+    contentId: string;
+  };
+  console.log(`Fetching comments for ${contentType} with ID ${contentId}`);
   try {
     const connection = await connectionPromise;
     const [results] = await connection.query<RowDataPacket[]>(
-      "SELECT * FROM comments WHERE tutorial_id = ?",
-      [tutorialId]
+      "SELECT * FROM comments WHERE content_type = ? AND content_id = ?",
+      [contentType, contentId]
     );
     res.json(results as Comment[]);
   } catch (err) {
@@ -28,17 +33,19 @@ router.get("/:tutorialId", async (req: Request, res: Response) => {
 });
 
 router.post("/", async (req: Request, res: Response) => {
-  const { tutorial_id, content } = req.body as {
-    tutorial_id: number;
+  const { content_id, content_type, content } = req.body as {
+    content_id: number;
+    content_type: "tutorial" | "blog";
     content: string;
   };
+  console.log(`Adding comment to ${content_type} with ID ${content_id}`);
   try {
     const connection = await connectionPromise;
     const [results] = await connection.query<ResultSetHeader>(
-      "INSERT INTO comments (tutorial_id, content) VALUES (?, ?)",
-      [tutorial_id, content]
+      "INSERT INTO comments (content_id, content_type, content) VALUES (?, ?, ?)",
+      [content_id, content_type, content]
     );
-    res.json({ id: results.insertId, tutorial_id, content });
+    res.json({ id: results.insertId, content_id, content_type, content });
   } catch (err) {
     const error = err as Error;
     res.status(500).json({ error: error.message });
@@ -48,6 +55,7 @@ router.post("/", async (req: Request, res: Response) => {
 router.put("/:id", async (req: Request, res: Response) => {
   const { id } = req.params as { id: string };
   const { content } = req.body as { content: string };
+  console.log(`Updating comment with ID ${id}`);
   try {
     const connection = await connectionPromise;
     await connection.query<ResultSetHeader>(
@@ -63,6 +71,7 @@ router.put("/:id", async (req: Request, res: Response) => {
 
 router.put("/:id/toggle-like", async (req: Request, res: Response) => {
   const { id } = req.params as { id: string };
+  console.log(`Toggling like for comment with ID ${id}`);
   try {
     const connection = await connectionPromise;
     const [results] = await connection.query<RowDataPacket[]>(
@@ -85,6 +94,7 @@ router.put("/:id/toggle-like", async (req: Request, res: Response) => {
 
 router.delete("/:id", async (req: Request, res: Response) => {
   const { id } = req.params as { id: string };
+  console.log(`Deleting comment with ID ${id}`);
   try {
     const connection = await connectionPromise;
     await connection.query<ResultSetHeader>(

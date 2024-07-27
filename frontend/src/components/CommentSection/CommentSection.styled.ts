@@ -40,14 +40,6 @@ export const LikesWrapper = styled.div`
     margin-right: 0.5rem;
     width: 25px;
   }
-
-  .liked {
-    filter: invert(1);
-  }
-
-  .unliked {
-    filter: none;
-  }
 `;
 
 export const FormWrapper = styled.form`
@@ -57,8 +49,10 @@ export const FormWrapper = styled.form`
 `;
 
 export const FormTextArea = styled.textarea`
-  width: 50%;
-  height: 100px;
+  min-width: 50%;
+  max-width: 100%;
+  min-height: 100px;
+  max-height: 250px;
   margin-top: 1.2rem;
 `;
 
