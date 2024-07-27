@@ -23,7 +23,7 @@ export const NavList = styled.ul`
   margin: 0;
   padding: 0;
 
-  @media (max-width: 858px) {
+  @media (max-width: 915px) {
     display: none;
   }
 `;
@@ -45,7 +45,7 @@ export const MobileNavList = styled.ul<{ open: boolean }>`
   transition: transform 0.3s ease-in-out;
   z-index: 1000;
 
-  @media (min-width: 859px) {
+  @media (min-width: 915px) {
     display: none;
   }
   li:first-child {
@@ -55,6 +55,7 @@ export const MobileNavList = styled.ul<{ open: boolean }>`
 
 export const NavItem = styled.li`
   margin: 0 1rem;
+  position: relative;
 `;
 
 export const NavPipe = styled.span`
@@ -63,13 +64,32 @@ export const NavPipe = styled.span`
   font-weight: bold;
 `;
 
-export const NavLink = styled(Link)`
+export const NavLinkStyled = styled(Link)<{ underlineWidth?: string }>`
   color: #222;
   text-decoration: none;
   padding-right: 2.2rem;
+  position: relative;
 
-  &:hover {
-    text-decoration: underline;
+  &::after {
+    content: "";
+    display: block;
+    width: ${({ underlineWidth }) => underlineWidth || "100%"};
+    height: 2px;
+    background-color: black;
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+    transform-origin: center;
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+  }
+
+  &.no-underline::after {
+    content: none;
   }
 `;
 

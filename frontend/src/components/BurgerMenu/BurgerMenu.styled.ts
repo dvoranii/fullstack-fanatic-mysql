@@ -19,7 +19,7 @@ export const Burger = styled.div`
     border-radius: 2px;
   }
 
-  @media (min-width: 859px) {
+  @media (min-width: 915px) {
     display: none;
   }
 `;

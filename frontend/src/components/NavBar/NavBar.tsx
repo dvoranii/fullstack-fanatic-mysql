@@ -1,83 +1,59 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Nav,
   NavList,
   NavItem,
-  NavLink,
   NavPipe,
   SmallFontSpan,
   Logo,
-  MobileNavList,
+  NavLinkStyled,
 } from "./NavBar.styled";
 import FSFLogo from "../../assets/images/fsf-logo-notext.png";
-import BurgerMenu from "../BurgerMenu/BurgerMenu";
+import SignInRegister from "./SignInRegister/SignInRegister";
 
 const NavBar: React.FC = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
   return (
     <Nav>
-      <NavLink to="/">
+      <NavLinkStyled to="/">
         <Logo src={FSFLogo} />
-      </NavLink>
+      </NavLinkStyled>
 
       <NavList>
         <NavItem>
-          <NavLink to="/">
-            Home&nbsp;<SmallFontSpan>▼</SmallFontSpan>
-          </NavLink>
+          <NavLinkStyled to="/" underlineWidth="60%">
+            Home <SmallFontSpan>▼</SmallFontSpan>
+          </NavLinkStyled>
           <NavPipe>|</NavPipe>
         </NavItem>
         <NavItem>
-          <NavLink to="/about">
-            About&nbsp;<SmallFontSpan>▼</SmallFontSpan>
-          </NavLink>
+          <NavLinkStyled to="/about" underlineWidth="62%">
+            About <SmallFontSpan>▼</SmallFontSpan>
+          </NavLinkStyled>
           <NavPipe>|</NavPipe>
         </NavItem>
         <NavItem>
-          <NavLink to="/tutorials">Tutorials</NavLink>
+          <NavLinkStyled to="/tutorials" underlineWidth="68%">
+            Tutorials
+          </NavLinkStyled>
           <NavPipe>|</NavPipe>
         </NavItem>
         <NavItem>
-          <NavLink to="/blogs">Blog</NavLink>
+          <NavLinkStyled to="/blogs" underlineWidth="50%">
+            Blog
+          </NavLinkStyled>
           <NavPipe>|</NavPipe>
         </NavItem>
         <NavItem>
-          <NavLink to="/contact">Contact</NavLink>
+          <NavLinkStyled to="/contact" underlineWidth="65%">
+            Contact
+          </NavLinkStyled>
+        </NavItem>
+        <NavItem>
+          <NavLinkStyled to="/sign-in" className="no-underline">
+            <SignInRegister />
+          </NavLinkStyled>
         </NavItem>
       </NavList>
-
-      <BurgerMenu onClick={toggleMenu} />
-      <MobileNavList open={menuOpen}>
-        <NavItem>
-          <NavLink to="/" onClick={toggleMenu}>
-            Home <SmallFontSpan>▼</SmallFontSpan>
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink to="/about" onClick={toggleMenu}>
-            About <SmallFontSpan>▼</SmallFontSpan>
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink to="/tutorials" onClick={toggleMenu}>
-            Tutorials
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink to="/blogs" onClick={toggleMenu}>
-            Blog
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink to="/contact" onClick={toggleMenu}>
-            Contact
-          </NavLink>
-        </NavItem>
-      </MobileNavList>
     </Nav>
   );
 };
