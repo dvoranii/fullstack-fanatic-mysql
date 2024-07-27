@@ -75,7 +75,7 @@ export const NavLinkStyled = styled(Link)<{ underlineWidth?: string }>`
     display: block;
     width: ${({ underlineWidth }) => underlineWidth || "100%"};
     height: 2px;
-    background-color: black;
+    background-color: #ffb923;
     position: absolute;
     bottom: -8px;
     left: 0;

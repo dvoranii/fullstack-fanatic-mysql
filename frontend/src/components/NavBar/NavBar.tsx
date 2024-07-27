@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Nav,
   NavList,
@@ -7,11 +7,19 @@ import {
   SmallFontSpan,
   Logo,
   NavLinkStyled,
+  MobileNavList,
 } from "./NavBar.styled";
 import FSFLogo from "../../assets/images/fsf-logo-notext.png";
 import SignInRegister from "./SignInRegister/SignInRegister";
+import BurgerMenu from "../BurgerMenu/BurgerMenu";
 
 const NavBar: React.FC = () => {
+  const [open, setOpen] = useState(false);
+
+  const toggleMobileNav = () => {
+    setOpen(!open);
+  };
+
   return (
     <Nav>
       <NavLinkStyled to="/">
@@ -54,6 +62,41 @@ const NavBar: React.FC = () => {
           </NavLinkStyled>
         </NavItem>
       </NavList>
+
+      <BurgerMenu onClick={toggleMobileNav} />
+
+      <MobileNavList open={open}>
+        <NavItem>
+          <NavLinkStyled to="/" onClick={toggleMobileNav}>
+            Home <SmallFontSpan>▼</SmallFontSpan>
+          </NavLinkStyled>
+        </NavItem>
+        <NavItem>
+          <NavLinkStyled to="/about" onClick={toggleMobileNav}>
+            About <SmallFontSpan>▼</SmallFontSpan>
+          </NavLinkStyled>
+        </NavItem>
+        <NavItem>
+          <NavLinkStyled to="/tutorials" onClick={toggleMobileNav}>
+            Tutorials
+          </NavLinkStyled>
+        </NavItem>
+        <NavItem>
+          <NavLinkStyled to="/blogs" onClick={toggleMobileNav}>
+            Blog
+          </NavLinkStyled>
+        </NavItem>
+        <NavItem>
+          <NavLinkStyled to="/contact" onClick={toggleMobileNav}>
+            Contact
+          </NavLinkStyled>
+        </NavItem>
+        <NavItem>
+          <NavLinkStyled to="/sign-in" onClick={toggleMobileNav}>
+            <SignInRegister />
+          </NavLinkStyled>
+        </NavItem>
+      </MobileNavList>
     </Nav>
   );
 };
