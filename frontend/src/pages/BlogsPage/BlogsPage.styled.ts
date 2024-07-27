@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 export const PageContainer = styled.div`
   max-width: 80vw;
   margin: 0 auto;
+  height: 100vh;
 `;
 
 export const BlogList = styled.div`
