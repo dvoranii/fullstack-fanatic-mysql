@@ -5,13 +5,20 @@ export const Nav = styled.nav`
   background: #333;
   padding: 1rem;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+`;
+
+export const Logo = styled.img`
+  width: 100px;
+  height: auto;
+  padding: 8px;
 `;
 
 export const NavList = styled.ul`
   list-style: none;
   display: flex;
   justify-content: space-around;
+  align-items: center;
   margin: 0;
   padding: 0;
   width: 25%;

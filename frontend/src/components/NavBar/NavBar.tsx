@@ -1,9 +1,21 @@
 import React from "react";
-import { Nav, NavList, NavItem, NavLink, SmallFontSpan } from "./NavBar.styled";
+import {
+  Nav,
+  NavList,
+  NavItem,
+  NavLink,
+  SmallFontSpan,
+  Logo,
+} from "./NavBar.styled";
+import FSFLogo from "../../assets/images/fsf-logo-notext.png";
 
 const NavBar: React.FC = () => {
   return (
     <Nav>
+      <NavLink to="/">
+        <Logo src={FSFLogo} />
+      </NavLink>
+
       <NavList>
         <NavItem>
           <NavLink to="/">

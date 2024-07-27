@@ -1,7 +1,7 @@
 export interface Step {
   title: string;
   content: string;
-  component?: string; // Made optional for now
+  component?: string;
 }
 
 export interface TutorialContent {

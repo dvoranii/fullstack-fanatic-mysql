@@ -1,6 +1,7 @@
 import {
   ModalWrapper,
   ModalContent,
+  ModalContentText,
   Button,
 } from "./DeleteConfirmationModal.styled";
 
@@ -16,7 +17,9 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
   return (
     <ModalWrapper>
       <ModalContent>
-        <p>Are you sure you want to delete your comment?</p>
+        <ModalContentText>
+          Are you sure you want to delete your comment?
+        </ModalContentText>
         <Button onClick={onConfirm}>Yes</Button>
         <Button onClick={onCancel}>No</Button>
       </ModalContent>
