@@ -15,6 +15,7 @@ import {
 } from "./CommentSection.styled";
 import like1 from "../../assets/images/like-1.png";
 import like2 from "../../assets/images/like-2.png";
+import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmationModal";
 
 interface Comment {
   id: number;
@@ -39,6 +40,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [editedComment, setEditedComment] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
 
   useEffect(() => {
     fetch(`/api/comments/${contentType}/${contentId}`)
@@ -131,17 +134,33 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   };
 
   const handleDelete = (id: number) => {
-    fetch(`/api/comments/${id}`, {
-      method: "DELETE",
-    })
-      .then((response) => response.json())
-      .then(() => {
-        setComments(comments.filter((comment) => comment.id !== id));
+    setShowDeleteModal(true);
+    setCommentToDelete(id);
+  };
+
+  const confirmDelete = () => {
+    if (commentToDelete !== null) {
+      fetch(`/api/comments/${commentToDelete}`, {
+        method: "DELETE",
       })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-        setError("Failed to delete comment");
-      });
+        .then((response) => response.json())
+        .then(() => {
+          setComments(
+            comments.filter((comment) => comment.id !== commentToDelete)
+          );
+          setShowDeleteModal(false);
+          setCommentToDelete(null);
+        })
+        .catch((error) => {
+          console.error("Fetch error: ", error);
+          setError("Failed to delete comment");
+        });
+    }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+    setCommentToDelete(null);
   };
 
   const handleLike = (id: number) => {
@@ -220,6 +239,12 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         <FormTextArea value={newComment} onChange={handleCommentChange} />
         <FormButton type="submit">Add Comment</FormButton>
       </FormWrapper>
+      {showDeleteModal && (
+        <DeleteConfirmationModal
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
+      )}
     </CommentSectionWrapperOuter>
   );
 };

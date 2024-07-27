@@ -38,7 +38,7 @@ router.post("/", async (req: Request, res: Response) => {
     content_type: "tutorial" | "blog";
     content: string;
   };
-  console.log(`Adding comment to ${content_type} with ID ${content_id}`);
+
   try {
     const connection = await connectionPromise;
     const [results] = await connection.query<ResultSetHeader>(
