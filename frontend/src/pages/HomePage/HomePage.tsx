@@ -1,12 +1,12 @@
 import React from "react";
 import Title from "../../components/Title/Title";
-import { HomePageWrapper } from "./HomePage.styled";
+import { PageWrapper } from "../../global.styled";
 
 const HomePage: React.FC = () => {
   return (
-    <HomePageWrapper>
+    <PageWrapper>
       <Title textContent="Home" />
-    </HomePageWrapper>
+    </PageWrapper>
   );
 };
 

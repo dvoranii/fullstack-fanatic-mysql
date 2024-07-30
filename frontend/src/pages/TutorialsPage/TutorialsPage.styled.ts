@@ -1,13 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-export const PageContainer = styled.div`
-  padding: 2rem;
-  width: 50%;
-  margin: 0 auto;
-  height: 100vh;
-`;
-
 export const TutorialList = styled.div`
   display: flex;
   flex-wrap: wrap;

@@ -64,7 +64,10 @@ export const NavPipe = styled.span`
   font-weight: bold;
 `;
 
-export const NavLinkStyled = styled(Link)<{ underlineWidth?: string }>`
+export const NavLinkStyled = styled(Link)<{
+  underlineWidth?: string;
+  noUnderline?: boolean;
+}>`
   color: #222;
   text-decoration: none;
   padding-right: 2.2rem;
@@ -72,7 +75,7 @@ export const NavLinkStyled = styled(Link)<{ underlineWidth?: string }>`
 
   &::after {
     content: "";
-    display: block;
+    display: ${({ noUnderline }) => (noUnderline ? "none" : "block")};
     width: ${({ underlineWidth }) => underlineWidth || "100%"};
     height: 2px;
     background-color: #ffb923;
@@ -85,7 +88,7 @@ export const NavLinkStyled = styled(Link)<{ underlineWidth?: string }>`
   }
 
   &:hover::after {
-    transform: scaleX(1);
+    transform: ${({ noUnderline }) => (noUnderline ? "none" : "scaleX(1)")};
   }
 
   &.no-underline::after {

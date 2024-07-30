@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Title from "../../components/Title/Title";
-import { PageContainer, BlogList, BlogThumbnail } from "./BlogsPage.styled";
+import { PageWrapper } from "../../global.styled";
+import { BlogList, BlogThumbnail } from "./BlogsPage.styled";
 
 interface Blog {
   id: number;
@@ -18,7 +19,7 @@ const BlogsPage: React.FC = () => {
   }, []);
 
   return (
-    <PageContainer>
+    <PageWrapper>
       <Title textContent="Blogs" />
       <BlogList>
         {blogs.map((blog) => (
@@ -27,7 +28,7 @@ const BlogsPage: React.FC = () => {
           </BlogThumbnail>
         ))}
       </BlogList>
-    </PageContainer>
+    </PageWrapper>
   );
 };
 

@@ -1,15 +1,15 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import TutorialDetail from "../../components/TutorialDetail/TutorialDetail";
-import { TutorialPageWrapper } from "./TutorialPage.styled";
+import { PageWrapper } from "../../global.styled";
 
 const TutorialPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
   return (
-    <TutorialPageWrapper>
+    <PageWrapper>
       {id ? <TutorialDetail /> : <div>Error: Tutorial ID not found</div>}
-    </TutorialPageWrapper>
+    </PageWrapper>
   );
 };
 

@@ -1,12 +1,11 @@
 import React from "react";
 import Title from "../../components/Title/Title";
-import { ContactPageWrapper } from "./ContactPage.styled";
-
+import { PageWrapper } from "../../global.styled";
 const ContactPage: React.FC = () => {
   return (
-    <ContactPageWrapper>
+    <PageWrapper>
       <Title textContent="Contact" />
-    </ContactPageWrapper>
+    </PageWrapper>
   );
 };
 

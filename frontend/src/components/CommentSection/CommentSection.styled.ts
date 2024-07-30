@@ -66,6 +66,7 @@ export const FormButton = styled.button`
   transition: all 150ms ease;
   font-weight: bold;
   letter-spacing: 0.25px;
+  height: fit-content;
 
   &:hover {
     cursor: pointer;

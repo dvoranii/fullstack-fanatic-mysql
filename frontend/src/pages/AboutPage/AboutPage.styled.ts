@@ -1,5 +1,5 @@
-import styled from "styled-components";
+// import styled from "styled-components";
 
-export const AboutPageWrapper = styled.div`
-  height: 100vh;
-`;
+// export const AboutPageWrapper = styled.div`
+//   height: 100vh;
+// `;

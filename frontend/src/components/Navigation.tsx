@@ -7,6 +7,7 @@ import TutorialPage from "../pages/TutorialPage/TutorialPage";
 import BlogsPage from "../pages/BlogsPage/BlogsPage";
 import BlogDetail from "../components/BlogDetail/BlogDetail";
 import ContactPage from "../pages/ContactPage/ContactPage";
+import SignInRegisterPage from "../pages/SignInRegisterPage/SignInRegisterPage";
 
 const Navigation: React.FC = () => {
   return (
@@ -18,6 +19,7 @@ const Navigation: React.FC = () => {
       <Route path="/blogs" element={<BlogsPage />} />
       <Route path="/blog/:id" element={<BlogDetail />} />
       <Route path="/contact" element={<ContactPage />} />
+      <Route path="/sign-in-register" element={<SignInRegisterPage />} />
     </Routes>
   );
 };

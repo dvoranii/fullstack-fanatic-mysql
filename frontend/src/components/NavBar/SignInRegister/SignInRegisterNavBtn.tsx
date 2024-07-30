@@ -1,7 +1,10 @@
 import ProfileIcon from "../../../assets/images/profile-icon.png";
-import { ProfileImg, SignInRegisterWrapper } from "./SignInRegister.styled";
+import {
+  ProfileImg,
+  SignInRegisterWrapper,
+} from "./SignInRegisterNavBtn.styled";
 
-const SignInRegister: React.FC = () => {
+const SignInRegisterNavBtn: React.FC = () => {
   return (
     <SignInRegisterWrapper>
       <p>Sign&nbsp;In</p>
@@ -10,4 +13,4 @@ const SignInRegister: React.FC = () => {
   );
 };
 
-export default SignInRegister;
+export default SignInRegisterNavBtn;

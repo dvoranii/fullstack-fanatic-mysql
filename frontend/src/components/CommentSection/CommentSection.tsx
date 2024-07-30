@@ -195,12 +195,15 @@ const CommentSection: React.FC<CommentSectionProps> = ({
                     value={editedComment}
                     onChange={handleEditCommentChange}
                   />
-                  <FormButton onClick={() => handleUpdate(comment.id)}>
-                    Save
-                  </FormButton>
-                  <FormButton onClick={() => setEditingCommentId(null)}>
-                    Cancel
-                  </FormButton>
+
+                  <CommentButtonsWrapper>
+                    <FormButton onClick={() => handleUpdate(comment.id)}>
+                      Save
+                    </FormButton>
+                    <FormButton onClick={() => setEditingCommentId(null)}>
+                      Cancel
+                    </FormButton>
+                  </CommentButtonsWrapper>
                 </>
               ) : (
                 <>

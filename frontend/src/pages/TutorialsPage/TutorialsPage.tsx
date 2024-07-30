@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Title from "../../components/Title/Title";
-import {
-  PageContainer,
-  TutorialList,
-  TutorialThumbnail,
-} from "./TutorialsPage.styled";
+import { PageWrapper } from "../../global.styled";
+import { TutorialList, TutorialThumbnail } from "./TutorialsPage.styled";
 
 interface Tutorial {
   id: number;
@@ -23,7 +20,7 @@ const TutorialsPage: React.FC = () => {
   }, []);
 
   return (
-    <PageContainer>
+    <PageWrapper>
       <Title textContent="Tutorials" />
       <TutorialList>
         {tutorials.map((tutorial) => (
@@ -32,7 +29,7 @@ const TutorialsPage: React.FC = () => {
           </TutorialThumbnail>
         ))}
       </TutorialList>
-    </PageContainer>
+    </PageWrapper>
   );
 };
 
