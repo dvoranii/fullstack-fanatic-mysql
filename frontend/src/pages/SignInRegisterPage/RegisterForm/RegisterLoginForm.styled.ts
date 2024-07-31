@@ -2,10 +2,9 @@ import styled from "styled-components";
 import checkIcon from "../../../assets/images/check-icon.png";
 
 interface WrapperProps {
-  isLogin: boolean;
+  $isLogin: boolean;
 }
 
-// Define color variables for reuse
 const colors = {
   primary: "#14213d",
   secondary: "#ffb923",
@@ -13,7 +12,6 @@ const colors = {
   white: "#ffffff",
 };
 
-// Common input and button styles
 const commonInputStyles = `
   margin-bottom: 10px;
   padding: 10px;
@@ -30,13 +28,13 @@ export const RegisterLoginFormOuter = styled.div`
 `;
 
 export const RegisterLoginFormWrapperInner = styled.div<WrapperProps>`
-  width: clamp(350px, 30vw, 500px);
-  background-color: ${({ isLogin }) =>
-    isLogin ? colors.primary : colors.background};
+  width: clamp(450px, 40vw, 600px);
+  background-color: ${({ $isLogin }) =>
+    $isLogin ? colors.primary : colors.background};
   border-radius: 40px;
   margin: 0 auto;
   overflow: hidden;
-  height: 600px;
+  height: 700px;
   position: relative;
   transition: all 0.25s ease-in-out;
 `;
@@ -106,7 +104,24 @@ export const TermsWrapper = styled.div`
     font-size: 0.8rem;
     position: relative;
     padding-left: 29px;
-    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    .checkbox-label {
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    .terms-link {
+      color: ${colors.primary};
+      text-decoration: underline;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    &:hover::before {
+      cursor: pointer;
+    }
   }
 
   label::before {
@@ -127,7 +142,7 @@ export const TermsWrapper = styled.div`
     content: "";
     display: none;
     position: absolute;
-    left: 6%;
+    left: 7%;
     top: 6%;
     transform: translate(-50%, -50%);
     width: 30px;
@@ -148,26 +163,27 @@ export const FormTitle = styled.h2<WrapperProps>`
   color: ${colors.primary};
   text-transform: uppercase;
   text-align: center;
-  margin-bottom: ${({ isLogin }) => (isLogin ? "40px" : "20px")};
-  font-size: ${({ isLogin }) => (isLogin ? "1.5rem" : "1.2rem")};
+  margin-bottom: ${({ $isLogin }) => ($isLogin ? "40px" : "20px")};
+  font-size: ${({ $isLogin }) => ($isLogin ? "1.5rem" : "1.2rem")};
   transition: all 150ms ease;
-  transition-delay: ${({ isLogin }) => (isLogin ? "250ms" : "0ms")};
+  transition-delay: ${({ $isLogin }) => ($isLogin ? "250ms" : "0ms")};
   user-select: none;
 `;
 
 export const RegisterFormTitleWrapper = styled.div<WrapperProps>`
   padding-top: 20px;
-  cursor: ${({ isLogin }) => (isLogin ? "pointer" : "default")};
+  cursor: ${({ $isLogin }) => ($isLogin ? "pointer" : "default")};
 
   ${FormTitle} {
-    font-size: ${({ isLogin }) => (isLogin ? "1.2rem" : "1.6rem")};
-    color: ${({ isLogin }) => (isLogin ? colors.background : colors.primary)};
+    font-size: ${({ $isLogin }) => ($isLogin ? "1.2rem" : "1.6rem")};
+    color: ${({ $isLogin }) => ($isLogin ? colors.background : colors.primary)};
     margin-top: -1.4rem;
     letter-spacing: 1.4px;
     transition-delay: 0ms;
 
     &:hover {
-      color: ${({ isLogin }) => (isLogin ? colors.secondary : colors.primary)};
+      color: ${({ $isLogin }) =>
+        $isLogin ? colors.secondary : colors.primary};
     }
   }
 `;
@@ -180,7 +196,7 @@ export const LoginFormTitleWrapper = styled.div<WrapperProps>`
   transition: all 150ms ease;
 
   ${FormTitle} {
-    font-size: ${({ isLogin }) => (isLogin ? "1.6rem" : "1.2rem")};
+    font-size: ${({ $isLogin }) => ($isLogin ? "1.6rem" : "1.2rem")};
     margin-bottom: 0;
     transition: all 250ms ease;
     transition-delay: 250ms;
@@ -194,7 +210,7 @@ export const LoginFormTitleWrapper = styled.div<WrapperProps>`
 export const LoginFormWrapperOuter = styled.div<WrapperProps>`
   background: ${colors.white};
   position: absolute;
-  top: ${({ isLogin }) => (isLogin ? "10%" : "89%")};
+  top: ${({ $isLogin }) => ($isLogin ? "10%" : "91%")};
   width: 100%;
   height: 100%;
   border-top-right-radius: 76px;
@@ -206,4 +222,53 @@ export const LoginFormWrapperInner = styled.div`
   padding: 20px;
   display: flex;
   flex-direction: column;
+`;
+
+export const Divider = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+  color: #999;
+  font-family: "ZenKakuGothicNewRegular", sans-serif;
+  font-size: 0.8rem;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #999;
+  }
+
+  &::before {
+    margin-right: 0.5em;
+  }
+
+  &::after {
+    margin-left: 0.5em;
+  }
+`;
+
+export const GoogleSignInButton = styled.button`
+  border: none;
+  padding: 8px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "ZenKakuGothicNewMedium";
+  width: fit-content;
+  margin: 0 auto;
+  border-radius: 20px;
+  transition: all 150ms ease;
+
+  img {
+    margin-right: 10px;
+    width: 25px;
+  }
+
+  &:hover {
+    background-color: #357ae8;
+    color: whitesmoke;
+    cursor: pointer;
+  }
 `;

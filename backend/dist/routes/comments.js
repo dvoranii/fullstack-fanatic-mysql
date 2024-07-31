@@ -6,11 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const db_1 = __importDefault(require("../db"));
 const router = express_1.default.Router();
-router.get("/:tutorialId", async (req, res) => {
-    const { tutorialId } = req.params;
+router.get("/:contentType/:contentId", async (req, res) => {
+    const { contentType, contentId } = req.params;
+    console.log(`Fetching comments for ${contentType} with ID ${contentId}`);
     try {
         const connection = await db_1.default;
-        const [results] = await connection.query("SELECT * FROM comments WHERE tutorial_id = ?", [tutorialId]);
+        const [results] = await connection.query("SELECT * FROM comments WHERE content_type = ? AND content_id = ?", [contentType, contentId]);
         res.json(results);
     }
     catch (err) {
@@ -19,11 +20,11 @@ router.get("/:tutorialId", async (req, res) => {
     }
 });
 router.post("/", async (req, res) => {
-    const { tutorial_id, content } = req.body;
+    const { content_id, content_type, content } = req.body;
     try {
         const connection = await db_1.default;
-        const [results] = await connection.query("INSERT INTO comments (tutorial_id, content) VALUES (?, ?)", [tutorial_id, content]);
-        res.json({ id: results.insertId, tutorial_id, content });
+        const [results] = await connection.query("INSERT INTO comments (content_id, content_type, content) VALUES (?, ?, ?)", [content_id, content_type, content]);
+        res.json({ id: results.insertId, content_id, content_type, content });
     }
     catch (err) {
         const error = err;
@@ -33,6 +34,7 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
     const { id } = req.params;
     const { content } = req.body;
+    console.log(`Updating comment with ID ${id}`);
     try {
         const connection = await db_1.default;
         await connection.query("UPDATE comments SET content = ? WHERE id = ?", [content, id]);
@@ -45,6 +47,7 @@ router.put("/:id", async (req, res) => {
 });
 router.put("/:id/toggle-like", async (req, res) => {
     const { id } = req.params;
+    console.log(`Toggling like for comment with ID ${id}`);
     try {
         const connection = await db_1.default;
         const [results] = await connection.query("SELECT likes FROM comments WHERE id = ?", [id]);
@@ -60,6 +63,7 @@ router.put("/:id/toggle-like", async (req, res) => {
 });
 router.delete("/:id", async (req, res) => {
     const { id } = req.params;
+    console.log(`Deleting comment with ID ${id}`);
     try {
         const connection = await db_1.default;
         await connection.query("DELETE FROM comments WHERE id = ?", [id]);

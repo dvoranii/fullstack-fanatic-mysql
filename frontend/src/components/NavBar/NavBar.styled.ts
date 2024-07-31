@@ -65,7 +65,7 @@ export const NavPipe = styled.span`
 `;
 
 export const NavLinkStyled = styled(Link)<{
-  underlineWidth?: string;
+  underlinewidth?: string;
   noUnderline?: boolean;
 }>`
   color: #222;
@@ -76,7 +76,7 @@ export const NavLinkStyled = styled(Link)<{
   &::after {
     content: "";
     display: ${({ noUnderline }) => (noUnderline ? "none" : "block")};
-    width: ${({ underlineWidth }) => underlineWidth || "100%"};
+    width: ${({ underlinewidth }) => underlinewidth || "100%"};
     height: 2px;
     background-color: #ffb923;
     position: absolute;

@@ -28,31 +28,31 @@ const NavBar: React.FC = () => {
 
       <NavList>
         <NavItem>
-          <NavLinkStyled to="/" underlineWidth="60%">
+          <NavLinkStyled to="/" underlinewidth="60%">
             Home <SmallFontSpan>▼</SmallFontSpan>
           </NavLinkStyled>
           <NavPipe>|</NavPipe>
         </NavItem>
         <NavItem>
-          <NavLinkStyled to="/about" underlineWidth="62%">
+          <NavLinkStyled to="/about" underlinewidth="62%">
             About <SmallFontSpan>▼</SmallFontSpan>
           </NavLinkStyled>
           <NavPipe>|</NavPipe>
         </NavItem>
         <NavItem>
-          <NavLinkStyled to="/tutorials" underlineWidth="68%">
+          <NavLinkStyled to="/tutorials" underlinewidth="68%">
             Tutorials
           </NavLinkStyled>
           <NavPipe>|</NavPipe>
         </NavItem>
         <NavItem>
-          <NavLinkStyled to="/blogs" underlineWidth="50%">
+          <NavLinkStyled to="/blogs" underlinewidth="50%">
             Blog
           </NavLinkStyled>
           <NavPipe>|</NavPipe>
         </NavItem>
         <NavItem>
-          <NavLinkStyled to="/contact" underlineWidth="65%">
+          <NavLinkStyled to="/contact" underlinewidth="65%">
             Contact
           </NavLinkStyled>
         </NavItem>

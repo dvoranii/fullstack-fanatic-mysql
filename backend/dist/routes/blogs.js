@@ -7,10 +7,9 @@ const express_1 = __importDefault(require("express"));
 const db_1 = __importDefault(require("../db"));
 const router = express_1.default.Router();
 router.get("/", async (req, res) => {
-    console.log(req);
     try {
         const connection = await db_1.default;
-        const [results] = await connection.query("SELECT * FROM tutorials");
+        const [results] = await connection.query("SELECT * FROM blogs");
         res.json(results);
     }
     catch (err) {
@@ -22,7 +21,7 @@ router.get("/:id", async (req, res) => {
     const { id } = req.params;
     try {
         const connection = await db_1.default;
-        const [results] = await connection.query("SELECT * FROM tutorials WHERE id = ?", [id]);
+        const [results] = await connection.query("SELECT * FROM blogs WHERE id = ?", [id]);
         res.json(results[0]);
     }
     catch (err) {

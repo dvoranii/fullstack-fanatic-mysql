@@ -8,6 +8,7 @@ import BlogsPage from "../pages/BlogsPage/BlogsPage";
 import BlogDetail from "../components/BlogDetail/BlogDetail";
 import ContactPage from "../pages/ContactPage/ContactPage";
 import SignInRegisterPage from "../pages/SignInRegisterPage/SignInRegisterPage";
+import UserAccountPage from "../pages/UserAccountPage/UserAccountPage";
 
 const Navigation: React.FC = () => {
   return (
@@ -20,6 +21,7 @@ const Navigation: React.FC = () => {
       <Route path="/blog/:id" element={<BlogDetail />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/sign-in-register" element={<SignInRegisterPage />} />
+      <Route path="my-account" element={<UserAccountPage />} />
     </Routes>
   );
 };
