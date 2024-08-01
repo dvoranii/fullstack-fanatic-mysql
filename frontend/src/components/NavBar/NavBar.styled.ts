@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
+interface NavLinkStyledProps {
+  underlinewidth?: string;
+}
+
 export const Nav = styled.nav`
   background: #f8f8f8;
   padding: 1rem;
@@ -64,10 +68,11 @@ export const NavPipe = styled.span`
   font-weight: bold;
 `;
 
-export const NavLinkStyled = styled(Link)<{
-  underlinewidth?: string;
-  noUnderline?: boolean;
-}>`
+export const SmallFontSpan = styled.span`
+  font-size: 0.75em;
+`;
+
+export const NavLinkStyled = styled(Link)<NavLinkStyledProps>`
   color: #222;
   text-decoration: none;
   padding-right: 2.2rem;
@@ -75,7 +80,8 @@ export const NavLinkStyled = styled(Link)<{
 
   &::after {
     content: "";
-    display: ${({ noUnderline }) => (noUnderline ? "none" : "block")};
+    display: ${({ underlinewidth }) =>
+      underlinewidth === "0%" ? "none" : "block"};
     width: ${({ underlinewidth }) => underlinewidth || "100%"};
     height: 2px;
     background-color: #ffb923;
@@ -88,14 +94,11 @@ export const NavLinkStyled = styled(Link)<{
   }
 
   &:hover::after {
-    transform: ${({ noUnderline }) => (noUnderline ? "none" : "scaleX(1)")};
+    transform: ${({ underlinewidth }) =>
+      underlinewidth === "0%" ? "none" : "scaleX(1)"};
   }
 
   &.no-underline::after {
     content: none;
   }
-`;
-
-export const SmallFontSpan = styled.span`
-  font-size: 0.75em;
 `;

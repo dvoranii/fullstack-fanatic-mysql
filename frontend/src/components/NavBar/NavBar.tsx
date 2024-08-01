@@ -22,7 +22,7 @@ const NavBar: React.FC = () => {
 
   return (
     <Nav>
-      <NavLinkStyled to="/">
+      <NavLinkStyled to="/" underlinewidth="0%">
         <Logo src={FSFLogo} />
       </NavLinkStyled>
 
@@ -92,7 +92,7 @@ const NavBar: React.FC = () => {
           </NavLinkStyled>
         </NavItem>
         <NavItem>
-          <NavLinkStyled to="/sign-in" onClick={toggleMobileNav}>
+          <NavLinkStyled to="/sign-in-register" onClick={toggleMobileNav}>
             <SignInRegisterNavBtn />
           </NavLinkStyled>
         </NavItem>

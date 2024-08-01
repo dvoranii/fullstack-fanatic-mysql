@@ -50,15 +50,42 @@ const RegisterLoginForm: React.FC = () => {
         .then((res) => res.json())
         .then((data) => {
           console.log("Google API Response:", data);
+
           setProfile({
             email: data.email,
             name: data.name,
             id: data.id,
             picture: data.picture,
           });
-          navigate("/my-account");
+
+          const requestBody = {
+            email: data.email,
+            name: data.name,
+            googleId: data.id,
+          };
+          console.log("Request body for registration:", requestBody);
+
+          return fetch("http://localhost:5000/api/users/register", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+          });
         })
-        .catch((err) => console.log(err));
+        .then((res) => {
+          if (!res.ok) {
+            return res.text().then((text) => {
+              throw new Error(text);
+            });
+          }
+          return res.json();
+        })
+        .then((response) => {
+          console.log("User created in DB:", response);
+          navigate("/user-accounts-page");
+        })
+        .catch((err) => console.log("Error creating user in DB:", err));
     }
   }, [user, setProfile, navigate]);
 
