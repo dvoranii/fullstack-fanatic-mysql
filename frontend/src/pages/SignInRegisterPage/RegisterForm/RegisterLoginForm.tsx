@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useGoogleLogin, TokenResponse } from "@react-oauth/google";
 import { useUser } from "../../../context/UserContext";
@@ -20,79 +20,159 @@ import {
   GoogleSignInButton,
 } from "./RegisterLoginForm.styled";
 import googleIcon from "../../../assets/images/google-signin-icon.png";
+import { User } from "../../../types/User";
 
 const RegisterLoginForm: React.FC = () => {
   const [isLogin, setIsLogin] = useState(false);
-  const [user, setUser] = useState<TokenResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const { setProfile } = useUser();
   const navigate = useNavigate();
 
   const toggleForm = () => {
     setIsLogin(!isLogin);
+    setError(null);
   };
 
-  const login = useGoogleLogin({
-    onSuccess: (codeResponse) => setUser(codeResponse),
-    onError: (error) => console.log("Login Failed: ", error),
+  const handleGoogleAuth = useGoogleLogin({
+    onSuccess: async (codeResponse: TokenResponse) => {
+      console.log("Google auth successful, codeResponse:", codeResponse);
+      try {
+        const userInfo = await fetchGoogleUserInfo(codeResponse.access_token);
+        if (isLogin) {
+          await handleLogin(userInfo);
+        } else {
+          await handleRegistration(userInfo);
+        }
+      } catch (error) {
+        console.error("Error during Google authentication:", error);
+        setError("Google authentication failed");
+      }
+    },
+    onError: (error) => {
+      console.log("Google auth failed:", error);
+      setError("Google authentication failed");
+    },
   });
 
-  useEffect(() => {
-    if (user) {
-      fetch(
-        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`,
-        {
-          headers: {
-            Authorization: `Bearer ${user.access_token}`,
-            Accept: "application/json",
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("Google API Response:", data);
+  const fetchGoogleUserInfo = async (token: string) => {
+    const res = await fetch(
+      `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      }
+    );
+    const data = await res.json();
+    console.log("Fetched Google user info:", data);
+    return data;
+  };
 
-          setProfile({
-            email: data.email,
-            name: data.name,
-            id: data.id,
-            picture: data.picture,
-          });
+  const handleRegistration = async (userInfo: User) => {
+    try {
+      console.log("Handling registration with userInfo:", userInfo);
 
-          const requestBody = {
-            email: data.email,
-            name: data.name,
-            googleId: data.id,
-          };
-          console.log("Request body for registration:", requestBody);
+      const requestBody = {
+        email: userInfo.email,
+        name: userInfo.name,
+        googleId: userInfo.id,
+      };
 
-          return fetch("http://localhost:5000/api/users/register", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestBody),
-          });
-        })
-        .then((res) => {
-          if (!res.ok) {
-            return res.text().then((text) => {
-              throw new Error(text);
-            });
-          }
-          return res.json();
-        })
-        .then((response) => {
-          console.log("User created in DB:", response);
-          navigate("/user-accounts-page");
-        })
-        .catch((err) => console.log("Error creating user in DB:", err));
+      const endpoint = "http://localhost:5000/api/users/register";
+      console.log("Making registration request to:", endpoint);
+      console.log("Request body:", requestBody);
+
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      console.log(`Response status: ${res.status}`);
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text);
+      }
+
+      const response = await res.json();
+      console.log("Response from backend:", response);
+
+      // Set profile and navigate to my-account
+      setProfile({
+        email: userInfo.email,
+        name: userInfo.name,
+        id: userInfo.id,
+        picture: userInfo.picture,
+      });
+      navigate("/my-account");
+    } catch (err) {
+      if (err instanceof Error) {
+        console.log("Error:", err.message);
+        setError(err.message);
+      } else {
+        console.log("Unexpected error:", err);
+        setError("An unexpected error occurred");
+      }
     }
-  }, [user, setProfile, navigate]);
+  };
+
+  const handleLogin = async (userInfo: User) => {
+    try {
+      console.log("Handling login with userInfo:", userInfo);
+
+      const requestBody = {
+        email: userInfo.email,
+        name: userInfo.name,
+        googleId: userInfo.id,
+      };
+
+      const endpoint = "http://localhost:5000/api/users/login";
+      console.log("Making login request to:", endpoint);
+      console.log("Request body:", requestBody);
+
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      console.log(`Response status: ${res.status}`);
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text);
+      }
+
+      const response = await res.json();
+      console.log("Response from backend:", response);
+
+      // Set profile and navigate to my-account
+      setProfile({
+        email: userInfo.email,
+        name: userInfo.name,
+        id: userInfo.id,
+        picture: userInfo.picture,
+      });
+      navigate("/my-account");
+    } catch (err) {
+      if (err instanceof Error) {
+        console.log("Error:", err.message);
+        setError(err.message);
+      } else {
+        console.log("Unexpected error:", err);
+        setError("An unexpected error occurred");
+      }
+    }
+  };
 
   return (
     <RegisterLoginFormOuter>
       <RegisterLoginFormWrapperInner $isLogin={isLogin}>
-        <Form>
+        <Form onSubmit={(e) => e.preventDefault()}>
           <RegisterFormWrapperInner>
             <RegisterFormTitleWrapper
               $isLogin={isLogin}
@@ -121,7 +201,12 @@ const RegisterLoginForm: React.FC = () => {
             <SubmitButton>
               <span>Register</span>
             </SubmitButton>
+            {error && !isLogin && <div style={{ color: "red" }}>{error}</div>}
             <Divider>OR</Divider>
+            <GoogleSignInButton onClick={() => handleGoogleAuth()}>
+              <img src={googleIcon} alt="Google Icon" />
+              <span>Register with Google</span>
+            </GoogleSignInButton>
           </RegisterFormWrapperInner>
         </Form>
 
@@ -138,16 +223,14 @@ const RegisterLoginForm: React.FC = () => {
             <SubmitButton>
               <span>Login</span>
             </SubmitButton>
+            {error && isLogin && <div style={{ color: "red" }}>{error}</div>}
             <Divider>OR</Divider>
+            <GoogleSignInButton onClick={() => handleGoogleAuth()}>
+              <img src={googleIcon} alt="Google Icon" />
+              <span>Sign in with Google</span>
+            </GoogleSignInButton>
           </LoginFormWrapperInner>
         </LoginFormWrapperOuter>
-
-        <GoogleSignInButton onClick={() => login()}>
-          <img src={googleIcon} alt="Google Icon" />
-          <span>
-            {isLogin ? "Sign in with Google" : "Register with Google"}
-          </span>
-        </GoogleSignInButton>
       </RegisterLoginFormWrapperInner>
     </RegisterLoginFormOuter>
   );
