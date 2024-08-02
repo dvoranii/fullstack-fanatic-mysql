@@ -2,6 +2,13 @@ import styled from "styled-components";
 import ZenKakuGothicNewRegular from "./assets/fonts/ZenKakuGothicNew-Regular.ttf";
 import ZenKakuGothicNewMedium from "./assets/fonts/ZenKakuGothicNew-Medium.ttf";
 
+export const colors = {
+  secondary: "#ffb923",
+  white: "#ffffff",
+  primary: "#14213d",
+  background: "#e5e5e5",
+};
+
 export const PageWrapper = styled.div`
   @font-face {
     font-family: "ZenKakuGothicNewRegular";

@@ -1,16 +1,10 @@
 import styled from "styled-components";
-import checkIcon from "../../../assets/images/check-icon.png";
+import checkIcon from "../../assets/images/check-icon.png";
+import { colors } from "../../global.styled";
 
 interface WrapperProps {
   $isLogin: boolean;
 }
-
-const colors = {
-  primary: "#14213d",
-  secondary: "#ffb923",
-  background: "#e5e5e5",
-  white: "#ffffff",
-};
 
 const commonInputStyles = `
   margin-bottom: 10px;
@@ -110,6 +104,7 @@ export const TermsWrapper = styled.div`
     .checkbox-label {
       cursor: pointer;
       margin-right: 5px;
+      user-select: none;
     }
 
     .terms-link {
@@ -117,6 +112,7 @@ export const TermsWrapper = styled.div`
       text-decoration: underline;
       cursor: pointer;
       pointer-events: auto;
+      user-select: none;
     }
 
     &:hover::before {

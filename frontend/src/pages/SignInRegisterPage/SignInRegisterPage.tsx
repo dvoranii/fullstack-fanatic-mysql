@@ -1,5 +1,5 @@
 import { PageWrapper } from "../../global.styled";
-import RegisterLoginForm from "./RegisterForm/RegisterLoginForm";
+import RegisterLoginForm from "../../components/RegisterForm/RegisterLoginForm";
 
 const SignInRegisterPage: React.FC = () => {
   return (

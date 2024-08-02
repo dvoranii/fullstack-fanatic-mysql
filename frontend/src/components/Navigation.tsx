@@ -1,28 +1,38 @@
-import React from "react";
+// import React from "react";
+import { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
-import HomePage from "../pages/HomePage/HomePage";
-import AboutPage from "../pages/AboutPage/AboutPage";
-import TutorialsPage from "../pages/TutorialsPage/TutorialsPage";
-import TutorialPage from "../pages/TutorialPage/TutorialPage";
-import BlogsPage from "../pages/BlogsPage/BlogsPage";
-import BlogDetail from "../components/BlogDetail/BlogDetail";
-import ContactPage from "../pages/ContactPage/ContactPage";
-import SignInRegisterPage from "../pages/SignInRegisterPage/SignInRegisterPage";
-import UserAccountPage from "../pages/UserAccountPage/UserAccountPage";
+
+const HomePage = lazy(() => import("../pages/HomePage/HomePage"));
+const AboutPage = lazy(() => import("../pages/AboutPage/AboutPage"));
+const TutorialsPage = lazy(
+  () => import("../pages/TutorialsPage/TutorialsPage")
+);
+const TutorialPage = lazy(() => import("../pages/TutorialPage/TutorialPage"));
+const BlogsPage = lazy(() => import("../pages/BlogsPage/BlogsPage"));
+const BlogDetail = lazy(() => import("../components/BlogDetail/BlogDetail"));
+const ContactPage = lazy(() => import("../pages/ContactPage/ContactPage"));
+const SignInRegisterPage = lazy(
+  () => import("../pages/SignInRegisterPage/SignInRegisterPage")
+);
+const UserAccountPage = lazy(
+  () => import("../pages/UserAccountPage/UserAccountPage")
+);
 
 const Navigation: React.FC = () => {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/about" element={<AboutPage />} />
-      <Route path="/tutorials" element={<TutorialsPage />} />
-      <Route path="/tutorial/:id" element={<TutorialPage />} />
-      <Route path="/blogs" element={<BlogsPage />} />
-      <Route path="/blog/:id" element={<BlogDetail />} />
-      <Route path="/contact" element={<ContactPage />} />
-      <Route path="/sign-in-register" element={<SignInRegisterPage />} />
-      <Route path="my-account" element={<UserAccountPage />} />
-    </Routes>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/tutorials" element={<TutorialsPage />} />
+        <Route path="/tutorial/:id" element={<TutorialPage />} />
+        <Route path="/blogs" element={<BlogsPage />} />
+        <Route path="/blog/:id" element={<BlogDetail />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/sign-in-register" element={<SignInRegisterPage />} />
+        <Route path="my-account" element={<UserAccountPage />} />
+      </Routes>
+    </Suspense>
   );
 };
 
