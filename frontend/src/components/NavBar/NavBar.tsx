@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import useUser from "../../hooks/useUser";
 import {
   Nav,
   NavList,
@@ -11,10 +12,12 @@ import {
 } from "./NavBar.styled";
 import FSFLogo from "../../assets/images/fsf-logo-notext.png";
 import SignInRegisterNavBtn from "./SignInRegister/SignInRegisterNavBtn";
+import UserProfileNavBtn from "./SignInRegister/UserProfileNavBtn";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
 
 const NavBar: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const { profile } = useUser();
 
   const toggleMobileNav = () => {
     setOpen(!open);
@@ -57,9 +60,13 @@ const NavBar: React.FC = () => {
           </NavLinkStyled>
         </NavItem>
         <NavItem>
-          <NavLinkStyled to="/sign-in-register" className="no-underline">
-            <SignInRegisterNavBtn />
-          </NavLinkStyled>
+          {profile ? (
+            <UserProfileNavBtn />
+          ) : (
+            <NavLinkStyled to="/sign-in-register">
+              <SignInRegisterNavBtn />
+            </NavLinkStyled>
+          )}
         </NavItem>
       </NavList>
 
@@ -92,9 +99,13 @@ const NavBar: React.FC = () => {
           </NavLinkStyled>
         </NavItem>
         <NavItem>
-          <NavLinkStyled to="/sign-in-register" onClick={toggleMobileNav}>
-            <SignInRegisterNavBtn />
-          </NavLinkStyled>
+          {profile ? (
+            <UserProfileNavBtn />
+          ) : (
+            <NavLinkStyled to="/sign-in-register">
+              <SignInRegisterNavBtn />
+            </NavLinkStyled>
+          )}
         </NavItem>
       </MobileNavList>
     </Nav>

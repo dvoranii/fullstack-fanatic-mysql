@@ -1,5 +1,4 @@
-// src/context/UserContext.tsx
-import React, { createContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useState, useEffect, ReactNode } from "react";
 import { User } from "../types/User";
 
 export interface UserContextType {
