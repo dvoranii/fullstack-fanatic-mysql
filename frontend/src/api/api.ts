@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { AuthRequestBody } from "../types/Api";
+
 export const fetchGoogleUserInfo = async (token: string) => {
   const res = await fetch(
     `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`,
@@ -12,7 +13,7 @@ export const fetchGoogleUserInfo = async (token: string) => {
   return res.json();
 };
 
-export const registerUser = async (requestBody: any) => {
+export const registerUser = async (requestBody: AuthRequestBody) => {
   const res = await fetch("http://localhost:5000/api/users/register", {
     method: "POST",
     headers: {
@@ -29,7 +30,7 @@ export const registerUser = async (requestBody: any) => {
   return res.json();
 };
 
-export const loginUser = async (requestBody: any) => {
+export const loginUser = async (requestBody: AuthRequestBody) => {
   const res = await fetch("http://localhost:5000/api/users/login", {
     method: "POST",
     headers: {

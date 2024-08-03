@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ErrorMessage } from "../ErrorMessage.styled";
+import ErrorMessage from "../Form/ErrorMessage";
 import {
   CommentSectionWrapperOuter,
   CommentSectionWrapperInner,
@@ -185,7 +185,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   return (
     <CommentSectionWrapperOuter>
       <CommentSectionTitle>Comments</CommentSectionTitle>
-      {error && <ErrorMessage>{error}</ErrorMessage>}
+      {error && <ErrorMessage error={error} />}
       <CommentSectionWrapperInner>
         {comments.map((comment) => (
           <CommentWrapper key={comment.id}>

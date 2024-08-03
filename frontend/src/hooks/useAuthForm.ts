@@ -1,14 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { TokenResponse } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../context/UserContext";
+import useUser from "../hooks/useUser";
 import { User } from "../types/User";
 import { registerUser, loginUser } from "../api/api";
 
 export const useAuthForm = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
   const { setProfile } = useUser();
   const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ export const useAuthForm = () => {
     }
   };
 
-  const handleGoogleAuthError = (error: any) => {
+  const handleGoogleAuthError = (error: unknown) => {
     console.log("Google auth failed:", error);
     setError("Google authentication failed");
   };
@@ -106,7 +106,7 @@ export const useAuthForm = () => {
     // Handle manual login logic if needed
   };
 
-  const handleError = (err: any) => {
+  const handleError = (err: unknown) => {
     if (err instanceof Error) {
       try {
         const parsedError = JSON.parse(err.message);
@@ -126,10 +126,13 @@ export const useAuthForm = () => {
   return {
     isLogin,
     error,
+    setError,
     toggleForm,
     handleGoogleAuthSuccess,
     handleGoogleAuthError,
     handleRegisterSubmit,
     handleLoginSubmit,
+    isTermsAccepted,
+    setIsTermsAccepted,
   };
 };

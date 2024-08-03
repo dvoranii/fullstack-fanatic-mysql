@@ -1,11 +1,10 @@
-import React from "react";
-import { Link } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useAuthForm } from "../../hooks/useAuthForm";
 import InputField from "../Form/InputField";
 import GoogleAuthButton from "../Form/GoogleAuthButton";
 import SubmitButton from "../Form/SubmitButton";
 import ErrorMessage from "../Form/ErrorMessage";
+import TermsCheckbox from "../Form/TermsCheckbox";
 import {
   RegisterLoginFormWrapperInner,
   RegisterLoginFormOuter,
@@ -17,7 +16,6 @@ import {
   LoginFormTitleWrapper,
   Divider,
   FormTitle,
-  TermsWrapper,
 } from "./RegisterLoginForm.styled";
 
 const RegisterLoginForm: React.FC = () => {
@@ -29,12 +27,35 @@ const RegisterLoginForm: React.FC = () => {
     handleGoogleAuthError,
     handleRegisterSubmit,
     handleLoginSubmit,
+    setError,
+    isTermsAccepted,
+    setIsTermsAccepted,
   } = useAuthForm();
 
   const handleGoogleAuth = useGoogleLogin({
     onSuccess: handleGoogleAuthSuccess,
     onError: handleGoogleAuthError,
   });
+
+  const handleRegisterButtonClick = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    if (!isTermsAccepted) {
+      setError("Please accept the terms and conditions");
+    } else {
+      setError(" ");
+      handleRegisterSubmit(e, "button");
+    }
+  };
+
+  const handleGoogleAuthButtonClick = () => {
+    if (!isTermsAccepted) {
+      setError("Please accept the terms and conditions");
+    } else {
+      setError(null);
+      handleGoogleAuth();
+    }
+  };
 
   return (
     <RegisterLoginFormOuter>
@@ -71,23 +92,15 @@ const RegisterLoginForm: React.FC = () => {
               id="confirm-password"
               placeholder="*****"
             />
-            <TermsWrapper>
-              <input type="checkbox" id="terms-register" />
-              <label htmlFor="terms-register">
-                <span className="checkbox-label">I accept</span>
-                <Link to="/terms-conditions" className="terms-link">
-                  terms & conditions
-                </Link>
-              </label>
-            </TermsWrapper>
-            <SubmitButton
-              onClick={(e) => handleRegisterSubmit(e, "button")}
-              text="Register"
+            <TermsCheckbox
+              isChecked={isTermsAccepted}
+              onChange={setIsTermsAccepted}
             />
+            <SubmitButton onClick={handleRegisterButtonClick} text="Register" />
             <ErrorMessage error={error} />
             <Divider>OR</Divider>
             <GoogleAuthButton
-              handleGoogleAuth={handleGoogleAuth}
+              handleClick={handleGoogleAuthButtonClick}
               text="Register with Google"
             />
           </RegisterFormWrapperInner>
@@ -119,7 +132,7 @@ const RegisterLoginForm: React.FC = () => {
               <Divider>OR</Divider>
 
               <GoogleAuthButton
-                handleGoogleAuth={handleGoogleAuth}
+                handleClick={handleGoogleAuth}
                 text="Sign in with Google"
               />
             </Form>

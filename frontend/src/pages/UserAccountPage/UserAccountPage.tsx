@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { googleLogout } from "@react-oauth/google";
-import { useUser } from "../../context/UserContext";
+import useUser from "../../hooks/useUser";
 import { PageWrapper } from "../../global.styled";
 
 const UserAccountsPage: React.FC = () => {
