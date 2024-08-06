@@ -1,18 +1,8 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { googleLogout } from "@react-oauth/google";
 import useUser from "../../hooks/useUser";
 import { PageWrapper } from "../../global.styled";
 
 const UserAccountsPage: React.FC = () => {
-  const { profile, setProfile } = useUser();
-  const navigate = useNavigate();
-
-  const logOut = () => {
-    googleLogout();
-    setProfile(null);
-    navigate("/");
-  };
+  const { profile } = useUser();
 
   console.log("Rendering profile:", profile);
 
@@ -26,7 +16,6 @@ const UserAccountsPage: React.FC = () => {
           <p>Email: {profile.email}</p>
           <br />
           <br />
-          <button onClick={logOut}>Log Out</button>
         </div>
       ) : (
         <p>No user logged in</p>

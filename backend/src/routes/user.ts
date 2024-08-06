@@ -10,7 +10,6 @@ router.post("/register", async (req: Request, res: Response) => {
 
   try {
     const connection = await connectionPromise;
-    // Check if the user already exists
     const [existingUser] = await connection.execute<RowDataPacket[]>(
       "SELECT * FROM users WHERE email = ?",
       [email]
@@ -62,4 +61,59 @@ router.post("/login", async (req: Request, res: Response) => {
   }
 });
 
+// router.post("/:id/favourite", async (req: Request, res: Response) => {
+//   console.log("called");
+//   const { id: tutorialId } = req.params;
+//   const { userId } = req.body;
+
+//   try {
+//     const connection = await connectionPromise;
+
+//     const [existingFavourite] = await connection.execute<RowDataPacket[]>(
+//       "SELECT * FROM favourites WHERE user_id = ? AND tutorial_id = ?",
+//       [userId, tutorialId]
+//     );
+
+//     if (existingFavourite.length > 0) {
+//       await connection.execute(
+//         "DELETE FROM favourites WHERE user_id = ? AND tutorial_id = ?",
+//         [userId, tutorialId]
+//       );
+//       console.log(`Unfavourited tutorial ${tutorialId} for user ${userId}`);
+//       return res.status(200).json({ message: "Tutorial unfavourited" });
+//     } else {
+//       await connection.execute<ResultSetHeader>(
+//         "INSERT INTO favourites (user_id, tutorial_id) VALUES (?, ?)",
+//         [userId, tutorialId]
+//       );
+//       console.log(`Favourited tutorial ${tutorialId} for user ${userId}`);
+//       return res.status(201).json({ message: "Tutorial favourited" });
+//     }
+//   } catch (err) {
+//     const error = err as Error;
+//     console.error("Error handling favourite/unfavourite:", error.message);
+//     res.status(500).json({ error: error.message });
+//   }
+// });
+
+// router.get("/:id/favourites", async (req: Request, res: Response) => {
+//   const { id: userId } = req.params;
+
+//   try {
+//     const connection = await connectionPromise;
+//     const [results] = await connection.execute<RowDataPacket[]>(
+//       `SELECT t.id, t.title, t.content, t.created_at
+//        FROM tutorials t
+//        JOIN favourites f ON t.id = f.tutorial_id
+//        WHERE f.user_id = ?`,
+//       [userId]
+//     );
+
+//     res.json(results);
+//   } catch (err) {
+//     const error = err as Error;
+//     console.error("Error fetching favourites:", error.message);
+//     res.status(500).json({ error: error.message });
+//   }
+// });
 export default router;

@@ -55,6 +55,10 @@ export const MobileNavList = styled.ul<{ open: boolean }>`
   li:first-child {
     margin-top: 2.4rem;
   }
+
+  a {
+    padding-right: 0;
+  }
 `;
 
 export const NavItem = styled.li`

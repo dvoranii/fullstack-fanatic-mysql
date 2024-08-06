@@ -19,6 +19,18 @@ export const SignInRegisterWrapper = styled.div`
       filter: invert(1);
     }
   }
+
+  button {
+    border: none;
+    border-radius: 30px;
+    padding: 8px;
+    /* background: transparent; */
+
+    &:hover {
+      cursor: pointer;
+      /* color: white; */
+    }
+  }
 `;
 
 export const ProfileImg = styled.img`

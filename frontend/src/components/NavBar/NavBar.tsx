@@ -63,7 +63,7 @@ const NavBar: React.FC = () => {
           {profile ? (
             <UserProfileNavBtn />
           ) : (
-            <NavLinkStyled to="/sign-in-register">
+            <NavLinkStyled to="/sign-in-register" underlinewidth="0%">
               <SignInRegisterNavBtn />
             </NavLinkStyled>
           )}
@@ -102,7 +102,7 @@ const NavBar: React.FC = () => {
           {profile ? (
             <UserProfileNavBtn />
           ) : (
-            <NavLinkStyled to="/sign-in-register">
+            <NavLinkStyled to="/sign-in-register" underlinewidth="0%">
               <SignInRegisterNavBtn />
             </NavLinkStyled>
           )}

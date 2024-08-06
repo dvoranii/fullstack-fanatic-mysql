@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/app.js",
-    "dev": "node tsconfig-paths-bootstrap.js"
+    "dev": "nodemon tsconfig-paths-bootstrap.js"
   },
   "keywords": [],
   "author": "",

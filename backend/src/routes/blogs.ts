@@ -1,14 +1,9 @@
 import express, { Request, Response } from "express";
 import connectionPromise from "../db";
 import { RowDataPacket } from "mysql2";
+import { Blog } from "../types/Blog";
 
 const router = express.Router();
-
-interface Blog {
-  id: number;
-  title: string;
-  created_at: string;
-}
 
 router.get("/", async (req: Request, res: Response) => {
   try {

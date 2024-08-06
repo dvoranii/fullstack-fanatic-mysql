@@ -1,4 +1,5 @@
 import { AuthRequestBody } from "../types/Api";
+import { User } from "../types/User";
 
 export const fetchGoogleUserInfo = async (token: string) => {
   const res = await fetch(
@@ -30,7 +31,9 @@ export const registerUser = async (requestBody: AuthRequestBody) => {
   return res.json();
 };
 
-export const loginUser = async (requestBody: AuthRequestBody) => {
+export const loginUser = async (
+  requestBody: AuthRequestBody
+): Promise<User> => {
   const res = await fetch("http://localhost:5000/api/users/login", {
     method: "POST",
     headers: {
