@@ -5,13 +5,11 @@ import { PageWrapper } from "../../global.styled";
 import {
   TutorialList,
   TutorialThumbnail,
-  FavouriteIcon,
   TutorialItemWrapper,
   ThumbnailBannerWrapper,
   BeginnerStarIcon,
 } from "./TutorialsPage.styled";
-import FavouriteIconImg from "../../assets/images/bookmark.png";
-import FavouriteIconImgFilled from "../../assets/images/bookmark(filled).png";
+import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
 import BeginnerStarImg from "../../assets/images/1-green-star.png";
 import { UserContext } from "../../context/UserContext";
 import {
@@ -86,6 +84,7 @@ const TutorialsPage: React.FC = () => {
     }
   };
 
+  // will need to change the layout and styles of the blogs page
   return (
     <PageWrapper>
       <Title textContent="Tutorials" />
@@ -95,14 +94,10 @@ const TutorialsPage: React.FC = () => {
             <ThumbnailBannerWrapper>
               <BeginnerStarIcon src={BeginnerStarImg} />
               {profile && (
-                <FavouriteIcon
-                  src={
-                    tutorial.isFavourited
-                      ? FavouriteIconImgFilled
-                      : FavouriteIconImg
-                  }
-                  alt="Favourite Icon"
+                <FavouriteButton
+                  isFavourited={tutorial.isFavourited}
                   onClick={() => handleFavouriteClick(tutorial.id, "tutorial")}
+                  altText="Favourite Button"
                 />
               )}
             </ThumbnailBannerWrapper>

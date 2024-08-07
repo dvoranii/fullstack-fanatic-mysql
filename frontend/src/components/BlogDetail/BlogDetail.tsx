@@ -5,21 +5,16 @@ import { BlogDetailWrapper } from "./BlogDetail.styled";
 import { blogContent } from "../../assets/blogContent";
 import Accordion from "../Accordion/Accordion";
 import CommentSection from "../CommentSection/CommentSection";
-
-interface Blog {
-  id: number;
-  title: string;
-  created_at: string;
-}
+import { BlogDetailType } from "../../types/BlogDetailType";
 
 const BlogDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [blog, setBlog] = useState<Blog | null>(null);
+  const [blog, setBlog] = useState<BlogDetailType | null>(null);
 
   useEffect(() => {
     fetch(`/api/blogs/${id}`)
       .then((response) => response.json())
-      .then((data: Blog) => setBlog(data));
+      .then((data: BlogDetailType) => setBlog(data));
   }, [id]);
 
   if (!blog) return <div>Loading...</div>;

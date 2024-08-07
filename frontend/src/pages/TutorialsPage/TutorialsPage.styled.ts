@@ -45,15 +45,6 @@ export const ThumbnailBannerWrapper = styled.div`
   user-select: none;
 `;
 
-export const FavouriteIcon = styled.img`
-  width: 25px;
-  /* margin-bottom: 1.2rem; */
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
 export const BeginnerStarIcon = styled.img`
   width: 35px;
   height: 35px;
