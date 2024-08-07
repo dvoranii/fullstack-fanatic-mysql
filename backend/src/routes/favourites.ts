@@ -2,7 +2,6 @@ import { Router, Request, Response } from "express";
 import connectionPromise from "../db";
 import { RowDataPacket } from "mysql2";
 import { ContentType } from "../types/ContentType";
-import { DeleteFavouriteQuery } from "../types/favourites";
 
 const router = Router();
 
@@ -47,9 +46,7 @@ router.post("/", async (req: Request, res: Response) => {
 });
 
 router.delete("/", async (req: Request, res: Response) => {
-  const queryParams = req.query as unknown as DeleteFavouriteQuery;
-
-  const { google_id, item_id, user_id, item_type } = queryParams;
+  const { google_id, item_id, user_id, item_type } = req.body;
 
   if (!google_id || !item_id || !user_id || !item_type) {
     return res.status(400).json({ error: "Missing required parameters" });

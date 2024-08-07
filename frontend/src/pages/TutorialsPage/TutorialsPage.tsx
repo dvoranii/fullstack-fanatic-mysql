@@ -15,7 +15,6 @@ import FavouriteIconImgFilled from "../../assets/images/bookmark(filled).png";
 import BeginnerStarImg from "../../assets/images/1-green-star.png";
 import { UserContext } from "../../context/UserContext";
 import {
-  getUser,
   addFavourite,
   removeFavourite,
 } from "../../services/favouritesService";
@@ -72,16 +71,14 @@ const TutorialsPage: React.FC = () => {
     });
 
     try {
-      const userId = await getUser(googleId);
-
       const item = tutorials.find((tutorial) => tutorial.id === id);
       if (!item) return;
 
       if (item.isFavourited) {
-        await removeFavourite(googleId, id, userId, itemType);
+        await removeFavourite(googleId, id, itemType);
         console.log("Favourite removed");
       } else {
-        await addFavourite(googleId, id, userId, itemType);
+        await addFavourite(googleId, id, itemType);
         console.log("Favourite added");
       }
     } catch (error) {
