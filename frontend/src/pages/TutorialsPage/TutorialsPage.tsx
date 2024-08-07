@@ -14,6 +14,14 @@ import FavouriteIconImg from "../../assets/images/bookmark.png";
 import FavouriteIconImgFilled from "../../assets/images/bookmark(filled).png";
 import BeginnerStarImg from "../../assets/images/1-green-star.png";
 import { UserContext } from "../../context/UserContext";
+import {
+  getUser,
+  addFavourite,
+  removeFavourite,
+} from "../../services/favouritesService";
+import { ContentType } from "../../types/ContentType";
+
+const LOCAL_STORAGE_FAVOURITES_KEY = "userFavourites";
 
 const TutorialsPage: React.FC = () => {
   const [tutorials, setTutorials] = useState<Tutorial[]>([]);
@@ -24,9 +32,13 @@ const TutorialsPage: React.FC = () => {
       try {
         const response = await fetch("/api/tutorials");
         const data = await response.json();
+        const savedFavourites = JSON.parse(
+          localStorage.getItem(LOCAL_STORAGE_FAVOURITES_KEY) || "[]"
+        );
+
         const tutorialsWithFavourite = data.map((tutorial: Tutorial) => ({
           ...tutorial,
-          isFavourited: false,
+          isFavourited: savedFavourites.includes(tutorial.id),
         }));
         setTutorials(tutorialsWithFavourite);
       } catch (error) {
@@ -37,89 +49,39 @@ const TutorialsPage: React.FC = () => {
     fetchTutorials();
   }, []);
 
-  const getUser = async (googleId: string) => {
-    const response = await fetch(`/api/users?google_id=${googleId}`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return await response.json();
-  };
+  const handleFavouriteClick = async (id: number, type: ContentType) => {
+    if (!profile) return;
 
-  const addFavourite = async (
-    googleId: string,
-    tutorialId: number,
-    userId: number
-  ) => {
-    const response = await fetch("/api/tutorials/favourites", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        google_id: googleId,
-        tutorial_id: tutorialId,
-        user_id: userId,
-      }),
-    });
+    const googleId = profile.id;
+    const itemType: ContentType = type;
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    return await response.json();
-  };
-
-  const removeFavourite = async (
-    googleId: string,
-    tutorialId: number,
-    userId: number
-  ) => {
-    const response = await fetch("/api/tutorials/favourites", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        google_id: googleId,
-        tutorial_id: tutorialId,
-        user_id: userId,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    return await response.json();
-  };
-
-  const handleFavouriteClick = async (id: number) => {
-    setTutorials((prevTutorials) => {
-      const updatedTutorials = prevTutorials.map((tutorial) =>
-        tutorial.id === id
-          ? { ...tutorial, isFavourited: !tutorial.isFavourited }
-          : tutorial
+    setTutorials((prevItems: Tutorial[]) => {
+      const updatedItems = prevItems.map((item) =>
+        item.id === id ? { ...item, isFavourited: !item.isFavourited } : item
       );
 
-      console.log("Updated Tutorials:", updatedTutorials);
-
-      return updatedTutorials;
+      const currentFavourites = updatedItems
+        .filter((item) => item.isFavourited)
+        .map((item) => item.id);
+      localStorage.setItem(
+        LOCAL_STORAGE_FAVOURITES_KEY,
+        JSON.stringify(currentFavourites)
+      );
+      console.log("Updated Tutorials:", updatedItems);
+      return updatedItems;
     });
 
-    if (!profile) return;
-    const googleId = profile.id;
-    const tutorial = tutorials.find((tutorial) => tutorial.id === id);
-    if (!tutorial) return;
-
     try {
-      const userData = await getUser(googleId);
-      const userId = userData.user_id;
+      const userId = await getUser(googleId);
 
-      if (tutorial.isFavourited) {
-        await removeFavourite(googleId, tutorial.id, userId);
+      const item = tutorials.find((tutorial) => tutorial.id === id);
+      if (!item) return;
+
+      if (item.isFavourited) {
+        await removeFavourite(googleId, id, userId, itemType);
         console.log("Favourite removed");
       } else {
-        await addFavourite(googleId, tutorial.id, userId);
+        await addFavourite(googleId, id, userId, itemType);
         console.log("Favourite added");
       }
     } catch (error) {
@@ -143,7 +105,7 @@ const TutorialsPage: React.FC = () => {
                       : FavouriteIconImg
                   }
                   alt="Favourite Icon"
-                  onClick={() => handleFavouriteClick(tutorial.id)}
+                  onClick={() => handleFavouriteClick(tutorial.id, "tutorial")}
                 />
               )}
             </ThumbnailBannerWrapper>

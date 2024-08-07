@@ -3,7 +3,7 @@ import ErrorMessage from "../Form/ErrorMessage";
 import {
   CommentSectionWrapperOuter,
   CommentSectionWrapperInner,
-  Comment,
+  CommentItem,
   CommentWrapper,
   LikesWrapper,
   FormWrapper,
@@ -189,7 +189,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
       <CommentSectionWrapperInner>
         {comments.map((comment) => (
           <CommentWrapper key={comment.id}>
-            <Comment>
+            <CommentItem>
               {editingCommentId === comment.id ? (
                 <>
                   <FormTextArea
@@ -227,7 +227,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
                   </CommentButtonsWrapper>
                 </>
               )}
-            </Comment>
+            </CommentItem>
             <LikesWrapper>
               <img
                 src={comment.likes % 2 === 1 ? like2 : like1}

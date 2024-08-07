@@ -5,7 +5,7 @@ export const CommentSectionTitle = styled.h3`
   color: #333333;
 `;
 
-export const Comment = styled.li`
+export const CommentItem = styled.li`
   list-style: none;
   padding: 1.2rem;
   margin-top: 1.2rem;
