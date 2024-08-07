@@ -4,4 +4,5 @@ export interface User {
   id: string;
   picture: string;
   token: string;
+  userId: number;
 }

@@ -24,7 +24,6 @@ const TutorialsPage: React.FC = () => {
       try {
         const response = await fetch("/api/tutorials");
         const data = await response.json();
-
         const tutorialsWithFavourite = data.map((tutorial: Tutorial) => ({
           ...tutorial,
           isFavourited: false,
@@ -38,43 +37,91 @@ const TutorialsPage: React.FC = () => {
     fetchTutorials();
   }, []);
 
+  const getUser = async (googleId: string) => {
+    const response = await fetch(`/api/users?google_id=${googleId}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return await response.json();
+  };
+
+  const addFavourite = async (
+    googleId: string,
+    tutorialId: number,
+    userId: number
+  ) => {
+    const response = await fetch("/api/tutorials/favourites", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        google_id: googleId,
+        tutorial_id: tutorialId,
+        user_id: userId,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    return await response.json();
+  };
+
+  const removeFavourite = async (
+    googleId: string,
+    tutorialId: number,
+    userId: number
+  ) => {
+    const response = await fetch("/api/tutorials/favourites", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        google_id: googleId,
+        tutorial_id: tutorialId,
+        user_id: userId,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    return await response.json();
+  };
+
   const handleFavouriteClick = async (id: number) => {
-    // Toggle the favourite state locally
-    setTutorials((prevTutorials) =>
-      prevTutorials.map((tutorial) =>
+    setTutorials((prevTutorials) => {
+      const updatedTutorials = prevTutorials.map((tutorial) =>
         tutorial.id === id
           ? { ...tutorial, isFavourited: !tutorial.isFavourited }
           : tutorial
-      )
-    );
+      );
 
-    // Get the user profile and find the selected tutorial
+      console.log("Updated Tutorials:", updatedTutorials);
+
+      return updatedTutorials;
+    });
+
     if (!profile) return;
-    const googleId = profile.id; // Assuming profile.id is the Google ID
+    const googleId = profile.id;
     const tutorial = tutorials.find((tutorial) => tutorial.id === id);
-
     if (!tutorial) return;
 
-    // Make the fetch call to update the favourites
     try {
-      const response = await fetch("/api/tutorials/favourites", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          google_id: googleId,
-          tutorial_id: tutorial.id,
-          isFavourited: tutorial.isFavourited,
-        }),
-      });
+      const userData = await getUser(googleId);
+      const userId = userData.user_id;
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+      if (tutorial.isFavourited) {
+        await removeFavourite(googleId, tutorial.id, userId);
+        console.log("Favourite removed");
+      } else {
+        await addFavourite(googleId, tutorial.id, userId);
+        console.log("Favourite added");
       }
-
-      const result = await response.json();
-      console.log("Response from server:", result);
     } catch (error) {
       console.error("Error:", error);
     }

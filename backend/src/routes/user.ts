@@ -61,59 +61,30 @@ router.post("/login", async (req: Request, res: Response) => {
   }
 });
 
-// router.post("/:id/favourite", async (req: Request, res: Response) => {
-//   console.log("called");
-//   const { id: tutorialId } = req.params;
-//   const { userId } = req.body;
+// Route to get user_id by google_id
+router.get("/", async (req: Request, res: Response) => {
+  const { google_id } = req.query;
 
-//   try {
-//     const connection = await connectionPromise;
+  if (typeof google_id !== "string") {
+    return res.status(400).json({ error: "Invalid google_id" });
+  }
 
-//     const [existingFavourite] = await connection.execute<RowDataPacket[]>(
-//       "SELECT * FROM favourites WHERE user_id = ? AND tutorial_id = ?",
-//       [userId, tutorialId]
-//     );
+  try {
+    const connection = await connectionPromise;
+    const [rows] = await connection.query<RowDataPacket[]>(
+      "SELECT id AS user_id FROM users WHERE google_id = ?",
+      [google_id]
+    );
 
-//     if (existingFavourite.length > 0) {
-//       await connection.execute(
-//         "DELETE FROM favourites WHERE user_id = ? AND tutorial_id = ?",
-//         [userId, tutorialId]
-//       );
-//       console.log(`Unfavourited tutorial ${tutorialId} for user ${userId}`);
-//       return res.status(200).json({ message: "Tutorial unfavourited" });
-//     } else {
-//       await connection.execute<ResultSetHeader>(
-//         "INSERT INTO favourites (user_id, tutorial_id) VALUES (?, ?)",
-//         [userId, tutorialId]
-//       );
-//       console.log(`Favourited tutorial ${tutorialId} for user ${userId}`);
-//       return res.status(201).json({ message: "Tutorial favourited" });
-//     }
-//   } catch (err) {
-//     const error = err as Error;
-//     console.error("Error handling favourite/unfavourite:", error.message);
-//     res.status(500).json({ error: error.message });
-//   }
-// });
+    if (rows.length > 0) {
+      res.status(200).json(rows[0]);
+    } else {
+      res.status(404).json({ error: "User not found" });
+    }
+  } catch (error) {
+    console.error("Database query error:", error);
+    res.status(500).json({ error: "Failed to retrieve user" });
+  }
+});
 
-// router.get("/:id/favourites", async (req: Request, res: Response) => {
-//   const { id: userId } = req.params;
-
-//   try {
-//     const connection = await connectionPromise;
-//     const [results] = await connection.execute<RowDataPacket[]>(
-//       `SELECT t.id, t.title, t.content, t.created_at
-//        FROM tutorials t
-//        JOIN favourites f ON t.id = f.tutorial_id
-//        WHERE f.user_id = ?`,
-//       [userId]
-//     );
-
-//     res.json(results);
-//   } catch (err) {
-//     const error = err as Error;
-//     console.error("Error fetching favourites:", error.message);
-//     res.status(500).json({ error: error.message });
-//   }
-// });
 export default router;
