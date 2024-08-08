@@ -1,17 +1,9 @@
 import express, { Request, Response } from "express";
 import connectionPromise from "../db";
 import { RowDataPacket, ResultSetHeader } from "mysql2";
+import { Comment } from "../types/Comment";
 
 const router = express.Router();
-
-interface Comment {
-  id: number;
-  content_id: number;
-  content_type: "tutorial" | "blog";
-  content: string;
-  created_at: string;
-  likes: number;
-}
 
 router.get("/:contentType/:contentId", async (req: Request, res: Response) => {
   const { contentType, contentId } = req.params as {

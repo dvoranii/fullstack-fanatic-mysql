@@ -4,7 +4,7 @@ import { getUser } from "./userService";
 export const addFavourite = async (
   googleId: string,
   itemId: number,
-  itemType: ContentType
+  contentType: ContentType
 ) => {
   try {
     const userId = await getUser(googleId);
@@ -17,7 +17,7 @@ export const addFavourite = async (
         google_id: googleId,
         item_id: itemId,
         user_id: userId,
-        item_type: itemType,
+        content_type: contentType,
       }),
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -29,7 +29,7 @@ export const addFavourite = async (
 export const removeFavourite = async (
   googleId: string,
   itemId: number,
-  itemType: ContentType
+  contentType: ContentType
 ) => {
   try {
     const userId = await getUser(googleId);
@@ -42,7 +42,7 @@ export const removeFavourite = async (
         google_id: googleId,
         item_id: itemId,
         user_id: userId,
-        item_type: itemType,
+        content_type: contentType,
       }),
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);

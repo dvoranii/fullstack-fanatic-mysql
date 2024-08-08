@@ -6,15 +6,7 @@ import {
   AccordionContent,
 } from "./Accordion.styled";
 
-interface Step {
-  title: string;
-  content: string;
-  component?: string;
-}
-
-interface AccordionProps {
-  steps: Step[];
-}
+import { AccordionProps } from "../../types/Accordion";
 
 const Accordion: React.FC<AccordionProps> = ({ steps }) => {
   const [activeIndices, setActiveIndices] = useState<number[]>([]);

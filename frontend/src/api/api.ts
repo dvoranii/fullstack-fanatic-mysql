@@ -1,4 +1,4 @@
-import { AuthRequestBody } from "../types/Api";
+import { AuthRequestBody } from "../types/AuthRequest";
 import { User } from "../types/User";
 
 export const fetchGoogleUserInfo = async (token: string) => {

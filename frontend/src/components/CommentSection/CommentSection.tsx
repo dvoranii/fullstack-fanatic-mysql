@@ -16,26 +16,14 @@ import {
 import like1 from "../../assets/images/like-1.png";
 import like2 from "../../assets/images/like-2.png";
 import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmationModal";
-
-interface Comment {
-  id: number;
-  content_id: number;
-  content_type: "tutorial" | "blog";
-  content: string;
-  created_at: string;
-  likes: number;
-}
-
-interface CommentSectionProps {
-  contentId: number;
-  contentType: "tutorial" | "blog";
-}
+import { CommentType } from "../../types/Comment";
+import { CommentSectionProps } from "../../types/CommentSectionProps";
 
 const CommentSection: React.FC<CommentSectionProps> = ({
   contentId,
   contentType,
 }) => {
-  const [comments, setComments] = useState<Comment[]>([]);
+  const [comments, setComments] = useState<CommentType[]>([]);
   const [newComment, setNewComment] = useState("");
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [editedComment, setEditedComment] = useState("");
@@ -52,7 +40,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         }
         return response.json();
       })
-      .then((data: Comment[]) => setComments(data))
+      .then((data: CommentType[]) => setComments(data))
       .catch((error) => {
         console.error("Fetch error:", error);
         setError("Failed to fetch comments");
@@ -79,7 +67,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
       }),
     })
       .then((response) => response.json())
-      .then((data: Comment) => {
+      .then((data: CommentType) => {
         setComments([...comments, data]);
         setNewComment("");
         setError(null);
@@ -120,7 +108,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
       body: JSON.stringify({ content: editedComment }),
     })
       .then((response) => response.json())
-      .then((data: Comment) => {
+      .then((data: CommentType) => {
         setComments(
           comments.map((comment) => (comment.id === id ? data : comment))
         );

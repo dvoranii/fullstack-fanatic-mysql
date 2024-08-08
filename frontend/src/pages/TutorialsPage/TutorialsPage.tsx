@@ -84,7 +84,6 @@ const TutorialsPage: React.FC = () => {
     }
   };
 
-  // will need to change the layout and styles of the blogs page
   return (
     <PageWrapper>
       <Title textContent="Tutorials" />
