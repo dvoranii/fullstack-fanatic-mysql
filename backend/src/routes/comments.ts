@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import connectionPromise from "../db";
 import { RowDataPacket, ResultSetHeader } from "mysql2";
 import { Comment } from "../types/Comment";
+// import { authenticate } from "../middleware/authenticate";
 
 const router = express.Router();
 
