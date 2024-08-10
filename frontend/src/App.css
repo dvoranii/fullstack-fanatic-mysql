@@ -7,8 +7,11 @@
 
 html,
 body {
-  position: relative;
+  overflow-y: auto;
   overflow-x: hidden;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
@@ -20,4 +23,5 @@ body {
     url("./assets/images/paper-bg.avif");
   background-size: cover;
   background-repeat: no-repeat;
+  min-height: 100vh;
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Title from "../../components/Title/Title";
 import { PageWrapper } from "../../global.styled";
 import {
@@ -9,8 +9,10 @@ import {
 } from "./BlogsPage.styled";
 import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
 import { useContent } from "../../hooks/useContent";
+import { UserContext } from "../../context/UserContext";
 
 const BlogsPage: React.FC = () => {
+  const { profile } = useContext(UserContext) || {};
   const { items: blogs, handleFavouriteClick } = useContent(
     "/api/blogs",
     "blog"
@@ -32,11 +34,14 @@ const BlogsPage: React.FC = () => {
               </p>
             </BlogContent>
             <BlogActions>
-              <FavouriteButton
-                isFavourited={blog.isFavourited}
-                onClick={() => handleFavouriteClick(blog.id)}
-                altText="Blog Favourite Button"
-              />
+              {profile && (
+                <FavouriteButton
+                  isFavourited={blog.isFavourited}
+                  onClick={() => handleFavouriteClick(blog.id)}
+                  altText="Blog Favourite Button"
+                />
+              )}
+
               <span className="badge">FREE</span>
             </BlogActions>
           </BlogItem>

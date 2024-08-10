@@ -1,5 +1,5 @@
 // TutorialsPage.tsx
-import React from "react";
+import React, { useContext } from "react";
 import Title from "../../components/Title/Title";
 import { PageWrapper } from "../../global.styled";
 import {
@@ -12,8 +12,10 @@ import {
 import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
 import { useContent } from "../../hooks/useContent";
 import BeginnerStarImg from "../../assets/images/1-green-star.png";
+import { UserContext } from "../../context/UserContext";
 
 const TutorialsPage: React.FC = () => {
+  const { profile } = useContext(UserContext) || {};
   const { items: tutorials, handleFavouriteClick } = useContent(
     "/api/tutorials",
     "tutorial"
@@ -27,11 +29,13 @@ const TutorialsPage: React.FC = () => {
           <TutorialItemWrapper key={tutorial.id}>
             <ThumbnailBannerWrapper>
               <BeginnerStarIcon src={BeginnerStarImg} />
-              <FavouriteButton
-                isFavourited={tutorial.isFavourited}
-                onClick={() => handleFavouriteClick(tutorial.id)}
-                altText="Tutorial Favourite Button"
-              />
+              {profile && (
+                <FavouriteButton
+                  isFavourited={tutorial.isFavourited}
+                  onClick={() => handleFavouriteClick(tutorial.id)}
+                  altText="Tutorial Favourite Button"
+                />
+              )}
             </ThumbnailBannerWrapper>
 
             <TutorialThumbnail to={`/tutorial/${tutorial.id}`}>

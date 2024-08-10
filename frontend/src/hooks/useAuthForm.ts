@@ -3,7 +3,7 @@ import { TokenResponse } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
 import { User } from "../types/User";
-import { registerUser, loginUser } from "../api/api";
+import { registerUser, loginUser, fetchGoogleUserInfo } from "../api/api";
 
 export const useAuthForm = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -35,21 +35,6 @@ export const useAuthForm = () => {
   const handleGoogleAuthError = (error: unknown) => {
     console.log("Google auth failed:", error);
     setError("Google authentication failed");
-  };
-
-  const fetchGoogleUserInfo = async (token: string): Promise<User> => {
-    const res = await fetch(
-      `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
-    const data = await res.json();
-    console.log("Fetched Google user info:", data);
-    return data;
   };
 
   const handleRegistration = async (userInfo: User) => {

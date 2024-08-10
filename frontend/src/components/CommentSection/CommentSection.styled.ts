@@ -5,18 +5,6 @@ export const CommentSectionTitle = styled.h3`
   color: #333333;
 `;
 
-export const CommentItem = styled.li`
-  list-style: none;
-  padding: 1.2rem;
-  margin-top: 1.2rem;
-  display: flex;
-  justify-content: space-between;
-`;
-
-export const CommentWrapper = styled.div`
-  border: 1px solid black;
-`;
-
 export const CommentSectionWrapperOuter = styled.div`
   display: flex;
   flex-direction: column;
@@ -28,18 +16,6 @@ export const CommentSectionWrapperInner = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-`;
-
-export const LikesWrapper = styled.div`
-  padding: 0 0 1.2rem 1.8rem;
-  display: flex;
-  align-items: center;
-
-  img {
-    cursor: pointer;
-    margin-right: 0.5rem;
-    width: 25px;
-  }
 `;
 
 export const FormWrapper = styled.form`

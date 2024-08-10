@@ -1,23 +1,25 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import ErrorMessage from "../Form/ErrorMessage";
 import {
   CommentSectionWrapperOuter,
   CommentSectionWrapperInner,
-  CommentItem,
-  CommentWrapper,
-  LikesWrapper,
-  FormWrapper,
-  FormButton,
-  FormTextArea,
   CommentSectionTitle,
-  CommentContentWrapper,
-  CommentButtonsWrapper,
+  FormWrapper,
+  FormTextArea,
+  FormButton,
 } from "./CommentSection.styled";
-import like1 from "../../assets/images/like-1.png";
-import like2 from "../../assets/images/like-2.png";
 import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmationModal";
 import { CommentType } from "../../types/Comment";
 import { CommentSectionProps } from "../../types/CommentSectionProps";
+import {
+  fetchComments,
+  submitComment,
+  updateComment,
+  deleteComment,
+  toggleLike,
+} from "../../services/commentService";
+import Comment from "./Comment/Comment";
+import { UserContext } from "../../context/UserContext";
 
 const CommentSection: React.FC<CommentSectionProps> = ({
   contentId,
@@ -30,24 +32,23 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
+  const { profile } = useContext(UserContext) || {};
 
   useEffect(() => {
-    fetch(`/api/comments/${contentType}/${contentId}`)
-      .then((response) => {
-        if (!response.ok) {
-          console.log(response);
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data: CommentType[]) => setComments(data))
-      .catch((error) => {
+    const fetchCommentsData = async () => {
+      try {
+        const data = await fetchComments(contentType, contentId);
+        setComments(data);
+      } catch (error) {
         console.error("Fetch error:", error);
         setError("Failed to fetch comments");
-      });
+      }
+    };
+
+    fetchCommentsData();
   }, [contentId, contentType]);
 
-  const handleCommentSubmit = (e: React.FormEvent) => {
+  const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (newComment.trim() === "") {
@@ -55,27 +56,15 @@ const CommentSection: React.FC<CommentSectionProps> = ({
       return;
     }
 
-    fetch("/api/comments", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        content_id: contentId,
-        content_type: contentType,
-        content: newComment,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data: CommentType) => {
-        setComments([...comments, data]);
-        setNewComment("");
-        setError(null);
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-        setError("Failed to submit comment");
-      });
+    try {
+      const data = await submitComment(contentId, contentType, newComment);
+      setComments([...comments, data]);
+      setNewComment("");
+      setError(null);
+    } catch (error) {
+      console.error("Fetch error:", error);
+      setError("Failed to submit comment");
+    }
   };
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -94,32 +83,24 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     }
   };
 
-  const handleUpdate = (id: number) => {
+  const handleUpdate = async (id: number) => {
     if (editedComment.trim() === "") {
       setError("Comment cannot be empty");
       return;
     }
 
-    fetch(`/api/comments/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ content: editedComment }),
-    })
-      .then((response) => response.json())
-      .then((data: CommentType) => {
-        setComments(
-          comments.map((comment) => (comment.id === id ? data : comment))
-        );
-        setEditingCommentId(null);
-        setEditedComment("");
-        setError(null);
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-        setError("Failed to update comment");
-      });
+    try {
+      const data = await updateComment(id, editedComment);
+      setComments(
+        comments.map((comment) => (comment.id === id ? data : comment))
+      );
+      setEditingCommentId(null);
+      setEditedComment("");
+      setError(null);
+    } catch (error) {
+      console.error("Fetch error:", error);
+      setError("Failed to update comment");
+    }
   };
 
   const handleDelete = (id: number) => {
@@ -127,23 +108,19 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     setCommentToDelete(id);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (commentToDelete !== null) {
-      fetch(`/api/comments/${commentToDelete}`, {
-        method: "DELETE",
-      })
-        .then((response) => response.json())
-        .then(() => {
-          setComments(
-            comments.filter((comment) => comment.id !== commentToDelete)
-          );
-          setShowDeleteModal(false);
-          setCommentToDelete(null);
-        })
-        .catch((error) => {
-          console.error("Fetch error: ", error);
-          setError("Failed to delete comment");
-        });
+      try {
+        await deleteComment(commentToDelete);
+        setComments(
+          comments.filter((comment) => comment.id !== commentToDelete)
+        );
+        setShowDeleteModal(false);
+        setCommentToDelete(null);
+      } catch (error) {
+        console.error("Fetch error: ", error);
+        setError("Failed to delete comment");
+      }
     }
   };
 
@@ -152,22 +129,18 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     setCommentToDelete(null);
   };
 
-  const handleLike = (id: number) => {
-    fetch(`/api/comments/${id}/toggle-like`, {
-      method: "PUT",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setComments(
-          comments.map((comment) =>
-            comment.id === id ? { ...comment, likes: data.likes } : comment
-          )
-        );
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-        setError("Failed to toggle like");
-      });
+  const handleLike = async (id: number) => {
+    try {
+      const likes = await toggleLike(id);
+      setComments(
+        comments.map((comment) =>
+          comment.id === id ? { ...comment, likes } : comment
+        )
+      );
+    } catch (error) {
+      console.error("Fetch error:", error);
+      setError("Failed to toggle like");
+    }
   };
 
   return (
@@ -176,61 +149,29 @@ const CommentSection: React.FC<CommentSectionProps> = ({
       {error && <ErrorMessage error={error} />}
       <CommentSectionWrapperInner>
         {comments.map((comment) => (
-          <CommentWrapper key={comment.id}>
-            <CommentItem>
-              {editingCommentId === comment.id ? (
-                <>
-                  <FormTextArea
-                    value={editedComment}
-                    onChange={handleEditCommentChange}
-                  />
-
-                  <CommentButtonsWrapper>
-                    <FormButton onClick={() => handleUpdate(comment.id)}>
-                      Save
-                    </FormButton>
-                    <FormButton onClick={() => setEditingCommentId(null)}>
-                      Cancel
-                    </FormButton>
-                  </CommentButtonsWrapper>
-                </>
-              ) : (
-                <>
-                  <CommentContentWrapper>
-                    {comment.content}
-                  </CommentContentWrapper>
-
-                  <CommentButtonsWrapper>
-                    <FormButton
-                      onClick={() => {
-                        setEditingCommentId(comment.id);
-                        setEditedComment(comment.content);
-                      }}
-                    >
-                      Edit
-                    </FormButton>
-                    <FormButton onClick={() => handleDelete(comment.id)}>
-                      Delete
-                    </FormButton>
-                  </CommentButtonsWrapper>
-                </>
-              )}
-            </CommentItem>
-            <LikesWrapper>
-              <img
-                src={comment.likes % 2 === 1 ? like2 : like1}
-                alt="like icon"
-                onClick={() => handleLike(comment.id)}
-              />
-              {comment.likes}
-            </LikesWrapper>
-          </CommentWrapper>
+          <Comment
+            key={comment.id}
+            comment={comment}
+            isEditing={editingCommentId === comment.id}
+            editedComment={editedComment}
+            handleEditChange={handleEditCommentChange}
+            onEdit={() => {
+              setEditingCommentId(comment.id);
+              setEditedComment(comment.content);
+            }}
+            onDelete={() => handleDelete(comment.id)}
+            onLike={() => handleLike(comment.id)}
+            onSave={handleUpdate}
+            onCancelEdit={() => setEditingCommentId(null)}
+          />
         ))}
       </CommentSectionWrapperInner>
-      <FormWrapper onSubmit={handleCommentSubmit}>
-        <FormTextArea value={newComment} onChange={handleCommentChange} />
-        <FormButton type="submit">Add Comment</FormButton>
-      </FormWrapper>
+      {profile && (
+        <FormWrapper onSubmit={handleCommentSubmit}>
+          <FormTextArea value={newComment} onChange={handleCommentChange} />
+          <FormButton type="submit">Add Comment</FormButton>
+        </FormWrapper>
+      )}
       {showDeleteModal && (
         <DeleteConfirmationModal
           onConfirm={confirmDelete}

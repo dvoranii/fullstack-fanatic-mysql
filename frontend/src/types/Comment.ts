@@ -6,4 +6,8 @@ export interface CommentType {
   content: string;
   created_at: string;
   likes: number;
+  user_id: number;
+  google_id: string;
+  name: string;
+  picture: string;
 }
