@@ -6,6 +6,36 @@ import { authenticate } from "../middleware/authenticate";
 
 const router = Router();
 
+router.get("/", authenticate, async (req: Request, res: Response) => {
+  const { userId } = req.user!;
+  console.log(userId);
+
+  try {
+    const connection = await connectionPromise;
+
+    const [tutorials] = await connection.query<RowDataPacket[]>(
+      `SELECT t.* FROM tutorials t
+       JOIN favourites f ON t.id = f.item_id
+       WHERE f.user_id = ? AND f.content_type = 'tutorial'`,
+      [userId]
+    );
+
+    const [blogs] = await connection.query<RowDataPacket[]>(
+      `
+      SELECT b.* FROM blogs b
+      JOIN favourites f ON b.id = f.item_id
+      WHERE f.user_id = ? AND f.content_type = 'blog'
+      `,
+      [userId]
+    );
+
+    res.json({ tutorials, blogs });
+  } catch (error) {
+    console.error("Database query error:", error);
+    res.status(500).json({ error: "Failed to fetch favourites" });
+  }
+});
+
 router.post("/", authenticate, async (req: Request, res: Response) => {
   const {
     item_id,

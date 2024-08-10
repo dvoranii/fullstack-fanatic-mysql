@@ -17,6 +17,7 @@ export const authenticate = (
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
     req.user = decoded as { userId: number; googleId: string; email: string };
+    console.log(req.user);
     next();
   } catch (error) {
     return res.status(401).json({ error: "Unauthorized" });
