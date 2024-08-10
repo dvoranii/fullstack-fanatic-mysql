@@ -36,8 +36,6 @@ export const useContent = (fetchEndpoint: string, contentType: ContentType) => {
   const handleFavouriteClick = async (id: number) => {
     if (!profile) return;
 
-    const googleId = profile.id;
-
     setItems((prevItems) => {
       const updatedItems = prevItems.map((item) =>
         item.id === id ? { ...item, isFavourited: !item.isFavourited } : item
@@ -59,10 +57,10 @@ export const useContent = (fetchEndpoint: string, contentType: ContentType) => {
       if (!item) return;
 
       if (item.isFavourited) {
-        await removeFavourite(googleId, id, contentType);
+        await removeFavourite(id, contentType);
         console.log("Favourite removed");
       } else {
-        await addFavourite(googleId, id, contentType);
+        await addFavourite(id, contentType);
         console.log("Favourite added");
       }
     } catch (error) {

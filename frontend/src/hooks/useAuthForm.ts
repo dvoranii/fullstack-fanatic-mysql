@@ -2,8 +2,7 @@ import { useState } from "react";
 import { TokenResponse } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
-import { User } from "../types/User";
-import { registerUser, loginUser, fetchGoogleUserInfo } from "../api/api";
+import { loginOrRegisterWithGoogle } from "../api/api";
 
 export const useAuthForm = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -20,12 +19,16 @@ export const useAuthForm = () => {
   const handleGoogleAuthSuccess = async (codeResponse: TokenResponse) => {
     console.log("Google auth successful, codeResponse:", codeResponse);
     try {
-      const userInfo = await fetchGoogleUserInfo(codeResponse.access_token);
-      if (isLogin) {
-        await handleLogin(userInfo);
-      } else {
-        await handleRegistration(userInfo);
-      }
+      const { token, user } = await loginOrRegisterWithGoogle(
+        codeResponse.access_token
+      );
+      console.log("User from backend", user);
+
+      localStorage.setItem("authToken", token);
+
+      setProfile(user);
+
+      navigate("/my-account");
     } catch (error) {
       console.error("Error during Google authentication:", error);
       setError("Google authentication failed");
@@ -35,42 +38,6 @@ export const useAuthForm = () => {
   const handleGoogleAuthError = (error: unknown) => {
     console.log("Google auth failed:", error);
     setError("Google authentication failed");
-  };
-
-  const handleRegistration = async (userInfo: User) => {
-    try {
-      const requestBody = {
-        email: userInfo.email,
-        name: userInfo.name,
-        googleId: userInfo.id,
-      };
-
-      const response = await registerUser(requestBody);
-      console.log(response);
-
-      setProfile(userInfo);
-      navigate("/my-account");
-    } catch (err) {
-      handleError(err);
-    }
-  };
-
-  const handleLogin = async (userInfo: User) => {
-    try {
-      const requestBody = {
-        email: userInfo.email,
-        name: userInfo.name,
-        googleId: userInfo.id,
-      };
-
-      const response = await loginUser(requestBody);
-      console.log(response);
-
-      setProfile(userInfo);
-      navigate("/my-account");
-    } catch (err) {
-      handleError(err);
-    }
   };
 
   const handleRegisterSubmit = (
@@ -89,23 +56,6 @@ export const useAuthForm = () => {
     e.preventDefault();
     console.log("Handle login submit", source);
     // Handle manual login logic if needed
-  };
-
-  const handleError = (err: unknown) => {
-    if (err instanceof Error) {
-      try {
-        const parsedError = JSON.parse(err.message);
-        if (parsedError.message) {
-          setError(parsedError.message);
-        } else {
-          setError(err.message);
-        }
-      } catch (parseError) {
-        setError(err.message);
-      }
-    } else {
-      setError("An unexpected error occurred");
-    }
   };
 
   return {

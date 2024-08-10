@@ -1,19 +1,6 @@
 import { AuthRequestBody } from "../types/AuthRequest";
 import { User } from "../types/User";
 
-export const fetchGoogleUserInfo = async (token: string) => {
-  const res = await fetch(
-    `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    }
-  );
-  return res.json();
-};
-
 export const registerUser = async (requestBody: AuthRequestBody) => {
   const res = await fetch("http://localhost:5000/api/users/register", {
     method: "POST",
@@ -40,6 +27,23 @@ export const loginUser = async (
       "Content-Type": "application/json",
     },
     body: JSON.stringify(requestBody),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text);
+  }
+
+  return res.json();
+};
+
+export const loginOrRegisterWithGoogle = async (token: string) => {
+  const res = await fetch("http://localhost:5000/api/users/google-auth", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token }),
   });
 
   if (!res.ok) {

@@ -19,6 +19,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (profile) {
+      console.log(profile);
       localStorage.setItem("userProfile", JSON.stringify(profile));
     } else {
       localStorage.removeItem("userProfile");
@@ -27,6 +28,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const logOut = () => {
     setProfile(null);
+    localStorage.removeItem("authToken");
   };
 
   return (

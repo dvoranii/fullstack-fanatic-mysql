@@ -4,8 +4,6 @@ import { PageWrapper } from "../../global.styled";
 const UserAccountsPage: React.FC = () => {
   const { profile } = useUser();
 
-  console.log("Rendering profile:", profile);
-
   return (
     <PageWrapper>
       {profile ? (

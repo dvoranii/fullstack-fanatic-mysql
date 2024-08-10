@@ -1,5 +1,9 @@
 import { CommentType } from "../types/Comment";
 
+const getAuthToken = () => {
+  return localStorage.getItem("authToken");
+};
+
 export const fetchComments = async (
   contentType: string,
   contentId: number
@@ -19,6 +23,7 @@ export const submitComment = async (
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${getAuthToken()}`,
     },
     body: JSON.stringify({
       content_id: contentId,
@@ -39,6 +44,7 @@ export const updateComment = async (
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${getAuthToken()}`,
     },
     body: JSON.stringify({ content: editedComment }),
   });
@@ -50,6 +56,9 @@ export const updateComment = async (
 export const deleteComment = async (id: number): Promise<void> => {
   const response = await fetch(`/api/comments/${id}`, {
     method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${getAuthToken()}`,
+    },
   });
   if (!response.ok) throw new Error("Failed to delete comment");
 };
@@ -57,6 +66,9 @@ export const deleteComment = async (id: number): Promise<void> => {
 export const toggleLike = async (id: number): Promise<number> => {
   const response = await fetch(`/api/comments/${id}/toggle-like`, {
     method: "PUT",
+    headers: {
+      Authorization: `Bearer ${getAuthToken()}`,
+    },
   });
   if (!response.ok) throw new Error("Failed to toggle like");
   const data = await response.json();
