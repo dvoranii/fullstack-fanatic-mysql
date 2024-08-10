@@ -2,23 +2,16 @@ import { Router, Request, Response } from "express";
 import connectionPromise from "../db";
 import { RowDataPacket } from "mysql2";
 import { ContentType } from "../types/ContentType";
+import { authenticate } from "../middleware/authenticate";
 
 const router = Router();
 
-router.post("/", async (req: Request, res: Response) => {
+router.post("/", authenticate, async (req: Request, res: Response) => {
   const {
-    google_id,
     item_id,
-    user_id,
     content_type,
-  }: {
-    google_id: string;
-    item_id: number;
-    user_id: number;
-    content_type: ContentType;
-  } = req.body;
-
-  console.log(req.body);
+  }: { item_id: number; content_type: ContentType } = req.body;
+  const { userId: user_id, googleId: google_id } = req.user!;
 
   try {
     const connection = await connectionPromise;
@@ -43,10 +36,11 @@ router.post("/", async (req: Request, res: Response) => {
   }
 });
 
-router.delete("/", async (req: Request, res: Response) => {
-  const { google_id, item_id, user_id, content_type } = req.body;
+router.delete("/", authenticate, async (req: Request, res: Response) => {
+  const { item_id, content_type } = req.body;
+  const { userId: user_id, googleId: google_id } = req.user!;
 
-  if (!google_id || !item_id || !user_id || !content_type) {
+  if (!item_id || !content_type) {
     return res.status(400).json({ error: "Missing required parameters" });
   }
 
