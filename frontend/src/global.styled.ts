@@ -29,4 +29,8 @@ export const PageWrapper = styled.div`
   max-width: 80vw;
   margin: 0 auto;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  font-family: "ZenKakuGothicNewRegular", sans-serif;
 `;

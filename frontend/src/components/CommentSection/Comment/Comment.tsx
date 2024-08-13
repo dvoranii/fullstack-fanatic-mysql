@@ -29,7 +29,6 @@ const Comment: React.FC<CommentProps> = ({
   onCancelEdit,
 }) => {
   const { profile } = useContext(UserContext) || {};
-  console.log(profile);
 
   const handleImageError = (
     event: React.SyntheticEvent<HTMLImageElement, Event>

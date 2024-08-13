@@ -2,38 +2,12 @@ import express, { Request, Response } from "express";
 import connectionPromise from "../db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
-// import { authenticate } from "middleware/authenticate";
+import { fetchUserByColumn, insertUser } from "../utils/userUtils";
+import { createJwtToken } from "../utils/jwtUtils";
 
 dotenv.config();
 
 const router = express.Router();
-
-const fetchUserByColumn = async (column: string, value: string) => {
-  const connection = await connectionPromise;
-  const [results] = await connection.execute<RowDataPacket[]>(
-    `SELECT * FROM users WHERE ${column} = ?`,
-    [value]
-  );
-  return results;
-};
-
-const insertUser = async (email: string, name: string, googleId: string) => {
-  const connection = await connectionPromise;
-  const [result] = await connection.execute<ResultSetHeader>(
-    "INSERT INTO users (email, name, google_id) VALUES (?, ?, ?)",
-    [email, name, googleId]
-  );
-  return result.insertId;
-};
-
-const createJwtToken = (userId: number, email: string, googleId: string) => {
-  return jwt.sign(
-    { userId, email, googleId },
-    process.env.JWT_SECRET as string,
-    { expiresIn: "1h" }
-  );
-};
 
 router.post("/register", async (req: Request, res: Response) => {
   const { email, name, googleId } = req.body;
