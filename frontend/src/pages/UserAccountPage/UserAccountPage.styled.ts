@@ -36,7 +36,6 @@ export const ProfileContentWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   min-height: 200px;
-  column-gap: 1.2rem;
   max-width: 65%;
 `;
 
@@ -52,6 +51,7 @@ export const ProfilePicture = styled.img`
 export const ProfileInfo = styled.div`
   text-align: center;
   grid-column: 1;
+  border-right: 2px solid lightgrey;
 `;
 
 export const ProfilePlaceholder = styled.div`
@@ -60,8 +60,12 @@ export const ProfilePlaceholder = styled.div`
 
 export const BioContentWrapper = styled.div`
   overflow-wrap: break-word;
+  border-right: 2px solid lightgrey;
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
 `;
 export const SocialSectionWrapper = styled.div`
+  padding-left: 1.8rem;
   p {
     margin-bottom: 0.4rem;
   }
@@ -108,6 +112,14 @@ export const EditProfileLink = styled.a`
   color: #222222;
   text-decoration: underline;
   margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 25px;
+    margin-left: 0.4rem;
+  }
 `;
 
 export const AccountActivity = styled.div`

@@ -37,6 +37,7 @@ import linkedinIcon from "../../assets/images/account/linkedin-icon.png";
 import TiktokIcon from "../../assets/images/account/tiktok-icon.png";
 import XIcon from "../../assets/images/account/x-icon.png";
 import InboxIcon from "../../assets/images/account/inbox.png";
+import EditIcon from "../../assets/images/account/edit.png";
 
 const UserAccountsPage: React.FC = () => {
   const { profile } = useUser();
@@ -73,7 +74,9 @@ const UserAccountsPage: React.FC = () => {
               <ProfileInfo>
                 <UserName>{profile?.name || ""}</UserName>
                 <UserProfession>Full Stack Developer</UserProfession>{" "}
-                <EditProfileLink href="#">Edit Profile</EditProfileLink>
+                <EditProfileLink href="#">
+                  Edit Profile <img src={EditIcon} alt="Edit Icon" />
+                </EditProfileLink>
               </ProfileInfo>
               <BioContentWrapper>
                 <p>BIO:</p>
