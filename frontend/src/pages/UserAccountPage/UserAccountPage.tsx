@@ -30,7 +30,6 @@ import {
   BioContentWrapper,
   SocialSectionWrapper,
 } from "./UserAccountPage.styled";
-import ProfileImgFallback from "../../assets/images/profile-icon.png";
 import GithubIcon from "../../assets/images/account/github-icon.png";
 import IgIcon from "../../assets/images/account/ig-icon.png";
 import linkedinIcon from "../../assets/images/account/linkedin-icon.png";
@@ -38,6 +37,7 @@ import TiktokIcon from "../../assets/images/account/tiktok-icon.png";
 import XIcon from "../../assets/images/account/x-icon.png";
 import InboxIcon from "../../assets/images/account/inbox.png";
 import EditIcon from "../../assets/images/account/edit.png";
+import { handleImageError } from "../../utils/imageUtils";
 
 const UserAccountsPage: React.FC = () => {
   const { profile } = useUser();
@@ -68,8 +68,9 @@ const UserAccountsPage: React.FC = () => {
           <ProfileBanner>
             <ProfileContentWrapper>
               <ProfilePicture
-                src={profile?.picture || ProfileImgFallback}
-                alt="user image"
+                src={profile?.picture}
+                alt={`${profile?.name}`}
+                onError={handleImageError}
               />
               <ProfileInfo>
                 <UserName>{profile?.name || ""}</UserName>

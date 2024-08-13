@@ -3,6 +3,8 @@ import { TokenResponse } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
 import { loginOrRegisterWithGoogle } from "../api/api";
+import { useAuthUtils } from "../utils/useAuthUtils";
+import { handleTokenExpiration } from "../utils/tokenUtils";
 
 export const useAuthForm = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -10,6 +12,7 @@ export const useAuthForm = () => {
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
   const { setProfile } = useUser();
   const navigate = useNavigate();
+  const { logOut } = useAuthUtils();
 
   const toggleForm = () => {
     setIsLogin(!isLogin);
@@ -17,16 +20,16 @@ export const useAuthForm = () => {
   };
 
   const handleGoogleAuthSuccess = async (codeResponse: TokenResponse) => {
-    console.log("Google auth successful, codeResponse:", codeResponse);
     try {
       const { token, user } = await loginOrRegisterWithGoogle(
         codeResponse.access_token
       );
-      console.log("User from backend", user);
 
       localStorage.setItem("authToken", token);
 
       setProfile(user);
+
+      handleTokenExpiration(token, logOut);
 
       navigate("/my-account");
     } catch (error) {

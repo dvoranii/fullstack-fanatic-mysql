@@ -4,21 +4,10 @@ import {
   ProfileImg,
   SignInRegisterWrapper,
 } from "./SignInRegisterNavBtn.styled";
-import { useNavigate } from "react-router-dom";
-import { googleLogout } from "@react-oauth/google";
-import useUser from "../../../hooks/useUser";
+import { useAuthUtils } from "../../../utils/useAuthUtils";
 
 const UserProfileNavBtn: React.FC = () => {
-  const navigate = useNavigate();
-  const { setProfile } = useUser();
-
-  const logOut = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    googleLogout();
-    setProfile(null);
-    navigate("/");
-  };
-
+  const { logOut } = useAuthUtils();
   return (
     <NavLinkStyled to="/my-account" underlinewidth="0%">
       <SignInRegisterWrapper>

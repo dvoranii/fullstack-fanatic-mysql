@@ -15,7 +15,7 @@ import { CommentProps } from "../../../types/CommentProps";
 import like1 from "../../../assets/images/like-1.png";
 import like2 from "../../../assets/images/like-2.png";
 import { UserContext } from "../../../context/UserContext";
-import ProfileIcon from "../../../assets/images/profile-icon.png";
+import { handleImageError } from "../../../utils/imageUtils";
 
 const Comment: React.FC<CommentProps> = ({
   comment,
@@ -29,12 +29,6 @@ const Comment: React.FC<CommentProps> = ({
   onCancelEdit,
 }) => {
   const { profile } = useContext(UserContext) || {};
-
-  const handleImageError = (
-    event: React.SyntheticEvent<HTMLImageElement, Event>
-  ) => {
-    event.currentTarget.src = ProfileIcon;
-  };
 
   return (
     <CommentWrapper>
