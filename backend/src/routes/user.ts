@@ -3,7 +3,11 @@ import connectionPromise from "../db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import dotenv from "dotenv";
 import { fetchUserByColumn, insertUser } from "../utils/userUtils";
-import { createJwtToken } from "../utils/jwtUtils";
+import {
+  createJwtToken,
+  createRefreshToken,
+  verifyRefreshToken,
+} from "../utils/jwtUtils";
 
 dotenv.config();
 
@@ -127,6 +131,14 @@ router.post("/google-auth", async (req: Request, res: Response) => {
     }
 
     const jwtToken = createJwtToken(userId, email, googleId);
+    const refreshToken = createRefreshToken(userId, email, googleId);
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Ensure HTTPS in production
+      sameSite: "strict", // Prevent CSRF attacks
+      maxAge: 7 * 24 * 60 * 60 * 1000, // Set expiry to 7 days
+    });
 
     res.status(200).json({
       token: jwtToken,
@@ -135,6 +147,28 @@ router.post("/google-auth", async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error during Google authentication: ", error);
     res.status(500).json({ error: "Failed to authenticate with Google" });
+  }
+});
+
+router.post("/refresh-token", async (req: Request, res: Response) => {
+  const { refreshToken } = req.cookies;
+
+  if (!refreshToken) {
+    return res.status(401).json({ error: "Refresh token is required" });
+  }
+
+  try {
+    const payload = verifyRefreshToken(refreshToken);
+    const newJwtToken = createJwtToken(
+      payload.userId,
+      payload.email,
+      payload.googleId
+    );
+
+    res.status(200).json({ token: newJwtToken });
+  } catch (error) {
+    console.error("Error verifying refresh token:", error);
+    res.status(401).json({ error: "Invalid refresh token" });
   }
 });
 

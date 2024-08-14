@@ -3,8 +3,8 @@ import { TokenResponse } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
 import { loginOrRegisterWithGoogle } from "../api/api";
-import { useAuthUtils } from "../utils/useAuthUtils";
-import { handleTokenExpiration } from "../utils/tokenUtils";
+// import { useAuthUtils } from "../utils/useAuthUtils";
+// import { handleTokenExpiration } from "../utils/tokenUtils";
 
 export const useAuthForm = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -12,7 +12,7 @@ export const useAuthForm = () => {
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
   const { setProfile } = useUser();
   const navigate = useNavigate();
-  const { logOut } = useAuthUtils();
+  // const { logOut } = useAuthUtils();
 
   const toggleForm = () => {
     setIsLogin(!isLogin);
@@ -29,7 +29,7 @@ export const useAuthForm = () => {
 
       setProfile(user);
 
-      handleTokenExpiration(token, logOut);
+      // handleTokenExpiration(token, logOut);
 
       navigate("/my-account");
     } catch (error) {

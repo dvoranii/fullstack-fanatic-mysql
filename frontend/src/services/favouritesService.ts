@@ -1,16 +1,18 @@
 import { ContentType } from "../types/ContentType";
 import { Tutorial } from "../types/Tutorial";
 import { Blog } from "../types/Blog";
+import { handleTokenExpiration } from "./authService";
 
 export const getUserFavourites = async (): Promise<{
   tutorials: Tutorial[];
   blogs: Blog[];
 }> => {
+  const token = await handleTokenExpiration();
   const response = await fetch("/api/favourites", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      Authorization: `Bearer ${token}`,
     },
   });
 
