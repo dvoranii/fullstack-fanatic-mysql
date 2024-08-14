@@ -1,4 +1,5 @@
 import { JwtPayload, jwtDecode } from "jwt-decode";
+import { refreshJwt as apiRefreshJwt } from "../api/api";
 
 const getAuthToken = () => localStorage.getItem("authToken");
 
@@ -8,16 +9,7 @@ const setAuthToken = (token: string) => {
 
 const refreshJwt = async () => {
   try {
-    const response = await fetch("/refresh-token", {
-      method: "POST",
-      credentials: "include", // Ensures cookies are sent with the request
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to refresh token");
-    }
-
-    const data = await response.json();
+    const data = await apiRefreshJwt();
     const { token } = data;
 
     setAuthToken(token);

@@ -8,6 +8,7 @@ export const getUserFavourites = async (): Promise<{
   blogs: Blog[];
 }> => {
   const token = await handleTokenExpiration();
+  console.log(token);
   const response = await fetch("/api/favourites", {
     method: "GET",
     headers: {

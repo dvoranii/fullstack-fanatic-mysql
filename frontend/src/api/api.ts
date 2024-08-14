@@ -53,3 +53,17 @@ export const loginOrRegisterWithGoogle = async (token: string) => {
 
   return res.json();
 };
+
+export const refreshJwt = async () => {
+  const res = await fetch("http://localhost:5000/api/users/refresh-token", {
+    method: "POST",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text);
+  }
+
+  return res.json();
+};
