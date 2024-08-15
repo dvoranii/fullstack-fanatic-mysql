@@ -25,12 +25,13 @@ export const addFavourite = async (
   itemId: number,
   contentType: ContentType
 ) => {
+  const token = await handleTokenExpiration();
   try {
     const response = await fetch("/api/favourites", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         item_id: itemId,
@@ -47,12 +48,13 @@ export const removeFavourite = async (
   itemId: number,
   contentType: ContentType
 ) => {
+  const token = await handleTokenExpiration();
   try {
     const response = await fetch("/api/favourites", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         item_id: itemId,

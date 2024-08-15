@@ -8,7 +8,7 @@ export const createJwtToken = (
   return jwt.sign(
     { userId, email, googleId },
     process.env.JWT_SECRET as string,
-    { expiresIn: "15m" }
+    { expiresIn: "1m" }
   );
 };
 

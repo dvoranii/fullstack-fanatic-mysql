@@ -1,10 +1,10 @@
 import { JwtPayload, jwtDecode } from "jwt-decode";
 import { refreshJwt as apiRefreshJwt } from "../api/api";
 
-const getAuthToken = () => localStorage.getItem("authToken");
+const getAuthToken = () => localStorage.getItem("accessToken");
 
 const setAuthToken = (token: string) => {
-  localStorage.setItem("authToken", token);
+  localStorage.setItem("accessToken", token);
 };
 
 const refreshJwt = async () => {
@@ -32,9 +32,10 @@ const isTokenExpired = (token: string) => {
 const handleTokenExpiration = async () => {
   let token = getAuthToken();
   if (!token || isTokenExpired(token)) {
+    console.log("token expired...called");
     token = await refreshJwt();
   }
   return token;
 };
 
-export { getAuthToken, setAuthToken, refreshJwt, handleTokenExpiration };
+export { getAuthToken, setAuthToken, handleTokenExpiration };

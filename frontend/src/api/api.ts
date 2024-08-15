@@ -40,6 +40,7 @@ export const loginUser = async (
 export const loginOrRegisterWithGoogle = async (token: string) => {
   const res = await fetch("http://localhost:5000/api/users/google-auth", {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },

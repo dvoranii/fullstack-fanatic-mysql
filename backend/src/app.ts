@@ -6,8 +6,11 @@ import commentsRouter from "./routes/comments";
 import blogsRouter from "./routes/blogs";
 import userRouter from "./routes/user";
 import favouriteRouter from "./routes/favourites";
+import cookieParser from "cookie-parser";
 
 const app = express();
+app.use(cookieParser());
+
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(helmet());
 app.use(express.json());

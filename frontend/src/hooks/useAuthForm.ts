@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
 import { loginOrRegisterWithGoogle } from "../api/api";
 // import { useAuthUtils } from "../utils/useAuthUtils";
-// import { handleTokenExpiration } from "../utils/tokenUtils";
+import { setAuthToken } from "../services/authService";
 
 export const useAuthForm = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -25,12 +25,9 @@ export const useAuthForm = () => {
         codeResponse.access_token
       );
 
-      localStorage.setItem("authToken", token);
+      setAuthToken(token);
 
       setProfile(user);
-
-      // handleTokenExpiration(token, logOut);
-
       navigate("/my-account");
     } catch (error) {
       console.error("Error during Google authentication:", error);

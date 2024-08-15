@@ -70,7 +70,6 @@ router.post("/login", async (req: Request, res: Response) => {
   }
 });
 
-// Route to get user_id by google_id
 router.get("/", async (req: Request, res: Response) => {
   const { google_id } = req.query;
 
@@ -135,10 +134,13 @@ router.post("/google-auth", async (req: Request, res: Response) => {
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Ensure HTTPS in production
-      sameSite: "strict", // Prevent CSRF attacks
-      maxAge: 7 * 24 * 60 * 60 * 1000, // Set expiry to 7 days
+      secure: false,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: "/",
     });
+
+    console.log(refreshToken);
 
     res.status(200).json({
       token: jwtToken,
@@ -151,6 +153,7 @@ router.post("/google-auth", async (req: Request, res: Response) => {
 });
 
 router.post("/refresh-token", async (req: Request, res: Response) => {
+  // undefined, the refreshToken is not being saved in the cookies
   const { refreshToken } = req.cookies;
 
   if (!refreshToken) {
@@ -158,6 +161,7 @@ router.post("/refresh-token", async (req: Request, res: Response) => {
   }
 
   try {
+    console.log("called");
     const payload = verifyRefreshToken(refreshToken);
     const newJwtToken = createJwtToken(
       payload.userId,
