@@ -25,3 +25,7 @@ body {
   background-repeat: no-repeat;
   min-height: 100vh;
 }
+
+img {
+  user-select: none;
+}

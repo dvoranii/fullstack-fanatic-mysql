@@ -14,6 +14,7 @@ export const TutorialItemWrapper = styled.div`
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
+  background-color: #f8f8f8;
   padding-bottom: 24px;
   width: 300px; /* Set a fixed width for each tutorial item */
 `;
@@ -23,7 +24,6 @@ export const TutorialThumbnail = styled(Link)`
   color: inherit;
   width: 100%; /* Make sure the thumbnail takes the full width of the wrapper */
   box-sizing: border-box;
-  background-color: #f8f8f8;
   display: flex;
   flex-direction: column;
   align-items: center; /* Center content like the image and title */

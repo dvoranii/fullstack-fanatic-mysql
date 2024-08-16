@@ -1,4 +1,3 @@
-import { ContentType } from "../types/ContentType";
 import { Tutorial } from "../types/Tutorial";
 import { Blog } from "../types/Blog";
 import { handleTokenExpiration } from "./authService";
@@ -20,10 +19,7 @@ export const getUserFavourites = async (): Promise<{
   return response.json();
 };
 
-export const addFavourite = async (
-  itemId: number,
-  contentType: ContentType
-) => {
+export const addFavourite = async (itemId: number) => {
   const token = await handleTokenExpiration();
   try {
     const response = await fetch("/api/favourites", {
@@ -34,7 +30,6 @@ export const addFavourite = async (
       },
       body: JSON.stringify({
         item_id: itemId,
-        content_type: contentType,
       }),
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -43,10 +38,7 @@ export const addFavourite = async (
   }
 };
 
-export const removeFavourite = async (
-  itemId: number,
-  contentType: ContentType
-) => {
+export const removeFavourite = async (itemId: number) => {
   const token = await handleTokenExpiration();
   try {
     const response = await fetch("/api/favourites", {
@@ -57,7 +49,6 @@ export const removeFavourite = async (
       },
       body: JSON.stringify({
         item_id: itemId,
-        content_type: contentType,
       }),
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
