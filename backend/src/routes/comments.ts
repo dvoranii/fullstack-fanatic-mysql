@@ -88,27 +88,23 @@ router.put(
     try {
       const connection = await connectionPromise;
 
-      // Check if the user has already liked this comment
       const [existingLike] = await connection.query<RowDataPacket[]>(
         "SELECT * FROM comment_likes WHERE comment_id = ? AND user_id = ?",
         [id, userId]
       );
 
       if (existingLike.length > 0) {
-        // User has liked the comment, so remove the like
         await connection.query<ResultSetHeader>(
           "DELETE FROM comment_likes WHERE comment_id = ? AND user_id = ?",
           [id, userId]
         );
       } else {
-        // User has not liked the comment, so add the like
         await connection.query<ResultSetHeader>(
           "INSERT INTO comment_likes (comment_id, user_id) VALUES (?, ?)",
           [id, userId]
         );
       }
 
-      // Update the total likes count
       const [likesResult] = await connection.query<RowDataPacket[]>(
         "SELECT COUNT(*) AS likes FROM comment_likes WHERE comment_id = ?",
         [id]

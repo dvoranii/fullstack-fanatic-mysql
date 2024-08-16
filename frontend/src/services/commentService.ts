@@ -1,10 +1,6 @@
 import { CommentType } from "../types/Comment";
 import { handleTokenExpiration } from "./authService";
 
-// const getAuthToken = () => {
-//   return localStorage.getItem("authToken");
-// };
-
 export const fetchComments = async (
   contentType: string,
   contentId: number
