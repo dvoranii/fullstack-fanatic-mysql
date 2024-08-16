@@ -7,7 +7,8 @@ export interface UserContextType {
   setProfile: (profile: User | null) => void;
   logOut: () => void;
   favouriteTutorials: number[];
-  toggleFavourite: (tutorialId: number) => void;
+  favouriteBlogs: number[];
+  toggleFavourite: (itemId: number, contentType: string) => void;
 }
 
 export const UserContext = createContext<UserContextType | undefined>(
@@ -21,49 +22,67 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const [favouriteTutorials, setFavouriteTutorials] = useState<number[]>([]);
+  const [favouriteBlogs, setFavouriteBlogs] = useState<number[]>([]);
 
   useEffect(() => {
     if (profile) {
       console.log(profile);
       localStorage.setItem("userProfile", JSON.stringify(profile));
 
-      const savedFavourites = localStorage.getItem("favouriteTutorials");
-      if (savedFavourites) {
-        setFavouriteTutorials(JSON.parse(savedFavourites));
+      const savedTutorialFavourites =
+        localStorage.getItem("favouriteTutorials");
+      if (savedTutorialFavourites) {
+        setFavouriteTutorials(JSON.parse(savedTutorialFavourites));
+      }
+
+      const savedBlogFavourites = localStorage.getItem("favouriteBlogs");
+      if (savedBlogFavourites) {
+        setFavouriteBlogs(JSON.parse(savedBlogFavourites));
       }
     } else {
       localStorage.removeItem("userProfile");
+      setFavouriteTutorials([]);
+      setFavouriteBlogs([]);
     }
   }, [profile]);
 
-  const toggleFavourite = async (tutorialId: number) => {
-    const isCurrentlyFavourited = favouriteTutorials.includes(tutorialId);
-    const updatedFavourites = isCurrentlyFavourited
-      ? favouriteTutorials.filter((id) => id !== tutorialId)
-      : [...favouriteTutorials, tutorialId];
+  const toggleFavourite = async (itemId: number, contentType: string) => {
+    let currentFavourites: number[];
+    let updateFavourites: (favourites: number[]) => void;
+    let storageKey: string;
 
-    setFavouriteTutorials(updatedFavourites);
-    localStorage.setItem(
-      "favouriteTutorials",
-      JSON.stringify(updatedFavourites)
-    );
+    if (contentType === "tutorial") {
+      currentFavourites = favouriteTutorials;
+      updateFavourites = setFavouriteTutorials;
+      storageKey = "favouriteTutorials";
+    } else if (contentType === "blog") {
+      currentFavourites = favouriteBlogs;
+      updateFavourites = setFavouriteBlogs;
+      storageKey = "favouriteBlogs";
+    } else {
+      return;
+    }
+
+    const isCurrentlyFavourited = currentFavourites.includes(itemId);
 
     try {
       if (isCurrentlyFavourited) {
-        await removeFavourite(tutorialId, "tutorial"); // API call to remove favourite
+        await removeFavourite(itemId, contentType);
         console.log("Favourite removed");
+        const updatedFavourites = currentFavourites.filter(
+          (id) => id !== itemId
+        );
+        updateFavourites(updatedFavourites);
+        localStorage.setItem(storageKey, JSON.stringify(updatedFavourites)); // Update local storage
       } else {
-        await addFavourite(tutorialId, "tutorial"); // API call to add favourite
+        await addFavourite(itemId, contentType);
         console.log("Favourite added");
+        const updatedFavourites = [...currentFavourites, itemId];
+        updateFavourites(updatedFavourites);
+        localStorage.setItem(storageKey, JSON.stringify(updatedFavourites)); // Update local storage
       }
     } catch (error) {
-      console.error("Error updating favourite status:", error);
-      // Revert the favourite status if the API call fails
-      setFavouriteTutorials(favouriteTutorials);
-      localStorage.setItem(
-        "favouriteTutorials",
-        JSON.stringify(favouriteTutorials)
-      );
+      console.error("Error toggling favourite:", error);
     }
   };
 
@@ -80,6 +99,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         setProfile,
         logOut,
         favouriteTutorials,
+        favouriteBlogs,
         toggleFavourite,
       }}
     >

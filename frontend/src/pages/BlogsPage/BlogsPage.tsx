@@ -14,7 +14,7 @@ import { blogContent } from "../../assets/blogContent"; // Import the static blo
 const BlogsPage: React.FC = () => {
   const {
     profile,
-    favouriteTutorials = [],
+    favouriteBlogs = [],
     toggleFavourite = () => {},
   } = useContext(UserContext) || {};
 
@@ -36,8 +36,8 @@ const BlogsPage: React.FC = () => {
             <BlogActions>
               {profile && (
                 <FavouriteButton
-                  isFavourited={favouriteTutorials.includes(blog.id)}
-                  onClick={() => toggleFavourite(blog.id)}
+                  isFavourited={favouriteBlogs.includes(blog.id)}
+                  onClick={() => toggleFavourite(blog.id, "blog")}
                   altText="Blog Favourite Button"
                 />
               )}

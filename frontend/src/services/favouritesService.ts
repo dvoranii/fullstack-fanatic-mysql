@@ -19,7 +19,7 @@ export const getUserFavourites = async (): Promise<{
   return response.json();
 };
 
-export const addFavourite = async (itemId: number) => {
+export const addFavourite = async (itemId: number, contentType: string) => {
   const token = await handleTokenExpiration();
   try {
     const response = await fetch("/api/favourites", {
@@ -30,6 +30,7 @@ export const addFavourite = async (itemId: number) => {
       },
       body: JSON.stringify({
         item_id: itemId,
+        content_type: contentType,
       }),
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -38,7 +39,7 @@ export const addFavourite = async (itemId: number) => {
   }
 };
 
-export const removeFavourite = async (itemId: number) => {
+export const removeFavourite = async (itemId: number, contentType: string) => {
   const token = await handleTokenExpiration();
   try {
     const response = await fetch("/api/favourites", {
@@ -49,6 +50,7 @@ export const removeFavourite = async (itemId: number) => {
       },
       body: JSON.stringify({
         item_id: itemId,
+        content_type: contentType, // Include content_type
       }),
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);

@@ -31,7 +31,7 @@ const TutorialsPage: React.FC = () => {
               {profile && (
                 <FavouriteButton
                   isFavourited={favouriteTutorials.includes(tutorial.id)}
-                  onClick={() => toggleFavourite(tutorial.id)}
+                  onClick={() => toggleFavourite(tutorial.id, "tutorial")}
                   altText="Tutorial Favourite Button"
                 />
               )}

@@ -1,18 +1,19 @@
 import { Router, Request, Response } from "express";
 import connectionPromise from "../db";
 import { RowDataPacket } from "mysql2";
-import { ContentType } from "../types/ContentType";
 import { authenticate } from "../middleware/authenticate";
 
 const router = Router();
 
+// GET request to fetch favourites based on content_type, if needed in the future
 router.get("/", authenticate, async (req: Request, res: Response) => {
   const { userId } = req.user!;
   console.log(userId);
 
   try {
-    const connection = await connectionPromise;
+    const connection = await connectionPromise; // Use await to get the connection
 
+    // Fetching favourites categorized by content_type
     const [tutorials] = await connection.query<RowDataPacket[]>(
       `SELECT t.* FROM tutorials t
        JOIN favourites f ON t.id = f.item_id
@@ -36,11 +37,10 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
   }
 });
 
+// POST request to add a favourite without content_type
 router.post("/", authenticate, async (req: Request, res: Response) => {
-  const {
-    item_id,
-    content_type,
-  }: { item_id: number; content_type: ContentType } = req.body;
+  const { item_id, content_type }: { item_id: number; content_type: string } =
+    req.body;
   const { userId: user_id, googleId: google_id } = req.user!;
 
   try {
@@ -66,6 +66,7 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
   }
 });
 
+// DELETE request to remove a favourite without content_type
 router.delete("/", authenticate, async (req: Request, res: Response) => {
   const { item_id, content_type } = req.body;
   const { userId: user_id, googleId: google_id } = req.user!;
