@@ -1,8 +1,9 @@
 import { CommentType } from "../types/Comment";
+import { handleTokenExpiration } from "./authService";
 
-const getAuthToken = () => {
-  return localStorage.getItem("authToken");
-};
+// const getAuthToken = () => {
+//   return localStorage.getItem("authToken");
+// };
 
 export const fetchComments = async (
   contentType: string,
@@ -19,11 +20,12 @@ export const submitComment = async (
   contentType: string,
   newComment: string
 ): Promise<CommentType> => {
+  const token = await handleTokenExpiration();
   const response = await fetch("/api/comments", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${getAuthToken()}`,
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       content_id: contentId,
@@ -40,11 +42,12 @@ export const updateComment = async (
   id: number,
   editedComment: string
 ): Promise<CommentType> => {
+  const token = await handleTokenExpiration();
   const response = await fetch(`/api/comments/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${getAuthToken()}`,
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ content: editedComment }),
   });
@@ -54,20 +57,22 @@ export const updateComment = async (
 };
 
 export const deleteComment = async (id: number): Promise<void> => {
+  const token = await handleTokenExpiration();
   const response = await fetch(`/api/comments/${id}`, {
     method: "DELETE",
     headers: {
-      Authorization: `Bearer ${getAuthToken()}`,
+      Authorization: `Bearer ${token}`,
     },
   });
   if (!response.ok) throw new Error("Failed to delete comment");
 };
 
 export const toggleLike = async (id: number): Promise<number> => {
+  const token = await handleTokenExpiration();
   const response = await fetch(`/api/comments/${id}/toggle-like`, {
     method: "PUT",
     headers: {
-      Authorization: `Bearer ${getAuthToken()}`,
+      Authorization: `Bearer ${token}`,
     },
   });
   if (!response.ok) throw new Error("Failed to toggle like");

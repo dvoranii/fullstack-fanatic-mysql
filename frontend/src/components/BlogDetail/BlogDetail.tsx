@@ -1,30 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import Title from "../Title/Title";
 import { BlogDetailWrapper } from "./BlogDetail.styled";
 import { blogContent } from "../../assets/blogContent";
 import Accordion from "../Accordion/Accordion";
 import CommentSection from "../CommentSection/CommentSection";
-import { BlogDetailType } from "../../types/BlogDetailType";
+import { BlogContentItem } from "../../types/BlogContentItem";
 
 const BlogDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [blog, setBlog] = useState<BlogDetailType | null>(null);
 
-  useEffect(() => {
-    fetch(`/api/blogs/${id}`)
-      .then((response) => response.json())
-      .then((data: BlogDetailType) => setBlog(data));
-  }, [id]);
+  const blog: BlogContentItem | undefined = blogContent.find(
+    (blog) => blog.id === Number(id)
+  );
 
-  if (!blog) return <div>Loading...</div>;
+  if (!blog) {
+    return <div>Error: Blog not found</div>;
+  }
 
-  const content = blogContent[blog.id];
+  if (!blog.steps) {
+    return <div>Error: Steps not found for this blog</div>;
+  }
 
   return (
     <BlogDetailWrapper>
       <Title textContent={blog.title} />
-      <Accordion steps={content.steps} />
+      <Accordion steps={blog.steps} />
       <CommentSection contentId={blog.id} contentType="blog" />
     </BlogDetailWrapper>
   );

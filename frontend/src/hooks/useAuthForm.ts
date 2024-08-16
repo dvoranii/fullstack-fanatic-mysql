@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
 import { loginOrRegisterWithGoogle } from "../api/api";
 // import { useAuthUtils } from "../utils/useAuthUtils";
-import { setAuthToken } from "../services/authService";
+// import { setAuthToken } from "../services/authService";
 
 export const useAuthForm = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -21,11 +21,11 @@ export const useAuthForm = () => {
 
   const handleGoogleAuthSuccess = async (codeResponse: TokenResponse) => {
     try {
-      const { token, user } = await loginOrRegisterWithGoogle(
+      const { user } = await loginOrRegisterWithGoogle(
         codeResponse.access_token
       );
 
-      setAuthToken(token);
+      // setAuthToken(token);
 
       setProfile(user);
       navigate("/my-account");

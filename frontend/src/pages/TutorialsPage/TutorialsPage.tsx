@@ -1,5 +1,4 @@
-// TutorialsPage.tsx
-import React, { useContext } from "react";
+import { useContext } from "react";
 import Title from "../../components/Title/Title";
 import { PageWrapper } from "../../global.styled";
 import {
@@ -10,36 +9,37 @@ import {
   BeginnerStarIcon,
 } from "./TutorialsPage.styled";
 import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
-import { useContent } from "../../hooks/useContent";
 import BeginnerStarImg from "../../assets/images/1-green-star.png";
 import { UserContext } from "../../context/UserContext";
+import { tutorialContent } from "../../assets/tutorialContent";
 
 const TutorialsPage: React.FC = () => {
-  const { profile } = useContext(UserContext) || {};
-  const { items: tutorials, handleFavouriteClick } = useContent(
-    "/api/tutorials",
-    "tutorial"
-  );
+  const {
+    profile,
+    favouriteTutorials = [],
+    toggleFavourite = () => {},
+  } = useContext(UserContext) || {};
 
   return (
     <PageWrapper>
       <Title textContent="Tutorials" />
       <TutorialList>
-        {tutorials.map((tutorial) => (
+        {tutorialContent.map((tutorial) => (
           <TutorialItemWrapper key={tutorial.id}>
             <ThumbnailBannerWrapper>
               <BeginnerStarIcon src={BeginnerStarImg} />
               {profile && (
                 <FavouriteButton
-                  isFavourited={tutorial.isFavourited}
-                  onClick={() => handleFavouriteClick(tutorial.id)}
+                  isFavourited={favouriteTutorials.includes(tutorial.id)}
+                  onClick={() => toggleFavourite(tutorial.id)}
                   altText="Tutorial Favourite Button"
                 />
               )}
             </ThumbnailBannerWrapper>
 
             <TutorialThumbnail to={`/tutorial/${tutorial.id}`}>
-              <h2>{tutorial.title}</h2>
+              <h2 title={tutorial.title}>{tutorial.title}</h2>
+              <img src={tutorial.image} alt={tutorial.title} />
             </TutorialThumbnail>
           </TutorialItemWrapper>
         ))}

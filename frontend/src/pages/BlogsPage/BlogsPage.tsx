@@ -8,21 +8,21 @@ import {
   BlogActions,
 } from "./BlogsPage.styled";
 import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
-import { useContent } from "../../hooks/useContent";
 import { UserContext } from "../../context/UserContext";
+import { blogContent } from "../../assets/blogContent"; // Import the static blog data
 
 const BlogsPage: React.FC = () => {
-  const { profile } = useContext(UserContext) || {};
-  const { items: blogs, handleFavouriteClick } = useContent(
-    "/api/blogs",
-    "blog"
-  );
+  const {
+    profile,
+    favouriteTutorials = [],
+    toggleFavourite = () => {},
+  } = useContext(UserContext) || {};
 
   return (
     <PageWrapper>
       <Title textContent="Blogs" />
       <BlogList>
-        {blogs.map((blog) => (
+        {blogContent.map((blog) => (
           <BlogItem key={blog.id}>
             <BlogContent to={`/blog/${blog.id}`}>
               <h2>{blog.title}</h2>
@@ -36,8 +36,8 @@ const BlogsPage: React.FC = () => {
             <BlogActions>
               {profile && (
                 <FavouriteButton
-                  isFavourited={blog.isFavourited}
-                  onClick={() => handleFavouriteClick(blog.id)}
+                  isFavourited={favouriteTutorials.includes(blog.id)}
+                  onClick={() => toggleFavourite(blog.id)}
                   altText="Blog Favourite Button"
                 />
               )}

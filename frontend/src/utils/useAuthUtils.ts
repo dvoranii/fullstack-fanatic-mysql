@@ -15,7 +15,7 @@ export const useAuthUtils = () => {
     }
     googleLogout(); // Log out from Google
     setProfile(null); // Clear the user profile in the frontend
-    localStorage.removeItem("authToken"); // Remove the JWT token from localStorage
+    localStorage.removeItem("accessToken"); // Remove the JWT token from localStorage
     navigate("/", { replace: true }); // Redirect to the home page
   };
 

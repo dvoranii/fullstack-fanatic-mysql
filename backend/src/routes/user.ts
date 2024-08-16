@@ -132,6 +132,7 @@ router.post("/google-auth", async (req: Request, res: Response) => {
     const jwtToken = createJwtToken(userId, email, googleId);
     const refreshToken = createRefreshToken(userId, email, googleId);
 
+    // dev environment, needs to be changed to work over https
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: false,
@@ -140,10 +141,8 @@ router.post("/google-auth", async (req: Request, res: Response) => {
       path: "/",
     });
 
-    console.log(refreshToken);
-
     res.status(200).json({
-      token: jwtToken,
+      message: jwtToken,
       user: { userId, email, name, googleId, picture },
     });
   } catch (error) {
@@ -153,7 +152,6 @@ router.post("/google-auth", async (req: Request, res: Response) => {
 });
 
 router.post("/refresh-token", async (req: Request, res: Response) => {
-  // undefined, the refreshToken is not being saved in the cookies
   const { refreshToken } = req.cookies;
 
   if (!refreshToken) {
@@ -161,7 +159,6 @@ router.post("/refresh-token", async (req: Request, res: Response) => {
   }
 
   try {
-    console.log("called");
     const payload = verifyRefreshToken(refreshToken);
     const newJwtToken = createJwtToken(
       payload.userId,

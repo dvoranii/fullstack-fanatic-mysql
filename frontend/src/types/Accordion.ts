@@ -1,7 +1,7 @@
-interface Step {
+export interface Step {
   title: string;
-  content: string;
-  component?: string;
+  content: React.ReactNode;
+  component?: React.ReactNode;
 }
 
 export interface AccordionProps {

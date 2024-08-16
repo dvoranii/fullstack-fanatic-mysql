@@ -1,42 +1,38 @@
-export interface Step {
-  title: string;
-  content: string;
-  component?: string;
-}
+import tutorial_1_thumbnail from "../assets/images/tutorials/deployment-thumbnail.png";
+import tutorial_2_thumbnail from "../assets/images/tutorials/csrf-thumbnail.png";
+import { TutorialContentItem } from "../types/TutorialContentItem";
 
-export interface TutorialContent {
-  [key: number]: {
-    steps: Step[];
-  };
-}
-
-export const tutorialContent: TutorialContent = {
-  1: {
+export const tutorialContent: TutorialContentItem[] = [
+  {
+    id: 1,
+    title: "Server Setup and Deployment",
+    created_at: "2024-08-16",
     steps: [
       {
         title: "Step 1: Setup server",
-        content: "Content for setting up the server...",
-        // component: "Component1", // Uncomment if needed in the future
+        content: "Content for setting up the server...", // Replace with React components if needed
       },
       {
         title: "Step 2: Deploy application",
         content: "Content for deploying the application...",
-        // component: "Component2", // Uncomment if needed in the future
       },
     ],
+    image: tutorial_1_thumbnail,
   },
-  2: {
+  {
+    id: 2,
+    title: "Understanding CSRF",
+    created_at: "2024-08-15",
     steps: [
       {
         title: "Step 1: Understanding CSRF",
         content: "Content for understanding CSRF...",
-        // component: "Component1", // Uncomment if needed in the future
       },
       {
         title: "Step 2: Implementing tokens",
         content: "Content for implementing tokens...",
-        // component: "Component2", // Uncomment if needed in the future
       },
     ],
+    image: tutorial_2_thumbnail,
   },
-};
+];

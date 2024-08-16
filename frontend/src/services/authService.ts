@@ -32,7 +32,6 @@ const isTokenExpired = (token: string) => {
 const handleTokenExpiration = async () => {
   let token = getAuthToken();
   if (!token || isTokenExpired(token)) {
-    console.log("token expired...called");
     token = await refreshJwt();
   }
   return token;

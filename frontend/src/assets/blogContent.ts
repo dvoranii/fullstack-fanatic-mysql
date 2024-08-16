@@ -1,70 +1,68 @@
-export interface Step {
-  title: string;
-  content: string;
-  component?: string; // Made optional for now
-}
+import { BlogContentItem } from "../types/BlogContentItem";
 
-export interface BlogContent {
-  [key: number]: {
-    steps: Step[];
-  };
-}
-
-export const blogContent: BlogContent = {
-  1: {
+export const blogContent: BlogContentItem[] = [
+  {
+    id: 1,
+    title: "Introduction to React",
+    created_at: "2024-08-16",
     steps: [
       {
         title: "Step 1: Introduction to React",
         content: "Content for the introduction to React...",
-        // component: "Component1", // Uncomment if needed in the future
       },
       {
         title: "Step 2: Understanding JSX",
         content: "Content for understanding JSX...",
-        // component: "Component2", // Uncomment if needed in the future
       },
     ],
+    image: "path-to-image", // Add appropriate image paths
   },
-  2: {
+  {
+    id: 2,
+    title: "What is Node.js?",
+    created_at: "2024-08-15",
     steps: [
       {
         title: "Step 1: What is Node.js?",
         content: "Content for understanding what Node.js is...",
-        // component: "Component1", // Uncomment if needed in the future
       },
       {
         title: "Step 2: Node.js Architecture",
         content: "Content for understanding Node.js architecture...",
-        // component: "Component2", // Uncomment if needed in the future
       },
     ],
+    image: "path-to-image",
   },
-  3: {
+  {
+    id: 3,
+    title: "Advanced CSS Techniques?",
+    created_at: "2024-07-26 19:43:37",
     steps: [
       {
-        title: "Step 1: Basics of CSS",
-        content: "Content for understanding CSS basics...",
-        // component: "Component1", // Uncomment if needed in the future
+        title: "Step 1: Advanced css step 1",
+        content: "Content for advanced css techniques is...",
       },
       {
-        title: "Step 2: Advanced CSS Techniques",
-        content: "Content for understanding advanced CSS techniques...",
-        // component: "Component2", // Uncomment if needed in the future
+        title: "Step 2: the second step",
+        content: "Content for advanced css techniques...",
       },
     ],
+    image: "path-to-image",
   },
-  4: {
+  {
+    id: 4,
+    title: "Getting Started with TypeScript",
+    created_at: "2024-07-26 19:43:37",
     steps: [
       {
-        title: "Step 1: Getting Started with TypeScript",
-        content: "Content for getting started with TypeScript...",
-        // component: "Component1", // Uncomment if needed in the future
+        title: "Step 1: typescript step 1",
+        content: "Content forTS...",
       },
       {
-        title: "Step 2: TypeScript Basics",
-        content: "Content for understanding TypeScript basics...",
-        // component: "Component2", // Uncomment if needed in the future
+        title: "Step 2: typescript step 2",
+        content: "Content for TS...",
       },
     ],
+    image: "path-to-image",
   },
-};
+];

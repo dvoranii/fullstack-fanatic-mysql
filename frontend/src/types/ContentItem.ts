@@ -3,4 +3,5 @@ export interface ContentItem {
   title: string;
   created_at: string;
   isFavourited: boolean;
+  // image?: string;
 }

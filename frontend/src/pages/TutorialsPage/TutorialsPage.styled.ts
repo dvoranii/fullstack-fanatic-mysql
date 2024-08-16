@@ -15,16 +15,18 @@ export const TutorialItemWrapper = styled.div`
   border-bottom-right-radius: 24px;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
   padding-bottom: 24px;
-  /* border: 1px solid #ddd; */
-  /* padding: 1rem; */
+  width: 300px; /* Set a fixed width for each tutorial item */
 `;
 
 export const TutorialThumbnail = styled(Link)`
   text-decoration: none;
   color: inherit;
-  width: fit-content;
+  width: 100%; /* Make sure the thumbnail takes the full width of the wrapper */
   box-sizing: border-box;
   background-color: #f8f8f8;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content like the image and title */
 
   &:hover {
     background: #f5f5f5;
@@ -34,6 +36,16 @@ export const TutorialThumbnail = styled(Link)`
     font-family: "ZenKakuGothicNewMedium";
     margin-top: 0;
     padding: 12px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+
+  img {
+    width: 150px;
+    height: auto;
   }
 `;
 

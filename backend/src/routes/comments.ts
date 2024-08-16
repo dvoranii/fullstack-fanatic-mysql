@@ -87,20 +87,43 @@ router.put(
 
     try {
       const connection = await connectionPromise;
-      const [results] = await connection.query<RowDataPacket[]>(
-        "SELECT likes FROM comments WHERE id = ?",
+
+      // Check if the user has already liked this comment
+      const [existingLike] = await connection.query<RowDataPacket[]>(
+        "SELECT * FROM comment_likes WHERE comment_id = ? AND user_id = ?",
+        [id, userId]
+      );
+
+      if (existingLike.length > 0) {
+        // User has liked the comment, so remove the like
+        await connection.query<ResultSetHeader>(
+          "DELETE FROM comment_likes WHERE comment_id = ? AND user_id = ?",
+          [id, userId]
+        );
+      } else {
+        // User has not liked the comment, so add the like
+        await connection.query<ResultSetHeader>(
+          "INSERT INTO comment_likes (comment_id, user_id) VALUES (?, ?)",
+          [id, userId]
+        );
+      }
+
+      // Update the total likes count
+      const [likesResult] = await connection.query<RowDataPacket[]>(
+        "SELECT COUNT(*) AS likes FROM comment_likes WHERE comment_id = ?",
         [id]
       );
-      const currentLikes = (results[0] as Comment).likes;
-      const newLikes =
-        currentLikes % 2 === 0 ? currentLikes + 1 : currentLikes - 1;
+      const totalLikes = likesResult[0].likes;
+
       await connection.query<ResultSetHeader>(
         "UPDATE comments SET likes = ? WHERE id = ?",
-        [newLikes, id]
+        [totalLikes, id]
       );
-      res.json({ id, likes: newLikes });
+
+      res.json({ id, likes: totalLikes });
     } catch (err) {
       const error = err as Error;
+      console.error(error);
       res.status(500).json({ error: error.message });
     }
   }
