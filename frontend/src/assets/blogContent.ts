@@ -15,7 +15,7 @@ export const blogContent: BlogContentItem[] = [
         content: "Content for understanding JSX...",
       },
     ],
-    image: "path-to-image", // Add appropriate image paths
+    image: "path-to-image", // Add image paths
   },
   {
     id: 2,
@@ -35,7 +35,7 @@ export const blogContent: BlogContentItem[] = [
   },
   {
     id: 3,
-    title: "Advanced CSS Techniques?",
+    title: "Advanced CSS Techniques",
     created_at: "2024-07-26 19:43:37",
     steps: [
       {

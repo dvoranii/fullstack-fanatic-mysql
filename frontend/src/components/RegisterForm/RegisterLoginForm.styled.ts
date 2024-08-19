@@ -28,7 +28,7 @@ export const RegisterLoginFormWrapperInner = styled.div<WrapperProps>`
   border-radius: 40px;
   margin: 0 auto;
   overflow: hidden;
-  height: 670px;
+  height: 700px;
   position: relative;
   transition: all 0.25s ease-in-out;
 `;

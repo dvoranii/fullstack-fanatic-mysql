@@ -37,6 +37,11 @@ export const ProfileContentWrapper = styled.div`
   grid-template-columns: 1fr 2fr 1fr;
   min-height: 200px;
   max-width: 65%;
+
+  @media (max-width: 959px) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+  }
 `;
 
 export const ProfilePicture = styled.img`
@@ -56,6 +61,10 @@ export const ProfileInfo = styled.div`
 
 export const ProfilePlaceholder = styled.div`
   height: 190px;
+
+  @media (max-width: 959px) {
+    height: 250px;
+  }
 `;
 
 export const BioContentWrapper = styled.div`
@@ -63,7 +72,14 @@ export const BioContentWrapper = styled.div`
   border-right: 2px solid lightgrey;
   padding-left: 1.2rem;
   padding-right: 1.2rem;
+
+  @media (max-width: 959px) {
+    border-right: none;
+    grid-column: span 2;
+    grid-row: 3;
+  }
 `;
+
 export const SocialSectionWrapper = styled.div`
   padding-left: 1.8rem;
   p {

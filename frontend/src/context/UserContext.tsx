@@ -73,13 +73,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
           (id) => id !== itemId
         );
         updateFavourites(updatedFavourites);
-        localStorage.setItem(storageKey, JSON.stringify(updatedFavourites)); // Update local storage
+        localStorage.setItem(storageKey, JSON.stringify(updatedFavourites));
       } else {
         await addFavourite(itemId, contentType);
         console.log("Favourite added");
         const updatedFavourites = [...currentFavourites, itemId];
         updateFavourites(updatedFavourites);
-        localStorage.setItem(storageKey, JSON.stringify(updatedFavourites)); // Update local storage
+        localStorage.setItem(storageKey, JSON.stringify(updatedFavourites));
       }
     } catch (error) {
       console.error("Error toggling favourite:", error);

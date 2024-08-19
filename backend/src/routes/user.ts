@@ -8,14 +8,15 @@ import {
   createRefreshToken,
   verifyRefreshToken,
 } from "../utils/jwtUtils";
+import bcrypt from "bcrypt";
 
 dotenv.config();
 
 const router = express.Router();
 
 router.post("/register", async (req: Request, res: Response) => {
-  const { email, name, googleId } = req.body;
-  console.log("Received registration request:", { email, name, googleId });
+  const { email, name, password } = req.body;
+  console.log("Received registration request:", { email, name, password });
 
   try {
     const connection = await connectionPromise;
@@ -29,9 +30,11 @@ router.post("/register", async (req: Request, res: Response) => {
       return res.status(409).json({ message: "User already exists" });
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const [results] = await connection.execute<ResultSetHeader>(
       "INSERT INTO users (email, name, google_id) VALUES (?, ?, ?)",
-      [email, name, googleId]
+      [email, name, hashedPassword, false, "manual"]
     );
     console.log("User inserted with ID:", results.insertId);
     res
@@ -45,24 +48,46 @@ router.post("/register", async (req: Request, res: Response) => {
 });
 
 router.post("/login", async (req: Request, res: Response) => {
-  const { email, googleId } = req.body;
-  console.log("Received login request:", { email, googleId });
+  const { email, password } = req.body;
+  console.log("Received login request:", { email, password });
 
   try {
     const connection = await connectionPromise;
     const [results] = await connection.execute<RowDataPacket[]>(
-      "SELECT * FROM users WHERE email = ? AND google_id = ?",
-      [email, googleId]
+      "SELECT * FROM users WHERE email = ? AND auth_type = 'manual'",
+      [email]
     );
 
     if (results.length === 0) {
       return res.status(401).json({ message: "User not found" });
     }
 
-    console.log("User logged in:", results[0]);
-    res
-      .status(200)
-      .json({ message: "User logged in successfully", user: results[0] });
+    const user = results[0];
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
+    const jwtToken = createJwtToken(user.id, user.email, user.google_id);
+    const refreshToken = createRefreshToken(
+      user.id,
+      user.email,
+      user.google_id
+    );
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: "/",
+    });
+
+    res.status(200).json({
+      message: "User logged in successfully",
+      user: { id: user.id, email: user.email, name: user.name },
+      token: jwtToken,
+    });
   } catch (err) {
     const error = err as Error;
     console.error("Error logging in user:", error.message);
@@ -126,7 +151,7 @@ router.post("/google-auth", async (req: Request, res: Response) => {
     if (existingUser.length > 0) {
       userId = existingUser[0].id;
     } else {
-      userId = await insertUser(email, name, googleId);
+      userId = await insertUser(email, name, googleId, null, true, "google");
     }
 
     const jwtToken = createJwtToken(userId, email, googleId);

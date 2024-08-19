@@ -80,7 +80,9 @@ const UserAccountsPage: React.FC = () => {
                 </EditProfileLink>
               </ProfileInfo>
               <BioContentWrapper>
-                <p>BIO:</p>
+                <p>
+                  <b>BIO:</b>
+                </p>
                 <p>
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis
                   sint fuga voluptatum laboriosam praesentium cupiditate quas
@@ -125,9 +127,8 @@ const UserAccountsPage: React.FC = () => {
             </ProfileContentWrapper>
           </ProfileBanner>
         </BannerWrapperInner>
-        <ProfilePlaceholder />
       </BannerWrapperOuter>
-
+      <ProfilePlaceholder />
       <UserAccountContainer>
         {profile ? (
           <AccountActivity>
