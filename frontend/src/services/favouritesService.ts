@@ -1,6 +1,6 @@
 import { Tutorial } from "../types/Tutorial";
 import { Blog } from "../types/Blog";
-import { handleTokenExpiration } from "./authService";
+import { handleTokenExpiration } from "./tokenService";
 
 export const getUserFavourites = async (): Promise<{
   tutorials: Tutorial[];

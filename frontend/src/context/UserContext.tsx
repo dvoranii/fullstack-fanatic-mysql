@@ -21,8 +21,15 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     return savedProfile ? JSON.parse(savedProfile) : null;
   });
 
-  const [favouriteTutorials, setFavouriteTutorials] = useState<number[]>([]);
-  const [favouriteBlogs, setFavouriteBlogs] = useState<number[]>([]);
+  const [favouriteTutorials, setFavouriteTutorials] = useState<number[]>(() => {
+    const savedTutorialFavourites = localStorage.getItem("favouriteTutorials");
+    return savedTutorialFavourites ? JSON.parse(savedTutorialFavourites) : [];
+  });
+
+  const [favouriteBlogs, setFavouriteBlogs] = useState<number[]>(() => {
+    const savedBlogFavourites = localStorage.getItem("favouriteBlogs");
+    return savedBlogFavourites ? JSON.parse(savedBlogFavourites) : [];
+  });
 
   useEffect(() => {
     if (profile) {
@@ -89,7 +96,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const logOut = () => {
     setProfile(null);
     setFavouriteTutorials([]);
+    setFavouriteBlogs([]);
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("userProfile");
   };
 
   return (

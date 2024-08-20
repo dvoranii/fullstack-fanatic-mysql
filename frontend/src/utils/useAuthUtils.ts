@@ -9,14 +9,13 @@ export const useAuthUtils = () => {
   const logOut = (
     e?: React.MouseEvent<HTMLButtonElement, MouseEvent> | null
   ) => {
-    // Prevent default behavior if an event is passed (user-initiated logout)
     if (e && e.preventDefault) {
       e.preventDefault();
     }
-    googleLogout(); // Log out from Google
-    setProfile(null); // Clear the user profile in the frontend
-    localStorage.removeItem("accessToken"); // Remove the JWT token from localStorage
-    navigate("/", { replace: true }); // Redirect to the home page
+    googleLogout();
+    setProfile(null);
+    localStorage.removeItem("accessToken");
+    navigate("/", { replace: true });
   };
 
   return {

@@ -1,5 +1,5 @@
 import { CommentType } from "../types/Comment";
-import { handleTokenExpiration } from "./authService";
+import { handleTokenExpiration } from "./tokenService";
 
 export const fetchComments = async (
   contentType: string,

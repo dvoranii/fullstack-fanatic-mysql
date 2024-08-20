@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   CommentWrapper,
   CommentItem,
@@ -16,6 +16,8 @@ import like1 from "../../../assets/images/like-1.png";
 import like2 from "../../../assets/images/like-2.png";
 import { UserContext } from "../../../context/UserContext";
 import { handleImageError } from "../../../utils/imageUtils";
+import { toggleLike } from "../../../services/commentService";
+import ProfileBackup from "../../../assets/images/profile-icon.png";
 
 const Comment: React.FC<CommentProps> = ({
   comment,
@@ -24,18 +26,41 @@ const Comment: React.FC<CommentProps> = ({
   handleEditChange,
   onEdit,
   onDelete,
-  onLike,
   onSave,
   onCancelEdit,
 }) => {
   const { profile } = useContext(UserContext) || {};
+  const [isLiked, setIsLiked] = useState(false);
+  const [likes, setLikes] = useState(comment.likes);
+
+  useEffect(() => {
+    if (
+      profile?.userId &&
+      comment.likedBy &&
+      comment.likedBy.includes(profile.userId.toString())
+    ) {
+      setIsLiked(true);
+    } else {
+      setIsLiked(false);
+    }
+  }, [comment.likedBy, profile?.userId]);
+
+  const handleLikeClick = async () => {
+    try {
+      const updatedLikes = await toggleLike(comment.id);
+      setLikes(updatedLikes);
+      setIsLiked(!isLiked);
+    } catch (error) {
+      console.error("Failed to toggle like", error);
+    }
+  };
 
   return (
     <CommentWrapper>
       <ProfilePictureWrapper>
         <ProfilePicture
-          src={profile?.picture}
-          alt={`${profile?.name}`}
+          src={profile?.picture || ProfileBackup}
+          alt={profile?.name || "Username"}
           onError={handleImageError}
         />
         <Username>{profile?.name || "Username"}</Username>
@@ -55,11 +80,11 @@ const Comment: React.FC<CommentProps> = ({
               <p>{comment.content}</p>
               <LikesWrapper>
                 <img
-                  src={comment.likes % 2 === 1 ? like2 : like1}
+                  src={isLiked ? like2 : like1} // Use isLiked to determine the icon
                   alt="like icon"
-                  onClick={onLike}
+                  onClick={handleLikeClick}
                 />
-                {comment.likes}
+                {likes}
               </LikesWrapper>
             </>
           )}

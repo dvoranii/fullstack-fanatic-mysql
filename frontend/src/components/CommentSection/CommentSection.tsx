@@ -16,7 +16,6 @@ import {
   submitComment,
   updateComment,
   deleteComment,
-  toggleLike,
 } from "../../services/commentService";
 import Comment from "./Comment/Comment";
 import { UserContext } from "../../context/UserContext";
@@ -129,20 +128,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     setCommentToDelete(null);
   };
 
-  const handleLike = async (id: number) => {
-    try {
-      const likes = await toggleLike(id);
-      setComments(
-        comments.map((comment) =>
-          comment.id === id ? { ...comment, likes } : comment
-        )
-      );
-    } catch (error) {
-      console.error("Fetch error:", error);
-      setError("Failed to toggle like");
-    }
-  };
-
   return (
     <CommentSectionWrapperOuter>
       <CommentSectionTitle>Comments</CommentSectionTitle>
@@ -160,7 +145,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({
               setEditedComment(comment.content);
             }}
             onDelete={() => handleDelete(comment.id)}
-            onLike={() => handleLike(comment.id)}
             onSave={handleUpdate}
             onCancelEdit={() => setEditingCommentId(null)}
           />

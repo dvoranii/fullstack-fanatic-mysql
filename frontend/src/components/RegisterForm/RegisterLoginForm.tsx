@@ -60,7 +60,7 @@ const RegisterLoginForm: React.FC = () => {
   return (
     <RegisterLoginFormOuter>
       <RegisterLoginFormWrapperInner $isLogin={isLogin}>
-        <Form onSubmit={(e) => handleRegisterSubmit(e, "form")}>
+        <Form onSubmit={(e) => handleRegisterSubmit(e, "form")} noValidate>
           <RegisterFormWrapperInner>
             <RegisterFormTitleWrapper
               $isLogin={isLogin}

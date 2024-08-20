@@ -1,9 +1,11 @@
 import { AuthRequestBody } from "../types/AuthRequest";
+import { LoginRequestBody } from "../types/LoginRequestBody";
 import { User } from "../types/User";
 
 export const registerUser = async (requestBody: AuthRequestBody) => {
   const res = await fetch("http://localhost:5000/api/users/register", {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -19,10 +21,11 @@ export const registerUser = async (requestBody: AuthRequestBody) => {
 };
 
 export const loginUser = async (
-  requestBody: AuthRequestBody
+  requestBody: LoginRequestBody
 ): Promise<User> => {
   const res = await fetch("http://localhost:5000/api/users/login", {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },

@@ -33,8 +33,8 @@ router.post("/register", async (req: Request, res: Response) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const [results] = await connection.execute<ResultSetHeader>(
-      "INSERT INTO users (email, name, google_id) VALUES (?, ?, ?)",
-      [email, name, hashedPassword, false, "manual"]
+      "INSERT INTO users (email, name, password, auth_type) VALUES (?, ?, ?, ?)",
+      [email, name, hashedPassword, "manual"]
     );
     console.log("User inserted with ID:", results.insertId);
     res
@@ -48,14 +48,14 @@ router.post("/register", async (req: Request, res: Response) => {
 });
 
 router.post("/login", async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-  console.log("Received login request:", { email, password });
+  const { username, password } = req.body;
+  console.log("Received login request:", { username, password });
 
   try {
     const connection = await connectionPromise;
     const [results] = await connection.execute<RowDataPacket[]>(
-      "SELECT * FROM users WHERE email = ? AND auth_type = 'manual'",
-      [email]
+      "SELECT * FROM users WHERE name = ? AND auth_type = 'manual'",
+      [username]
     );
 
     if (results.length === 0) {
@@ -68,24 +68,22 @@ router.post("/login", async (req: Request, res: Response) => {
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid password" });
     }
-    const jwtToken = createJwtToken(user.id, user.email, user.google_id);
-    const refreshToken = createRefreshToken(
-      user.id,
-      user.email,
-      user.google_id
-    );
 
+    const jwtToken = createJwtToken(user.id, user.name);
+    const refreshToken = createRefreshToken(user.id, user.name);
+
+    // Set the refresh token in an HTTP-only cookie
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: false,
       sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
       path: "/",
     });
 
     res.status(200).json({
       message: "User logged in successfully",
-      user: { id: user.id, email: user.email, name: user.name },
+      user: { id: user.id, username: user.username, name: user.name },
       token: jwtToken,
     });
   } catch (err) {
@@ -151,13 +149,12 @@ router.post("/google-auth", async (req: Request, res: Response) => {
     if (existingUser.length > 0) {
       userId = existingUser[0].id;
     } else {
-      userId = await insertUser(email, name, googleId, null, true, "google");
+      userId = await insertUser(email, name, googleId, null, "google");
     }
 
     const jwtToken = createJwtToken(userId, email, googleId);
     const refreshToken = createRefreshToken(userId, email, googleId);
 
-    // dev environment, needs to be changed to work over https
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: false,
@@ -188,7 +185,7 @@ router.post("/refresh-token", async (req: Request, res: Response) => {
     const newJwtToken = createJwtToken(
       payload.userId,
       payload.email,
-      payload.googleId
+      payload.googleId || undefined // Pass undefined if googleId is null
     );
 
     res.status(200).json({ token: newJwtToken });
