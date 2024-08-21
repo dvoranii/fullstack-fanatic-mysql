@@ -30,7 +30,9 @@ const TutorialsPage: React.FC = () => {
               <BeginnerStarIcon src={BeginnerStarImg} />
               {profile && (
                 <FavouriteButton
-                  isFavourited={favouriteTutorials.includes(tutorial.id)}
+                  isFavourited={favouriteTutorials.some(
+                    (favTutorial) => favTutorial.id === tutorial.id
+                  )}
                   onClick={() => toggleFavourite(tutorial.id, "tutorial")}
                   altText="Tutorial Favourite Button"
                 />

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   CommentWrapper,
   CommentItem,
@@ -14,7 +14,7 @@ import {
 import { CommentProps } from "../../../types/CommentProps";
 import like1 from "../../../assets/images/like-1.png";
 import like2 from "../../../assets/images/like-2.png";
-import { UserContext } from "../../../context/UserContext";
+// import { UserContext } from "../../../context/UserContext";
 import { handleImageError } from "../../../utils/imageUtils";
 import { toggleLike } from "../../../services/commentService";
 import ProfileBackup from "../../../assets/images/profile-icon.png";
@@ -29,21 +29,28 @@ const Comment: React.FC<CommentProps> = ({
   onSave,
   onCancelEdit,
 }) => {
-  const { profile } = useContext(UserContext) || {};
+  // const { profile } = useContext(UserContext) || {};
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState(comment.likes);
 
+  // useEffect(() => {
+  //   if (
+  //     profile?.userId &&
+  //     comment.likedBy &&
+  //     comment.likedBy.includes(profile.userId.toString())
+  //   ) {
+  //     setIsLiked(true);
+  //   } else {
+  //     setIsLiked(false);
+  //   }
+  // }, [comment.likedBy, profile?.userId]);
   useEffect(() => {
-    if (
-      profile?.userId &&
-      comment.likedBy &&
-      comment.likedBy.includes(profile.userId.toString())
-    ) {
+    if (comment.likedBy && comment.likedBy.includes(String(comment.user_id))) {
       setIsLiked(true);
     } else {
       setIsLiked(false);
     }
-  }, [comment.likedBy, profile?.userId]);
+  }, [comment.likedBy, comment.user_id]);
 
   const handleLikeClick = async () => {
     try {
@@ -58,12 +65,18 @@ const Comment: React.FC<CommentProps> = ({
   return (
     <CommentWrapper>
       <ProfilePictureWrapper>
-        <ProfilePicture
+        {/* <ProfilePicture
           src={profile?.picture || ProfileBackup}
           alt={profile?.name || "Username"}
           onError={handleImageError}
+        /> */}
+        {/* <Username>{profile?.name || "Username"}</Username> */}
+        <ProfilePicture
+          src={comment.user_picture || ProfileBackup}
+          alt={comment.user_name || "Username"}
+          onError={handleImageError}
         />
-        <Username>{profile?.name || "Username"}</Username>
+        <Username>{comment.user_name || "Username"}</Username>
       </ProfilePictureWrapper>
       <CommentItem>
         <CommentContentWrapper>
@@ -80,7 +93,7 @@ const Comment: React.FC<CommentProps> = ({
               <p>{comment.content}</p>
               <LikesWrapper>
                 <img
-                  src={isLiked ? like2 : like1} // Use isLiked to determine the icon
+                  src={isLiked ? like2 : like1} // Use isLiked to determine the icon, but need to refactor to be user specific
                   alt="like icon"
                   onClick={handleLikeClick}
                 />

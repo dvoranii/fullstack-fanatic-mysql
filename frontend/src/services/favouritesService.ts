@@ -4,6 +4,7 @@ import { handleTokenExpiration } from "./tokenService";
 
 export const getUserFavourites = async (): Promise<{
   tutorials: Tutorial[];
+
   blogs: Blog[];
 }> => {
   const token = await handleTokenExpiration();
@@ -19,27 +20,41 @@ export const getUserFavourites = async (): Promise<{
   return response.json();
 };
 
-export const addFavourite = async (itemId: number, contentType: string) => {
-  const token = await handleTokenExpiration();
+export const addFavourite = async (
+  itemId: number,
+  contentType: "tutorial" | "blog"
+): Promise<Tutorial | Blog | undefined> => {
   try {
-    const response = await fetch("/api/favourites", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        item_id: itemId,
-        content_type: contentType,
-      }),
-    });
-    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    const res = await fetch(
+      `http://localhost:5000/api/favourites/${contentType}/${itemId}`,
+      {
+        method: "POST",
+        credentials: "include",
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to add favourite");
+    }
+
+    const data = await res.json();
+
+    // Return the object based on content type
+    if (contentType === "tutorial") {
+      return data as Tutorial;
+    } else {
+      return data as Blog;
+    }
   } catch (error) {
     console.error("Error adding favourite:", error);
+    return undefined;
   }
 };
 
-export const removeFavourite = async (itemId: number, contentType: string) => {
+export const removeFavourite = async (
+  itemId: number,
+  contentType: "tutorial" | "blog"
+) => {
   const token = await handleTokenExpiration();
   try {
     const response = await fetch("/api/favourites", {

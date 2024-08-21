@@ -15,12 +15,13 @@ export const insertUser = async (
   name: string,
   googleId: string | null, // Nullable in case of manual registration
   password: string | null, // Nullable in case of Google registration
-  authType: "google" | "manual" // Enforced to accept only 'google' or 'manual'
+  authType: "google" | "manual", // Enforced to accept only 'google' or 'manual'
+  profilePicture: string | null
 ) => {
   const connection = await connectionPromise;
   const [result] = await connection.execute<ResultSetHeader>(
-    "INSERT INTO users (email, name, google_id, password, auth_type) VALUES (?, ?, ?, ?, ?)",
-    [email, name, googleId, password, authType]
+    "INSERT INTO users (email, name, google_id, password, auth_type, profile_picture) VALUES (?, ?, ?, ?, ?, ?)",
+    [email, name, googleId, password, authType, profilePicture]
   );
   return result.insertId;
 };

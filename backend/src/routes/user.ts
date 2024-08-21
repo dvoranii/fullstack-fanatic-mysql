@@ -9,14 +9,39 @@ import {
   verifyRefreshToken,
 } from "../utils/jwtUtils";
 import bcrypt from "bcrypt";
+import { authenticate } from "../middleware/authenticate";
 
 dotenv.config();
 
 const router = express.Router();
 
+router.get("/profile", authenticate, async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.userId;
+
+    const connection = await connectionPromise;
+    const [user] = await connection.query<RowDataPacket[]>(
+      "SELECT id, email, name, profile_picture AS picture FROM users WHERE id = ?",
+      [userId]
+    );
+
+    if (!user.length) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    console.log(user);
+    res.json(user[0]);
+  } catch (error) {
+    console.error("Failed to fetch user profile: ", error);
+    res.status(500).json({ error: "Failed to fetch user profile" });
+  }
+});
+
 router.post("/register", async (req: Request, res: Response) => {
   const { email, name, password } = req.body;
   console.log("Received registration request:", { email, name, password });
+
+  const defaultProfilePicture = "/assets/images/profile-icon.png";
 
   try {
     const connection = await connectionPromise;
@@ -33,8 +58,8 @@ router.post("/register", async (req: Request, res: Response) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const [results] = await connection.execute<ResultSetHeader>(
-      "INSERT INTO users (email, name, password, auth_type) VALUES (?, ?, ?, ?)",
-      [email, name, hashedPassword, "manual"]
+      "INSERT INTO users (email, name, password, auth_type, profile_picture) VALUES (?, ?, ?, ?, ?)",
+      [email, name, hashedPassword, "manual", defaultProfilePicture]
     );
     console.log("User inserted with ID:", results.insertId);
     res
@@ -141,15 +166,34 @@ router.post("/google-auth", async (req: Request, res: Response) => {
     }
 
     const googleUserInfo = await googleUserInfoResponse.json();
-    const { email, name, id: googleId, picture } = googleUserInfo;
+    const {
+      email,
+      name,
+      id: googleId,
+      picture: profilePicture,
+    } = googleUserInfo;
 
     const existingUser = await fetchUserByColumn("google_id", googleId);
 
     let userId;
     if (existingUser.length > 0) {
       userId = existingUser[0].id;
+
+      // update profile picture to remain up to date in case google user changes their picture
+      const connection = await connectionPromise;
+      await connection.execute(
+        "UPDATE users SET profile_picture = ?, name = ? WHERE id = ?",
+        [profilePicture, name, userId]
+      );
     } else {
-      userId = await insertUser(email, name, googleId, null, "google");
+      userId = await insertUser(
+        email,
+        name,
+        googleId,
+        null,
+        "google",
+        profilePicture
+      );
     }
 
     const jwtToken = createJwtToken(userId, email, googleId);
@@ -165,7 +209,7 @@ router.post("/google-auth", async (req: Request, res: Response) => {
 
     res.status(200).json({
       message: jwtToken,
-      user: { userId, email, name, googleId, picture },
+      user: { userId, email, name, googleId, picture: profilePicture },
     });
   } catch (error) {
     console.error("Error during Google authentication: ", error);

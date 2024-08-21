@@ -1,14 +1,23 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { User } from "../types/User";
-import { removeFavourite, addFavourite } from "../services/favouritesService";
+import { getUserProfile } from "../services/userService";
+import {
+  getUserFavourites,
+  addFavourite,
+  removeFavourite,
+} from "../services/favouritesService";
+import { Tutorial } from "../types/Tutorial";
+import { Blog } from "../types/Blog";
 
 export interface UserContextType {
   profile: User | null;
   setProfile: (profile: User | null) => void;
   logOut: () => void;
-  favouriteTutorials: number[];
-  favouriteBlogs: number[];
-  toggleFavourite: (itemId: number, contentType: string) => void;
+  favouriteTutorials: Tutorial[];
+  favouriteBlogs: Blog[];
+  toggleFavourite: (itemId: number, contentType: "tutorial" | "blog") => void;
+  loading: boolean;
+  error: string | null;
 }
 
 export const UserContext = createContext<UserContextType | undefined>(
@@ -16,80 +25,75 @@ export const UserContext = createContext<UserContextType | undefined>(
 );
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [profile, setProfile] = useState<User | null>(() => {
-    const savedProfile = localStorage.getItem("userProfile");
-    return savedProfile ? JSON.parse(savedProfile) : null;
-  });
-
-  const [favouriteTutorials, setFavouriteTutorials] = useState<number[]>(() => {
-    const savedTutorialFavourites = localStorage.getItem("favouriteTutorials");
-    return savedTutorialFavourites ? JSON.parse(savedTutorialFavourites) : [];
-  });
-
-  const [favouriteBlogs, setFavouriteBlogs] = useState<number[]>(() => {
-    const savedBlogFavourites = localStorage.getItem("favouriteBlogs");
-    return savedBlogFavourites ? JSON.parse(savedBlogFavourites) : [];
-  });
+  const [profile, setProfile] = useState<User | null>(null);
+  const [favouriteTutorials, setFavouriteTutorials] = useState<Tutorial[]>([]);
+  const [favouriteBlogs, setFavouriteBlogs] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (profile) {
-      console.log(profile);
-      localStorage.setItem("userProfile", JSON.stringify(profile));
+    const fetchUserProfileAndFavourites = async () => {
+      try {
+        const userProfile = await getUserProfile();
+        setProfile(userProfile);
+        localStorage.setItem("userProfile", JSON.stringify(userProfile));
 
-      const savedTutorialFavourites =
-        localStorage.getItem("favouriteTutorials");
-      if (savedTutorialFavourites) {
-        setFavouriteTutorials(JSON.parse(savedTutorialFavourites));
+        const userFavourites = await getUserFavourites();
+        setFavouriteTutorials(userFavourites.tutorials);
+        setFavouriteBlogs(userFavourites.blogs);
+      } catch (err) {
+        setError("Failed to load user data");
+        console.error("Failed to fetch user data:", err);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      const savedBlogFavourites = localStorage.getItem("favouriteBlogs");
-      if (savedBlogFavourites) {
-        setFavouriteBlogs(JSON.parse(savedBlogFavourites));
-      }
-    } else {
-      localStorage.removeItem("userProfile");
-      setFavouriteTutorials([]);
-      setFavouriteBlogs([]);
-    }
-  }, [profile]);
+    fetchUserProfileAndFavourites();
+  }, []);
 
-  const toggleFavourite = async (itemId: number, contentType: string) => {
-    let currentFavourites: number[];
-    let updateFavourites: (favourites: number[]) => void;
-    let storageKey: string;
-
+  const toggleFavourite = async (
+    itemId: number,
+    contentType: "tutorial" | "blog"
+  ) => {
     if (contentType === "tutorial") {
-      currentFavourites = favouriteTutorials;
-      updateFavourites = setFavouriteTutorials;
-      storageKey = "favouriteTutorials";
-    } else if (contentType === "blog") {
-      currentFavourites = favouriteBlogs;
-      updateFavourites = setFavouriteBlogs;
-      storageKey = "favouriteBlogs";
-    } else {
-      return;
-    }
+      const isCurrentlyFavourited = favouriteTutorials.some(
+        (tutorial) => tutorial.id === itemId
+      );
 
-    const isCurrentlyFavourited = currentFavourites.includes(itemId);
-
-    try {
       if (isCurrentlyFavourited) {
         await removeFavourite(itemId, contentType);
-        console.log("Favourite removed");
-        const updatedFavourites = currentFavourites.filter(
-          (id) => id !== itemId
+        setFavouriteTutorials((prevFavourites) =>
+          prevFavourites.filter((tutorial) => tutorial.id !== itemId)
         );
-        updateFavourites(updatedFavourites);
-        localStorage.setItem(storageKey, JSON.stringify(updatedFavourites));
       } else {
-        await addFavourite(itemId, contentType);
-        console.log("Favourite added");
-        const updatedFavourites = [...currentFavourites, itemId];
-        updateFavourites(updatedFavourites);
-        localStorage.setItem(storageKey, JSON.stringify(updatedFavourites));
+        const newFavourite = await addFavourite(itemId, contentType);
+        if (newFavourite) {
+          setFavouriteTutorials((prevFavourites) => [
+            ...prevFavourites,
+            newFavourite as Tutorial,
+          ]);
+        }
       }
-    } catch (error) {
-      console.error("Error toggling favourite:", error);
+    } else if (contentType === "blog") {
+      const isCurrentlyFavourited = favouriteBlogs.some(
+        (blog) => blog.id === itemId
+      );
+
+      if (isCurrentlyFavourited) {
+        await removeFavourite(itemId, contentType);
+        setFavouriteBlogs((prevFavourites) =>
+          prevFavourites.filter((blog) => blog.id !== itemId)
+        );
+      } else {
+        const newFavourite = await addFavourite(itemId, contentType);
+        if (newFavourite) {
+          setFavouriteBlogs((prevFavourites) => [
+            ...prevFavourites,
+            newFavourite as Blog,
+          ]);
+        }
+      }
     }
   };
 
@@ -110,6 +114,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         favouriteTutorials,
         favouriteBlogs,
         toggleFavourite,
+        loading,
+        error,
       }}
     >
       {children}

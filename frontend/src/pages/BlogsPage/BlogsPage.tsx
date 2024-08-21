@@ -9,7 +9,7 @@ import {
 } from "./BlogsPage.styled";
 import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
 import { UserContext } from "../../context/UserContext";
-import { blogContent } from "../../assets/blogContent"; // Import the static blog data
+import { blogContent } from "../../assets/blogContent";
 
 const BlogsPage: React.FC = () => {
   const {
@@ -36,7 +36,9 @@ const BlogsPage: React.FC = () => {
             <BlogActions>
               {profile && (
                 <FavouriteButton
-                  isFavourited={favouriteBlogs.includes(blog.id)}
+                  isFavourited={favouriteBlogs.some(
+                    (favBlog) => favBlog.id === blog.id
+                  )}
                   onClick={() => toggleFavourite(blog.id, "blog")}
                   altText="Blog Favourite Button"
                 />

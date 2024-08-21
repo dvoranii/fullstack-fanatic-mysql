@@ -1,9 +1,5 @@
-// import { PageWrapper } from "../../global.styled";
-import { useEffect, useState } from "react";
-import useUser from "../../hooks/useUser";
-import { getUserFavourites } from "../../services/favouritesService";
-import { Tutorial } from "../../types/Tutorial";
-import { Blog } from "../../types/Blog";
+import React, { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 import {
   UserAccountContainer,
   ProfileBanner,
@@ -40,26 +36,26 @@ import EditIcon from "../../assets/images/account/edit.png";
 import { handleImageError } from "../../utils/imageUtils";
 
 const UserAccountsPage: React.FC = () => {
-  const { profile } = useUser();
-  const [favourites, setFavourites] = useState<{
-    tutorials: Tutorial[];
-    blogs: Blog[];
-  }>({ tutorials: [], blogs: [] });
+  const context = useContext(UserContext);
 
-  useEffect(() => {
-    const fetchFavourites = async () => {
-      try {
-        const userFavourites = await getUserFavourites();
-        setFavourites(userFavourites);
-      } catch (error) {
-        console.error("Failed to fetch user favourites:", error);
-      }
-    };
+  if (!context) {
+    return <p>No user logged in</p>;
+  }
 
-    if (profile) {
-      fetchFavourites();
-    }
-  }, [profile]);
+  const { profile, favouriteTutorials, favouriteBlogs, loading, error } =
+    context;
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  if (!profile) {
+    return <p>No user logged in</p>;
+  }
 
   return (
     <>
@@ -68,12 +64,12 @@ const UserAccountsPage: React.FC = () => {
           <ProfileBanner>
             <ProfileContentWrapper>
               <ProfilePicture
-                src={profile?.picture}
-                alt={`${profile?.name}`}
+                src={profile.picture || ""}
+                alt={`${profile.name}`}
                 onError={handleImageError}
               />
               <ProfileInfo>
-                <UserName>{profile?.name || ""}</UserName>
+                <UserName>{profile.name || ""}</UserName>
                 <UserProfession>Full Stack Developer</UserProfession>{" "}
                 <EditProfileLink href="#">
                   Edit Profile <img src={EditIcon} alt="Edit Icon" />
@@ -130,47 +126,41 @@ const UserAccountsPage: React.FC = () => {
       </BannerWrapperOuter>
       <ProfilePlaceholder />
       <UserAccountContainer>
-        {profile ? (
-          <AccountActivity>
-            <Section>
-              <SectionTitle>Favorites</SectionTitle>
-              <SectionContent>
-                <div>
-                  <FavouriteIcon>
-                    <i className="fas fa-book"></i>
-                  </FavouriteIcon>
-                  <p>Tutorials</p>
-                  <ViewAllButton
-                    onClick={() => console.log(favourites.tutorials)}
-                  >
-                    View All
-                  </ViewAllButton>
-                </div>
-                <div>
-                  <FavouriteIcon>
-                    <i className="fas fa-pencil-alt"></i>
-                  </FavouriteIcon>
-                  <p>Blog Posts</p>
-                  <ViewAllButton onClick={() => console.log(favourites.blogs)}>
-                    View All
-                  </ViewAllButton>
-                </div>
-              </SectionContent>
-            </Section>
-            <Section>
-              <SectionTitle>Comment History</SectionTitle>
-              <CommentHistory>
-                <CommentItem>
-                  <CommentText>Sample comment text goes here.</CommentText>
-                  <CommentLink href="#">View Content</CommentLink>
-                </CommentItem>
-                <ViewMoreCommentsButton>See More</ViewMoreCommentsButton>
-              </CommentHistory>
-            </Section>
-          </AccountActivity>
-        ) : (
-          <p>No user logged in</p>
-        )}
+        <AccountActivity>
+          <Section>
+            <SectionTitle>Favorites</SectionTitle>
+            <SectionContent>
+              <div>
+                <FavouriteIcon>
+                  <i className="fas fa-book"></i>
+                </FavouriteIcon>
+                <p>Tutorials</p>
+                <ViewAllButton onClick={() => console.log(favouriteTutorials)}>
+                  View All
+                </ViewAllButton>
+              </div>
+              <div>
+                <FavouriteIcon>
+                  <i className="fas fa-pencil-alt"></i>
+                </FavouriteIcon>
+                <p>Blog Posts</p>
+                <ViewAllButton onClick={() => console.log(favouriteBlogs)}>
+                  View All
+                </ViewAllButton>
+              </div>
+            </SectionContent>
+          </Section>
+          <Section>
+            <SectionTitle>Comment History</SectionTitle>
+            <CommentHistory>
+              <CommentItem>
+                <CommentText>Sample comment text goes here.</CommentText>
+                <CommentLink href="#">View Content</CommentLink>
+              </CommentItem>
+              <ViewMoreCommentsButton>See More</ViewMoreCommentsButton>
+            </CommentHistory>
+          </Section>
+        </AccountActivity>
       </UserAccountContainer>
     </>
   );

@@ -8,7 +8,7 @@ export interface CommentType {
   likes: number;
   user_id: number;
   google_id: string;
-  name: string;
-  picture: string;
+  user_name: string;
+  user_picture: string;
   likedBy: string;
 }

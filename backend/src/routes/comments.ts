@@ -15,9 +15,10 @@ router.get("/:contentType/:contentId", async (req: Request, res: Response) => {
   try {
     const connection = await connectionPromise;
     const [results] = await connection.query<RowDataPacket[]>(
-      "SELECT * FROM comments WHERE content_type = ? AND content_id = ?",
+      "Select c.*, u.name as user_name, u.profile_picture as user_picture FROM comments c JOIN users u ON c.user_id = u.id WHERE c.content_type = ? AND content_id = ?",
       [contentType, contentId]
     );
+    console.log(results);
     res.json(results as Comment[]);
   } catch (err) {
     const error = err as Error;
