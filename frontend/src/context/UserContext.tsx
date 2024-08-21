@@ -35,6 +35,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const fetchUserProfileAndFavourites = async () => {
       try {
         const userProfile = await getUserProfile();
+
         setProfile(userProfile);
         localStorage.setItem("userProfile", JSON.stringify(userProfile));
 

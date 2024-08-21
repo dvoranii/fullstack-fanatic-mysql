@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   CommentWrapper,
   CommentItem,
@@ -14,7 +14,7 @@ import {
 import { CommentProps } from "../../../types/CommentProps";
 import like1 from "../../../assets/images/like-1.png";
 import like2 from "../../../assets/images/like-2.png";
-// import { UserContext } from "../../../context/UserContext";
+import { UserContext } from "../../../context/UserContext";
 import { handleImageError } from "../../../utils/imageUtils";
 import { toggleLike } from "../../../services/commentService";
 import ProfileBackup from "../../../assets/images/profile-icon.png";
@@ -29,21 +29,13 @@ const Comment: React.FC<CommentProps> = ({
   onSave,
   onCancelEdit,
 }) => {
-  // const { profile } = useContext(UserContext) || {};
+  const { profile } = useContext(UserContext) || {};
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState(comment.likes);
 
-  // useEffect(() => {
-  //   if (
-  //     profile?.userId &&
-  //     comment.likedBy &&
-  //     comment.likedBy.includes(profile.userId.toString())
-  //   ) {
-  //     setIsLiked(true);
-  //   } else {
-  //     setIsLiked(false);
-  //   }
-  // }, [comment.likedBy, profile?.userId]);
+  console.log(profile?.id);
+  console.log(comment.user_id);
+
   useEffect(() => {
     if (comment.likedBy && comment.likedBy.includes(String(comment.user_id))) {
       setIsLiked(true);
@@ -62,15 +54,11 @@ const Comment: React.FC<CommentProps> = ({
     }
   };
 
+  const isCommentOwner = profile && Number(profile?.id) === comment.user_id;
+
   return (
     <CommentWrapper>
       <ProfilePictureWrapper>
-        {/* <ProfilePicture
-          src={profile?.picture || ProfileBackup}
-          alt={profile?.name || "Username"}
-          onError={handleImageError}
-        /> */}
-        {/* <Username>{profile?.name || "Username"}</Username> */}
         <ProfilePicture
           src={comment.user_picture || ProfileBackup}
           alt={comment.user_name || "Username"}
@@ -102,7 +90,7 @@ const Comment: React.FC<CommentProps> = ({
             </>
           )}
         </CommentContentWrapper>
-        {!isEditing && (
+        {!isEditing && isCommentOwner && (
           <CommentActions>
             <FormButton onClick={onEdit}>Edit</FormButton>
             <FormButton onClick={onDelete}>Delete</FormButton>
