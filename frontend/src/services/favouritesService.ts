@@ -8,6 +8,7 @@ export const getUserFavourites = async (): Promise<{
   blogs: Blog[];
 }> => {
   const token = await handleTokenExpiration();
+
   const response = await fetch("/api/favourites", {
     method: "GET",
     headers: {
@@ -25,13 +26,20 @@ export const addFavourite = async (
   contentType: "tutorial" | "blog"
 ): Promise<Tutorial | Blog | undefined> => {
   try {
-    const res = await fetch(
-      `http://localhost:5000/api/favourites/${contentType}/${itemId}`,
-      {
-        method: "POST",
-        credentials: "include",
-      }
-    );
+    const token = await handleTokenExpiration();
+
+    const res = await fetch("http://localhost:5000/api/favourites/", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        item_id: itemId,
+        content_type: contentType,
+      }),
+    });
 
     if (!res.ok) {
       throw new Error("Failed to add favourite");
@@ -40,11 +48,7 @@ export const addFavourite = async (
     const data = await res.json();
 
     // Return the object based on content type
-    if (contentType === "tutorial") {
-      return data as Tutorial;
-    } else {
-      return data as Blog;
-    }
+    return contentType === "tutorial" ? (data as Tutorial) : (data as Blog);
   } catch (error) {
     console.error("Error adding favourite:", error);
     return undefined;

@@ -6,25 +6,52 @@ import { authenticate } from "../middleware/authenticate";
 
 const router = express.Router();
 
-router.get("/:contentType/:contentId", async (req: Request, res: Response) => {
-  const { contentType, contentId } = req.params as {
-    contentType: string;
-    contentId: string;
-  };
-  console.log(`Fetching comments for ${contentType} with ID ${contentId}`);
-  try {
-    const connection = await connectionPromise;
-    const [results] = await connection.query<RowDataPacket[]>(
-      "Select c.*, u.name as user_name, u.profile_picture as user_picture FROM comments c JOIN users u ON c.user_id = u.id WHERE c.content_type = ? AND content_id = ?",
-      [contentType, contentId]
-    );
-    // console.log(results);
-    res.json(results as Comment[]);
-  } catch (err) {
-    const error = err as Error;
-    res.status(500).json({ error: error.message });
+router.get(
+  "/:contentType/:contentId",
+  authenticate,
+  async (req: Request, res: Response) => {
+    const { contentType, contentId } = req.params as {
+      contentType: string;
+      contentId: string;
+    };
+
+    const userId = req.user?.userId;
+
+    const includeLikedStatus = req.query.includeLikedStatus === "true";
+
+    try {
+      const connection = await connectionPromise;
+      const [comments] = await connection.query<RowDataPacket[]>(
+        `SELECT c.*, u.name as user_name, u.profile_picture as user_picture 
+      FROM comments c 
+      JOIN users u ON c.user_id = u.id 
+      WHERE c.content_type = ? AND c.content_id = ?`,
+        [contentType, contentId]
+      );
+
+      if (includeLikedStatus && userId) {
+        const [likedComments] = await connection.query<RowDataPacket[]>(
+          `SELECT comment_id FROM comment_likes WHERE user_id = ?`,
+          [userId]
+        );
+
+        const likedCommentIds = likedComments.map((row) => row.comment_id);
+
+        const commentsWithLikeStatus = comments.map((comment) => ({
+          ...comment,
+          likedByUser: likedCommentIds.includes(comment.id),
+        }));
+        // console.log(commentsWithLikeStatus);
+        res.json(commentsWithLikeStatus as Comment[]);
+      } else {
+        res.json(comments as Comment[]);
+      }
+    } catch (err) {
+      const error = err as Error;
+      res.status(500).json({ error: error.message });
+    }
   }
-});
+);
 
 router.post("/", authenticate, async (req: Request, res: Response) => {
   const { content_id, content_type, content } = req.body as {

@@ -30,25 +30,18 @@ const Comment: React.FC<CommentProps> = ({
   onCancelEdit,
 }) => {
   const { profile } = useContext(UserContext) || {};
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(comment.likedByUser ?? false);
   const [likes, setLikes] = useState(comment.likes);
 
-  console.log(profile?.id);
-  console.log(comment.user_id);
-
   useEffect(() => {
-    if (comment.likedBy && comment.likedBy.includes(String(comment.user_id))) {
-      setIsLiked(true);
-    } else {
-      setIsLiked(false);
-    }
-  }, [comment.likedBy, comment.user_id]);
+    setIsLiked(comment.likedByUser ?? false); // Use nullish coalescing to handle undefined
+  }, [comment.likedByUser, profile?.id]);
 
   const handleLikeClick = async () => {
     try {
       const updatedLikes = await toggleLike(comment.id);
       setLikes(updatedLikes);
-      setIsLiked(!isLiked);
+      setIsLiked((prev) => !prev);
     } catch (error) {
       console.error("Failed to toggle like", error);
     }
@@ -81,7 +74,7 @@ const Comment: React.FC<CommentProps> = ({
               <p>{comment.content}</p>
               <LikesWrapper>
                 <img
-                  src={isLiked ? like2 : like1} // Use isLiked to determine the icon, but need to refactor to be user specific
+                  src={isLiked ? like2 : like1}
                   alt="like icon"
                   onClick={handleLikeClick}
                 />

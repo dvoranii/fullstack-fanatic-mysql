@@ -10,5 +10,5 @@ export interface CommentType {
   google_id: string;
   user_name: string;
   user_picture: string;
-  likedBy: string;
+  likedByUser: boolean;
 }

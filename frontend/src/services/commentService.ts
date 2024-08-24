@@ -4,8 +4,15 @@ import { handleTokenExpiration } from "./tokenService";
 export const fetchComments = async (
   contentType: string,
   contentId: number
+  // includeLikedStatus: boolean = false
 ): Promise<CommentType[]> => {
-  const response = await fetch(`/api/comments/${contentType}/${contentId}`);
+  const token = await handleTokenExpiration();
+  const url = `/api/comments/${contentType}/${contentId}?includeLikedStatus=true`;
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   if (!response.ok) throw new Error("Failed to fetch comments");
   const data = await response.json();
   return data;

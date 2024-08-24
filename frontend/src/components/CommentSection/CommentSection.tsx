@@ -37,6 +37,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     const fetchCommentsData = async () => {
       try {
         const data = await fetchComments(contentType, contentId);
+        console.log(data);
         setComments(data);
       } catch (error) {
         console.error("Fetch error:", error);

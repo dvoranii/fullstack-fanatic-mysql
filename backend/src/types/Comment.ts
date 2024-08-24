@@ -5,4 +5,8 @@ export interface Comment {
   content: string;
   created_at: string;
   likes: number;
+  user_id: number;
+  user_name: string;
+  user_picture: string | null;
+  likedByUser?: boolean;
 }

@@ -15,6 +15,7 @@ export const useAuthUtils = () => {
     googleLogout();
     setProfile(null);
     localStorage.removeItem("accessToken");
+    // localStorage.removeItem("userProfile");
     navigate("/", { replace: true });
   };
 

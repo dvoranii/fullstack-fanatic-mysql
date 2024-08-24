@@ -6,7 +6,7 @@ import { Tutorial } from "../types/Tutorial";
 const router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const connection = await connectionPromise;
     const [results] = await connection.query<RowDataPacket[]>(

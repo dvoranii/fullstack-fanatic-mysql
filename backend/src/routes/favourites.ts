@@ -8,10 +8,9 @@ const router = Router();
 // GET request to fetch favourites based on content_type, if needed in the future
 router.get("/", authenticate, async (req: Request, res: Response) => {
   const { userId } = req.user!;
-  console.log(userId);
 
   try {
-    const connection = await connectionPromise; // Use await to get the connection
+    const connection = await connectionPromise;
 
     // Fetching favourites categorized by content_type
     const [tutorials] = await connection.query<RowDataPacket[]>(
@@ -44,11 +43,18 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
   const { userId: user_id, googleId: google_id } = req.user!;
 
   try {
+    console.log("Adding Favourite:", {
+      item_id,
+      content_type,
+      user_id,
+      google_id,
+    });
+
     const connection = await connectionPromise;
 
     const [existing] = await connection.query<RowDataPacket[]>(
-      `SELECT * FROM favourites WHERE google_id = ? AND item_id = ? AND content_type = ?`,
-      [google_id, item_id, content_type]
+      `SELECT * FROM favourites WHERE (google_id = ? OR google_id IS NULL) AND item_id = ? AND user_id = ? AND content_type = ?`,
+      [google_id, item_id, user_id, content_type]
     );
 
     if (existing.length === 0) {
@@ -66,10 +72,16 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
   }
 });
 
-// DELETE request to remove a favourite without content_type
 router.delete("/", authenticate, async (req: Request, res: Response) => {
   const { item_id, content_type } = req.body;
   const { userId: user_id, googleId: google_id } = req.user!;
+
+  console.log("Deleting Favourite:", {
+    item_id,
+    content_type,
+    user_id,
+    google_id,
+  });
 
   if (!item_id || !content_type) {
     return res.status(400).json({ error: "Missing required parameters" });
@@ -79,13 +91,15 @@ router.delete("/", authenticate, async (req: Request, res: Response) => {
     const connection = await connectionPromise;
 
     const [existing] = await connection.query<RowDataPacket[]>(
-      `SELECT * FROM favourites WHERE google_id = ? AND item_id = ? AND user_id = ? AND content_type = ?`,
+      `SELECT * FROM favourites WHERE (google_id = ? OR google_id IS NULL) AND item_id = ? AND user_id = ? AND content_type = ?`,
       [google_id, item_id, user_id, content_type]
     );
 
+    console.log("Existing Favourites:", existing);
+
     if (existing.length > 0) {
       await connection.query(
-        `DELETE FROM favourites WHERE google_id = ? AND item_id = ? AND user_id = ? AND content_type = ?`,
+        `DELETE FROM favourites WHERE (google_id = ? OR google_id IS NULL) AND item_id = ? AND user_id = ? AND content_type = ?`,
         [google_id, item_id, user_id, content_type]
       );
       res.status(200).json({ message: "Favourite removed" });
