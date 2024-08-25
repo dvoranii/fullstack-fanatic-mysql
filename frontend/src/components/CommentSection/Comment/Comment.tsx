@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   CommentWrapper,
   CommentItem,
@@ -18,6 +18,8 @@ import { UserContext } from "../../../context/UserContext";
 import { handleImageError } from "../../../utils/imageUtils";
 import { toggleLike } from "../../../services/commentService";
 import ProfileBackup from "../../../assets/images/profile-icon.png";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Comment: React.FC<CommentProps> = ({
   comment,
@@ -32,9 +34,10 @@ const Comment: React.FC<CommentProps> = ({
   const { profile } = useContext(UserContext) || {};
   const [isLiked, setIsLiked] = useState(comment.likedByUser ?? false);
   const [likes, setLikes] = useState(comment.likes);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setIsLiked(comment.likedByUser ?? false); // Use nullish coalescing to handle undefined
+    setIsLiked(comment.likedByUser ?? false);
   }, [comment.likedByUser, profile?.id]);
 
   const handleLikeClick = async () => {
@@ -49,15 +52,27 @@ const Comment: React.FC<CommentProps> = ({
 
   const isCommentOwner = profile && Number(profile?.id) === comment.user_id;
 
+  const handleProfileClick = () => {
+    if (Number(profile?.id) === comment.user_id) {
+      navigate("/my-account");
+    } else {
+      navigate(`/user/${comment.user_id}`);
+    }
+  };
+
   return (
     <CommentWrapper>
-      <ProfilePictureWrapper>
-        <ProfilePicture
-          src={comment.user_picture || ProfileBackup}
-          alt={comment.user_name || "Username"}
-          onError={handleImageError}
-        />
-        <Username>{comment.user_name || "Username"}</Username>
+      <ProfilePictureWrapper onClick={handleProfileClick}>
+        <Link to={`/user/${comment.user_id}`}>
+          <ProfilePicture
+            src={comment.user_picture || ProfileBackup}
+            alt={comment.user_name || "Username"}
+            onError={handleImageError}
+          />
+        </Link>
+        <Link to={`/user/${comment.user_id}`}>
+          <Username>{comment.user_name || "Username"}</Username>
+        </Link>
       </ProfilePictureWrapper>
       <CommentItem>
         <CommentContentWrapper>

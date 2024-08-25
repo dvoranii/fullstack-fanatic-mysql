@@ -101,7 +101,7 @@ router.post("/login", async (req: Request, res: Response) => {
       httpOnly: true,
       secure: false,
       sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
+      maxAge: 7 * 24 * 60 * 60 * 1000,
       path: "/",
     });
 
@@ -115,6 +115,11 @@ router.post("/login", async (req: Request, res: Response) => {
     console.error("Error logging in user:", error.message);
     res.status(500).json({ error: error.message });
   }
+});
+
+router.post("/logout", (req, res) => {
+  res.clearCookie("refreshToken");
+  res.status(200).json({ message: "Logged Out" });
 });
 
 router.get("/", async (req: Request, res: Response) => {
@@ -172,13 +177,14 @@ router.post("/google-auth", async (req: Request, res: Response) => {
       picture: profilePicture,
     } = googleUserInfo;
 
+    console.log(googleUserInfo);
+
     const existingUser = await fetchUserByColumn("google_id", googleId);
 
     let userId;
     if (existingUser.length > 0) {
       userId = existingUser[0].id;
 
-      // update profile picture to remain up to date in case google user changes their picture
       const connection = await connectionPromise;
       await connection.execute(
         "UPDATE users SET profile_picture = ?, name = ? WHERE id = ?",
@@ -228,13 +234,52 @@ router.post("/refresh-token", async (req: Request, res: Response) => {
     const newJwtToken = createJwtToken(
       payload.userId,
       payload.email,
-      payload.googleId || undefined // Pass undefined if googleId is null
+      payload.googleId || undefined
     );
 
     res.status(200).json({ token: newJwtToken });
   } catch (error) {
     console.error("Error verifying refresh token:", error);
     res.status(401).json({ error: "Invalid refresh token" });
+  }
+});
+
+router.get("/user-profile/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const connection = await connectionPromise;
+    const [user] = await connection.query<RowDataPacket[]>(
+      "Select id, email, name, profile_picture AS picture FROM users WHERE id = ?",
+      [id]
+    );
+
+    if (!user.length) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const [favouriteTutorials] = await connection.query<RowDataPacket[]>(
+      `SELECT t.* from tutorials t 
+      JOIN favourites f ON t.id = f.item_id 
+      WHERE f.user_id = ? AND f.content_type = 'tutorial'`,
+      [id]
+    );
+
+    const [favouriteBlogs] = await connection.query<RowDataPacket[]>(
+      `SELECT b.* FROM blogs b
+       JOIN favourites f ON b.id = f.item_id
+       WHERE f.user_id = ? AND f.content_type = 'blog'`,
+      [id]
+    );
+
+    res.json({
+      user: user[0],
+      favouriteTutorials,
+      favouriteBlogs,
+    });
+  } catch (error) {
+    console.error("Failed to load user page: ", error);
+    res.status(500).json({ error: "Failed to fetch public profile" });
   }
 });
 

@@ -11,7 +11,6 @@ const refreshJwt = async () => {
   try {
     const data = await apiRefreshJwt();
     const { token } = data;
-
     setAuthToken(token);
     return token;
   } catch (error) {
@@ -31,8 +30,18 @@ const isTokenExpired = (token: string) => {
 
 const handleTokenExpiration = async () => {
   let token = getAuthToken();
-  if (!token || isTokenExpired(token)) {
-    token = await refreshJwt();
+
+  if (!token) {
+    return null;
+  }
+
+  if (isTokenExpired(token)) {
+    try {
+      token = await refreshJwt();
+    } catch (error) {
+      console.error("Failed to refresh JWT:", error);
+      return null;
+    }
   }
   return token;
 };

@@ -8,21 +8,9 @@ import {
 } from "../services/favouritesService";
 import { Tutorial } from "../types/Tutorial";
 import { Blog } from "../types/Blog";
-// import { fetchComments } from "../services/commentService";
 import { CommentType } from "../types/Comment";
-
-export interface UserContextType {
-  profile: User | null;
-  setProfile: (profile: User | null) => void;
-  logOut: () => void;
-  favouriteTutorials: Tutorial[];
-  favouriteBlogs: Blog[];
-  toggleFavourite: (itemId: number, contentType: "tutorial" | "blog") => void;
-  comments: CommentType[];
-  setComments: (comments: CommentType[]) => void;
-  loading: boolean;
-  error: string | null;
-}
+import { UserContextType } from "../types/UserContextType";
+import { handleTokenExpiration } from "../services/tokenService";
 
 export const UserContext = createContext<UserContextType | undefined>(
   undefined
@@ -32,13 +20,18 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [profile, setProfile] = useState<User | null>(null);
   const [favouriteTutorials, setFavouriteTutorials] = useState<Tutorial[]>([]);
   const [favouriteBlogs, setFavouriteBlogs] = useState<Blog[]>([]);
-  const [comments, setComments] = useState<CommentType[]>([]); // New state for comments
+  const [comments, setComments] = useState<CommentType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUserProfileAndFavourites = async () => {
       try {
+        const token = await handleTokenExpiration();
+        if (!token) {
+          setLoading(false);
+          return;
+        }
         const userProfile = await getUserProfile();
 
         setProfile(userProfile);
@@ -47,20 +40,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         const userFavourites = await getUserFavourites();
         setFavouriteTutorials(userFavourites.tutorials);
         setFavouriteBlogs(userFavourites.blogs);
-
-        // if (userProfile) {
-        //   const fetchedComments = await fetchComments("tutorial", 1, true);
-
-        //   const userAuthoredComments = fetchedComments.filter(
-        //     (comment) => Number(comment.user_id) === Number(userProfile.id)
-        //   );
-
-        //   if (userAuthoredComments.length > 0) {
-        //     console.log("User authored comments:", userAuthoredComments);
-        //   }
-
-        //   setComments(fetchedComments);
-        // }
       } catch (err) {
         setError("Failed to load user data");
         console.error("Failed to fetch user data:", err);
@@ -154,7 +133,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     setProfile(null);
     setFavouriteTutorials([]);
     setFavouriteBlogs([]);
-    setComments([]); // Clear comments on logout
+    setComments([]);
     localStorage.removeItem("accessToken");
     localStorage.removeItem("userProfile");
   };
@@ -166,10 +145,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         setProfile,
         logOut,
         favouriteTutorials,
+        setFavouriteTutorials,
         favouriteBlogs,
+        setFavouriteBlogs,
         toggleFavourite,
-        comments, // Provide comments in context
-        setComments, // Optionally provide setComments
+        comments,
+        setComments,
         loading,
         error,
       }}

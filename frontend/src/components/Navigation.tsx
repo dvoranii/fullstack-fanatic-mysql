@@ -16,6 +16,9 @@ const SignInRegisterPage = lazy(
 const UserAccountPage = lazy(
   () => import("../pages/UserAccountPage/UserAccountPage")
 );
+const PublicUserPage = lazy(
+  () => import("../pages/UserAccountPage/PublicUserPage")
+);
 
 const Navigation: React.FC = () => {
   return (
@@ -30,6 +33,7 @@ const Navigation: React.FC = () => {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/sign-in-register" element={<SignInRegisterPage />} />
         <Route path="my-account" element={<UserAccountPage />} />
+        <Route path="/user/:id" element={<PublicUserPage />} />
       </Routes>
     </Suspense>
   );

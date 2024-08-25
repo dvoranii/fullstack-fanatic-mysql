@@ -50,12 +50,22 @@ export const loginOrRegisterWithGoogle = async (token: string) => {
     body: JSON.stringify({ token }),
   });
 
+  const contentType = res.headers.get("content-type");
+
   if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text);
+    const errorText =
+      contentType && contentType.includes("application/json")
+        ? await res.json() // If the error is in JSON format
+        : await res.text(); // Otherwise, get it as text
+    throw new Error(errorText);
   }
 
-  return res.json();
+  const data = await res.json();
+  if (data.message) {
+    localStorage.setItem("accessToken", data.message);
+  }
+
+  return data;
 };
 
 export const refreshJwt = async () => {

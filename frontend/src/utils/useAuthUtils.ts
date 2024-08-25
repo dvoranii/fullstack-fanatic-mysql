@@ -4,19 +4,32 @@ import useUser from "../hooks/useUser";
 
 export const useAuthUtils = () => {
   const navigate = useNavigate();
-  const { setProfile } = useUser();
+  const { setProfile, setFavouriteTutorials, setFavouriteBlogs, setComments } =
+    useUser();
 
-  const logOut = (
+  const logOut = async (
     e?: React.MouseEvent<HTMLButtonElement, MouseEvent> | null
   ) => {
     if (e && e.preventDefault) {
       e.preventDefault();
     }
-    googleLogout();
-    setProfile(null);
-    localStorage.removeItem("accessToken");
-    // localStorage.removeItem("userProfile");
-    navigate("/", { replace: true });
+
+    try {
+      await fetch("/api/users/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      googleLogout();
+      setProfile(null);
+      setFavouriteTutorials([]);
+      setFavouriteBlogs([]);
+      setComments([]);
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("userProfile");
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.error("Failed to log out: ", error);
+    }
   };
 
   return {
