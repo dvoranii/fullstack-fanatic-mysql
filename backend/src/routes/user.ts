@@ -1,4 +1,7 @@
 import express, { Request, Response } from "express";
+// import multer, { DiskStorageOptions, FileFilterCallback } from "multer";
+import multer from "multer";
+import path from "path";
 import connectionPromise from "../db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import dotenv from "dotenv";
@@ -14,6 +17,41 @@ import { authenticate } from "../middleware/authenticate";
 dotenv.config();
 
 const router = express.Router();
+
+const storage = multer.diskStorage({
+  destination: (
+    req: Request,
+    file: Express.Multer.File,
+    cb: (error: Error | null, destination: string) => void
+  ) => {
+    cb(null, path.join(__dirname, "../../public/assets/images"));
+  },
+
+  filename: (
+    req: Request,
+    file: Express.Multer.File,
+    cb: (error: Error | null, destination: string) => void
+  ) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
+router.post(
+  "/upload-profile",
+  authenticate,
+  upload.single("bannerImage"),
+  async (req: Request, res: Response) => {
+    console.log("Request file:", req.file); // Logs the uploaded file information
+    console.log("Request body:", req.body); // Logs the request body
+
+    res.status(200).json({ message: "Upload endpoint hit successfully" });
+  }
+);
+
+// ===================================================================================================================
 
 router.get("/profile", authenticate, async (req: Request, res: Response) => {
   try {

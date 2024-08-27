@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import {
   UserAccountContainer,
@@ -25,6 +25,7 @@ import {
   ProfilePlaceholder,
   BioContentWrapper,
   SocialSectionWrapper,
+  BannerUploadWrapper,
 } from "./UserAccountPage.styled";
 import GithubIcon from "../../assets/images/account/github-icon.png";
 import IgIcon from "../../assets/images/account/ig-icon.png";
@@ -33,10 +34,14 @@ import TiktokIcon from "../../assets/images/account/tiktok-icon.png";
 import XIcon from "../../assets/images/account/x-icon.png";
 import InboxIcon from "../../assets/images/account/inbox.png";
 import EditIcon from "../../assets/images/account/edit.png";
+import TutorialIcon from "../../assets/images/tutorial-icon.png";
+import BlogIcon from "../../assets/images/blog-icon.png";
 import { handleImageError } from "../../utils/imageUtils";
+import { handleTokenExpiration } from "../../services/tokenService";
 
 const UserAccountsPage: React.FC = () => {
   const context = useContext(UserContext);
+  const [bannerImage, setBannerImage] = useState<File | null>(null);
 
   if (!context) {
     return <p>No user logged in</p>;
@@ -56,6 +61,45 @@ const UserAccountsPage: React.FC = () => {
   if (!profile) {
     return <p>No user logged in</p>;
   }
+
+  const handleBannerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event);
+    const file = event.target.files?.[0];
+    if (file) {
+      setBannerImage(file);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (bannerImage) {
+      const formData = new FormData();
+      formData.append("bannerImage", bannerImage);
+
+      try {
+        const token = await handleTokenExpiration();
+
+        if (!token) {
+          throw new Error("User not authenticated");
+        }
+
+        const response = await fetch("/api/users/upload-profile", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to upload images");
+        }
+
+        console.log("Images uploaded successfully");
+      } catch (error) {
+        console.error("Error uploading image: ", error);
+      }
+    }
+  };
 
   return (
     <>
@@ -123,6 +167,17 @@ const UserAccountsPage: React.FC = () => {
             </ProfileContentWrapper>
           </ProfileBanner>
         </BannerWrapperInner>
+        <BannerUploadWrapper>
+          <input
+            className="banner-upload"
+            type="file"
+            accept="image/*"
+            onChange={handleBannerChange}
+          />
+          <button type="submit" onClick={handleSubmit}>
+            Upload Banner
+          </button>
+        </BannerUploadWrapper>
       </BannerWrapperOuter>
       <ProfilePlaceholder />
       <UserAccountContainer>
@@ -132,7 +187,7 @@ const UserAccountsPage: React.FC = () => {
             <SectionContent>
               <div>
                 <FavouriteIcon>
-                  <i className="fas fa-book"></i>
+                  <img src={TutorialIcon} alt="Tutorials" />
                 </FavouriteIcon>
                 <p>Tutorials</p>
                 <ViewAllButton onClick={() => console.log(favouriteTutorials)}>
@@ -141,7 +196,7 @@ const UserAccountsPage: React.FC = () => {
               </div>
               <div>
                 <FavouriteIcon>
-                  <i className="fas fa-pencil-alt"></i>
+                  <img src={BlogIcon} alt="Tutorials" />
                 </FavouriteIcon>
                 <p>Blog Posts</p>
                 <ViewAllButton onClick={() => console.log(favouriteBlogs)}>

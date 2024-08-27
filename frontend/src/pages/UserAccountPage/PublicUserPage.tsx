@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { UserContext } from "../../context/UserContext";
 import {
   UserAccountContainer,
   ProfileBanner,
@@ -31,30 +32,27 @@ import linkedinIcon from "../../assets/images/account/linkedin-icon.png";
 import TiktokIcon from "../../assets/images/account/tiktok-icon.png";
 import XIcon from "../../assets/images/account/x-icon.png";
 import InboxIcon from "../../assets/images/account/inbox.png";
+import TutorialIcon from "../../assets/images/tutorial-icon.png";
+import BlogIcon from "../../assets/images/blog-icon.png";
 import { handleImageError } from "../../utils/imageUtils";
-import { Tutorial } from "../../types/Tutorial";
-import { Blog } from "../../types/Blog";
-import { CommentType } from "../../types/Comment";
-import { User } from "../../types/User";
-
-// Interface for public user profile data
-interface PublicProfile {
-  id: number;
-  name: string;
-  picture: string;
-  favouriteTutorials: Tutorial[];
-  favouriteBlogs: Blog[];
-  comments?: CommentType[];
-  user: User;
-}
+import { PublicProfile } from "../../types/PublicProfileType";
 
 const PublicUserPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const userContext = useContext(UserContext);
+  const loggedInUser = userContext?.profile?.id;
+
   const [profile, setProfile] = useState<PublicProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (loggedInUser && Number(id) && Number(id) === Number(loggedInUser)) {
+      navigate("/my-account");
+      return;
+    }
+
     const fetchUserProfile = async () => {
       try {
         const response = await fetch(`/api/users/user-profile/${id}`);
@@ -74,7 +72,7 @@ const PublicUserPage: React.FC = () => {
     };
 
     fetchUserProfile();
-  }, [id]);
+  }, [id, loggedInUser, navigate]);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -158,7 +156,7 @@ const PublicUserPage: React.FC = () => {
             <SectionContent>
               <div>
                 <FavouriteIcon>
-                  <i className="fas fa-book"></i>
+                  <img src={TutorialIcon} alt="Tutorials" />
                 </FavouriteIcon>
                 <p>Tutorials</p>
                 <ViewAllButton
@@ -169,7 +167,7 @@ const PublicUserPage: React.FC = () => {
               </div>
               <div>
                 <FavouriteIcon>
-                  <i className="fas fa-pencil-alt"></i>
+                  <img src={BlogIcon} alt="Tutorials" />
                 </FavouriteIcon>
                 <p>Blog Posts</p>
                 <ViewAllButton

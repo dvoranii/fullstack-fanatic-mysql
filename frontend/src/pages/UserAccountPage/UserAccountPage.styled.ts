@@ -10,6 +10,7 @@ export const UserAccountContainer = styled(PageWrapper)`
 `;
 
 export const BannerWrapperOuter = styled.div`
+  position: relative;
   width: 100%;
 `;
 export const BannerWrapperInner = styled.div`
@@ -200,6 +201,10 @@ export const FavouriteIcon = styled.div`
   align-items: center;
   font-size: 24px;
   color: #007bff;
+
+  img {
+    width: 120%;
+  }
 `;
 
 export const CommentHistory = styled.div`
@@ -242,5 +247,20 @@ export const ViewMoreCommentsButton = styled.button`
 
   &:hover {
     text-decoration: underline;
+  }
+`;
+
+export const BannerUploadWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 20px;
+
+  &:hover,
+  input:hover,
+  button:hover {
+    cursor: pointer;
   }
 `;

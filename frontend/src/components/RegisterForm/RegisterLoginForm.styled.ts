@@ -26,7 +26,7 @@ export const RegisterLoginFormWrapperInner = styled.div<WrapperProps>`
   background-color: ${({ $isLogin }) =>
     $isLogin ? colors.primary : colors.background};
   border-radius: 40px;
-  margin: 0 auto;
+  margin: 10vh auto;
   overflow: hidden;
   height: 700px;
   position: relative;
