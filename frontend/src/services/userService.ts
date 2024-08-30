@@ -4,7 +4,7 @@ import { handleTokenExpiration } from "./tokenService";
 export const getUserProfile = async (): Promise<User> => {
   const token = await handleTokenExpiration();
 
-  const res = await fetch("http://localhost:5000/api/users/profile", {
+  const res = await fetch("http://localhost:5000/api/profile/profile", {
     method: "GET",
     credentials: "include",
     headers: {

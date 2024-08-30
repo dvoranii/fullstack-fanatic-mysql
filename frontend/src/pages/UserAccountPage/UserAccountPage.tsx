@@ -27,6 +27,7 @@ import {
   SocialSectionWrapper,
   BannerUploadWrapper,
 } from "./UserAccountPage.styled";
+import EditProfileModal from "./EditProfileModal/EditProfileModal";
 import GithubIcon from "../../assets/images/account/github-icon.png";
 import IgIcon from "../../assets/images/account/ig-icon.png";
 import linkedinIcon from "../../assets/images/account/linkedin-icon.png";
@@ -44,6 +45,7 @@ const BASE_URL = "http://localhost:5000";
 const UserAccountsPage: React.FC = () => {
   const context = useContext(UserContext);
   const [bannerimage, setBannerImage] = useState<File | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
     profile,
@@ -52,7 +54,6 @@ const UserAccountsPage: React.FC = () => {
     favouriteBlogs,
     loading,
     error,
-    // refreshUserProfile,
   } = context || {};
 
   if (!context) {
@@ -90,7 +91,7 @@ const UserAccountsPage: React.FC = () => {
           throw new Error("User not authenticated");
         }
 
-        const response = await fetch("/api/users/upload-profile", {
+        const response = await fetch("/api/profile/upload-profile", {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -119,6 +120,13 @@ const UserAccountsPage: React.FC = () => {
 
   return (
     <>
+      {isModalOpen && (
+        <EditProfileModal
+          profile={profile}
+          setProfile={setProfile!}
+          closeModal={() => setIsModalOpen(false)}
+        />
+      )}
       <BannerWrapperOuter>
         <BannerWrapperInner>
           <ProfileBanner
@@ -133,9 +141,17 @@ const UserAccountsPage: React.FC = () => {
                 onError={handleImageError}
               />
               <ProfileInfo>
-                <UserName>{profile.name || ""}</UserName>
+                <UserName>
+                  {profile.display_name ? profile.display_name : profile.name}
+                </UserName>
                 <UserProfession>Full Stack Developer</UserProfession>{" "}
-                <EditProfileLink href="#">
+                <EditProfileLink
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsModalOpen(true);
+                  }}
+                >
                   Edit Profile <img src={EditIcon} alt="Edit Icon" />
                 </EditProfileLink>
               </ProfileInfo>
@@ -143,12 +159,7 @@ const UserAccountsPage: React.FC = () => {
                 <p>
                   <b>BIO:</b>
                 </p>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis
-                  sint fuga voluptatum laboriosam praesentium cupiditate quas
-                  numquam illo velit non possimus, eveniet dolores facilis nihil
-                  incidunt id neque totam dolor?
-                </p>
+                <p>{profile.bio || "No bio available."}</p>
               </BioContentWrapper>
               <SocialSectionWrapper>
                 <p>Links</p>

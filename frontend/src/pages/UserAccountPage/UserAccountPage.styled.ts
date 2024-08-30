@@ -18,25 +18,18 @@ export const BannerWrapperInner = styled.div`
 `;
 
 export const ProfileBanner = styled.div<{ banner_image: string }>`
-  /* position: relative;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 200px;
-  background-color: #4884d7;
-  background-image: url(${(props) => props.banner_image});
-  background-size: cover;
-  background-position: center;
   padding: 20px 0;
   border-bottom-left-radius: 40px;
-  border-bottom-right-radius: 40px; */
+  border-bottom-right-radius: 40px;
   width: 100%;
   height: 200px;
   background-image: url(${(props) => props.banner_image});
   background-size: cover;
   background-position: center;
-  z-index: 1;
 `;
 
 export const ProfileContentWrapper = styled.div`
@@ -67,6 +60,7 @@ export const ProfileInfo = styled.div`
   text-align: center;
   grid-column: 1;
   border-right: 2px solid lightgrey;
+  padding: 20px;
 `;
 
 export const ProfilePlaceholder = styled.div`
@@ -80,8 +74,7 @@ export const ProfilePlaceholder = styled.div`
 export const BioContentWrapper = styled.div`
   overflow-wrap: break-word;
   border-right: 2px solid lightgrey;
-  padding-left: 1.2rem;
-  padding-right: 1.2rem;
+  padding: 20px;
 
   @media (max-width: 959px) {
     border-right: none;
@@ -91,7 +84,7 @@ export const BioContentWrapper = styled.div`
 `;
 
 export const SocialSectionWrapper = styled.div`
-  padding-left: 1.8rem;
+  padding-left: 20px;
   p {
     margin-bottom: 0.4rem;
   }

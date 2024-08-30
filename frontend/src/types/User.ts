@@ -5,9 +5,9 @@ export interface User {
   picture?: string;
   token: string;
   userId: number;
-  displayName?: string;
+  display_name?: string;
   profession?: string;
   bio?: string;
-  socialLinks?: { [key: string]: string };
+  social_links?: { [key: string]: string };
   banner_image?: string;
 }
