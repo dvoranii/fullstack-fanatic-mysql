@@ -16,5 +16,6 @@ export const getUserProfile = async (): Promise<User> => {
     throw new Error("Failed to fetch user profile");
   }
 
+  // console.log(res.json());
   return res.json();
 };

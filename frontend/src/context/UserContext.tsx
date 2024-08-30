@@ -33,7 +33,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
           return;
         }
         const userProfile = await getUserProfile();
-
         setProfile(userProfile);
         localStorage.setItem("userProfile", JSON.stringify(userProfile));
 

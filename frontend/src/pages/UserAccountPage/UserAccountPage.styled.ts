@@ -17,17 +17,26 @@ export const BannerWrapperInner = styled.div`
   width: 100%;
 `;
 
-export const ProfileBanner = styled.div`
-  position: relative;
+export const ProfileBanner = styled.div<{ banner_image: string }>`
+  /* position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 200px;
   background-color: #4884d7;
+  background-image: url(${(props) => props.banner_image});
+  background-size: cover;
+  background-position: center;
   padding: 20px 0;
   border-bottom-left-radius: 40px;
-  border-bottom-right-radius: 40px;
+  border-bottom-right-radius: 40px; */
+  width: 100%;
+  height: 200px;
+  background-image: url(${(props) => props.banner_image});
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
 `;
 
 export const ProfileContentWrapper = styled.div`

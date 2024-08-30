@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import path from "path";
 import tutorialsRouter from "./routes/tutorials";
 import commentsRouter from "./routes/comments";
 import blogsRouter from "./routes/blogs";
@@ -11,6 +12,7 @@ import cookieParser from "cookie-parser";
 const app = express();
 app.use(cookieParser());
 
+app.use(helmet());
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -18,9 +20,16 @@ app.use(
     allowedHeaders: ["Authorization", "Content-Type"],
   })
 );
-app.use(helmet());
+
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use("/assets", express.static(path.join(__dirname, "../public/assets")));
 
 app.use("/api/tutorials", tutorialsRouter);
 app.use("/api/comments", commentsRouter);

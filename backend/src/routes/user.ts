@@ -1,5 +1,4 @@
 import express, { Request, Response } from "express";
-// import multer, { DiskStorageOptions, FileFilterCallback } from "multer";
 import multer from "multer";
 import path from "path";
 import connectionPromise from "../db";
@@ -17,6 +16,8 @@ import { authenticate } from "../middleware/authenticate";
 dotenv.config();
 
 const router = express.Router();
+
+// Banner upload
 
 const storage = multer.diskStorage({
   destination: (
@@ -42,16 +43,35 @@ const upload = multer({ storage });
 router.post(
   "/upload-profile",
   authenticate,
-  upload.single("bannerImage"),
+  upload.single("bannerimage"),
   async (req: Request, res: Response) => {
-    console.log("Request file:", req.file); // Logs the uploaded file information
-    console.log("Request body:", req.body); // Logs the request body
+    const userId = req.user?.userId;
 
-    res.status(200).json({ message: "Upload endpoint hit successfully" });
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const bannerImagePath = `/assets/images/${req.file.filename}`;
+
+    try {
+      const connection = await connectionPromise;
+      await connection.execute(
+        "UPDATE users SET banner_image = ? WHERE id = ?",
+        [bannerImagePath, userId]
+      );
+
+      res.status(200).json({
+        message: "Profile banner updated successfully",
+        bannerImagePath,
+      });
+    } catch (error) {
+      console.error("Error updating profile banner: ", error);
+      res.status(500).json({ error: "Failed to update profile banner" });
+    }
   }
 );
 
-// ===================================================================================================================
+// -----------------------------------------------------------------------------
 
 router.get("/profile", authenticate, async (req: Request, res: Response) => {
   try {
@@ -59,7 +79,7 @@ router.get("/profile", authenticate, async (req: Request, res: Response) => {
 
     const connection = await connectionPromise;
     const [user] = await connection.query<RowDataPacket[]>(
-      "SELECT id, email, name, profile_picture AS picture FROM users WHERE id = ?",
+      "SELECT id, email, name, profile_picture AS picture, banner_image FROM users WHERE id = ?",
       [userId]
     );
 

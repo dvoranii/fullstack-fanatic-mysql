@@ -26,7 +26,16 @@ export const authenticate = (
       token,
       process.env.JWT_SECRET as string
     ) as UserPayload;
-    req.user = decoded as { userId: number; googleId: string; email: string };
+    req.user = {
+      userId: decoded.userId,
+      googleId: decoded.googleId,
+      email: decoded.email,
+      displayName: decoded.displayName,
+      profession: decoded.profession,
+      bio: decoded.bio,
+      socialLinks: decoded.socialLinks,
+      bannerImage: decoded.bannerImage,
+    };
 
     next();
   } catch (error) {

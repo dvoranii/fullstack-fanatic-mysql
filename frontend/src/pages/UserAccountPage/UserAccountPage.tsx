@@ -39,16 +39,25 @@ import BlogIcon from "../../assets/images/blog-icon.png";
 import { handleImageError } from "../../utils/imageUtils";
 import { handleTokenExpiration } from "../../services/tokenService";
 
+const BASE_URL = "http://localhost:5000";
+
 const UserAccountsPage: React.FC = () => {
   const context = useContext(UserContext);
-  const [bannerImage, setBannerImage] = useState<File | null>(null);
+  const [bannerimage, setBannerImage] = useState<File | null>(null);
+
+  const {
+    profile,
+    setProfile,
+    favouriteTutorials,
+    favouriteBlogs,
+    loading,
+    error,
+    // refreshUserProfile,
+  } = context || {};
 
   if (!context) {
     return <p>No user logged in</p>;
   }
-
-  const { profile, favouriteTutorials, favouriteBlogs, loading, error } =
-    context;
 
   if (loading) {
     return <p>Loading...</p>;
@@ -63,7 +72,6 @@ const UserAccountsPage: React.FC = () => {
   }
 
   const handleBannerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event);
     const file = event.target.files?.[0];
     if (file) {
       setBannerImage(file);
@@ -71,9 +79,9 @@ const UserAccountsPage: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    if (bannerImage) {
+    if (bannerimage) {
       const formData = new FormData();
-      formData.append("bannerImage", bannerImage);
+      formData.append("bannerimage", bannerimage);
 
       try {
         const token = await handleTokenExpiration();
@@ -94,7 +102,15 @@ const UserAccountsPage: React.FC = () => {
           throw new Error("Failed to upload images");
         }
 
-        console.log("Images uploaded successfully");
+        const data = await response.json();
+        console.log("Image uploaded successfully", data);
+
+        if (setProfile) {
+          setProfile({
+            ...profile,
+            banner_image: data.bannerImagePath,
+          });
+        }
       } catch (error) {
         console.error("Error uploading image: ", error);
       }
@@ -105,7 +121,11 @@ const UserAccountsPage: React.FC = () => {
     <>
       <BannerWrapperOuter>
         <BannerWrapperInner>
-          <ProfileBanner>
+          <ProfileBanner
+            banner_image={
+              profile.banner_image ? `${BASE_URL}${profile.banner_image}` : ""
+            }
+          >
             <ProfileContentWrapper>
               <ProfilePicture
                 src={profile.picture || ""}
