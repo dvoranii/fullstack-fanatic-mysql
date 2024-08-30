@@ -39,6 +39,7 @@ import TutorialIcon from "../../assets/images/tutorial-icon.png";
 import BlogIcon from "../../assets/images/blog-icon.png";
 import { handleImageError } from "../../utils/imageUtils";
 import { handleTokenExpiration } from "../../services/tokenService";
+// import { User } from "../../types/User";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -91,7 +92,7 @@ const UserAccountsPage: React.FC = () => {
           throw new Error("User not authenticated");
         }
 
-        const response = await fetch("/api/profile/upload-profile", {
+        const response = await fetch("/api/profile/upload-banner", {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -118,12 +119,20 @@ const UserAccountsPage: React.FC = () => {
     }
   };
 
+  // const handleProfileSet = (updatedProfile: User) => {
+  //   if (setProfile) {
+  //     setProfile(updatedProfile);
+  //   } else {
+  //     console.error("setProfile is not defined");
+  //   }
+  // };
+
   return (
     <>
-      {isModalOpen && (
+      {isModalOpen && profile && setProfile && (
         <EditProfileModal
           profile={profile}
-          setProfile={setProfile!}
+          setProfile={setProfile}
           closeModal={() => setIsModalOpen(false)}
         />
       )}
@@ -144,7 +153,7 @@ const UserAccountsPage: React.FC = () => {
                 <UserName>
                   {profile.display_name ? profile.display_name : profile.name}
                 </UserName>
-                <UserProfession>Full Stack Developer</UserProfession>{" "}
+                <UserProfession>{profile.profession}</UserProfession>
                 <EditProfileLink
                   href="#"
                   onClick={(e) => {

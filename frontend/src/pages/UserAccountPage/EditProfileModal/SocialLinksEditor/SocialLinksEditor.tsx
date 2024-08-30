@@ -3,17 +3,20 @@ import { Input, FormGroup, Label } from "../EditProfileModal.styled"; // Adjust 
 interface SocialLinksEditorProps {
   socialLinks: { [key: string]: string };
   setSocialLinks: (socialLinks: { [key: string]: string }) => void;
+  markSocialLinksChanged: () => void;
 }
 
 const SocialLinksEditor: React.FC<SocialLinksEditorProps> = ({
   socialLinks,
   setSocialLinks,
+  markSocialLinksChanged,
 }) => {
   const handleSocialLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSocialLinks({
       ...socialLinks,
       [e.target.name]: e.target.value,
     });
+    markSocialLinksChanged();
   };
 
   const handleAddSocialLink = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -23,6 +26,7 @@ const SocialLinksEditor: React.FC<SocialLinksEditorProps> = ({
         ...socialLinks,
         [selectedPlatform]: "",
       });
+      markSocialLinksChanged();
     }
 
     e.target.selectedIndex = 0;

@@ -91,7 +91,7 @@ const PublicUserPage: React.FC = () => {
       <BannerWrapperOuter>
         <BannerWrapperInner>
           {/* do after user account page */}
-          <ProfileBanner bannerimage={""}>
+          <ProfileBanner banner_image={""}>
             <ProfileContentWrapper>
               <ProfilePicture
                 src={profile.user.picture || ""}

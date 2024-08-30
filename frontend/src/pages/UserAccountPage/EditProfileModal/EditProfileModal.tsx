@@ -9,28 +9,63 @@ import {
   TextArea,
   SaveButton,
 } from "./EditProfileModal.styled";
+import { UpdatedProfileFields } from "../../../types/User";
 import SocialLinksEditor from "./SocialLinksEditor/SocialLinksEditor";
-import { useState } from "react";
-import { User } from "../../../types/User";
+import { useState, useEffect } from "react";
+import { EditProfileModalProps } from "../../../types/EditProfileProps";
 import { handleTokenExpiration } from "../../../services/tokenService";
-
-interface EditProfileModalProps {
-  profile: User;
-  setProfile: (profile: User) => void;
-  closeModal: () => void;
-}
 
 const EditProfileModal: React.FC<EditProfileModalProps> = ({
   profile,
   setProfile,
   closeModal,
 }) => {
-  const [displayName, setDisplayName] = useState(profile?.display_name || "");
-  const [profession, setProfession] = useState(profile?.profession || "");
-  const [bio, setBio] = useState(profile?.bio || "");
+  const [displayName, setDisplayName] = useState(
+    profile.display_name || profile.name || ""
+  );
+  const [profession, setProfession] = useState(profile.profession || "");
+  const [bio, setBio] = useState(profile.bio || "");
   const [socialLinks, setSocialLinks] = useState<{ [key: string]: string }>(
     profile.social_links || {}
   );
+
+  const [isChanged, setIsChanged] = useState({
+    displayName: false,
+    profession: false,
+    bio: false,
+    socialLinks: false,
+  });
+
+  useEffect(() => {
+    setDisplayName(profile.display_name || profile.name || "");
+    setProfession(profile.profession || "");
+    setBio(profile.bio || "");
+    setSocialLinks(profile.social_links || {});
+  }, [profile]);
+
+  const handleDisplayNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDisplayName(e.target.value);
+    setIsChanged((prev) => ({ ...prev, displayName: true }));
+  };
+
+  const handleProfessionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setProfession(e.target.value);
+    setIsChanged((prev) => ({ ...prev, profession: true }));
+  };
+
+  const handleBioChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setBio(e.target.value);
+    setIsChanged((prev) => ({ ...prev, bio: true }));
+  };
+
+  const handleSocialLinksChange = (updatedLinks: { [key: string]: string }) => {
+    setSocialLinks(updatedLinks);
+    setIsChanged((prev) => ({ ...prev, socialLinks: true }));
+  };
+
+  const markSocialLinksChanged = () => {
+    setIsChanged((prev) => ({ ...prev, socialLinks: true }));
+  };
 
   const handleProfileUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -42,18 +77,22 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
         throw new Error("User not authenticated");
       }
 
+      const updatedFields: UpdatedProfileFields = {};
+
+      if (isChanged.displayName) updatedFields.display_name = displayName;
+      if (isChanged.profession) updatedFields.profession = profession;
+      if (isChanged.bio) updatedFields.bio = bio;
+      if (isChanged.socialLinks) updatedFields.social_links = socialLinks;
+
+      console.log("Updated Fields: ", updatedFields);
+
       const response = await fetch("/api/profile/update-profile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          displayName,
-          profession,
-          bio,
-          socialLinks,
-        }),
+        body: JSON.stringify(updatedFields),
       });
 
       if (!response.ok) {
@@ -81,7 +120,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
             <Input
               type="text"
               value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
+              onChange={handleDisplayNameChange}
             />
           </FormGroup>
           <FormGroup>
@@ -89,17 +128,18 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
             <Input
               type="text"
               value={profession}
-              onChange={(e) => setProfession(e.target.value)}
+              onChange={handleProfessionChange}
             />
           </FormGroup>
           <FormGroup>
             <Label>Bio:</Label>
-            <TextArea value={bio} onChange={(e) => setBio(e.target.value)} />
+            <TextArea value={bio} onChange={handleBioChange} />
           </FormGroup>
 
           <SocialLinksEditor
             socialLinks={socialLinks}
-            setSocialLinks={setSocialLinks}
+            setSocialLinks={handleSocialLinksChange}
+            markSocialLinksChanged={markSocialLinksChanged}
           />
           <SaveButton type="submit">Save Changes</SaveButton>
         </ModalForm>

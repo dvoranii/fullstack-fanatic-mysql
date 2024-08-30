@@ -11,3 +11,10 @@ export interface User {
   social_links?: { [key: string]: string };
   banner_image?: string;
 }
+
+export type UpdatedProfileFields = {
+  display_name?: string;
+  profession?: string;
+  bio?: string;
+  social_links?: { [key: string]: string };
+};

@@ -7,7 +7,27 @@ import { authenticate } from "../middleware/authenticate";
 
 const router = express.Router();
 
-// Setup Multer for image uploads
+router.get("/profile", authenticate, async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.userId;
+
+    const connection = await connectionPromise;
+    const [user] = await connection.query<RowDataPacket[]>(
+      "SELECT id, email, name, display_name, profession, bio, social_links, profile_picture AS picture, banner_image FROM users WHERE id = ?",
+      [userId]
+    );
+
+    if (!user.length) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user[0]);
+  } catch (error) {
+    console.error("Failed to fetch user profile: ", error);
+    res.status(500).json({ error: "Failed to fetch user profile" });
+  }
+});
+
 const storage = multer.diskStorage({
   destination: (
     req: Request,
@@ -30,7 +50,7 @@ const upload = multer({ storage });
 
 // Route to upload profile banner
 router.post(
-  "/upload-profile",
+  "/upload-banner",
   authenticate,
   upload.single("bannerimage"),
   async (req: Request, res: Response) => {
@@ -66,7 +86,9 @@ router.put(
   authenticate,
   async (req: Request, res: Response) => {
     const userId = req.user?.userId;
-    const { displayName, profession, bio, socialLinks } = req.body;
+    const { display_name, profession, bio, social_links } = req.body;
+
+    console.log("Display name:", display_name);
 
     if (!userId) {
       return res.status(400).json({ error: "User ID is required" });
@@ -74,10 +96,40 @@ router.put(
 
     try {
       const connection = await connectionPromise;
-      await connection.execute(
-        `UPDATE users SET display_name = ?, profession = ?, bio = ?, social_links = ? WHERE id = ?`,
-        [displayName, profession, bio, JSON.stringify(socialLinks), userId]
+
+      // Fetch current user info
+      const [currentUser] = await connection.query<RowDataPacket[]>(
+        "SELECT display_name, profession, bio, social_links FROM users WHERE id = ?",
+        [userId]
       );
+      const userInfo = currentUser[0];
+      console.log("Current User Info:", userInfo);
+
+      // Assign safe values using fallback to current values if necessary
+      const safeDisplayName =
+        display_name !== undefined ? display_name : userInfo.display_name;
+      const safeProfession =
+        profession !== undefined ? profession : userInfo.profession;
+      const safeBio = bio !== undefined ? bio : userInfo.bio;
+      const safeSocialLinks =
+        social_links !== undefined
+          ? JSON.stringify(social_links)
+          : userInfo.social_links;
+
+      console.log("Safe values to update:", {
+        displayName: safeDisplayName,
+        profession: safeProfession,
+        bio: safeBio,
+        socialLinks: safeSocialLinks,
+      });
+
+      // Update user profile in the database
+      const [updateResult] = await connection.execute(
+        `UPDATE users SET display_name = ?, profession = ?, bio = ?, social_links = ? WHERE id = ?`,
+        [safeDisplayName, safeProfession, safeBio, safeSocialLinks, userId]
+      );
+
+      console.log("Update Result:", updateResult);
 
       const [user] = await connection.query<RowDataPacket[]>(
         "SELECT id, email, name, display_name, profession, bio, social_links, profile_picture AS picture, banner_image FROM users WHERE id = ?",
@@ -95,27 +147,5 @@ router.put(
     }
   }
 );
-
-// Route to fetch user profile
-router.get("/profile", authenticate, async (req: Request, res: Response) => {
-  try {
-    const userId = req.user?.userId;
-
-    const connection = await connectionPromise;
-    const [user] = await connection.query<RowDataPacket[]>(
-      "SELECT id, email, name, display_name, profession, bio, social_links, profile_picture AS picture, banner_image FROM users WHERE id = ?",
-      [userId]
-    );
-
-    if (!user.length) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    res.json(user[0]);
-  } catch (error) {
-    console.error("Failed to fetch user profile: ", error);
-    res.status(500).json({ error: "Failed to fetch user profile" });
-  }
-});
 
 export default router;
