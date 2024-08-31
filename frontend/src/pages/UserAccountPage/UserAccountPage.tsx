@@ -24,22 +24,17 @@ import {
   ProfileInfo,
   ProfilePlaceholder,
   BioContentWrapper,
-  SocialSectionWrapper,
+  SocialSectionWrapperOuter,
   BannerUploadWrapper,
 } from "./UserAccountPage.styled";
 import EditProfileModal from "./EditProfileModal/EditProfileModal";
-import GithubIcon from "../../assets/images/account/github-icon.png";
-import IgIcon from "../../assets/images/account/ig-icon.png";
-import linkedinIcon from "../../assets/images/account/linkedin-icon.png";
-import TiktokIcon from "../../assets/images/account/tiktok-icon.png";
-import XIcon from "../../assets/images/account/x-icon.png";
 import InboxIcon from "../../assets/images/account/inbox.png";
 import EditIcon from "../../assets/images/account/edit.png";
 import TutorialIcon from "../../assets/images/tutorial-icon.png";
 import BlogIcon from "../../assets/images/blog-icon.png";
 import { handleImageError } from "../../utils/imageUtils";
 import { handleTokenExpiration } from "../../services/tokenService";
-// import { User } from "../../types/User";
+import SocialLinksDisplay from "./SocialLinksDisplay/SocialLinksDisplay";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -119,13 +114,7 @@ const UserAccountsPage: React.FC = () => {
     }
   };
 
-  // const handleProfileSet = (updatedProfile: User) => {
-  //   if (setProfile) {
-  //     setProfile(updatedProfile);
-  //   } else {
-  //     console.error("setProfile is not defined");
-  //   }
-  // };
+  const socialLinks = profile.social_links || {};
 
   return (
     <>
@@ -165,45 +154,16 @@ const UserAccountsPage: React.FC = () => {
                 </EditProfileLink>
               </ProfileInfo>
               <BioContentWrapper>
-                <p>
-                  <b>BIO:</b>
-                </p>
+                <h3>Bio</h3>
                 <p>{profile.bio || "No bio available."}</p>
               </BioContentWrapper>
-              <SocialSectionWrapper>
-                <p>Links</p>
-                <ul>
-                  <li>
-                    <a href="#">
-                      <img src={GithubIcon} alt="Github Logo" />
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <img src={IgIcon} alt="Instagram Logo" />
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <img src={linkedinIcon} alt="LinkedIn Logo" />
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <img src={TiktokIcon} alt="Tik Tok Logo" />
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <img src={XIcon} alt="X Logo" />
-                    </a>
-                  </li>
-                </ul>
+              <SocialSectionWrapperOuter>
+                <SocialLinksDisplay socialLinks={socialLinks} />
                 <span>
                   <img src={InboxIcon} alt="" /> Inbox
                 </span>
                 <a href="">127 Connections</a>
-              </SocialSectionWrapper>
+              </SocialSectionWrapperOuter>
             </ProfileContentWrapper>
           </ProfileBanner>
         </BannerWrapperInner>

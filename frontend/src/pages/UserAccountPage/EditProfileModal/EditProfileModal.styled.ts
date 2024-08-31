@@ -50,6 +50,7 @@ export const FormGroup = styled.div`
 export const Label = styled.label`
   font-size: 14px;
   margin-bottom: 5px;
+  font-weight: bold;
 `;
 
 export const Input = styled.input`
@@ -57,6 +58,7 @@ export const Input = styled.input`
   font-size: 14px;
   border-radius: 4px;
   border: 1px solid #ccc;
+  width: 100%;
 `;
 
 export const TextArea = styled.textarea`

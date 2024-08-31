@@ -80,15 +80,12 @@ router.post(
   }
 );
 
-// Route to update user profile
 router.put(
   "/update-profile",
   authenticate,
   async (req: Request, res: Response) => {
     const userId = req.user?.userId;
     const { display_name, profession, bio, social_links } = req.body;
-
-    console.log("Display name:", display_name);
 
     if (!userId) {
       return res.status(400).json({ error: "User ID is required" });
@@ -97,15 +94,12 @@ router.put(
     try {
       const connection = await connectionPromise;
 
-      // Fetch current user info
       const [currentUser] = await connection.query<RowDataPacket[]>(
         "SELECT display_name, profession, bio, social_links FROM users WHERE id = ?",
         [userId]
       );
       const userInfo = currentUser[0];
-      console.log("Current User Info:", userInfo);
 
-      // Assign safe values using fallback to current values if necessary
       const safeDisplayName =
         display_name !== undefined ? display_name : userInfo.display_name;
       const safeProfession =
@@ -116,20 +110,11 @@ router.put(
           ? JSON.stringify(social_links)
           : userInfo.social_links;
 
-      console.log("Safe values to update:", {
-        displayName: safeDisplayName,
-        profession: safeProfession,
-        bio: safeBio,
-        socialLinks: safeSocialLinks,
-      });
-
       // Update user profile in the database
       const [updateResult] = await connection.execute(
         `UPDATE users SET display_name = ?, profession = ?, bio = ?, social_links = ? WHERE id = ?`,
         [safeDisplayName, safeProfession, safeBio, safeSocialLinks, userId]
       );
-
-      console.log("Update Result:", updateResult);
 
       const [user] = await connection.query<RowDataPacket[]>(
         "SELECT id, email, name, display_name, profession, bio, social_links, profile_picture AS picture, banner_image FROM users WHERE id = ?",
@@ -144,6 +129,75 @@ router.put(
     } catch (error) {
       console.error("Failed to update user profile: ", error);
       res.status(500).json({ error: "Failed to update user profile" });
+    }
+  }
+);
+
+router.delete(
+  "/social-link/:platform",
+  authenticate,
+  async (req: Request, res: Response) => {
+    const userId = req.user?.userId;
+    const { platform } = req.params;
+
+    console.log("User ID:", userId, "Platform:", platform);
+
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
+    try {
+      const connection = await connectionPromise;
+
+      // Begin transaction
+      await connection.beginTransaction();
+
+      const [currentUser] = await connection.query<RowDataPacket[]>(
+        "SELECT social_links FROM users WHERE id = ?",
+        [userId]
+      );
+
+      if (!currentUser.length) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      console.log("Raw social_links data:", currentUser[0].social_links);
+
+      let socialLinks;
+      try {
+        if (typeof currentUser[0].social_links === "string") {
+          socialLinks = JSON.parse(currentUser[0].social_links || "{}");
+        } else {
+          socialLinks = currentUser[0].social_links || {};
+        }
+      } catch (parseError) {
+        console.error("Error parsing social links JSON:", parseError);
+        await connection.rollback();
+        return res.status(500).json({ error: "Failed to parse social links" });
+      }
+
+      delete socialLinks[platform];
+
+      const sqlQuery = `UPDATE users SET social_links = '${JSON.stringify(
+        socialLinks
+      )}' WHERE id = ${userId}`;
+
+      const [updateResult] = await connection.execute(
+        "UPDATE users SET social_links = ? WHERE id = ?",
+        [JSON.stringify(socialLinks), userId]
+      );
+
+      await connection.commit();
+
+      const [updatedUser] = await connection.query<RowDataPacket[]>(
+        "SELECT social_links FROM users WHERE id = ?",
+        [userId]
+      );
+
+      res.status(200).json({ message: "Social link deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting social link:", error);
+      res.status(500).json({ error: "Failed to delete social link" });
     }
   }
 );

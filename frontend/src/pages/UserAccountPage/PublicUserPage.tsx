@@ -24,14 +24,8 @@ import {
   ProfileInfo,
   ProfilePlaceholder,
   BioContentWrapper,
-  SocialSectionWrapper,
+  // SocialSectionWrapper,
 } from "./UserAccountPage.styled";
-import GithubIcon from "../../assets/images/account/github-icon.png";
-import IgIcon from "../../assets/images/account/ig-icon.png";
-import linkedinIcon from "../../assets/images/account/linkedin-icon.png";
-import TiktokIcon from "../../assets/images/account/tiktok-icon.png";
-import XIcon from "../../assets/images/account/x-icon.png";
-import InboxIcon from "../../assets/images/account/inbox.png";
 import TutorialIcon from "../../assets/images/tutorial-icon.png";
 import BlogIcon from "../../assets/images/blog-icon.png";
 import { handleImageError } from "../../utils/imageUtils";
@@ -111,7 +105,7 @@ const PublicUserPage: React.FC = () => {
                   public information here.
                 </p>
               </BioContentWrapper>
-              <SocialSectionWrapper>
+              {/* <SocialSectionWrapper>
                 <p>Links</p>
                 <ul>
                   <li>
@@ -144,7 +138,7 @@ const PublicUserPage: React.FC = () => {
                   <img src={InboxIcon} alt="" /> Inbox
                 </span>
                 <a href="">127 Connections</a>
-              </SocialSectionWrapper>
+              </SocialSectionWrapper> */}
             </ProfileContentWrapper>
           </ProfileBanner>
         </BannerWrapperInner>

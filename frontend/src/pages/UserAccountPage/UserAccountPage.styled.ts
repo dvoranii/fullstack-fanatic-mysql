@@ -76,44 +76,16 @@ export const BioContentWrapper = styled.div`
   border-right: 2px solid lightgrey;
   padding: 20px;
 
+  h3 {
+    border-bottom: 2px solid black;
+    width: fit-content;
+    margin-bottom: 0.8rem;
+  }
+
   @media (max-width: 959px) {
     border-right: none;
     grid-column: span 2;
     grid-row: 3;
-  }
-`;
-
-export const SocialSectionWrapper = styled.div`
-  padding-left: 20px;
-  p {
-    margin-bottom: 0.4rem;
-  }
-  ul {
-    display: flex;
-    list-style: none;
-    padding-inline-start: 0;
-  }
-
-  ul li {
-    padding-left: 0.4rem;
-    user-select: none;
-  }
-  ul li:first-child {
-    padding-left: 0;
-  }
-  img {
-    max-width: 25px;
-  }
-
-  span {
-    padding-top: 0.4rem;
-    padding-bottom: 0.8rem;
-    display: flex;
-    align-items: center;
-
-    img {
-      margin-right: 0.4rem;
-    }
   }
 `;
 
@@ -264,5 +236,39 @@ export const BannerUploadWrapper = styled.div`
   input:hover,
   button:hover {
     cursor: pointer;
+  }
+`;
+
+export const SocialSectionWrapperOuter = styled.div`
+  padding-left: 20px;
+  p {
+    margin-bottom: 0.4rem;
+  }
+  ul {
+    display: flex;
+    list-style: none;
+    padding-inline-start: 0;
+  }
+
+  ul li {
+    padding-left: 0.4rem;
+    user-select: none;
+  }
+  ul li:first-child {
+    padding-left: 0;
+  }
+  img {
+    max-width: 25px;
+  }
+
+  span {
+    padding-top: 0.4rem;
+    padding-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+
+    img {
+      margin-right: 0.4rem;
+    }
   }
 `;

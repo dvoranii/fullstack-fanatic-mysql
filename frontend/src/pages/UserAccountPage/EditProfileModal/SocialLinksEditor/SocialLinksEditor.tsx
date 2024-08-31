@@ -1,4 +1,10 @@
-import { Input, FormGroup, Label } from "../EditProfileModal.styled"; // Adjust the import path as necessary
+import {
+  DeleteButton,
+  SocialMenuDropdown,
+  SocialLinkWrapper,
+} from "./SocialLinksEditor.styled";
+import { Input, FormGroup, Label } from "../EditProfileModal.styled";
+import { handleTokenExpiration } from "../../../../services/tokenService";
 
 interface SocialLinksEditorProps {
   socialLinks: { [key: string]: string };
@@ -32,11 +38,47 @@ const SocialLinksEditor: React.FC<SocialLinksEditorProps> = ({
     e.target.selectedIndex = 0;
   };
 
+  const handleDeleteSocialLink = async (platform: string) => {
+    const token = await handleTokenExpiration();
+
+    if (!token) {
+      throw new Error("User not authenticated");
+    }
+    try {
+      const response = await fetch(`/api/profile/social-link/${platform}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete social link");
+      }
+
+      const updatedLinks = { ...socialLinks };
+      delete updatedLinks[platform];
+      setSocialLinks(updatedLinks);
+      markSocialLinksChanged();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const availablePlatforms = [
+    "facebook",
+    "twitter",
+    "instagram",
+    "linkedin",
+    "youtube",
+  ].filter((platform) => !socialLinks[platform]);
+
   return (
     <FormGroup>
       <Label>Social Links:</Label>
       {Object.keys(socialLinks).map((platform) => (
-        <div key={platform}>
+        <SocialLinkWrapper key={platform}>
           <Input
             type="text"
             name={platform}
@@ -46,18 +88,21 @@ const SocialLinksEditor: React.FC<SocialLinksEditorProps> = ({
               platform.charAt(0).toUpperCase() + platform.slice(1)
             } URL`}
           />
-        </div>
+          <DeleteButton onClick={() => handleDeleteSocialLink(platform)}>
+            &times;
+          </DeleteButton>
+        </SocialLinkWrapper>
       ))}
-      <select onChange={handleAddSocialLink} defaultValue="">
+      <SocialMenuDropdown onChange={handleAddSocialLink} defaultValue="">
         <option value="" disabled>
           Add Social Link
         </option>
-        <option value="facebook">Facebook</option>
-        <option value="twitter">Twitter</option>
-        <option value="instagram">Instagram</option>
-        <option value="linkedin">LinkedIn</option>
-        <option value="youtube">YouTube</option>
-      </select>
+        {availablePlatforms.map((platform) => (
+          <option key={platform} value={platform}>
+            {platform.charAt(0).toUpperCase() + platform.slice(1)}
+          </option>
+        ))}
+      </SocialMenuDropdown>
     </FormGroup>
   );
 };
