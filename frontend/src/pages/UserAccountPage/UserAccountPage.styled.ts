@@ -49,6 +49,8 @@ export const ProfileContentWrapper = styled.div`
 
 export const ProfilePictureWrapper = styled.div`
   position: relative;
+  display: flex;
+  justify-content: center;
 
   /* img:nth-child(1) {
     width: 30px;
@@ -63,6 +65,7 @@ export const ProfilePicture = styled.img`
   border-radius: 50%;
   margin-bottom: 10px;
   place-self: center;
+  background-color: grey;
 `;
 
 export const ProfileInfo = styled.div`

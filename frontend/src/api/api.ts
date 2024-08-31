@@ -55,8 +55,8 @@ export const loginOrRegisterWithGoogle = async (token: string) => {
   if (!res.ok) {
     const errorText =
       contentType && contentType.includes("application/json")
-        ? await res.json() // If the error is in JSON format
-        : await res.text(); // Otherwise, get it as text
+        ? await res.json()
+        : await res.text();
     throw new Error(errorText);
   }
 

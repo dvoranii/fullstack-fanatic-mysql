@@ -22,7 +22,7 @@ router.get(
     try {
       const connection = await connectionPromise;
       const [comments] = await connection.query<RowDataPacket[]>(
-        `SELECT c.*, u.name as user_name, u.profile_picture as user_picture 
+        `SELECT c.*, u.name as user_name, u.profile_picture 
       FROM comments c 
       JOIN users u ON c.user_id = u.id 
       WHERE c.content_type = ? AND c.content_id = ?`,

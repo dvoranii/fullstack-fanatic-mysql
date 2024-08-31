@@ -136,9 +136,12 @@ const UserAccountsPage: React.FC = () => {
           >
             <ProfileContentWrapper>
               <ProfilePictureWrapper>
-                {/* <img src={EditIcon2} alt="" /> */}
                 <ProfilePicture
-                  src={profile.picture || ""}
+                  src={
+                    profile.profile_picture
+                      ? `${BASE_URL}${profile.profile_picture}`
+                      : ""
+                  }
                   alt={`${profile.name}`}
                   onError={handleImageError}
                 />

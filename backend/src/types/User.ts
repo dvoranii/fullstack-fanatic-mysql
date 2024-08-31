@@ -3,6 +3,7 @@ export interface UserPayload {
   googleId: string;
   email: string;
   displayName?: string;
+  profile_picture?: string;
   profession?: string;
   bio?: string;
   socialLinks?: { [key: string]: string };

@@ -149,12 +149,7 @@ router.post("/google-auth", async (req: Request, res: Response) => {
     }
 
     const googleUserInfo = await googleUserInfoResponse.json();
-    const {
-      email,
-      name,
-      id: googleId,
-      picture: profilePicture,
-    } = googleUserInfo;
+    const { email, name, id: googleId, profile_picture } = googleUserInfo;
 
     console.log(googleUserInfo);
 
@@ -167,7 +162,7 @@ router.post("/google-auth", async (req: Request, res: Response) => {
       const connection = await connectionPromise;
       await connection.execute(
         "UPDATE users SET profile_picture = ?, name = ? WHERE id = ?",
-        [profilePicture, name, userId]
+        [profile_picture, name, userId]
       );
     } else {
       userId = await insertUser(
@@ -176,7 +171,7 @@ router.post("/google-auth", async (req: Request, res: Response) => {
         googleId,
         null,
         "google",
-        profilePicture
+        profile_picture
       );
     }
 
@@ -193,7 +188,7 @@ router.post("/google-auth", async (req: Request, res: Response) => {
 
     res.status(200).json({
       message: jwtToken,
-      user: { userId, email, name, googleId, picture: profilePicture },
+      user: { userId, email, name, googleId, profile_picture },
     });
   } catch (error) {
     console.error("Error during Google authentication: ", error);
@@ -229,7 +224,7 @@ router.get("/user-profile/:id", async (req: Request, res: Response) => {
   try {
     const connection = await connectionPromise;
     const [user] = await connection.query<RowDataPacket[]>(
-      "Select id, email, name, profile_picture AS picture FROM users WHERE id = ?",
+      "Select id, email, name, profile_picture FROM users WHERE id = ?",
       [id]
     );
 

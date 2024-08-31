@@ -10,11 +10,13 @@ import {
   SaveButton,
   MaxCharCountText,
 } from "./EditProfileModal.styled";
-import { UpdatedProfileFields } from "../../../types/User";
+// import { UpdatedProfileFields } from "../../../types/User";
 import SocialLinksEditor from "./SocialLinksEditor/SocialLinksEditor";
 import { useState, useEffect } from "react";
 import { EditProfileModalProps } from "../../../types/EditProfileProps";
 import { handleTokenExpiration } from "../../../services/tokenService";
+
+const BASE_URL = "http://localhost:5000";
 
 const EditProfileModal: React.FC<EditProfileModalProps> = ({
   profile,
@@ -29,6 +31,10 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const [socialLinks, setSocialLinks] = useState<{ [key: string]: string }>(
     profile.social_links || {}
   );
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
+  const [profilePicturePreview, setProfilePicturePreview] = useState<
+    string | null
+  >(null);
 
   const maxDisplayNameCharCount = 30;
   const maxProfessionCharCount = 50;
@@ -39,6 +45,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     profession: false,
     bio: false,
     socialLinks: false,
+    profilePicture: false,
   });
 
   useEffect(() => {
@@ -46,6 +53,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     setProfession(profile.profession || "");
     setBio(profile.bio || "");
     setSocialLinks(profile.social_links || {});
+    setProfilePicturePreview(profile.profile_picture || null);
   }, [profile]);
 
   const handleDisplayNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,6 +76,22 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     setIsChanged((prev) => ({ ...prev, socialLinks: true }));
   };
 
+  const handleProfilePictureChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e?.target.files?.[0];
+    if (file) {
+      setProfilePicture(file);
+      setIsChanged((prev) => ({ ...prev, profilePicture: true }));
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        setProfilePicturePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const markSocialLinksChanged = () => {
     setIsChanged((prev) => ({ ...prev, socialLinks: true }));
   };
@@ -82,22 +106,49 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
         throw new Error("User not authenticated");
       }
 
-      const updatedFields: UpdatedProfileFields = {};
+      let profilePicturePath = profile.profile_picture;
 
-      if (isChanged.displayName) updatedFields.display_name = displayName;
-      if (isChanged.profession) updatedFields.profession = profession;
-      if (isChanged.bio) updatedFields.bio = bio;
-      if (isChanged.socialLinks) updatedFields.social_links = socialLinks;
+      if (isChanged.profilePicture && profilePicture) {
+        const profilePictureFormData = new FormData();
+        profilePictureFormData.append("profile_picture", profilePicture);
 
-      console.log("Updated Fields: ", updatedFields);
+        const pictureResponse = await fetch(
+          "/api/profile/upload-profile-picture",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: profilePictureFormData,
+          }
+        );
+
+        if (!pictureResponse.ok) {
+          throw new Error("Failed to upload profile picture");
+        }
+
+        const pictureData = await pictureResponse.json();
+        profilePicturePath = pictureData.profilePicturePath;
+      }
+
+      const formData = new FormData();
+
+      if (isChanged.displayName) formData.append("display_name", displayName);
+      if (isChanged.profession) formData.append("profession", profession);
+      if (isChanged.bio) formData.append("bio", bio);
+      if (isChanged.socialLinks) {
+        formData.append("social_links", JSON.stringify(socialLinks));
+      }
+      if (profilePicturePath) {
+        formData.append("profile_picture", profilePicturePath); // Use the uploaded picture path
+      }
 
       const response = await fetch("/api/profile/update-profile", {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(updatedFields),
+        body: formData,
       });
 
       if (!response.ok) {
@@ -120,6 +171,25 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
       <ModalContent>
         <CloseButton onClick={closeModal}>&times;</CloseButton>
         <ModalForm onSubmit={handleProfileUpdate}>
+          <FormGroup>
+            <Label>Profile Picture:</Label>
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={handleProfilePictureChange}
+            />
+            {profilePicturePreview && (
+              <img
+                src={
+                  profilePicturePreview.startsWith("data:")
+                    ? profilePicturePreview
+                    : `${BASE_URL}${profilePicturePreview}`
+                }
+                alt="Profile Preview"
+                style={{ width: 100, height: 100, objectFit: "cover" }}
+              />
+            )}
+          </FormGroup>
           <FormGroup>
             <Label>Display Name:</Label>
             <Input

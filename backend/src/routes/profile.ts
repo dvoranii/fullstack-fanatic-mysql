@@ -13,7 +13,7 @@ router.get("/profile", authenticate, async (req: Request, res: Response) => {
 
     const connection = await connectionPromise;
     const [user] = await connection.query<RowDataPacket[]>(
-      "SELECT id, email, name, display_name, profession, bio, social_links, profile_picture AS picture, banner_image FROM users WHERE id = ?",
+      "SELECT id, email, name, display_name, profession, bio, social_links, profile_picture , banner_image FROM users WHERE id = ?",
       [userId]
     );
 
@@ -34,7 +34,15 @@ const storage = multer.diskStorage({
     file: Express.Multer.File,
     cb: (error: Error | null, destination: string) => void
   ) => {
-    cb(null, path.join(__dirname, "../../public/assets/images"));
+    let destinationPath = path.join(__dirname, "../../public/assets/images");
+
+    if (file.fieldname === "bannerimage") {
+      destinationPath = path.join(destinationPath, "banners");
+    } else if (file.fieldname === "profile_picture") {
+      destinationPath = path.join(destinationPath, "profilePictures");
+    }
+
+    cb(null, destinationPath);
   },
   filename: (
     req: Request,
@@ -59,7 +67,7 @@ router.post(
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    const bannerImagePath = `/assets/images/${req.file.filename}`;
+    const bannerImagePath = `/assets/images/banners/${req.file.filename}`;
 
     try {
       const connection = await connectionPromise;
@@ -75,6 +83,37 @@ router.post(
     } catch (error) {
       console.error("Error updating profile banner: ", error);
       res.status(500).json({ error: "Failed to update profile banner" });
+    }
+  }
+);
+
+router.post(
+  "/upload-profile-picture",
+  authenticate,
+  upload.single("profile_picture"),
+  async (req: Request, res: Response) => {
+    const userId = req.user?.userId;
+
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const profilePicturePath = `/assets/images/profilePictures/${req.file.filename}`;
+
+    try {
+      const connection = await connectionPromise;
+      await connection.execute(
+        "UPDATE users SET profile_picture = ? WHERE id = ?",
+        [profilePicturePath, userId]
+      );
+
+      res.status(200).json({
+        message: "Profile picture updated successfully",
+        profilePicturePath,
+      });
+    } catch (error) {
+      console.error("Error updating profile picture: ", error);
+      res.status(500).json({ error: "Failed to update profile picture" });
     }
   }
 );
@@ -116,7 +155,7 @@ router.put(
       );
 
       const [user] = await connection.query<RowDataPacket[]>(
-        "SELECT id, email, name, display_name, profession, bio, social_links, profile_picture AS picture, banner_image FROM users WHERE id = ?",
+        "SELECT id, email, name, display_name, profession, bio, social_links, profile_picture, banner_image FROM users WHERE id = ?",
         [userId]
       );
 
