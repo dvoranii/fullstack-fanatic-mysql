@@ -51,12 +51,6 @@ export const ProfilePictureWrapper = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
-
-  /* img:nth-child(1) {
-    width: 30px;
-    position: absolute;
-    right: 32%;
-  } */
 `;
 export const ProfilePicture = styled.img`
   width: 150px;

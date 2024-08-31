@@ -78,7 +78,7 @@ router.post(
 
       res.status(200).json({
         message: "Profile banner updated successfully",
-        bannerImagePath,
+        imagePath: bannerImagePath,
       });
     } catch (error) {
       console.error("Error updating profile banner: ", error);
@@ -106,10 +106,9 @@ router.post(
         "UPDATE users SET profile_picture = ? WHERE id = ?",
         [profilePicturePath, userId]
       );
-
       res.status(200).json({
         message: "Profile picture updated successfully",
-        profilePicturePath,
+        imagePath: profilePicturePath,
       });
     } catch (error) {
       console.error("Error updating profile picture: ", error);

@@ -31,12 +31,12 @@ import {
 import EditProfileModal from "./EditProfileModal/EditProfileModal";
 import InboxIcon from "../../assets/images/account/inbox.png";
 import EditIcon from "../../assets/images/account/edit.png";
-// import EditIcon2 from "../../assets/images/account/edit-icon.png";
 import TutorialIcon from "../../assets/images/tutorial-icon.png";
 import BlogIcon from "../../assets/images/blog-icon.png";
 import { handleImageError } from "../../utils/imageUtils";
-import { handleTokenExpiration } from "../../services/tokenService";
 import SocialLinksDisplay from "./SocialLinksDisplay/SocialLinksDisplay";
+import { uploadImage } from "../../services/imageUploadService";
+import { ImageUploadResponse } from "../../types/ImageUploadResponse";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -77,41 +77,25 @@ const UserAccountsPage: React.FC = () => {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleBannerUpload = async () => {
     if (bannerimage) {
       const formData = new FormData();
       formData.append("bannerimage", bannerimage);
 
       try {
-        const token = await handleTokenExpiration();
+        const data: ImageUploadResponse = await uploadImage(
+          "/api/profile/upload-banner",
+          formData
+        );
 
-        if (!token) {
-          throw new Error("User not authenticated");
-        }
-
-        const response = await fetch("/api/profile/upload-banner", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to upload images");
-        }
-
-        const data = await response.json();
-        console.log("Image uploaded successfully", data);
-
-        if (setProfile) {
+        if (data.imagePath && setProfile) {
           setProfile({
             ...profile,
-            banner_image: data.bannerImagePath,
+            banner_image: data.imagePath,
           });
         }
       } catch (error) {
-        console.error("Error uploading image: ", error);
+        console.error("Error uploading banner image: ", error);
       }
     }
   };
@@ -183,7 +167,7 @@ const UserAccountsPage: React.FC = () => {
             accept="image/*"
             onChange={handleBannerChange}
           />
-          <button type="submit" onClick={handleSubmit}>
+          <button type="submit" onClick={handleBannerUpload}>
             Upload Banner
           </button>
         </BannerUploadWrapper>

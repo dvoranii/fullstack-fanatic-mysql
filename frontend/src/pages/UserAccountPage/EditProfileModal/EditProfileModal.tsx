@@ -10,11 +10,11 @@ import {
   SaveButton,
   MaxCharCountText,
 } from "./EditProfileModal.styled";
-// import { UpdatedProfileFields } from "../../../types/User";
 import SocialLinksEditor from "./SocialLinksEditor/SocialLinksEditor";
 import { useState, useEffect } from "react";
 import { EditProfileModalProps } from "../../../types/EditProfileProps";
 import { handleTokenExpiration } from "../../../services/tokenService";
+import { uploadImage } from "../../../services/imageUploadService";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -109,26 +109,19 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
       let profilePicturePath = profile.profile_picture;
 
       if (isChanged.profilePicture && profilePicture) {
-        const profilePictureFormData = new FormData();
-        profilePictureFormData.append("profile_picture", profilePicture);
+        const formData = new FormData();
+        formData.append("profile_picture", profilePicture);
 
-        const pictureResponse = await fetch(
+        const data = await uploadImage(
           "/api/profile/upload-profile-picture",
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            body: profilePictureFormData,
-          }
+          formData
         );
 
-        if (!pictureResponse.ok) {
+        if (!data.imagePath) {
           throw new Error("Failed to upload profile picture");
         }
 
-        const pictureData = await pictureResponse.json();
-        profilePicturePath = pictureData.profilePicturePath;
+        profilePicturePath = data.imagePath;
       }
 
       const formData = new FormData();
