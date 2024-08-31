@@ -8,6 +8,7 @@ import {
   Input,
   TextArea,
   SaveButton,
+  MaxCharCountText,
 } from "./EditProfileModal.styled";
 import { UpdatedProfileFields } from "../../../types/User";
 import SocialLinksEditor from "./SocialLinksEditor/SocialLinksEditor";
@@ -28,6 +29,10 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const [socialLinks, setSocialLinks] = useState<{ [key: string]: string }>(
     profile.social_links || {}
   );
+
+  const maxDisplayNameCharCount = 30;
+  const maxProfessionCharCount = 50;
+  const maxBioCharCount = 250;
 
   const [isChanged, setIsChanged] = useState({
     displayName: false,
@@ -121,7 +126,18 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
               type="text"
               value={displayName}
               onChange={handleDisplayNameChange}
+              maxLength={maxDisplayNameCharCount}
             />
+            <MaxCharCountText
+              style={{
+                color:
+                  displayName.length >= maxDisplayNameCharCount
+                    ? "red"
+                    : "black",
+              }}
+            >
+              {maxDisplayNameCharCount - displayName.length}
+            </MaxCharCountText>
           </FormGroup>
           <FormGroup>
             <Label>Profession:</Label>
@@ -129,11 +145,29 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
               type="text"
               value={profession}
               onChange={handleProfessionChange}
+              maxLength={maxProfessionCharCount}
             />
+            <MaxCharCountText
+              style={{
+                color: profession.length >= maxBioCharCount ? "red" : "black",
+              }}
+            >
+              {maxProfessionCharCount - profession.length}
+            </MaxCharCountText>
           </FormGroup>
           <FormGroup>
             <Label>Bio:</Label>
-            <TextArea value={bio} onChange={handleBioChange} />
+            <TextArea
+              value={bio}
+              onChange={handleBioChange}
+              maxLength={maxBioCharCount}
+              placeholder="Enter your bio"
+            />
+            <MaxCharCountText
+              style={{ color: bio.length >= maxBioCharCount ? "red" : "black" }}
+            >
+              {maxBioCharCount - bio.length}
+            </MaxCharCountText>
           </FormGroup>
 
           <SocialLinksEditor

@@ -47,6 +47,15 @@ export const ProfileContentWrapper = styled.div`
   }
 `;
 
+export const ProfilePictureWrapper = styled.div`
+  position: relative;
+
+  /* img:nth-child(1) {
+    width: 30px;
+    position: absolute;
+    right: 32%;
+  } */
+`;
 export const ProfilePicture = styled.img`
   width: 150px;
   height: 150px;

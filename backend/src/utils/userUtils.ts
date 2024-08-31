@@ -13,9 +13,9 @@ export const fetchUserByColumn = async (column: string, value: string) => {
 export const insertUser = async (
   email: string,
   name: string,
-  googleId: string | null, // Nullable in case of manual registration
-  password: string | null, // Nullable in case of Google registration
-  authType: "google" | "manual", // Enforced to accept only 'google' or 'manual'
+  googleId: string | null,
+  password: string | null,
+  authType: "google" | "manual",
   profilePicture: string | null
 ) => {
   const connection = await connectionPromise;

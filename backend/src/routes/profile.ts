@@ -48,7 +48,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Route to upload profile banner
 router.post(
   "/upload-banner",
   authenticate,

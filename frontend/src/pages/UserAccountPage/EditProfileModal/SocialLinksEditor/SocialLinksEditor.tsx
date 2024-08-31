@@ -5,12 +5,7 @@ import {
 } from "./SocialLinksEditor.styled";
 import { Input, FormGroup, Label } from "../EditProfileModal.styled";
 import { handleTokenExpiration } from "../../../../services/tokenService";
-
-interface SocialLinksEditorProps {
-  socialLinks: { [key: string]: string };
-  setSocialLinks: (socialLinks: { [key: string]: string }) => void;
-  markSocialLinksChanged: () => void;
-}
+import { SocialLinksEditorProps } from "../../../../types/SocialLinksEditorProps";
 
 const SocialLinksEditor: React.FC<SocialLinksEditorProps> = ({
   socialLinks,
@@ -59,6 +54,7 @@ const SocialLinksEditor: React.FC<SocialLinksEditorProps> = ({
 
       const updatedLinks = { ...socialLinks };
       delete updatedLinks[platform];
+
       setSocialLinks(updatedLinks);
       markSocialLinksChanged();
     } catch (error) {

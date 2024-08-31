@@ -3,6 +3,7 @@ import { UserContext } from "../../context/UserContext";
 import {
   UserAccountContainer,
   ProfileBanner,
+  ProfilePictureWrapper,
   ProfilePicture,
   UserName,
   UserProfession,
@@ -30,6 +31,7 @@ import {
 import EditProfileModal from "./EditProfileModal/EditProfileModal";
 import InboxIcon from "../../assets/images/account/inbox.png";
 import EditIcon from "../../assets/images/account/edit.png";
+// import EditIcon2 from "../../assets/images/account/edit-icon.png";
 import TutorialIcon from "../../assets/images/tutorial-icon.png";
 import BlogIcon from "../../assets/images/blog-icon.png";
 import { handleImageError } from "../../utils/imageUtils";
@@ -133,11 +135,15 @@ const UserAccountsPage: React.FC = () => {
             }
           >
             <ProfileContentWrapper>
-              <ProfilePicture
-                src={profile.picture || ""}
-                alt={`${profile.name}`}
-                onError={handleImageError}
-              />
+              <ProfilePictureWrapper>
+                {/* <img src={EditIcon2} alt="" /> */}
+                <ProfilePicture
+                  src={profile.picture || ""}
+                  alt={`${profile.name}`}
+                  onError={handleImageError}
+                />
+              </ProfilePictureWrapper>
+
               <ProfileInfo>
                 <UserName>
                   {profile.display_name ? profile.display_name : profile.name}

@@ -5,14 +5,12 @@ import { authenticate } from "../middleware/authenticate";
 
 const router = Router();
 
-// GET request to fetch favourites based on content_type, if needed in the future
 router.get("/", authenticate, async (req: Request, res: Response) => {
   const { userId } = req.user!;
 
   try {
     const connection = await connectionPromise;
 
-    // Fetching favourites categorized by content_type
     const [tutorials] = await connection.query<RowDataPacket[]>(
       `SELECT t.* FROM tutorials t
        JOIN favourites f ON t.id = f.item_id
@@ -36,7 +34,6 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
   }
 });
 
-// POST request to add a favourite without content_type
 router.post("/", authenticate, async (req: Request, res: Response) => {
   const { item_id, content_type }: { item_id: number; content_type: string } =
     req.body;

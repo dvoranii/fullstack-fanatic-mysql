@@ -81,3 +81,9 @@ export const SaveButton = styled.button`
     background-color: #0056b3;
   }
 `;
+
+export const MaxCharCountText = styled.p`
+  font-size: 12px;
+  text-align: right;
+  margin-top: 4px;
+`;
