@@ -120,6 +120,7 @@ router.post(
 router.put(
   "/update-profile",
   authenticate,
+  upload.none(),
   async (req: Request, res: Response) => {
     const userId = req.user?.userId;
     const { display_name, profession, bio, social_links } = req.body;
@@ -144,11 +145,11 @@ router.put(
       const safeBio = bio !== undefined ? bio : userInfo.bio;
       const safeSocialLinks =
         social_links !== undefined
-          ? JSON.stringify(social_links)
+          ? JSON.stringify(JSON.parse(social_links)) // Ensure JSON string is parsed
           : userInfo.social_links;
 
       // Update user profile in the database
-      const [updateResult] = await connection.execute(
+      await connection.execute(
         `UPDATE users SET display_name = ?, profession = ?, bio = ?, social_links = ? WHERE id = ?`,
         [safeDisplayName, safeProfession, safeBio, safeSocialLinks, userId]
       );

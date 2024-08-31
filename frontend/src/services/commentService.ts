@@ -4,7 +4,6 @@ import { handleTokenExpiration } from "./tokenService";
 export const fetchComments = async (
   contentType: string,
   contentId: number
-  // includeLikedStatus: boolean = false
 ): Promise<CommentType[]> => {
   const token = await handleTokenExpiration();
   const url = `/api/comments/${contentType}/${contentId}?includeLikedStatus=true`;

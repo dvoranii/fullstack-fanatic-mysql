@@ -133,7 +133,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
         formData.append("social_links", JSON.stringify(socialLinks));
       }
       if (profilePicturePath) {
-        formData.append("profile_picture", profilePicturePath); // Use the uploaded picture path
+        formData.append("profile_picture", profilePicturePath);
       }
 
       const response = await fetch("/api/profile/update-profile", {

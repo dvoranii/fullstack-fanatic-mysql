@@ -21,6 +21,8 @@ import ProfileBackup from "../../../assets/images/profile-icon.png";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
+const BASE_URL = "http://localhost:5000";
+
 const Comment: React.FC<CommentProps> = ({
   comment,
   isEditing,
@@ -60,12 +62,16 @@ const Comment: React.FC<CommentProps> = ({
     }
   };
 
+  const profilePictureUrl = comment.profile_picture
+    ? `${BASE_URL}${comment.profile_picture}`
+    : ProfileBackup;
+
   return (
     <CommentWrapper>
       <ProfilePictureWrapper onClick={handleProfileClick}>
         <Link to={`/user/${comment.user_id}`}>
           <ProfilePicture
-            src={comment.user_picture || ProfileBackup}
+            src={profilePictureUrl}
             alt={comment.user_name || "Username"}
             onError={handleImageError}
           />
