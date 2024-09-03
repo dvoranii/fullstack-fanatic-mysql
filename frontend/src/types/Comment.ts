@@ -10,5 +10,6 @@ export interface CommentType {
   google_id: string;
   user_name: string;
   profile_picture: string;
-  likedByUser: boolean;
+  likedByUser?: boolean;
+  replies: CommentType[];
 }

@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 interface NavLinkStyledProps {
   underlinewidth?: string;
@@ -76,7 +77,7 @@ export const SmallFontSpan = styled.span`
   font-size: 0.75em;
 `;
 
-export const NavLinkStyled = styled(Link)<NavLinkStyledProps>`
+export const NavLinkStyled = styled(NavLink)<NavLinkStyledProps>`
   color: #222;
   text-decoration: none;
   padding-right: 2.2rem;
@@ -97,7 +98,12 @@ export const NavLinkStyled = styled(Link)<NavLinkStyledProps>`
     transform-origin: center;
   }
 
-  &:hover::after {
+  &.active {
+    font-weight: bold;
+  }
+
+  &:hover::after,
+  &.active::after {
     transform: ${({ underlinewidth }) =>
       underlinewidth === "0%" ? "none" : "scaleX(1)"};
   }

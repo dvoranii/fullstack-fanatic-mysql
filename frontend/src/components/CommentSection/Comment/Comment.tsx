@@ -18,8 +18,8 @@ import { UserContext } from "../../../context/UserContext";
 import { handleImageError } from "../../../utils/imageUtils";
 import { toggleLike } from "../../../services/commentService";
 import ProfileBackup from "../../../assets/images/profile-icon.png";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { submitReply } from "../../../services/commentService";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -36,6 +36,9 @@ const Comment: React.FC<CommentProps> = ({
   const { profile } = useContext(UserContext) || {};
   const [isLiked, setIsLiked] = useState(comment.likedByUser ?? false);
   const [likes, setLikes] = useState(comment.likes);
+  const [showReplies, setShowReplies] = useState(false);
+  const [replyContent, setReplyContent] = useState("");
+  const [replies, setReplies] = useState(comment.replies || []);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -59,6 +62,23 @@ const Comment: React.FC<CommentProps> = ({
       navigate("/my-account");
     } else {
       navigate(`/user/${comment.user_id}`);
+    }
+  };
+
+  const handleReply = async () => {
+    if (replyContent.trim() === "") return;
+
+    try {
+      const newReply = await submitReply({
+        content_id: comment.content_id,
+        content_type: comment.content_type,
+        content: replyContent,
+        parent_comment_id: comment.id,
+      });
+      setReplies([...replies, newReply]);
+      setReplyContent("");
+    } catch (error) {
+      console.error("Failed to submit reply", error);
     }
   };
 
@@ -101,6 +121,12 @@ const Comment: React.FC<CommentProps> = ({
                 />
                 {likes}
               </LikesWrapper>
+
+              {!isCommentOwner && (
+                <FormButton onClick={() => setShowReplies((prev) => !prev)}>
+                  {showReplies ? "Hide Replies" : "reply"}
+                </FormButton>
+              )}
             </>
           )}
         </CommentContentWrapper>
@@ -109,6 +135,31 @@ const Comment: React.FC<CommentProps> = ({
             <FormButton onClick={onEdit}>Edit</FormButton>
             <FormButton onClick={onDelete}>Delete</FormButton>
           </CommentActions>
+        )}
+
+        {showReplies && (
+          <>
+            <FormTextArea
+              value={replyContent}
+              onChange={(e) => setReplyContent(e.target.value)}
+              placeholder="Write a reply..."
+            />
+            <FormButton onClick={handleReply}>Submit Reply</FormButton>
+
+            {replies.map((reply) => (
+              <Comment
+                key={reply.id}
+                comment={reply}
+                isEditing={false}
+                editedComment=""
+                handleEditChange={() => {}}
+                onEdit={() => {}}
+                onDelete={() => {}}
+                onSave={() => {}}
+                onCancelEdit={() => {}}
+              />
+            ))}
+          </>
         )}
       </CommentItem>
     </CommentWrapper>

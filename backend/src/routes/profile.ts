@@ -145,7 +145,7 @@ router.put(
       const safeBio = bio !== undefined ? bio : userInfo.bio;
       const safeSocialLinks =
         social_links !== undefined
-          ? JSON.stringify(JSON.parse(social_links)) // Ensure JSON string is parsed
+          ? JSON.stringify(JSON.parse(social_links))
           : userInfo.social_links;
 
       // Update user profile in the database

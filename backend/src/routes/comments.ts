@@ -25,9 +25,23 @@ router.get(
         `SELECT c.*, u.name as user_name, u.profile_picture 
       FROM comments c 
       JOIN users u ON c.user_id = u.id 
-      WHERE c.content_type = ? AND c.content_id = ?`,
+      WHERE c.content_type = ? AND c.content_id = ? AND c.parent_comment_id IS NULL 
+      ORDER BY c.created_at DESC`,
         [contentType, contentId]
       );
+
+      for (const comment of comments) {
+        const [replies] = await connection.query<RowDataPacket[]>(
+          `SELECT c.*, u.name as user_name, u.profile_picture
+          FROM comments c
+          JOIN users u ON c.user_id = u.id
+          WHERE c.parent_comment_id = ?
+          ORDER BY c.created_at ASC`,
+          [comment.id]
+        );
+
+        comment.replies = replies;
+      }
 
       if (includeLikedStatus && userId) {
         const [likedComments] = await connection.query<RowDataPacket[]>(
@@ -41,13 +55,14 @@ router.get(
           ...comment,
           likedByUser: likedCommentIds.includes(comment.id),
         }));
-        // console.log(commentsWithLikeStatus);
+
         res.json(commentsWithLikeStatus as Comment[]);
       } else {
         res.json(comments as Comment[]);
       }
     } catch (err) {
       const error = err as Error;
+      console.error("Error fetching comments:", error);
       res.status(500).json({ error: error.message });
     }
   }
@@ -98,6 +113,36 @@ router.put("/:id", authenticate, async (req: Request, res: Response) => {
       [content, id]
     );
     res.json({ id, content });
+  } catch (err) {
+    const error = err as Error;
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.post("/reply", authenticate, async (req: Request, res: Response) => {
+  const { content_id, content_type, content, parent_comment_id } = req.body as {
+    content_id: number;
+    content_type: "tutorial" | "blog";
+    content: string;
+    parent_comment_id: number;
+  };
+
+  const { userId } = req.user!;
+
+  try {
+    const connection = await connectionPromise;
+    const [results] = await connection.query<ResultSetHeader>(
+      "INSERT INTO comments (content_id, content_type, content, user_id, parent_comment_id) VALUES (?, ?, ?, ?, ?)",
+      [content_id, content_type, content, userId, parent_comment_id]
+    );
+
+    res.json({
+      id: results.insertId,
+      content_id,
+      content_type,
+      content,
+      parent_comment_id,
+    });
   } catch (err) {
     const error = err as Error;
     res.status(500).json({ error: error.message });

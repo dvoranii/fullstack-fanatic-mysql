@@ -40,6 +40,40 @@ export const submitComment = async (
   return data;
 };
 
+export const submitReply = async ({
+  content_id,
+  content_type,
+  content,
+  parent_comment_id,
+}: {
+  content_id: number;
+  content_type: "tutorial" | "blog";
+  content: string;
+  parent_comment_id: number;
+}) => {
+  const token = await handleTokenExpiration();
+  const res = await fetch("http://localhost:5000/api/comments", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      content_id,
+      content_type,
+      content,
+      parent_comment_id,
+    }),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text);
+  }
+
+  return res.json();
+};
+
 export const updateComment = async (
   id: number,
   editedComment: string
