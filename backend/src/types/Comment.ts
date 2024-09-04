@@ -9,4 +9,6 @@ export interface Comment {
   user_name: string;
   user_picture: string | null;
   likedByUser?: boolean;
+  parent_comment_id?: number;
+  replies?: Comment[];
 }

@@ -128,27 +128,38 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     setCommentToDelete(null);
   };
 
+  const renderComments = (comments: CommentType[], isReply = false) => {
+    return comments.map((comment) => (
+      <Comment
+        key={comment.id}
+        comment={comment}
+        isEditing={editingCommentId === comment.id}
+        editedComment={editedComment}
+        handleEditChange={handleEditCommentChange}
+        onEdit={() => {
+          setEditingCommentId(comment.id);
+          setEditedComment(comment.content);
+        }}
+        onDelete={() => handleDelete(comment.id)}
+        onSave={handleUpdate}
+        onCancelEdit={() => setEditingCommentId(null)}
+        isReply={isReply}
+      >
+        {comment.replies && comment.replies.length > 0 && (
+          <div style={{ marginLeft: "2rem", marginTop: "0.5rem" }}>
+            {renderComments(comment.replies, true)}
+          </div>
+        )}
+      </Comment>
+    ));
+  };
+
   return (
     <CommentSectionWrapperOuter>
       <CommentSectionTitle>Comments</CommentSectionTitle>
       {error && <ErrorMessage error={error} />}
       <CommentSectionWrapperInner>
-        {comments.map((comment) => (
-          <Comment
-            key={comment.id}
-            comment={comment}
-            isEditing={editingCommentId === comment.id}
-            editedComment={editedComment}
-            handleEditChange={handleEditCommentChange}
-            onEdit={() => {
-              setEditingCommentId(comment.id);
-              setEditedComment(comment.content);
-            }}
-            onDelete={() => handleDelete(comment.id)}
-            onSave={handleUpdate}
-            onCancelEdit={() => setEditingCommentId(null)}
-          />
-        ))}
+        {renderComments(comments)}
       </CommentSectionWrapperInner>
       {profile && (
         <FormWrapper onSubmit={handleCommentSubmit}>

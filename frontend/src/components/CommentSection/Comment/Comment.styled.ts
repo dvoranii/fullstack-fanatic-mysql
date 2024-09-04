@@ -1,10 +1,19 @@
 import styled from "styled-components";
+import discardIcon from "../../../assets/images/discard-icon.png";
 
-export const CommentWrapper = styled.div`
+interface CommentWrapperProps {
+  isreply: boolean;
+}
+
+export const CommentWrapper = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "isreply",
+})<CommentWrapperProps>`
   display: flex;
   align-items: flex-start;
-  padding: 1rem 0;
-  border-bottom: 1px solid #ddd;
+  flex-direction: ${({ isreply }) => (isreply ? "column" : "row")};
+  padding: ${({ isreply }) => (isreply ? "0.5rem 0 0.5rem 2rem" : "1rem 0")};
+  border-bottom: ${({ isreply }) => (isreply ? "none" : "1px solid #ddd")};
+  margin-left: ${({ isreply }) => (isreply ? "0" : "0")};
 `;
 
 export const ProfilePictureWrapper = styled.div`
@@ -30,14 +39,16 @@ export const Username = styled.p`
 export const CommentItem = styled.div`
   flex: 1;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 `;
 
 export const CommentContentWrapper = styled.div`
   font-size: 1rem;
   color: #333;
   margin-bottom: 0.5rem;
+  width: 100%;
 `;
 
 export const CommentActions = styled.div`
@@ -67,6 +78,12 @@ export const FormTextArea = styled.textarea`
   border: 1px solid #ccc;
 `;
 
+export const ReplyFormWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.5rem;
+`;
+
 export const FormButton = styled.button`
   padding: 0.4rem 1rem;
   border-radius: 4px;
@@ -77,5 +94,25 @@ export const FormButton = styled.button`
   cursor: pointer;
   &:hover {
     background-color: #0056b3;
+  }
+`;
+
+export const TrashBinButton = styled.button`
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  background-color: red;
+  color: #fff;
+  border: none;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url(${discardIcon});
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px 20px;
+  &:hover {
+    background-color: darkred;
   }
 `;

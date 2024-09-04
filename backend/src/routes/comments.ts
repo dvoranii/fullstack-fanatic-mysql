@@ -10,60 +10,70 @@ router.get(
   "/:contentType/:contentId",
   authenticate,
   async (req: Request, res: Response) => {
-    const { contentType, contentId } = req.params as {
-      contentType: string;
-      contentId: string;
-    };
-
+    const { contentType, contentId } = req.params;
     const userId = req.user?.userId;
-
     const includeLikedStatus = req.query.includeLikedStatus === "true";
 
     try {
       const connection = await connectionPromise;
       const [comments] = await connection.query<RowDataPacket[]>(
         `SELECT c.*, u.name as user_name, u.profile_picture 
-      FROM comments c 
-      JOIN users u ON c.user_id = u.id 
-      WHERE c.content_type = ? AND c.content_id = ? AND c.parent_comment_id IS NULL 
-      ORDER BY c.created_at DESC`,
+         FROM comments c 
+         JOIN users u ON c.user_id = u.id 
+         WHERE c.content_type = ? AND c.content_id = ? AND c.parent_comment_id IS NULL 
+         ORDER BY c.created_at DESC`,
         [contentType, contentId]
       );
 
-      for (const comment of comments) {
-        const [replies] = await connection.query<RowDataPacket[]>(
-          `SELECT c.*, u.name as user_name, u.profile_picture
-          FROM comments c
-          JOIN users u ON c.user_id = u.id
-          WHERE c.parent_comment_id = ?
-          ORDER BY c.created_at ASC`,
-          [comment.id]
-        );
+      const [replies] = await connection.query<RowDataPacket[]>(
+        `SELECT c.*, u.name as user_name, u.profile_picture 
+         FROM comments c 
+         JOIN users u ON c.user_id = u.id 
+         WHERE c.content_type = ? AND c.content_id = ? AND c.parent_comment_id IS NOT NULL 
+         ORDER BY c.created_at ASC`,
+        [contentType, contentId]
+      );
 
-        comment.replies = replies;
-      }
+      const repliesByParentId: Record<number, Comment[]> = replies.reduce(
+        (acc: Record<number, Comment[]>, reply: RowDataPacket) => {
+          const typedReply = reply as Comment;
+
+          if (typedReply.parent_comment_id !== undefined) {
+            if (!acc[typedReply.parent_comment_id]) {
+              acc[typedReply.parent_comment_id] = [];
+            }
+            acc[typedReply.parent_comment_id].push(typedReply);
+          }
+
+          return acc;
+        },
+        {}
+      );
+
+      comments.forEach((comment) => {
+        comment.replies = repliesByParentId[comment.id] || [];
+      });
 
       if (includeLikedStatus && userId) {
         const [likedComments] = await connection.query<RowDataPacket[]>(
           `SELECT comment_id FROM comment_likes WHERE user_id = ?`,
           [userId]
         );
-
         const likedCommentIds = likedComments.map((row) => row.comment_id);
 
-        const commentsWithLikeStatus = comments.map((comment) => ({
-          ...comment,
-          likedByUser: likedCommentIds.includes(comment.id),
-        }));
-
-        res.json(commentsWithLikeStatus as Comment[]);
-      } else {
-        res.json(comments as Comment[]);
+        (comments as Comment[]).forEach((comment) => {
+          comment.likedByUser = likedCommentIds.includes(comment.id);
+          if (comment.replies) {
+            comment.replies.forEach((reply) => {
+              reply.likedByUser = likedCommentIds.includes(reply.id);
+            });
+          }
+        });
       }
+
+      res.json(comments as Comment[]);
     } catch (err) {
-      const error = err as Error;
-      console.error("Error fetching comments:", error);
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ error: (err as Error).message });
     }
   }
 );
@@ -79,8 +89,8 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
   try {
     const connection = await connectionPromise;
     const [results] = await connection.query<ResultSetHeader>(
-      "INSERT INTO comments (content_id, content_type, content, user_id) VALUES (?, ?, ?, ?)",
-      [content_id, content_type, content, userId]
+      "INSERT INTO comments (content_id, content_type, content, user_id, parent_comment_id) VALUES (?, ?, ?, ?, ?)",
+      [content_id, content_type, content, userId, null]
     );
     res.json({ id: results.insertId, content_id, content_type, content });
   } catch (err) {
@@ -93,8 +103,6 @@ router.put("/:id", authenticate, async (req: Request, res: Response) => {
   const { id } = req.params as { id: string };
   const { content } = req.body as { content: string };
   const { userId } = req.user!;
-
-  console.log(`Updating comment with ID ${id}`);
   try {
     const connection = await connectionPromise;
     const [existing] = await connection.query<RowDataPacket[]>(
@@ -124,7 +132,7 @@ router.post("/reply", authenticate, async (req: Request, res: Response) => {
     content_id: number;
     content_type: "tutorial" | "blog";
     content: string;
-    parent_comment_id: number;
+    parent_comment_id: number | null;
   };
 
   const { userId } = req.user!;
@@ -133,7 +141,7 @@ router.post("/reply", authenticate, async (req: Request, res: Response) => {
     const connection = await connectionPromise;
     const [results] = await connection.query<ResultSetHeader>(
       "INSERT INTO comments (content_id, content_type, content, user_id, parent_comment_id) VALUES (?, ?, ?, ?, ?)",
-      [content_id, content_type, content, userId, parent_comment_id]
+      [content_id, content_type, content, userId, parent_comment_id || null]
     );
 
     res.json({
@@ -155,8 +163,6 @@ router.put(
   async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
     const { userId } = req.user!;
-
-    console.log(`User ${userId} is toggling like for comment with ID ${id}`);
 
     try {
       const connection = await connectionPromise;
@@ -201,8 +207,6 @@ router.put(
 router.delete("/:id", authenticate, async (req: Request, res: Response) => {
   const { id } = req.params as { id: string };
   const { userId } = req.user!;
-
-  console.log(`Deleting comment with ID ${id} by user ${userId}`);
 
   try {
     const connection = await connectionPromise;

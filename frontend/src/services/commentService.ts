@@ -14,7 +14,9 @@ export const fetchComments = async (
   });
   if (!response.ok) throw new Error("Failed to fetch comments");
   const data = await response.json();
-  return data;
+
+  console.log(data);
+  return data as CommentType[];
 };
 
 export const submitComment = async (
@@ -52,7 +54,7 @@ export const submitReply = async ({
   parent_comment_id: number;
 }) => {
   const token = await handleTokenExpiration();
-  const res = await fetch("http://localhost:5000/api/comments", {
+  const res = await fetch("http://localhost:5000/api/comments/reply", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

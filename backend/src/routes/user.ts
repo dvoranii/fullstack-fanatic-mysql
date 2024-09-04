@@ -149,30 +149,49 @@ router.post("/google-auth", async (req: Request, res: Response) => {
     }
 
     const googleUserInfo = await googleUserInfoResponse.json();
-    const { email, name, id: googleId, profile_picture } = googleUserInfo;
-
-    console.log(googleUserInfo);
+    const {
+      email,
+      name,
+      id: googleId,
+      picture: googleProfilePicture,
+    } = googleUserInfo;
 
     const existingUser = await fetchUserByColumn("google_id", googleId);
 
     let userId;
+    let currentProfilePicture;
+
     if (existingUser.length > 0) {
       userId = existingUser[0].id;
 
       const connection = await connectionPromise;
-      await connection.execute(
-        "UPDATE users SET profile_picture = ?, name = ? WHERE id = ?",
-        [profile_picture, name, userId]
-      );
+
+      currentProfilePicture = existingUser[0].profile_picture;
+      if (
+        !currentProfilePicture ||
+        currentProfilePicture.startsWith("https://")
+      ) {
+        await connection.execute(
+          "UPDATE users SET profile_picture = ?, name = ? WHERE id = ?",
+          [googleProfilePicture || null, name || null, userId]
+        );
+        currentProfilePicture = googleProfilePicture;
+      } else {
+        await connection.execute("UPDATE users SET name = ? WHERE id = ?", [
+          name || null,
+          userId,
+        ]);
+      }
     } else {
       userId = await insertUser(
-        email,
-        name,
-        googleId,
+        email ?? null,
+        name ?? null,
+        googleId ?? null,
         null,
         "google",
-        profile_picture
+        googleProfilePicture ?? null
       );
+      currentProfilePicture = googleProfilePicture;
     }
 
     const jwtToken = createJwtToken(userId, email, googleId);
@@ -188,7 +207,13 @@ router.post("/google-auth", async (req: Request, res: Response) => {
 
     res.status(200).json({
       message: jwtToken,
-      user: { userId, email, name, googleId, profile_picture },
+      user: {
+        userId,
+        email,
+        name,
+        googleId,
+        profile_picture: currentProfilePicture || googleProfilePicture,
+      },
     });
   } catch (error) {
     console.error("Error during Google authentication: ", error);

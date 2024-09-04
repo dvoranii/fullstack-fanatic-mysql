@@ -10,6 +10,8 @@ import {
   LikesWrapper,
   FormTextArea,
   FormButton,
+  ReplyFormWrapper,
+  TrashBinButton,
 } from "./Comment.styled";
 import { CommentProps } from "../../../types/CommentProps";
 import like1 from "../../../assets/images/like-1.png";
@@ -32,13 +34,15 @@ const Comment: React.FC<CommentProps> = ({
   onDelete,
   onSave,
   onCancelEdit,
+  isReply,
+  children,
+  ...restProps
 }) => {
   const { profile } = useContext(UserContext) || {};
   const [isLiked, setIsLiked] = useState(comment.likedByUser ?? false);
   const [likes, setLikes] = useState(comment.likes);
-  const [showReplies, setShowReplies] = useState(false);
+  const [showReplyForm, setShowReplyForm] = useState(false);
   const [replyContent, setReplyContent] = useState("");
-  const [replies, setReplies] = useState(comment.replies || []);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -75,8 +79,9 @@ const Comment: React.FC<CommentProps> = ({
         content: replyContent,
         parent_comment_id: comment.id,
       });
-      setReplies([...replies, newReply]);
+      comment.replies.push(newReply);
       setReplyContent("");
+      setShowReplyForm(false);
     } catch (error) {
       console.error("Failed to submit reply", error);
     }
@@ -87,7 +92,7 @@ const Comment: React.FC<CommentProps> = ({
     : ProfileBackup;
 
   return (
-    <CommentWrapper>
+    <CommentWrapper isreply={isReply} {...restProps}>
       <ProfilePictureWrapper onClick={handleProfileClick}>
         <Link to={`/user/${comment.user_id}`}>
           <ProfilePicture
@@ -121,15 +126,10 @@ const Comment: React.FC<CommentProps> = ({
                 />
                 {likes}
               </LikesWrapper>
-
-              {!isCommentOwner && (
-                <FormButton onClick={() => setShowReplies((prev) => !prev)}>
-                  {showReplies ? "Hide Replies" : "reply"}
-                </FormButton>
-              )}
             </>
           )}
         </CommentContentWrapper>
+
         {!isEditing && isCommentOwner && (
           <CommentActions>
             <FormButton onClick={onEdit}>Edit</FormButton>
@@ -137,30 +137,31 @@ const Comment: React.FC<CommentProps> = ({
           </CommentActions>
         )}
 
-        {showReplies && (
-          <>
+        {!isEditing && !isCommentOwner && !isReply && !showReplyForm && (
+          <FormButton onClick={() => setShowReplyForm(true)}>Reply</FormButton>
+        )}
+
+        {showReplyForm && (
+          <ReplyFormWrapper>
             <FormTextArea
               value={replyContent}
               onChange={(e) => setReplyContent(e.target.value)}
               placeholder="Write a reply..."
             />
-            <FormButton onClick={handleReply}>Submit Reply</FormButton>
-
-            {replies.map((reply) => (
-              <Comment
-                key={reply.id}
-                comment={reply}
-                isEditing={false}
-                editedComment=""
-                handleEditChange={() => {}}
-                onEdit={() => {}}
-                onDelete={() => {}}
-                onSave={() => {}}
-                onCancelEdit={() => {}}
-              />
-            ))}
-          </>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: "0.5rem",
+              }}
+            >
+              <FormButton onClick={handleReply}>Submit Reply</FormButton>
+              <TrashBinButton onClick={() => setShowReplyForm(false)} />
+            </div>
+          </ReplyFormWrapper>
         )}
+
+        {children}
       </CommentItem>
     </CommentWrapper>
   );
