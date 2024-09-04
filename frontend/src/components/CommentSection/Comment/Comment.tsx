@@ -130,38 +130,42 @@ const Comment: React.FC<CommentProps> = ({
           )}
         </CommentContentWrapper>
 
-        {!isEditing && isCommentOwner && (
-          <CommentActions>
-            <FormButton onClick={onEdit}>Edit</FormButton>
-            <FormButton onClick={onDelete}>Delete</FormButton>
-          </CommentActions>
-        )}
+        <CommentActions>
+          {!isEditing && isCommentOwner && (
+            <>
+              <FormButton onClick={onEdit}>Edit</FormButton>
+              <FormButton onClick={onDelete}>Delete</FormButton>
+            </>
+          )}
 
-        {!isEditing && !isCommentOwner && !isReply && !showReplyForm && (
-          <FormButton onClick={() => setShowReplyForm(true)}>Reply</FormButton>
-        )}
+          {!isEditing && !isCommentOwner && !isReply && !showReplyForm && (
+            <FormButton onClick={() => setShowReplyForm(true)}>
+              Reply
+            </FormButton>
+          )}
 
-        {showReplyForm && (
-          <ReplyFormWrapper>
-            <FormTextArea
-              value={replyContent}
-              onChange={(e) => setReplyContent(e.target.value)}
-              placeholder="Write a reply..."
-            />
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                gap: "0.5rem",
-              }}
-            >
-              <FormButton onClick={handleReply}>Submit Reply</FormButton>
-              <TrashBinButton onClick={() => setShowReplyForm(false)} />
-            </div>
-          </ReplyFormWrapper>
-        )}
+          {showReplyForm && (
+            <ReplyFormWrapper>
+              <FormTextArea
+                value={replyContent}
+                onChange={(e) => setReplyContent(e.target.value)}
+                placeholder="Write a reply..."
+              />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  gap: "0.5rem",
+                }}
+              >
+                <FormButton onClick={handleReply}>Submit Reply</FormButton>
+                <TrashBinButton onClick={() => setShowReplyForm(false)} />
+              </div>
+            </ReplyFormWrapper>
+          )}
+        </CommentActions>
 
-        {children}
+        <div style={{ width: "100%" }}>{children}</div>
       </CommentItem>
     </CommentWrapper>
   );

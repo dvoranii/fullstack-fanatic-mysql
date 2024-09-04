@@ -10,10 +10,29 @@ export const CommentWrapper = styled.div.withConfig({
 })<CommentWrapperProps>`
   display: flex;
   align-items: flex-start;
-  flex-direction: ${({ isreply }) => (isreply ? "column" : "row")};
-  padding: ${({ isreply }) => (isreply ? "0.5rem 0 0.5rem 2rem" : "1rem 0")};
-  border-bottom: ${({ isreply }) => (isreply ? "none" : "1px solid #ddd")};
-  margin-left: ${({ isreply }) => (isreply ? "0" : "0")};
+  padding: 1rem 0;
+  border-bottom: 1px solid #ddd;
+  margin-left: ${({ isreply }) => (isreply ? "2rem" : "0")};
+  flex-direction: row;
+  position: relative;
+
+  ${({ isreply }) =>
+    isreply &&
+    `
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:before {
+    content: '';
+    position: absolute;
+    left: -6.5rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #ddd;
+    }
+  `}
 `;
 
 export const ProfilePictureWrapper = styled.div`
@@ -100,7 +119,7 @@ export const FormButton = styled.button`
 export const TrashBinButton = styled.button`
   padding: 0.4rem 1rem;
   border-radius: 4px;
-  background-color: red;
+  background: none;
   color: #fff;
   border: none;
   height: 40px;
@@ -112,7 +131,8 @@ export const TrashBinButton = styled.button`
   background-repeat: no-repeat;
   background-position: center;
   background-size: 20px 20px;
+  transition: 150ms ease;
   &:hover {
-    background-color: darkred;
+    filter: brightness(0.8);
   }
 `;
