@@ -11,4 +11,8 @@ export interface CommentProps {
   onCancelEdit: () => void;
   isReply: boolean;
   children?: ReactNode;
+  onReplySubmit: (
+    parentCommentId: number,
+    replyContent: string
+  ) => Promise<void>;
 }

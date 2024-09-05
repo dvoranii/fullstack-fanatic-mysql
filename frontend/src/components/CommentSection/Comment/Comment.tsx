@@ -21,7 +21,7 @@ import { handleImageError } from "../../../utils/imageUtils";
 import { toggleLike } from "../../../services/commentService";
 import ProfileBackup from "../../../assets/images/profile-icon.png";
 import { Link, useNavigate } from "react-router-dom";
-import { submitReply } from "../../../services/commentService";
+// import { submitReply } from "../../../services/commentService";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -36,6 +36,7 @@ const Comment: React.FC<CommentProps> = ({
   onCancelEdit,
   isReply,
   children,
+  onReplySubmit,
   ...restProps
 }) => {
   const { profile } = useContext(UserContext) || {};
@@ -73,13 +74,7 @@ const Comment: React.FC<CommentProps> = ({
     if (replyContent.trim() === "") return;
 
     try {
-      const newReply = await submitReply({
-        content_id: comment.content_id,
-        content_type: comment.content_type,
-        content: replyContent,
-        parent_comment_id: comment.id,
-      });
-      comment.replies.push(newReply);
+      await onReplySubmit(comment.id, replyContent);
       setReplyContent("");
       setShowReplyForm(false);
     } catch (error) {

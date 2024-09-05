@@ -16,6 +16,7 @@ import {
   submitComment,
   updateComment,
   deleteComment,
+  submitReply,
 } from "../../services/commentService";
 import Comment from "./Comment/Comment";
 import { UserContext } from "../../context/UserContext";
@@ -47,6 +48,29 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     fetchCommentsData();
   }, [contentId, contentType]);
 
+  const handleReply = async (parentCommentId: number, replyContent: string) => {
+    if (replyContent.trim() === "") return;
+
+    try {
+      const newReply = await submitReply({
+        content_id: contentId,
+        content_type: contentType,
+        content: replyContent,
+        parent_comment_id: parentCommentId,
+      });
+      setComments((prevComments) =>
+        prevComments.map((comment) =>
+          comment.id === parentCommentId
+            ? { ...comment, replies: [...(comment.replies || []), newReply] }
+            : comment
+        )
+      );
+    } catch (error) {
+      console.error("Failed to submit reply", error);
+      setError("Failed to submit reply");
+    }
+  };
+
   const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -57,7 +81,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
 
     try {
       const data = await submitComment(contentId, contentType, newComment);
-      setComments([...comments, data]);
+      setComments((prevComments) => [data, ...prevComments]);
       setNewComment("");
       setError(null);
     } catch (error) {
@@ -111,9 +135,27 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     if (commentToDelete !== null) {
       try {
         await deleteComment(commentToDelete);
-        setComments(
-          comments.filter((comment) => comment.id !== commentToDelete)
-        );
+
+        setComments((prevComments) => {
+          const updatedComments = prevComments
+            .map((comment) => {
+              if (comment.id === commentToDelete) {
+                return null;
+              }
+
+              if (comment.replies) {
+                comment.replies = comment.replies.filter(
+                  (reply) => reply.id !== commentToDelete
+                );
+              }
+
+              return comment;
+            })
+            .filter((comment) => comment !== null) as CommentType[];
+
+          return updatedComments;
+        });
+
         setShowDeleteModal(false);
         setCommentToDelete(null);
       } catch (error) {
@@ -144,6 +186,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         onSave={handleUpdate}
         onCancelEdit={() => setEditingCommentId(null)}
         isReply={isReply}
+        onReplySubmit={handleReply}
       >
         {comment.replies && comment.replies.length > 0 && (
           <div style={{ marginLeft: "2rem", marginTop: "0.5rem" }}>

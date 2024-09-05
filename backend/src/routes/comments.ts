@@ -92,7 +92,16 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
       "INSERT INTO comments (content_id, content_type, content, user_id, parent_comment_id) VALUES (?, ?, ?, ?, ?)",
       [content_id, content_type, content, userId, null]
     );
-    res.json({ id: results.insertId, content_id, content_type, content });
+
+    const [newComment] = await connection.query<RowDataPacket[]>(
+      `SELECT c.*, u.name as user_name, u.profile_picture
+      FROM comments c
+      JOIN users u ON c.user_id = u.id
+      WHERE c.id = ?`,
+      [results.insertId]
+    );
+
+    res.json(newComment[0]);
   } catch (err) {
     const error = err as Error;
     res.status(500).json({ error: error.message });
@@ -144,13 +153,15 @@ router.post("/reply", authenticate, async (req: Request, res: Response) => {
       [content_id, content_type, content, userId, parent_comment_id || null]
     );
 
-    res.json({
-      id: results.insertId,
-      content_id,
-      content_type,
-      content,
-      parent_comment_id,
-    });
+    const [newReply] = await connection.query<RowDataPacket[]>(
+      `SELECT c.*, u.name as user_name, u.profile_picture
+      FROM comments c
+      JOIN users u ON c.user_id = u.id
+      WHERE c.id = ?`,
+      [results.insertId]
+    );
+
+    res.json(newReply[0]);
   } catch (err) {
     const error = err as Error;
     res.status(500).json({ error: error.message });
