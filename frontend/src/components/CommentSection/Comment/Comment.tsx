@@ -21,7 +21,9 @@ import { handleImageError } from "../../../utils/imageUtils";
 import { toggleLike } from "../../../services/commentService";
 import ProfileBackup from "../../../assets/images/profile-icon.png";
 import { Link, useNavigate } from "react-router-dom";
-// import { submitReply } from "../../../services/commentService";
+import EditIcon from "../../../assets/images/edit-icon.png";
+import DeleteIcon from "../../../assets/images/discard-icon.png";
+import ReplyIcon from "../../../assets/images/reply-icon.png";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -128,15 +130,18 @@ const Comment: React.FC<CommentProps> = ({
         <CommentActions>
           {!isEditing && isCommentOwner && (
             <>
-              <FormButton onClick={onEdit}>Edit</FormButton>
-              <FormButton onClick={onDelete}>Delete</FormButton>
+              <FormButton onClick={onEdit}>
+                <img src={EditIcon} alt="Edit" title="Edit" />
+              </FormButton>
+              <FormButton onClick={onDelete}>
+                <img src={DeleteIcon} alt="Delete" title="Delete" />
+              </FormButton>
             </>
           )}
 
-          {/* {!isEditing && !isCommentOwner && !isReply && !showReplyForm && ( */}
           {!isEditing && !isCommentOwner && !showReplyForm && (
             <FormButton onClick={() => setShowReplyForm(true)}>
-              Reply
+              <img src={ReplyIcon} alt="Reply" title="Reply" />
             </FormButton>
           )}
 

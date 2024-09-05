@@ -104,15 +104,20 @@ export const ReplyFormWrapper = styled.div`
 `;
 
 export const FormButton = styled.button`
-  padding: 0.4rem 1rem;
   border-radius: 4px;
-  background-color: #007bff;
+  background: none;
   color: #fff;
   border: none;
   height: 40px;
   cursor: pointer;
+  transition: all 150ms ease;
   &:hover {
-    background-color: #0056b3;
+    filter: brightness(0.8);
+  }
+
+  img {
+    margin-top: 1.2rem;
+    width: 25px;
   }
 `;
 

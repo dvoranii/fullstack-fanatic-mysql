@@ -148,9 +148,6 @@ router.post("/reply", authenticate, async (req: Request, res: Response) => {
       [content_id, content_type, content, userId, parent_comment_id || null]
     );
 
-    const newReplyId = results.insertId;
-    console.log(newReplyId);
-
     const [newReply] = await connection.query<RowDataPacket[]>(
       `SELECT c.*, u.name as user_name, u.profile_picture
       FROM comments c
@@ -159,21 +156,15 @@ router.post("/reply", authenticate, async (req: Request, res: Response) => {
       [results.insertId]
     );
 
-    // res.json(newReply[0]);
-    console.log("Fetched new reply:", newReply);
-
-    // If the reply exists, return it, otherwise return an error
     if (newReply.length > 0) {
       res.json(newReply[0]);
     } else {
-      console.error("Failed to fetch the newly inserted reply.");
       res
         .status(500)
         .json({ error: "Failed to fetch the newly inserted reply." });
     }
   } catch (err) {
     const error = err as Error;
-    console.error("Error in /reply endpoint:", error);
     res.status(500).json({ error: error.message });
   }
 });

@@ -15,7 +15,6 @@ export const fetchComments = async (
   if (!response.ok) throw new Error("Failed to fetch comments");
   const data = await response.json();
 
-  console.log(data);
   return data as CommentType[];
 };
 
