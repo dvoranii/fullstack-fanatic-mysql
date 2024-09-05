@@ -28,31 +28,25 @@ router.get(
       const commentMap = new Map<number, Comment>();
 
       rows.forEach((row) => {
-        // Cast row as Comment and ensure replies is initialized as an empty array
         commentMap.set(row.id, {
-          ...(row as Comment), // Directly spread the row to keep fetched data
-          replies: [], // Initialize replies as an empty array
+          ...(row as Comment),
+          replies: [],
         });
       });
 
-      // Prepare the final comments array
       const comments: Comment[] = [];
 
-      // Build the comment tree
       commentMap.forEach((comment) => {
         if (comment.parent_comment_id) {
-          // If the comment has a parent, add it to the parent's replies
           const parentComment = commentMap.get(comment.parent_comment_id);
           if (parentComment) {
             parentComment.replies!.push(comment);
           }
         } else {
-          // If no parent, it is a top-level comment
           comments.push(comment);
         }
       });
 
-      // Optionally include liked status
       if (includeLikedStatus && userId) {
         const [likedComments] = await connection.query<RowDataPacket[]>(
           `SELECT comment_id FROM comment_likes WHERE user_id = ?`,
@@ -60,12 +54,16 @@ router.get(
         );
         const likedCommentIds = likedComments.map((row) => row.comment_id);
 
-        comments.forEach((comment) => {
-          comment.likedByUser = likedCommentIds.includes(comment.id);
-          comment.replies?.forEach((reply) => {
-            reply.likedByUser = likedCommentIds.includes(reply.id);
+        const setLikedStatus = (comments: Comment[]) => {
+          comments.forEach((comment) => {
+            comment.likedByUser = likedCommentIds.includes(comment.id);
+            if (comment.replies && comment.replies.length > 0) {
+              setLikedStatus(comment.replies);
+            }
           });
-        });
+        };
+
+        setLikedStatus(comments);
       }
 
       res.json(comments);
