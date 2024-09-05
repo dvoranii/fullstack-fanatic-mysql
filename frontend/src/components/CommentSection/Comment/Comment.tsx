@@ -133,7 +133,8 @@ const Comment: React.FC<CommentProps> = ({
             </>
           )}
 
-          {!isEditing && !isCommentOwner && !isReply && !showReplyForm && (
+          {/* {!isEditing && !isCommentOwner && !isReply && !showReplyForm && ( */}
+          {!isEditing && !isCommentOwner && !showReplyForm && (
             <FormButton onClick={() => setShowReplyForm(true)}>
               Reply
             </FormButton>

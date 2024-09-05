@@ -6,8 +6,9 @@ export interface Comment {
   created_at: string;
   likes: number;
   user_id: number;
+  google_id?: string | null;
   user_name: string;
-  user_picture: string | null;
+  profile_picture: string | null;
   likedByUser?: boolean;
   parent_comment_id?: number;
   replies?: Comment[];

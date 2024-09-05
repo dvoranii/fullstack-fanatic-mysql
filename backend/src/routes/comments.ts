@@ -16,44 +16,43 @@ router.get(
 
     try {
       const connection = await connectionPromise;
-      const [comments] = await connection.query<RowDataPacket[]>(
+      const [rows] = await connection.query<RowDataPacket[]>(
         `SELECT c.*, u.name as user_name, u.profile_picture 
-         FROM comments c 
-         JOIN users u ON c.user_id = u.id 
-         WHERE c.content_type = ? AND c.content_id = ? AND c.parent_comment_id IS NULL 
-         ORDER BY c.created_at DESC`,
+       FROM comments c 
+       JOIN users u ON c.user_id = u.id 
+       WHERE c.content_type = ? AND c.content_id = ? 
+       ORDER BY c.created_at ASC`,
         [contentType, contentId]
       );
 
-      const [replies] = await connection.query<RowDataPacket[]>(
-        `SELECT c.*, u.name as user_name, u.profile_picture 
-         FROM comments c 
-         JOIN users u ON c.user_id = u.id 
-         WHERE c.content_type = ? AND c.content_id = ? AND c.parent_comment_id IS NOT NULL 
-         ORDER BY c.created_at ASC`,
-        [contentType, contentId]
-      );
+      const commentMap = new Map<number, Comment>();
 
-      const repliesByParentId: Record<number, Comment[]> = replies.reduce(
-        (acc: Record<number, Comment[]>, reply: RowDataPacket) => {
-          const typedReply = reply as Comment;
-
-          if (typedReply.parent_comment_id !== undefined) {
-            if (!acc[typedReply.parent_comment_id]) {
-              acc[typedReply.parent_comment_id] = [];
-            }
-            acc[typedReply.parent_comment_id].push(typedReply);
-          }
-
-          return acc;
-        },
-        {}
-      );
-
-      comments.forEach((comment) => {
-        comment.replies = repliesByParentId[comment.id] || [];
+      rows.forEach((row) => {
+        // Cast row as Comment and ensure replies is initialized as an empty array
+        commentMap.set(row.id, {
+          ...(row as Comment), // Directly spread the row to keep fetched data
+          replies: [], // Initialize replies as an empty array
+        });
       });
 
+      // Prepare the final comments array
+      const comments: Comment[] = [];
+
+      // Build the comment tree
+      commentMap.forEach((comment) => {
+        if (comment.parent_comment_id) {
+          // If the comment has a parent, add it to the parent's replies
+          const parentComment = commentMap.get(comment.parent_comment_id);
+          if (parentComment) {
+            parentComment.replies!.push(comment);
+          }
+        } else {
+          // If no parent, it is a top-level comment
+          comments.push(comment);
+        }
+      });
+
+      // Optionally include liked status
       if (includeLikedStatus && userId) {
         const [likedComments] = await connection.query<RowDataPacket[]>(
           `SELECT comment_id FROM comment_likes WHERE user_id = ?`,
@@ -61,17 +60,15 @@ router.get(
         );
         const likedCommentIds = likedComments.map((row) => row.comment_id);
 
-        (comments as Comment[]).forEach((comment) => {
+        comments.forEach((comment) => {
           comment.likedByUser = likedCommentIds.includes(comment.id);
-          if (comment.replies) {
-            comment.replies.forEach((reply) => {
-              reply.likedByUser = likedCommentIds.includes(reply.id);
-            });
-          }
+          comment.replies?.forEach((reply) => {
+            reply.likedByUser = likedCommentIds.includes(reply.id);
+          });
         });
       }
 
-      res.json(comments as Comment[]);
+      res.json(comments);
     } catch (err) {
       res.status(500).json({ error: (err as Error).message });
     }
@@ -153,6 +150,9 @@ router.post("/reply", authenticate, async (req: Request, res: Response) => {
       [content_id, content_type, content, userId, parent_comment_id || null]
     );
 
+    const newReplyId = results.insertId;
+    console.log(newReplyId);
+
     const [newReply] = await connection.query<RowDataPacket[]>(
       `SELECT c.*, u.name as user_name, u.profile_picture
       FROM comments c
@@ -161,9 +161,21 @@ router.post("/reply", authenticate, async (req: Request, res: Response) => {
       [results.insertId]
     );
 
-    res.json(newReply[0]);
+    // res.json(newReply[0]);
+    console.log("Fetched new reply:", newReply);
+
+    // If the reply exists, return it, otherwise return an error
+    if (newReply.length > 0) {
+      res.json(newReply[0]);
+    } else {
+      console.error("Failed to fetch the newly inserted reply.");
+      res
+        .status(500)
+        .json({ error: "Failed to fetch the newly inserted reply." });
+    }
   } catch (err) {
     const error = err as Error;
+    console.error("Error in /reply endpoint:", error);
     res.status(500).json({ error: error.message });
   }
 });

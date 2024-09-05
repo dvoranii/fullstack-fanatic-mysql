@@ -58,13 +58,27 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         content: replyContent,
         parent_comment_id: parentCommentId,
       });
-      setComments((prevComments) =>
-        prevComments.map((comment) =>
-          comment.id === parentCommentId
-            ? { ...comment, replies: [...(comment.replies || []), newReply] }
-            : comment
-        )
-      );
+
+      // Recursive function to add the new reply to the correct parent comment
+      const addReplyToComments = (comments: CommentType[]): CommentType[] => {
+        return comments.map((comment) => {
+          if (comment.id === parentCommentId) {
+            return {
+              ...comment,
+              replies: [...(comment.replies || []), newReply],
+            };
+          } else if (comment.replies) {
+            return {
+              ...comment,
+              replies: addReplyToComments(comment.replies),
+            };
+          } else {
+            return comment;
+          }
+        });
+      };
+
+      setComments((prevComments) => addReplyToComments(prevComments));
     } catch (error) {
       console.error("Failed to submit reply", error);
       setError("Failed to submit reply");
@@ -137,23 +151,19 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         await deleteComment(commentToDelete);
 
         setComments((prevComments) => {
-          const updatedComments = prevComments
-            .map((comment) => {
-              if (comment.id === commentToDelete) {
-                return null;
-              }
+          const removeCommentById = (
+            comments: CommentType[],
+            id: number
+          ): CommentType[] => {
+            return comments
+              .filter((comment) => comment.id !== id)
+              .map((comment) => ({
+                ...comment,
+                replies: removeCommentById(comment.replies || [], id),
+              }));
+          };
 
-              if (comment.replies) {
-                comment.replies = comment.replies.filter(
-                  (reply) => reply.id !== commentToDelete
-                );
-              }
-
-              return comment;
-            })
-            .filter((comment) => comment !== null) as CommentType[];
-
-          return updatedComments;
+          return removeCommentById(prevComments, commentToDelete);
         });
 
         setShowDeleteModal(false);
