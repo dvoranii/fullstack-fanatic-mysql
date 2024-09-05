@@ -4,12 +4,15 @@ import { useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
 import { loginOrRegisterWithGoogle, registerUser, loginUser } from "../api/api";
 import validateField from "../utils/validationUtils";
+import { fetchUserProfileAndFavourites } from "../utils/userUtils";
+// import { getUserProfile } from "../services/userService";
+// import { getUserFavourites } from "../services/favouritesService";
 
 export const useAuthForm = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
-  const { setProfile } = useUser();
+  const { setProfile, setFavouriteTutorials, setFavouriteBlogs } = useUser();
   const navigate = useNavigate();
 
   const toggleForm = () => {
@@ -19,11 +22,15 @@ export const useAuthForm = () => {
 
   const handleGoogleAuthSuccess = async (codeResponse: TokenResponse) => {
     try {
-      const { user } = await loginOrRegisterWithGoogle(
-        codeResponse.access_token
+      await loginOrRegisterWithGoogle(codeResponse.access_token);
+
+      await fetchUserProfileAndFavourites(
+        setProfile,
+        setFavouriteTutorials,
+        setFavouriteBlogs,
+        setError
       );
 
-      setProfile(user);
       navigate("/my-account");
     } catch (error) {
       console.error("Error during Google authentication:", error);
@@ -76,8 +83,14 @@ export const useAuthForm = () => {
     }
 
     try {
-      const user = await registerUser({ email, password, name: username });
-      setProfile(user);
+      await registerUser({ email, password, name: username });
+      await fetchUserProfileAndFavourites(
+        setProfile,
+        setFavouriteTutorials,
+        setFavouriteBlogs,
+        setError
+      );
+
       navigate("my-account");
     } catch (error) {
       console.error("Error during registration:", error);
@@ -113,9 +126,17 @@ export const useAuthForm = () => {
     }
 
     try {
-      const user = await loginUser({ username, password });
-      localStorage.setItem("accessToken", user.token);
-      setProfile(user);
+      const { token } = await loginUser({ username, password });
+
+      localStorage.setItem("accessToken", token);
+
+      await fetchUserProfileAndFavourites(
+        setProfile,
+        setFavouriteTutorials,
+        setFavouriteBlogs,
+        setError
+      );
+
       navigate("/my-account");
     } catch (error) {
       console.error("Error during login:", error);

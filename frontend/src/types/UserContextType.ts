@@ -6,7 +6,7 @@ import { Blog } from "./Blog";
 export interface UserContextType {
   profile: User | null;
   setProfile: (profile: User | null) => void;
-  logOut: () => void;
+  // logOut: () => void;
   favouriteTutorials: Tutorial[];
   setFavouriteTutorials: React.Dispatch<React.SetStateAction<Tutorial[]>>;
   favouriteBlogs: Blog[];

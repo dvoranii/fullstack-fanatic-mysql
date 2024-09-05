@@ -14,7 +14,6 @@ import FSFLogo from "../../assets/images/fsf-logo-notext.png";
 import SignInRegisterNavBtn from "./SignInRegister/SignInRegisterNavBtn";
 import UserProfileNavBtn from "./SignInRegister/UserProfileNavBtn";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
-// import { NavLink } from "react-router-dom";
 
 const NavBar: React.FC = () => {
   const [open, setOpen] = useState(false);

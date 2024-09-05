@@ -1,8 +1,9 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { User } from "../types/User";
-import { getUserProfile } from "../services/userService";
+import { fetchUserProfileAndFavourites } from "../utils/userUtils";
+// import { getUserProfile } from "../services/userService";
 import {
-  getUserFavourites,
+  // getUserFavourites,
   addFavourite,
   removeFavourite,
 } from "../services/favouritesService";
@@ -10,7 +11,7 @@ import { Tutorial } from "../types/Tutorial";
 import { Blog } from "../types/Blog";
 import { CommentType } from "../types/Comment";
 import { UserContextType } from "../types/UserContextType";
-import { handleTokenExpiration } from "../services/tokenService";
+// import { handleTokenExpiration } from "../services/tokenService";
 
 export const UserContext = createContext<UserContextType | undefined>(
   undefined
@@ -25,29 +26,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchUserProfileAndFavourites = async () => {
-      try {
-        const token = await handleTokenExpiration();
-        if (!token) {
-          setLoading(false);
-          return;
-        }
-        const userProfile = await getUserProfile();
-        setProfile(userProfile);
-        localStorage.setItem("userProfile", JSON.stringify(userProfile));
-
-        const userFavourites = await getUserFavourites();
-        setFavouriteTutorials(userFavourites.tutorials);
-        setFavouriteBlogs(userFavourites.blogs);
-      } catch (err) {
-        setError("Failed to load user data");
-        console.error("Failed to fetch user data:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserProfileAndFavourites();
+    fetchUserProfileAndFavourites(
+      setProfile,
+      setFavouriteTutorials,
+      setFavouriteBlogs,
+      setError,
+      setLoading
+    );
   }, []);
 
   // Helper function for optimistic UI update
@@ -103,7 +88,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       // Optimistic UI update
       updateFavourites(isCurrentlyFavourited, itemId, setFavouriteTutorials);
 
-      // Handle API call
       await handleApiToggle(
         isCurrentlyFavourited,
         itemId,
@@ -128,21 +112,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const logOut = () => {
-    setProfile(null);
-    setFavouriteTutorials([]);
-    setFavouriteBlogs([]);
-    setComments([]);
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("userProfile");
-  };
-
   return (
     <UserContext.Provider
       value={{
         profile,
         setProfile,
-        logOut,
         favouriteTutorials,
         setFavouriteTutorials,
         favouriteBlogs,
