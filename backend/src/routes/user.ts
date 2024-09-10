@@ -130,10 +130,11 @@ router.post("/google-auth", async (req: Request, res: Response) => {
   const { token } = req.body;
 
   if (!token) {
-    return res.status(400).json({ error: "token is required" });
+    return res.status(400).json({ error: "Token is required" });
   }
 
   try {
+    // Fetch Google user info using the token
     const googleUserInfoResponse = await fetch(
       `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`,
       {
@@ -156,6 +157,7 @@ router.post("/google-auth", async (req: Request, res: Response) => {
       picture: googleProfilePicture,
     } = googleUserInfo;
 
+    // Check if the user already exists based on Google ID
     const existingUser = await fetchUserByColumn("google_id", googleId);
 
     let userId;
@@ -163,36 +165,44 @@ router.post("/google-auth", async (req: Request, res: Response) => {
 
     if (existingUser.length > 0) {
       userId = existingUser[0].id;
-
-      const connection = await connectionPromise;
-
       currentProfilePicture = existingUser[0].profile_picture;
+
+      // Check if the current profile picture is either missing or it's a Google profile picture (to update it)
       if (
         !currentProfilePicture ||
         currentProfilePicture.startsWith("https://")
       ) {
+        const connection = await connectionPromise;
         await connection.execute(
           "UPDATE users SET profile_picture = ?, name = ? WHERE id = ?",
           [googleProfilePicture || null, name || null, userId]
         );
         currentProfilePicture = googleProfilePicture;
-      } else {
-        await connection.execute("UPDATE users SET name = ? WHERE id = ?", [
-          name || null,
-          userId,
-        ]);
       }
-    } else {
-      userId = await insertUser(
-        email ?? null,
-        name ?? null,
-        googleId ?? null,
-        null,
-        "google",
-        googleProfilePicture ?? null
-      );
-      currentProfilePicture = googleProfilePicture;
+
+      // User already exists, return a 409 conflict response
+      return res.status(409).json({
+        error: "User already exists",
+        user: {
+          userId,
+          email,
+          name,
+          googleId,
+          profile_picture: currentProfilePicture,
+        },
+      });
     }
+
+    // If user doesn't exist, proceed with registration
+    userId = await insertUser(
+      email ?? null,
+      name ?? null,
+      googleId ?? null,
+      null,
+      "google",
+      googleProfilePicture ?? null
+    );
+    currentProfilePicture = googleProfilePicture;
 
     const jwtToken = createJwtToken(userId, email, googleId);
     const refreshToken = createRefreshToken(userId, email, googleId);
@@ -205,14 +215,14 @@ router.post("/google-auth", async (req: Request, res: Response) => {
       path: "/",
     });
 
-    res.status(200).json({
+    res.status(201).json({
       message: jwtToken,
       user: {
         userId,
         email,
         name,
         googleId,
-        profile_picture: currentProfilePicture || googleProfilePicture,
+        profile_picture: currentProfilePicture,
       },
     });
   } catch (error) {

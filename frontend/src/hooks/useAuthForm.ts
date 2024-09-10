@@ -20,7 +20,14 @@ export const useAuthForm = () => {
 
   const handleGoogleAuthSuccess = async (codeResponse: TokenResponse) => {
     try {
-      await loginOrRegisterWithGoogle(codeResponse.access_token);
+      const response = await loginOrRegisterWithGoogle(
+        codeResponse.access_token
+      );
+
+      if (response.status === 409) {
+        setError("This Google account is already registered. Please log in.");
+        return;
+      }
 
       await fetchUserProfileAndFavourites(
         setProfile,
@@ -32,7 +39,7 @@ export const useAuthForm = () => {
       navigate("/my-account");
     } catch (error) {
       console.error("Error during Google authentication:", error);
-      setError("Google authentication failed");
+      setError("Google authentication failed.");
     }
   };
 

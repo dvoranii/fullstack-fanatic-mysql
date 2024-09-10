@@ -50,6 +50,10 @@ export const loginOrRegisterWithGoogle = async (token: string) => {
     body: JSON.stringify({ token }),
   });
 
+  if (res.status === 409) {
+    return { status: 409, message: "User already exists" };
+  }
+
   const contentType = res.headers.get("content-type");
 
   if (!res.ok) {
