@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef, useContext, useCallback } from "react";
 import ProfileIconBlack from "../../../../assets/images/profile-icon-black.png";
 import { useAuthUtils } from "../../../../utils/useAuthUtils";
 import {
@@ -13,55 +13,57 @@ import {
 import { UserContext } from "../../../../context/UserContext";
 
 const UserProfileNavBtn: React.FC = () => {
-  const context = useContext(UserContext);
-  const [isVisible, setIsVisible] = useState(false);
+  const { profile } = useContext(UserContext) || {};
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const { logOut } = useAuthUtils();
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { profile } = context || {};
 
-  const toggleDropdown = (e?: React.MouseEvent) => {
+  const handleDropdown = useCallback((e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    setIsVisible(!isVisible);
-  };
-
-  const closeDropdown = () => {
-    setIsVisible(false);
-  };
+    setIsDropdownVisible((prevState) => !prevState);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      if (!isDropdownVisible) return;
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        closeDropdown();
+        setIsDropdownVisible(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
+
+    if (isDropdownVisible) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isVisible]);
+  }, [isDropdownVisible]);
 
   return (
     <div ref={dropdownRef}>
       <ProfileIconImg
         src={ProfileIconBlack}
-        onClick={(e) => toggleDropdown(e)}
+        onClick={handleDropdown}
         alt="Profile Icon"
       />
 
-      <DropdownWrapper isVisible={isVisible}>
-        <ProfileName>{profile?.name}</ProfileName>
-        <ProfileProfession>{profile?.profession}</ProfileProfession>
-        <ViewProfileButton to="/my-account">View Profile</ViewProfileButton>
-        <DropdownDivider />
-        <DropdownItem>Settings</DropdownItem>
-        <DropdownItem>Subscriptions</DropdownItem>
-        <DropdownItem>Help</DropdownItem>
-        <DropdownDivider />
-        <DropdownItem onClick={logOut}>Log Out</DropdownItem>
-      </DropdownWrapper>
+      {isDropdownVisible && (
+        <DropdownWrapper isDropdownVisible={isDropdownVisible}>
+          <ProfileName>{profile?.name}</ProfileName>
+          <ProfileProfession>{profile?.profession}</ProfileProfession>
+          <ViewProfileButton to="/my-account">View Profile</ViewProfileButton>
+          <DropdownDivider />
+          <DropdownItem>Settings</DropdownItem>
+          <DropdownItem>Subscriptions</DropdownItem>
+          <DropdownItem>Help</DropdownItem>
+          <DropdownDivider />
+          <DropdownItem onClick={logOut}>Log Out</DropdownItem>
+        </DropdownWrapper>
+      )}
     </div>
   );
 };

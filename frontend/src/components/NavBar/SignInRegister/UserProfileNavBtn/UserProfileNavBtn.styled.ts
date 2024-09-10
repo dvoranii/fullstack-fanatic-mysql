@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
-export const DropdownWrapper = styled.div<{ isVisible: boolean }>`
+export const DropdownWrapper = styled.div<{ isDropdownVisible: boolean }>`
   position: absolute;
   top: 50px;
   right: 0;
@@ -11,8 +11,8 @@ export const DropdownWrapper = styled.div<{ isVisible: boolean }>`
   padding: 10px;
   width: 200px;
   z-index: 1000;
-  opacity: ${(props) => (props.isVisible ? 1 : 0)};
-  visibility: ${(props) => (props.isVisible ? "visible" : "hidden")};
+  opacity: ${(props) => (props.isDropdownVisible ? 1 : 0)};
+  visibility: ${(props) => (props.isDropdownVisible ? "visible" : "hidden")};
   transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 `;
 

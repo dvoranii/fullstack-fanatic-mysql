@@ -40,21 +40,28 @@ const RegisterLoginForm: React.FC = () => {
   const handleRegisterButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    setError(null);
+
     if (!isTermsAccepted) {
       setError("Please accept the terms and conditions");
-    } else {
-      setError(" ");
-      handleRegisterSubmit(e, "button");
+      return;
     }
+
+    handleRegisterSubmit(e, "button");
   };
 
-  const handleGoogleAuthButtonClick = () => {
+  const handleGoogleAuthButtonClick = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    setError(null);
+
     if (!isTermsAccepted) {
       setError("Please accept the terms and conditions");
-    } else {
-      setError(null);
-      handleGoogleAuth();
+      return;
     }
+
+    handleGoogleAuth();
   };
 
   return (
@@ -132,7 +139,7 @@ const RegisterLoginForm: React.FC = () => {
               <Divider>OR</Divider>
 
               <GoogleAuthButton
-                handleClick={handleGoogleAuth}
+                handleClick={handleGoogleAuthButtonClick}
                 text="Sign in with Google"
               />
             </Form>

@@ -3,7 +3,7 @@ import googleIcon from "../../assets/images/google-signin-icon.png";
 import { GoogleSignInButton } from "./styles/GoogleAuthButton.styled";
 
 interface GoogleAuthButtonProps {
-  handleClick: () => void;
+  handleClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   text: string;
 }
 

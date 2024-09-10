@@ -41,7 +41,6 @@ import { ImageUploadResponse } from "../../types/ImageUploadResponse";
 const BASE_URL = "http://localhost:5000";
 
 const UserAccountsPage: React.FC = () => {
-  const context = useContext(UserContext);
   const [bannerimage, setBannerImage] = useState<File | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -52,11 +51,7 @@ const UserAccountsPage: React.FC = () => {
     favouriteBlogs,
     loading,
     error,
-  } = context || {};
-
-  if (!context) {
-    return <p>No user logged in</p>;
-  }
+  } = useContext(UserContext) || {};
 
   if (loading) {
     return <p>Loading...</p>;
