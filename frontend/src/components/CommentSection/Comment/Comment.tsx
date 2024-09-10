@@ -5,7 +5,6 @@ import {
   CommentContentWrapper,
   CommentActions,
   ProfilePictureWrapper,
-  ProfilePicture,
   Username,
   LikesWrapper,
   FormTextArea,
@@ -13,19 +12,16 @@ import {
   ReplyFormWrapper,
   TrashBinButton,
 } from "./Comment.styled";
+import ProfilePicture from "../../ProfilePicture/ProfilePicture";
 import { CommentProps } from "../../../types/CommentProps";
 import like1 from "../../../assets/images/like-1.png";
 import like2 from "../../../assets/images/like-2.png";
 import { UserContext } from "../../../context/UserContext";
-import { handleImageError } from "../../../utils/imageUtils";
 import { toggleLike } from "../../../services/commentService";
-import ProfileBackup from "../../../assets/images/profile-icon.png";
 import { Link, useNavigate } from "react-router-dom";
 import EditIcon from "../../../assets/images/edit-icon.png";
 import DeleteIcon from "../../../assets/images/discard-icon.png";
 import ReplyIcon from "../../../assets/images/reply-icon.png";
-
-const BASE_URL = "http://localhost:5000";
 
 const Comment: React.FC<CommentProps> = ({
   comment,
@@ -84,18 +80,14 @@ const Comment: React.FC<CommentProps> = ({
     }
   };
 
-  const profilePictureUrl = comment.profile_picture
-    ? `${BASE_URL}${comment.profile_picture}`
-    : ProfileBackup;
-
   return (
     <CommentWrapper isreply={isReply} {...restProps}>
       <ProfilePictureWrapper onClick={handleProfileClick}>
         <Link to={`/user/${comment.user_id}`}>
           <ProfilePicture
-            src={profilePictureUrl}
+            src={comment.profile_picture}
             alt={comment.user_name || "Username"}
-            onError={handleImageError}
+            width="60px"
           />
         </Link>
         <Link to={`/user/${comment.user_id}`}>

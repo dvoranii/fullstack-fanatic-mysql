@@ -4,7 +4,6 @@ import {
   UserAccountContainer,
   ProfileBanner,
   ProfilePictureWrapper,
-  ProfilePicture,
   UserName,
   UserProfession,
   EditProfileLink,
@@ -28,12 +27,12 @@ import {
   SocialSectionWrapperOuter,
   BannerUploadWrapper,
 } from "./UserAccountPage.styled";
+import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import EditProfileModal from "./EditProfileModal/EditProfileModal";
 import InboxIcon from "../../assets/images/account/inbox.png";
 import EditIcon from "../../assets/images/account/edit.png";
 import TutorialIcon from "../../assets/images/tutorial-icon.png";
 import BlogIcon from "../../assets/images/blog-icon.png";
-import { handleImageError } from "../../utils/imageUtils";
 import SocialLinksDisplay from "./SocialLinksDisplay/SocialLinksDisplay";
 import { uploadImage } from "../../services/imageUploadService";
 import { ImageUploadResponse } from "../../types/ImageUploadResponse";
@@ -116,13 +115,9 @@ const UserAccountsPage: React.FC = () => {
             <ProfileContentWrapper>
               <ProfilePictureWrapper>
                 <ProfilePicture
-                  src={
-                    profile.profile_picture
-                      ? `${BASE_URL}${profile.profile_picture}`
-                      : ""
-                  }
+                  src={profile.profile_picture || ""}
                   alt={`${profile.name}`}
-                  onError={handleImageError}
+                  width="150px"
                 />
               </ProfilePictureWrapper>
 

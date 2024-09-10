@@ -42,12 +42,6 @@ export const ProfilePictureWrapper = styled.div`
   margin-right: 1rem;
 `;
 
-export const ProfilePicture = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-`;
-
 export const Username = styled.p`
   margin-top: 0.5rem;
   font-size: 0.875rem;

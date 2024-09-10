@@ -52,15 +52,6 @@ export const ProfilePictureWrapper = styled.div`
   display: flex;
   justify-content: center;
 `;
-export const ProfilePicture = styled.img`
-  width: 150px;
-  height: 150px;
-  border: 4px solid white;
-  border-radius: 50%;
-  margin-bottom: 10px;
-  place-self: center;
-  background-color: grey;
-`;
 
 export const ProfileInfo = styled.div`
   text-align: center;

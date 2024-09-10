@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
-export const DropdownWrapper = styled.div<{ isDropdownVisible: boolean }>`
+export const DropdownWrapper = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "isdropdownvisible",
+})<{ isdropdownvisible: boolean }>`
   position: absolute;
   top: 50px;
   right: 0;
@@ -11,10 +13,15 @@ export const DropdownWrapper = styled.div<{ isDropdownVisible: boolean }>`
   padding: 10px;
   width: 200px;
   z-index: 1000;
-  opacity: ${(props) => (props.isDropdownVisible ? 1 : 0)};
-  visibility: ${(props) => (props.isDropdownVisible ? "visible" : "hidden")};
+  opacity: ${(props) => (props.isdropdownvisible ? 1 : 0)};
+  visibility: ${(props) => (props.isdropdownvisible ? "visible" : "hidden")};
   transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 `;
+
+export const ProfileInfoWrapper = styled.div``;
+// export const ProfilePictureWrapper = styled.div`
+
+// `;
 
 export const ProfileName = styled.p`
   font-size: 14px;
@@ -39,6 +46,7 @@ export const ViewProfileButton = styled(NavLink)`
   text-decoration: none;
   cursor: pointer;
   margin-bottom: 8px;
+  transition: 150ms ease;
 
   &:hover {
     background-color: darkorange;
@@ -52,6 +60,7 @@ export const DropdownItem = styled.button`
   border: none;
   text-align: left;
   width: 100%;
+  transition: 150ms ease;
 
   &:hover {
     background-color: #f0f0f0;

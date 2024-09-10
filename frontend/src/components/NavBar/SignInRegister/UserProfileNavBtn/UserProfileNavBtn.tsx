@@ -9,7 +9,9 @@ import {
   DropdownItem,
   DropdownDivider,
   ProfileIconImg,
+  ProfileInfoWrapper,
 } from "./UserProfileNavBtn.styled";
+import ProfilePicture from "../../../ProfilePicture/ProfilePicture";
 import { UserContext } from "../../../../context/UserContext";
 
 const UserProfileNavBtn: React.FC = () => {
@@ -17,6 +19,8 @@ const UserProfileNavBtn: React.FC = () => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const { logOut } = useAuthUtils();
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  console.log(profile?.profile_picture);
 
   const handleDropdown = useCallback((e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
@@ -52,9 +56,16 @@ const UserProfileNavBtn: React.FC = () => {
       />
 
       {isDropdownVisible && (
-        <DropdownWrapper isDropdownVisible={isDropdownVisible}>
-          <ProfileName>{profile?.name}</ProfileName>
-          <ProfileProfession>{profile?.profession}</ProfileProfession>
+        <DropdownWrapper isdropdownvisible={isDropdownVisible}>
+          <ProfileInfoWrapper>
+            <ProfilePicture
+              src={profile?.profile_picture || ""}
+              alt="Profile Picture"
+              width="50px"
+            />
+            <ProfileName>{profile?.name}</ProfileName>
+            <ProfileProfession>{profile?.profession}</ProfileProfession>
+          </ProfileInfoWrapper>
           <ViewProfileButton to="/my-account">View Profile</ViewProfileButton>
           <DropdownDivider />
           <DropdownItem>Settings</DropdownItem>
