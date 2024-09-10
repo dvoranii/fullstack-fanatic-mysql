@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
-export const DropdownWrapper = styled.div`
+export const DropdownWrapper = styled.div<{ isVisible: boolean }>`
   position: absolute;
   top: 50px;
   right: 0;
@@ -11,6 +11,9 @@ export const DropdownWrapper = styled.div`
   padding: 10px;
   width: 200px;
   z-index: 1000;
+  opacity: ${(props) => (props.isVisible ? 1 : 0)};
+  visibility: ${(props) => (props.isVisible ? "visible" : "hidden")};
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 `;
 
 export const ProfileName = styled.p`
@@ -63,4 +66,8 @@ export const DropdownDivider = styled.div`
 
 export const ProfileIconImg = styled.img`
   width: 30px;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;

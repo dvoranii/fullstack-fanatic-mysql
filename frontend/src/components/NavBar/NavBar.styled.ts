@@ -111,4 +111,8 @@ export const NavLinkStyled = styled(NavLink)<NavLinkStyledProps>`
   &.no-underline::after {
     content: none;
   }
+
+  &:last-child {
+    padding-right: 1.2rem;
+  }
 `;
