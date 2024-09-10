@@ -21,8 +21,6 @@ const UserProfileNavBtn: React.FC = () => {
   const { logOut } = useAuthUtils();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  console.log(profile?.profile_picture);
-
   const handleDropdown = useCallback((e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     setIsDropdownVisible((prevState) => !prevState);

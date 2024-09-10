@@ -298,7 +298,7 @@ router.get("/user-profile/:id", async (req: Request, res: Response) => {
   try {
     const connection = await connectionPromise;
     const [user] = await connection.query<RowDataPacket[]>(
-      "Select id, email, name, profile_picture FROM users WHERE id = ?",
+      "Select id, email, name, profile_picture, banner_image, profession, social_links FROM users WHERE id = ?",
       [id]
     );
 

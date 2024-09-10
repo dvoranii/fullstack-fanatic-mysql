@@ -30,7 +30,6 @@ const SocialLinksDisplay: React.FC<SocialLinksDisplayProps> = ({
 
   return (
     <SocialSectionWrapperInner>
-      <h3>Links</h3>
       <ul>
         {Object.entries(socialLinks).map(([platform, url]) => (
           <li key={platform}>

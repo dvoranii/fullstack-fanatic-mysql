@@ -14,10 +14,10 @@ const SignInRegisterPage = lazy(
   () => import("../pages/SignInRegisterPage/SignInRegisterPage")
 );
 const UserAccountPage = lazy(
-  () => import("../pages/UserAccountPage/UserAccountPage")
+  () => import("../pages/UserProfileLayout/UserAccountPage/UserAccountPage")
 );
 const PublicUserPage = lazy(
-  () => import("../pages/UserAccountPage/PublicUserPage")
+  () => import("../pages/UserProfileLayout/PublicUserPage/PublicUserPage")
 );
 
 const Navigation: React.FC = () => {

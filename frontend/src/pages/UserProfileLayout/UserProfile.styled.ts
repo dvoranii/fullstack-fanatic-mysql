@@ -39,7 +39,7 @@ export const ProfileContentWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   min-height: 200px;
-  max-width: 65%;
+  min-width: 55%;
 
   @media (max-width: 959px) {
     grid-template-columns: 1fr 1fr;
@@ -73,12 +73,6 @@ export const BioContentWrapper = styled.div`
   border-right: 2px solid lightgrey;
   padding: 20px;
 
-  h3 {
-    border-bottom: 2px solid black;
-    width: fit-content;
-    margin-bottom: 0.8rem;
-  }
-
   @media (max-width: 959px) {
     border-right: none;
     grid-column: span 2;
@@ -93,7 +87,21 @@ export const UserName = styled.h1`
 
 export const UserProfession = styled.h2`
   font-size: 18px;
-  color: #666;
+  color: #333;
+  margin-bottom: 0.8rem;
+`;
+
+export const UserInfoSubtitle = styled.h3`
+  font-size: 16px;
+  width: fit-content;
+  margin-bottom: 0.8rem;
+  border-bottom: 2px solid black;
+`;
+
+export const UserProfileInfoSubtitle = styled.h3`
+  margin-bottom: 0.8rem;
+  border-bottom: 2px solid black;
+  width: fit-content;
 `;
 
 export const EditProfileLink = styled.a`
