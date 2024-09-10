@@ -126,7 +126,7 @@ router.get("/", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/google-auth", async (req: Request, res: Response) => {
+router.post("/google-register", async (req: Request, res: Response) => {
   const { token } = req.body;
 
   if (!token) {
@@ -134,7 +134,6 @@ router.post("/google-auth", async (req: Request, res: Response) => {
   }
 
   try {
-    // Fetch Google user info using the token
     const googleUserInfoResponse = await fetch(
       `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`,
       {
@@ -157,44 +156,15 @@ router.post("/google-auth", async (req: Request, res: Response) => {
       picture: googleProfilePicture,
     } = googleUserInfo;
 
-    // Check if the user already exists based on Google ID
     const existingUser = await fetchUserByColumn("google_id", googleId);
 
-    let userId;
-    let currentProfilePicture;
-
     if (existingUser.length > 0) {
-      userId = existingUser[0].id;
-      currentProfilePicture = existingUser[0].profile_picture;
-
-      // Check if the current profile picture is either missing or it's a Google profile picture (to update it)
-      if (
-        !currentProfilePicture ||
-        currentProfilePicture.startsWith("https://")
-      ) {
-        const connection = await connectionPromise;
-        await connection.execute(
-          "UPDATE users SET profile_picture = ?, name = ? WHERE id = ?",
-          [googleProfilePicture || null, name || null, userId]
-        );
-        currentProfilePicture = googleProfilePicture;
-      }
-
-      // User already exists, return a 409 conflict response
-      return res.status(409).json({
-        error: "User already exists",
-        user: {
-          userId,
-          email,
-          name,
-          googleId,
-          profile_picture: currentProfilePicture,
-        },
-      });
+      // User already exists, return 409 conflict
+      return res.status(409).json({ message: "User already exists" });
     }
 
-    // If user doesn't exist, proceed with registration
-    userId = await insertUser(
+    // If the user does not exist, register them
+    const userId = await insertUser(
       email ?? null,
       name ?? null,
       googleId ?? null,
@@ -202,7 +172,6 @@ router.post("/google-auth", async (req: Request, res: Response) => {
       "google",
       googleProfilePicture ?? null
     );
-    currentProfilePicture = googleProfilePicture;
 
     const jwtToken = createJwtToken(userId, email, googleId);
     const refreshToken = createRefreshToken(userId, email, googleId);
@@ -222,12 +191,71 @@ router.post("/google-auth", async (req: Request, res: Response) => {
         email,
         name,
         googleId,
-        profile_picture: currentProfilePicture,
+        profile_picture: googleProfilePicture,
       },
     });
   } catch (error) {
-    console.error("Error during Google authentication: ", error);
-    res.status(500).json({ error: "Failed to authenticate with Google" });
+    console.error("Error during Google registration: ", error);
+    res.status(500).json({ error: "Failed to register with Google" });
+  }
+});
+
+router.post("/google-login", async (req: Request, res: Response) => {
+  const { token } = req.body;
+
+  if (!token) {
+    return res.status(400).json({ error: "Token is required" });
+  }
+
+  try {
+    const googleUserInfoResponse = await fetch(
+      `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      }
+    );
+
+    if (!googleUserInfoResponse.ok) {
+      throw new Error("Failed to fetch user info from Google");
+    }
+
+    const googleUserInfo = await googleUserInfoResponse.json();
+    const { email, id: googleId } = googleUserInfo;
+
+    const existingUser = await fetchUserByColumn("google_id", googleId);
+
+    if (existingUser.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const userId = existingUser[0].id;
+
+    const jwtToken = createJwtToken(userId, email, googleId);
+    const refreshToken = createRefreshToken(userId, email, googleId);
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: "/",
+    });
+
+    return res.status(200).json({
+      message: jwtToken,
+      user: {
+        userId,
+        email,
+        googleId,
+        profile_picture: existingUser[0].profile_picture,
+      },
+    });
+  } catch (error) {
+    console.error("Error during Google login: ", error);
+    res.status(500).json({ error: "Failed to log in with Google" });
   }
 });
 

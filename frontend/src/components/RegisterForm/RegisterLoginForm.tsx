@@ -23,8 +23,10 @@ const RegisterLoginForm: React.FC = () => {
     isLogin,
     error,
     toggleForm,
-    handleGoogleAuthSuccess,
-    handleGoogleAuthError,
+
+    handleGoogleRegister,
+    handleGoogleLogin,
+    // handleGoogleAuthError,
     handleRegisterSubmit,
     handleLoginSubmit,
     setError,
@@ -32,9 +34,20 @@ const RegisterLoginForm: React.FC = () => {
     setIsTermsAccepted,
   } = useAuthForm();
 
-  const handleGoogleAuth = useGoogleLogin({
-    onSuccess: handleGoogleAuthSuccess,
-    onError: handleGoogleAuthError,
+  const handleGoogleRegisterClick = useGoogleLogin({
+    onSuccess: handleGoogleRegister,
+    onError: (error) => {
+      setError("Google authentication failed");
+      console.log(error);
+    },
+  });
+
+  const handleGoogleLoginClick = useGoogleLogin({
+    onSuccess: handleGoogleLogin,
+    onError: (error) => {
+      setError("Google authentication failed");
+      console.log(error);
+    },
   });
 
   const handleRegisterButtonClick = (
@@ -50,7 +63,7 @@ const RegisterLoginForm: React.FC = () => {
     handleRegisterSubmit(e, "button");
   };
 
-  const handleGoogleAuthButtonClick = (
+  const handleGoogleRegisterButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
@@ -61,7 +74,16 @@ const RegisterLoginForm: React.FC = () => {
       return;
     }
 
-    handleGoogleAuth();
+    handleGoogleRegisterClick();
+  };
+
+  const handleGoogleLoginButtonClick = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    setError(null);
+
+    handleGoogleLoginClick();
   };
 
   return (
@@ -107,7 +129,7 @@ const RegisterLoginForm: React.FC = () => {
             <ErrorMessage error={error} />
             <Divider>OR</Divider>
             <GoogleAuthButton
-              handleClick={handleGoogleAuthButtonClick}
+              handleClick={handleGoogleRegisterButtonClick}
               text="Register with Google"
             />
           </RegisterFormWrapperInner>
@@ -139,7 +161,7 @@ const RegisterLoginForm: React.FC = () => {
               <Divider>OR</Divider>
 
               <GoogleAuthButton
-                handleClick={handleGoogleAuthButtonClick}
+                handleClick={handleGoogleLoginButtonClick}
                 text="Sign in with Google"
               />
             </Form>

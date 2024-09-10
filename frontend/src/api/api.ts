@@ -40,8 +40,8 @@ export const loginUser = async (
   return res.json();
 };
 
-export const loginOrRegisterWithGoogle = async (token: string) => {
-  const res = await fetch("http://localhost:5000/api/users/google-auth", {
+export const googleRegister = async (token: string) => {
+  const res = await fetch("http://localhost:5000/api/users/google-register", {
     method: "POST",
     credentials: "include",
     headers: {
@@ -53,6 +53,34 @@ export const loginOrRegisterWithGoogle = async (token: string) => {
   if (res.status === 409) {
     return { status: 409, message: "User already exists" };
   }
+
+  const contentType = res.headers.get("content-type");
+
+  if (!res.ok) {
+    const errorText =
+      contentType && contentType.includes("application/json")
+        ? await res.json()
+        : await res.text();
+    throw new Error(errorText);
+  }
+
+  const data = await res.json();
+  if (data.message) {
+    localStorage.setItem("accessToken", data.message);
+  }
+
+  return data;
+};
+
+export const googleLogin = async (token: string) => {
+  const res = await fetch("http://localhost:5000/api/users/google-login", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token }),
+  });
 
   const contentType = res.headers.get("content-type");
 

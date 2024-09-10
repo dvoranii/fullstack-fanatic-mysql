@@ -2,7 +2,12 @@ import { useState } from "react";
 import { TokenResponse } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
-import { loginOrRegisterWithGoogle, registerUser, loginUser } from "../api/api";
+import {
+  googleLogin,
+  googleRegister,
+  registerUser,
+  loginUser,
+} from "../api/api";
 import validateField from "../utils/validationUtils";
 import { fetchUserProfileAndFavourites } from "../utils/userUtils";
 
@@ -18,11 +23,9 @@ export const useAuthForm = () => {
     setError(null);
   };
 
-  const handleGoogleAuthSuccess = async (codeResponse: TokenResponse) => {
+  const handleGoogleRegister = async (codeResponse: TokenResponse) => {
     try {
-      const response = await loginOrRegisterWithGoogle(
-        codeResponse.access_token
-      );
+      const response = await googleRegister(codeResponse.access_token);
 
       if (response.status === 409) {
         setError("This Google account is already registered. Please log in.");
@@ -38,14 +41,27 @@ export const useAuthForm = () => {
 
       navigate("/my-account");
     } catch (error) {
-      console.error("Error during Google authentication:", error);
-      setError("Google authentication failed.");
+      console.error("Error during Google registration:", error);
+      setError("Google registration failed.");
     }
   };
 
-  const handleGoogleAuthError = (error: unknown) => {
-    console.log("Google auth failed:", error);
-    setError("Google authentication failed");
+  const handleGoogleLogin = async (codeResponse: TokenResponse) => {
+    try {
+      await googleLogin(codeResponse.access_token);
+
+      await fetchUserProfileAndFavourites(
+        setProfile,
+        setFavouriteTutorials,
+        setFavouriteBlogs,
+        setError
+      );
+
+      navigate("/my-account");
+    } catch (error) {
+      console.error("Error during Google login:", error);
+      setError("Google login failed.");
+    }
   };
 
   const handleRegisterSubmit = async (
@@ -117,7 +133,6 @@ export const useAuthForm = () => {
       document.getElementById("login-password") as HTMLInputElement
     ).value;
 
-    // Validate the fields using the same validateField function
     const usernameError = validateField("username", username);
     if (usernameError) {
       setError(usernameError);
@@ -154,8 +169,8 @@ export const useAuthForm = () => {
     error,
     setError,
     toggleForm,
-    handleGoogleAuthSuccess,
-    handleGoogleAuthError,
+    handleGoogleRegister,
+    handleGoogleLogin,
     handleRegisterSubmit,
     handleLoginSubmit,
     isTermsAccepted,
