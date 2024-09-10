@@ -65,11 +65,9 @@ export const useAuthForm = () => {
   };
 
   const handleRegisterSubmit = async (
-    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>,
-    source: "form" | "button"
+    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
-    console.log(source);
 
     const email = (document.getElementById("email") as HTMLInputElement).value;
     const password = (document.getElementById("password") as HTMLInputElement)
@@ -129,11 +127,9 @@ export const useAuthForm = () => {
   };
 
   const handleLoginSubmit = async (
-    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>,
-    source: "form" | "button"
+    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
-    console.log(source);
 
     const username = (
       document.getElementById("login-username") as HTMLInputElement

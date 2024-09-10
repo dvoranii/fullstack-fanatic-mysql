@@ -23,10 +23,8 @@ const RegisterLoginForm: React.FC = () => {
     isLogin,
     error,
     toggleForm,
-
     handleGoogleRegister,
     handleGoogleLogin,
-    // handleGoogleAuthError,
     handleRegisterSubmit,
     handleLoginSubmit,
     setError,
@@ -49,19 +47,6 @@ const RegisterLoginForm: React.FC = () => {
       console.log(error);
     },
   });
-
-  const handleRegisterButtonClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    setError(null);
-
-    if (!isTermsAccepted) {
-      setError("Please accept the terms and conditions");
-      return;
-    }
-
-    handleRegisterSubmit(e, "button");
-  };
 
   const handleGoogleRegisterButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -89,7 +74,7 @@ const RegisterLoginForm: React.FC = () => {
   return (
     <RegisterLoginFormOuter>
       <RegisterLoginFormWrapperInner $isLogin={isLogin}>
-        <Form onSubmit={(e) => handleRegisterSubmit(e, "form")} noValidate>
+        <Form onSubmit={handleRegisterSubmit} noValidate>
           <RegisterFormWrapperInner>
             <RegisterFormTitleWrapper
               $isLogin={isLogin}
@@ -125,7 +110,7 @@ const RegisterLoginForm: React.FC = () => {
               isChecked={isTermsAccepted}
               onChange={setIsTermsAccepted}
             />
-            <SubmitButton onClick={handleRegisterButtonClick} text="Register" />
+            <SubmitButton text="Register" />
             <ErrorMessage error={error} />
             <Divider>OR</Divider>
             <GoogleAuthButton
@@ -140,7 +125,7 @@ const RegisterLoginForm: React.FC = () => {
             <FormTitle $isLogin={isLogin}>Login</FormTitle>
           </LoginFormTitleWrapper>
           <LoginFormWrapperInner>
-            <Form onSubmit={(e) => handleLoginSubmit(e, "form")}>
+            <Form onSubmit={handleLoginSubmit}>
               <InputField
                 label="Username"
                 type="text"
@@ -153,13 +138,9 @@ const RegisterLoginForm: React.FC = () => {
                 id="login-password"
                 placeholder="*****"
               />
-              <SubmitButton
-                onClick={(e) => handleLoginSubmit(e, "button")}
-                text="Login"
-              />
+              <SubmitButton text="Login" />
               <ErrorMessage error={error} />
               <Divider>OR</Divider>
-
               <GoogleAuthButton
                 handleClick={handleGoogleLoginButtonClick}
                 text="Sign in with Google"
