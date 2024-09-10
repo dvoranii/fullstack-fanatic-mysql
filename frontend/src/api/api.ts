@@ -12,6 +12,11 @@ export const registerUser = async (requestBody: AuthRequestBody) => {
     body: JSON.stringify(requestBody),
   });
 
+  if (res.status === 409) {
+    const text = await res.text();
+    throw new Error(text);
+  }
+
   if (!res.ok) {
     const text = await res.text();
     throw new Error(text);

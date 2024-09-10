@@ -17,20 +17,31 @@ const router = express.Router();
 
 router.post("/register", async (req: Request, res: Response) => {
   const { email, name, password } = req.body;
-  console.log("Received registration request:", { email, name, password });
 
   const defaultProfilePicture = "/assets/images/profile-icon.png";
 
   try {
     const connection = await connectionPromise;
-    const [existingUser] = await connection.execute<RowDataPacket[]>(
+    const [existingUserByEmail] = await connection.execute<RowDataPacket[]>(
       "SELECT * FROM users WHERE email = ?",
       [email]
     );
 
-    if (existingUser.length > 0) {
+    if (existingUserByEmail.length > 0) {
       console.log("User already exists");
-      return res.status(409).json({ message: "User already exists" });
+      return res
+        .status(409)
+        .json({ message: "User with this email already exists" });
+    }
+
+    const [existingUserByName] = await connection.execute<RowDataPacket[]>(
+      "SELECT * FROM users WHERE name = ?",
+      [name]
+    );
+
+    if (existingUserByName.length > 0) {
+      console.log("Username already exists");
+      return res.status(409).json({ message: "Username already taken" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);

@@ -112,10 +112,19 @@ export const useAuthForm = () => {
         setError
       );
 
-      navigate("my-account");
+      navigate("/my-account");
     } catch (error) {
+      if (error instanceof Error) {
+        try {
+          const parsedError = JSON.parse(error.message);
+          setError(parsedError.message);
+        } catch {
+          setError(error.message);
+        }
+      } else {
+        setError("Registration failed. Please try again.");
+      }
       console.error("Error during registration:", error);
-      setError("Registration failed. Please try again");
     }
   };
 
