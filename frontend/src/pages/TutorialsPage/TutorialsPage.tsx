@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import Title from "../../components/Title/Title";
 import { PageWrapper } from "../../global.styled";
 import {
@@ -20,10 +20,6 @@ const TutorialsPage: React.FC = () => {
     toggleFavourite = () => {},
     loading,
   } = useContext(UserContext) || {};
-
-  useEffect(() => {
-    console.log("Favourite Tutorials updated:", favouriteTutorials);
-  }, [favouriteTutorials]);
 
   if (loading) {
     return <p>Loading...</p>;

@@ -1,17 +1,11 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { User } from "../types/User";
 import { fetchUserProfileAndFavourites } from "../utils/userUtils";
-// import { getUserProfile } from "../services/userService";
-import {
-  // getUserFavourites,
-  addFavourite,
-  removeFavourite,
-} from "../services/favouritesService";
+import { addFavourite, removeFavourite } from "../services/favouritesService";
 import { Tutorial } from "../types/Tutorial";
 import { Blog } from "../types/Blog";
 import { CommentType } from "../types/Comment";
 import { UserContextType } from "../types/UserContextType";
-// import { handleTokenExpiration } from "../services/tokenService";
 
 export const UserContext = createContext<UserContextType | undefined>(
   undefined

@@ -88,7 +88,7 @@ const PublicUserPage: React.FC = () => {
           <ProfileBanner banner_image={""}>
             <ProfileContentWrapper>
               <ProfilePicture
-                src={profile.user.picture || ""}
+                src={profile.user.profile_picture || ""}
                 alt={`${profile.user.name}`}
                 onError={handleImageError}
               />

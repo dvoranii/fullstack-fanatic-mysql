@@ -12,7 +12,7 @@ import {
 } from "./NavBar.styled";
 import FSFLogo from "../../assets/images/fsf-logo-notext.png";
 import SignInRegisterNavBtn from "./SignInRegister/SignInRegisterNavBtn";
-import UserProfileNavBtn from "./SignInRegister/UserProfileNavBtn";
+import UserProfileNavBtn from "./SignInRegister/UserProfileNavBtn/UserProfileNavBtn";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
 
 const NavBar: React.FC = () => {

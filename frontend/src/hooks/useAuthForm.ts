@@ -5,8 +5,6 @@ import useUser from "../hooks/useUser";
 import { loginOrRegisterWithGoogle, registerUser, loginUser } from "../api/api";
 import validateField from "../utils/validationUtils";
 import { fetchUserProfileAndFavourites } from "../utils/userUtils";
-// import { getUserProfile } from "../services/userService";
-// import { getUserFavourites } from "../services/favouritesService";
 
 export const useAuthForm = () => {
   const [isLogin, setIsLogin] = useState(false);
