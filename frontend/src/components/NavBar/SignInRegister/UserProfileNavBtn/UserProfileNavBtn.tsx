@@ -10,6 +10,7 @@ import {
   DropdownDivider,
   ProfileIconImg,
   ProfileInfoWrapper,
+  ProfilePictureAndInfoWrapper,
 } from "./UserProfileNavBtn.styled";
 import ProfilePicture from "../../../ProfilePicture/ProfilePicture";
 import { UserContext } from "../../../../context/UserContext";
@@ -57,15 +58,17 @@ const UserProfileNavBtn: React.FC = () => {
 
       {isDropdownVisible && (
         <DropdownWrapper isdropdownvisible={isDropdownVisible}>
-          <ProfileInfoWrapper>
+          <ProfilePictureAndInfoWrapper>
             <ProfilePicture
               src={profile?.profile_picture || ""}
               alt="Profile Picture"
               width="50px"
             />
-            <ProfileName>{profile?.name}</ProfileName>
-            <ProfileProfession>{profile?.profession}</ProfileProfession>
-          </ProfileInfoWrapper>
+            <ProfileInfoWrapper>
+              <ProfileName>{profile?.name}</ProfileName>
+              <ProfileProfession>{profile?.profession}</ProfileProfession>
+            </ProfileInfoWrapper>
+          </ProfilePictureAndInfoWrapper>
           <ViewProfileButton to="/my-account">View Profile</ViewProfileButton>
           <DropdownDivider />
           <DropdownItem>Settings</DropdownItem>

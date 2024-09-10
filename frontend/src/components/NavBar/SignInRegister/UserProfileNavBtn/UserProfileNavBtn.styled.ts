@@ -11,24 +11,28 @@ export const DropdownWrapper = styled.div.withConfig({
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   padding: 10px;
-  width: 200px;
+  width: 220px;
   z-index: 1000;
   opacity: ${(props) => (props.isdropdownvisible ? 1 : 0)};
   visibility: ${(props) => (props.isdropdownvisible ? "visible" : "hidden")};
   transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 `;
 
-export const ProfileInfoWrapper = styled.div``;
-// export const ProfilePictureWrapper = styled.div`
-
-// `;
+export const ProfilePictureAndInfoWrapper = styled.div`
+  display: flex;
+`;
+export const ProfileInfoWrapper = styled.div`
+  padding-left: 0.4rem;
+`;
 
 export const ProfileName = styled.p`
-  font-size: 14px;
+  font-size: 16px;
+  margin-top: 0.4rem;
   font-weight: bold;
 `;
 export const ProfileProfession = styled.p`
   font-size: 14px;
+  color: #222;
   font-weight: bold;
   margin-top: 0.25rem;
 `;
