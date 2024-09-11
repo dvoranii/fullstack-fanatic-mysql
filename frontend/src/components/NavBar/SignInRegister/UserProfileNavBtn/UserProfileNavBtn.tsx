@@ -12,21 +12,32 @@ import {
   ProfileInfoWrapper,
   ProfilePictureAndInfoWrapper,
   ViewProfileButtonWrapper,
-  // ProfileIconWrapper,
+  AccountTitle,
 } from "./UserProfileNavBtn.styled";
 import ProfilePicture from "../../../ProfilePicture/ProfilePicture";
 import { UserContext } from "../../../../context/UserContext";
 
-const UserProfileNavBtn: React.FC = () => {
+interface UserProfileNavBtnProps {
+  setIsDropdownVisible?: (visible: boolean) => void; // New prop
+}
+
+const UserProfileNavBtn: React.FC<UserProfileNavBtnProps> = ({
+  setIsDropdownVisible,
+}) => {
   const { profile } = useContext(UserContext) || {};
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [isDropdownVisible, setLocalDropdownVisible] = useState(false);
   const { logOut } = useAuthUtils();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleDropdown = useCallback((e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
-    setIsDropdownVisible((prevState) => !prevState);
-  }, []);
+  const handleDropdown = useCallback(
+    (e?: React.MouseEvent) => {
+      if (e) e.stopPropagation();
+      const newState = !isDropdownVisible;
+      setLocalDropdownVisible(newState);
+      if (setIsDropdownVisible) setIsDropdownVisible(newState); // Pass the state back
+    },
+    [isDropdownVisible]
+  );
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -35,7 +46,8 @@ const UserProfileNavBtn: React.FC = () => {
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setIsDropdownVisible(false);
+        setLocalDropdownVisible(false);
+        if (setIsDropdownVisible) setIsDropdownVisible(false); // Update the state
       }
     };
 
@@ -59,13 +71,11 @@ const UserProfileNavBtn: React.FC = () => {
       {isDropdownVisible && (
         <DropdownWrapper isdropdownvisible={isDropdownVisible}>
           <ProfilePictureAndInfoWrapper>
-            {/* <ProfileIconWrapper> */}
             <ProfilePicture
               src={profile?.profile_picture || ""}
               alt="Profile Picture"
               width="50px"
             />
-            {/* </ProfileIconWrapper> */}
 
             <ProfileInfoWrapper>
               <ProfileName>{profile?.name}</ProfileName>
@@ -77,9 +87,8 @@ const UserProfileNavBtn: React.FC = () => {
           </ViewProfileButtonWrapper>
 
           <DropdownDivider />
-          <p>
-            <b>Account</b>
-          </p>
+          <AccountTitle>Account</AccountTitle>
+
           <DropdownItem>Settings</DropdownItem>
           <DropdownItem>Subscriptions</DropdownItem>
           <DropdownItem>Help</DropdownItem>

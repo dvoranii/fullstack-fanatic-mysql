@@ -16,10 +16,24 @@ export const DropdownWrapper = styled.div.withConfig({
   opacity: ${(props) => (props.isdropdownvisible ? 1 : 0)};
   visibility: ${(props) => (props.isdropdownvisible ? "visible" : "hidden")};
   transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+
+  @media (max-width: 915px) {
+    position: relative;
+    top: 0;
+    right: 0;
+    width: 100%;
+    background-color: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+  }
 `;
 
 export const ProfilePictureAndInfoWrapper = styled.div`
   display: flex;
+  @media (max-width: 915px) {
+    display: none;
+  }
 `;
 export const ProfileInfoWrapper = styled.div`
   padding-left: 0.4rem;
@@ -59,6 +73,11 @@ export const ViewProfileButton = styled(NavLink)`
     background-color: darkorange;
     color: #eee;
   }
+
+  @media (max-width: 915px) {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
 `;
 
 export const DropdownItem = styled.button`
@@ -69,7 +88,7 @@ export const DropdownItem = styled.button`
   text-align: left;
   width: 100%;
   transition: 150ms ease;
-  padding-left: 0.8rem;
+  /* padding-left: 0.8rem; */
 
   &:hover {
     background-color: #f0f0f0;
@@ -79,19 +98,46 @@ export const DropdownItem = styled.button`
     border-bottom-left-radius: 14px;
     border-bottom-right-radius: 14px;
   }
+
+  @media (max-width: 915px) {
+    padding-left: 0.5rem 0 0 0.8rem;
+    font-size: 1rem;
+  }
+`;
+
+export const AccountTitle = styled.p`
+  font-weight: bold;
+
+  @media (max-width: 915px) {
+    display: none;
+  }
 `;
 
 export const DropdownDivider = styled.div`
   height: 1px;
   background-color: #e0e0e0;
   margin: 8px 0;
+
+  @media (max-width: 915px) {
+    display: none;
+  }
 `;
 
-// export const ProfileIconWrapper = styled.div`
-//   width: 100%;
-//   display: flex;
-//   justify-content: center;
-// `;
+export const ProfileIconWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+
+  @media (max-width: 915px) {
+    span {
+      font-size: 14px;
+    }
+    img {
+      width: 30px;
+    }
+  }
+`;
 
 export const ProfileIconImg = styled.img`
   width: 30px;

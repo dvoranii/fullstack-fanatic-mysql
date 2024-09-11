@@ -1,6 +1,5 @@
 import styled from "styled-components";
-
-export const Burger = styled.div`
+export const Burger = styled.div<{ isOpen: boolean }>`
   width: 30px;
   height: 30px;
   display: flex;
@@ -9,8 +8,12 @@ export const Burger = styled.div`
   align-items: center;
   cursor: pointer;
   z-index: 1001;
-  margin-top: 2.2rem;
+  margin-top: 1.2rem;
   margin-right: 1.2rem;
+  position: ${({ isOpen }) =>
+    isOpen ? "fixed" : "absolute"}; /* Fixed when open */
+  right: 20px; /* Adjust to your needs */
+  top: 20px; /* Adjust to your needs */
 
   div {
     width: 100%;
