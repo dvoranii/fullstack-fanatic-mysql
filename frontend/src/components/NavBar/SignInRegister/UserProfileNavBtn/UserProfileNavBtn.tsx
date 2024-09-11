@@ -11,6 +11,7 @@ import {
   ProfileIconImg,
   ProfileInfoWrapper,
   ProfilePictureAndInfoWrapper,
+  ViewProfileButtonWrapper,
 } from "./UserProfileNavBtn.styled";
 import ProfilePicture from "../../../ProfilePicture/ProfilePicture";
 import { UserContext } from "../../../../context/UserContext";
@@ -67,8 +68,14 @@ const UserProfileNavBtn: React.FC = () => {
               <ProfileProfession>{profile?.profession}</ProfileProfession>
             </ProfileInfoWrapper>
           </ProfilePictureAndInfoWrapper>
-          <ViewProfileButton to="/my-account">View Profile</ViewProfileButton>
+          <ViewProfileButtonWrapper>
+            <ViewProfileButton to="/my-account">View Profile</ViewProfileButton>
+          </ViewProfileButtonWrapper>
+
           <DropdownDivider />
+          <p>
+            <b>Account</b>
+          </p>
           <DropdownItem>Settings</DropdownItem>
           <DropdownItem>Subscriptions</DropdownItem>
           <DropdownItem>Help</DropdownItem>

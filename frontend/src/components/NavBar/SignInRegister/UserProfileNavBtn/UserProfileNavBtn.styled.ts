@@ -8,7 +8,7 @@ export const DropdownWrapper = styled.div.withConfig({
   top: 50px;
   right: 0;
   background-color: white;
-  border-radius: 8px;
+  border-radius: 20px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   padding: 10px;
   width: 220px;
@@ -28,24 +28,27 @@ export const ProfileInfoWrapper = styled.div`
 export const ProfileName = styled.p`
   font-size: 16px;
   margin-top: 0.4rem;
-  font-weight: bold;
+  font-weight: 600;
 `;
 export const ProfileProfession = styled.p`
   font-size: 14px;
   color: #222;
-  font-weight: bold;
   margin-top: 0.25rem;
 `;
-
+export const ViewProfileButtonWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
 export const ViewProfileButton = styled(NavLink)`
   background-color: #ffb923;
   border: none;
   border-radius: 20px;
-  color: white;
+  color: #222;
   padding: 5px 10px;
   margin-top: 0.8rem;
   text-align: center;
-  width: 100%;
+  width: 75%;
   display: inline-block;
   text-decoration: none;
   cursor: pointer;
@@ -54,6 +57,7 @@ export const ViewProfileButton = styled(NavLink)`
 
   &:hover {
     background-color: darkorange;
+    color: #eee;
   }
 `;
 
@@ -65,9 +69,15 @@ export const DropdownItem = styled.button`
   text-align: left;
   width: 100%;
   transition: 150ms ease;
+  padding-left: 0.8rem;
 
   &:hover {
     background-color: #f0f0f0;
+  }
+
+  &:last-child {
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
   }
 `;
 

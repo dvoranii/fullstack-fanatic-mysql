@@ -9,6 +9,7 @@ import {
   BannerWrapperInner,
   ProfileContentWrapper,
   AccountActivity,
+  AccountActivityTitle,
   Section,
   SectionTitle,
   UserInfoSubtitle,
@@ -24,27 +25,13 @@ import {
   ProfilePlaceholder,
   BannerUploadWrapper,
   UserAccountContainer,
+  AccountActivitySubBanner,
 } from "./UserProfile.styled";
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import SocialLinksDisplay from "./SocialLinksDisplay/SocialLinksDisplay";
 import TutorialIcon from "../../assets/images/tutorial-icon.png";
 import BlogIcon from "../../assets/images/blog-icon.png";
-import { User } from "../../types/User";
-import { Tutorial } from "../../types/Tutorial";
-import { Blog } from "../../types/Blog";
-import { CommentType } from "../../types/Comment";
-
-interface UserProfilePageProps {
-  profile: User;
-  favouriteTutorials: Tutorial[];
-  favouriteBlogs: Blog[];
-  comments: CommentType[];
-  isEditable?: boolean;
-  onEditProfileClick?: () => void;
-  onBannerChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onBannerUpload?: () => void;
-  children?: React.ReactNode;
-}
+import { UserProfilePageProps } from "../../types/UserProfilePageProps";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -101,28 +88,31 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                 {/* placeholder for the followers and inbox  */}
                 {children}
               </SocialSectionWrapperOuter>
-
-              {isEditable && (
-                <BannerUploadWrapper>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={onBannerChange}
-                  />
-                  <button onClick={onBannerUpload}>Upload Banner</button>
-                </BannerUploadWrapper>
-              )}
             </ProfileContentWrapper>
           </ProfileBanner>
         </BannerWrapperInner>
+        {isEditable && (
+          <BannerUploadWrapper>
+            <input type="file" accept="image/*" onChange={onBannerChange} />
+            <button onClick={onBannerUpload}>Upload Banner</button>
+          </BannerUploadWrapper>
+        )}
       </BannerWrapperOuter>
 
       <ProfilePlaceholder />
 
+      <AccountActivityTitle>Account Activity</AccountActivityTitle>
+      <AccountActivitySubBanner>
+        <div>
+          <SectionTitle>Favorites</SectionTitle>
+        </div>
+        <div>
+          <SectionTitle>Comment History</SectionTitle>
+        </div>
+      </AccountActivitySubBanner>
       <UserAccountContainer>
         <AccountActivity>
           <Section>
-            <SectionTitle>Favorites</SectionTitle>
             <SectionContent>
               <div>
                 <FavouriteIcon>
@@ -147,7 +137,6 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
           </Section>
 
           <Section>
-            <SectionTitle>Comment History</SectionTitle>
             <CommentHistory>
               {comments.map((comment) => (
                 <CommentItem key={comment.id}>

@@ -1,4 +1,4 @@
-import { PageWrapper } from "../../global.styled";
+import { PageWrapper } from "../../PageWrapper.styled";
 import RegisterLoginForm from "../../components/RegisterForm/RegisterLoginForm";
 
 const SignInRegisterPage: React.FC = () => {

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-// import { Link } from "react-router-dom";
 
 interface NavLinkStyledProps {
   underlinewidth?: string;
@@ -82,6 +81,7 @@ export const NavLinkStyled = styled(NavLink)<NavLinkStyledProps>`
   text-decoration: none;
   padding-right: 2.2rem;
   position: relative;
+  font-family: "ZenKakuGothicNewMedium", sans-serif;
 
   &::after {
     content: "";
@@ -99,6 +99,7 @@ export const NavLinkStyled = styled(NavLink)<NavLinkStyledProps>`
   }
 
   &.active {
+    /* font-family: "ZenKakuGothicNewBold"; */
     font-weight: bold;
   }
 

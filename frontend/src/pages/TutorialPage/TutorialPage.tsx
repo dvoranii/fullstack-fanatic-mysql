@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import TutorialDetail from "../../components/TutorialDetail/TutorialDetail";
-import { PageWrapper } from "../../global.styled";
+import { PageWrapper } from "../../PageWrapper.styled";
 
 const TutorialPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();

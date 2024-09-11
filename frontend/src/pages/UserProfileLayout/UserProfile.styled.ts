@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { PageWrapper } from "../../global.styled";
+import { PageWrapper } from "../../PageWrapper.styled";
 
 export const UserAccountContainer = styled(PageWrapper)`
   display: flex;
@@ -15,6 +15,21 @@ export const BannerWrapperOuter = styled.div`
 `;
 export const BannerWrapperInner = styled.div`
   width: 100%;
+`;
+
+export const BannerUploadWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 20px;
+
+  &:hover,
+  input:hover,
+  button:hover {
+    cursor: pointer;
+  }
 `;
 
 export const ProfileBanner = styled.div<{ banner_image: string }>`
@@ -80,28 +95,19 @@ export const BioContentWrapper = styled.div`
   }
 `;
 
-export const UserName = styled.h1`
-  font-size: 24px;
+export const UserName = styled.h2`
   margin: 10px 0 5px;
 `;
 
-export const UserProfession = styled.h2`
-  font-size: 18px;
+export const UserProfession = styled.h3`
   color: #333;
   margin-bottom: 0.8rem;
 `;
 
 export const UserInfoSubtitle = styled.h3`
-  font-size: 16px;
   width: fit-content;
   margin-bottom: 0.8rem;
   border-bottom: 2px solid black;
-`;
-
-export const UserProfileInfoSubtitle = styled.h3`
-  margin-bottom: 0.8rem;
-  border-bottom: 2px solid black;
-  width: fit-content;
 `;
 
 export const EditProfileLink = styled.a`
@@ -118,12 +124,42 @@ export const EditProfileLink = styled.a`
   }
 `;
 
+export const AccountActivityTitle = styled.h2`
+  font-size: 1.8rem;
+  padding: 1.2rem 0 1.2rem 0;
+  font-family: "Alata";
+  letter-spacing: 0.5px;
+  width: 100%;
+  text-align: center;
+`;
+
 export const AccountActivity = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
+  text-align: center;
   gap: 3.2rem;
   margin-top: 40px;
+`;
+
+export const AccountActivitySubBanner = styled.div`
+  width: 100%;
+  height: 40px;
+  background-color: #ffb923;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  div {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  div:nth-child(1) {
+    border-right: 3px solid white;
+  }
 `;
 
 export const Section = styled.div`
@@ -135,10 +171,11 @@ export const Section = styled.div`
 `;
 
 export const SectionTitle = styled.h3`
-  font-size: 20px;
-  margin-bottom: 20px;
+  font-family: "ZenKakuGothicNewMedium";
+  font-size: 1.4rem;
   text-align: center;
-  color: #333;
+  color: #031f2a;
+  letter-spacing: 1px;
 `;
 
 export const SectionContent = styled.div`
@@ -226,21 +263,6 @@ export const ViewMoreCommentsButton = styled.button`
 
   &:hover {
     text-decoration: underline;
-  }
-`;
-
-export const BannerUploadWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 20px;
-
-  &:hover,
-  input:hover,
-  button:hover {
-    cursor: pointer;
   }
 `;
 
