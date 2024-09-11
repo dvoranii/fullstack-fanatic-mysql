@@ -11,7 +11,6 @@ import {
   MobileNavList,
 } from "./NavBar.styled";
 import FSFLogo from "../../assets/images/fsf-logo-notext.png";
-import SignInRegisterNavBtn from "./SignInRegister/SignInRegisterNavBtn";
 import UserProfileNavBtn from "./SignInRegister/UserProfileNavBtn/UserProfileNavBtn";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
 
@@ -59,15 +58,7 @@ const NavBar: React.FC = () => {
             Contact
           </NavLinkStyled>
         </NavItem>
-        <NavItem>
-          {profile ? (
-            <UserProfileNavBtn />
-          ) : (
-            <NavLinkStyled to="/sign-in-register" underlinewidth="0%">
-              <SignInRegisterNavBtn />
-            </NavLinkStyled>
-          )}
-        </NavItem>
+        <NavItem>{profile && <UserProfileNavBtn />}</NavItem>
       </NavList>
 
       <BurgerMenu onClick={toggleMobileNav} />
@@ -98,15 +89,7 @@ const NavBar: React.FC = () => {
             Contact
           </NavLinkStyled>
         </NavItem>
-        <NavItem>
-          {profile ? (
-            <UserProfileNavBtn />
-          ) : (
-            <NavLinkStyled to="/sign-in-register" underlinewidth="0%">
-              <SignInRegisterNavBtn />
-            </NavLinkStyled>
-          )}
-        </NavItem>
+        <NavItem>{profile && <UserProfileNavBtn />}</NavItem>
       </MobileNavList>
     </Nav>
   );

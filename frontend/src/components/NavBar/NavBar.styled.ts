@@ -36,8 +36,7 @@ export const MobileNavList = styled.ul<{ open: boolean }>`
   list-style: none;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
+  /* justify-content: space-evenly; */
   background: #f8f8f8;
   position: fixed;
   top: 0;
@@ -53,6 +52,9 @@ export const MobileNavList = styled.ul<{ open: boolean }>`
     display: none;
   }
   li:first-child {
+    margin-top: 6.4rem;
+  }
+  li {
     margin-top: 2.4rem;
   }
 
@@ -99,7 +101,6 @@ export const NavLinkStyled = styled(NavLink)<NavLinkStyledProps>`
   }
 
   &.active {
-    /* font-family: "ZenKakuGothicNewBold"; */
     font-weight: bold;
   }
 

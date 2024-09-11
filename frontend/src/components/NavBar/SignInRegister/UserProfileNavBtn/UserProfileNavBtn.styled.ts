@@ -87,6 +87,12 @@ export const DropdownDivider = styled.div`
   margin: 8px 0;
 `;
 
+// export const ProfileIconWrapper = styled.div`
+//   width: 100%;
+//   display: flex;
+//   justify-content: center;
+// `;
+
 export const ProfileIconImg = styled.img`
   width: 30px;
 
