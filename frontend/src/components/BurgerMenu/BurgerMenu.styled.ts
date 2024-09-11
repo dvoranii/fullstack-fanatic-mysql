@@ -10,10 +10,9 @@ export const Burger = styled.div<{ isOpen: boolean }>`
   z-index: 1001;
   margin-top: 1.2rem;
   margin-right: 1.2rem;
-  position: ${({ isOpen }) =>
-    isOpen ? "fixed" : "absolute"}; /* Fixed when open */
-  right: 20px; /* Adjust to your needs */
-  top: 20px; /* Adjust to your needs */
+  position: ${({ isOpen }) => (isOpen ? "fixed" : "absolute")};
+  right: 20px;
+  top: 20px;
 
   div {
     width: 100%;

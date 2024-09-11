@@ -11,7 +11,7 @@ export const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
-  position: fixed;
+
   top: 0;
   left: 0;
   width: 100%;
@@ -19,6 +19,7 @@ export const Nav = styled.nav`
 
   @media screen and (max-width: 915px) {
     height: 100px;
+    position: fixed;
   }
 `;
 
