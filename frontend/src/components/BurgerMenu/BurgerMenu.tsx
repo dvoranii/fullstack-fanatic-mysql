@@ -7,7 +7,7 @@ interface BurgerMenuProps {
 }
 
 const BurgerMenu: React.FC<BurgerMenuProps> = ({ onClick, isOpen }) => (
-  <Burger onClick={onClick} isOpen={isOpen}>
+  <Burger onClick={onClick} isopen={isOpen}>
     <div></div>
     <div></div>
     <div></div>

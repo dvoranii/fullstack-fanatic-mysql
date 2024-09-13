@@ -73,6 +73,19 @@ export const ProfileInfo = styled.div`
   grid-column: 1;
   border-right: 2px solid lightgrey;
   padding: 20px;
+
+  h2 {
+    font-family: "ZenKakuGothicNewMedium";
+  }
+
+  h3 {
+    font-family: "ZenKakuGothicNewRegular";
+  }
+
+  a {
+    text-decoration: underline;
+    color: blue;
+  }
 `;
 
 export const ProfilePlaceholder = styled.div`
@@ -138,7 +151,7 @@ export const AccountActivity = styled.div`
   justify-content: center;
   width: 100%;
   text-align: center;
-  gap: 3.2rem;
+  gap: 8.2rem;
   margin-top: 40px;
 `;
 
@@ -171,7 +184,8 @@ export const Section = styled.div`
 `;
 
 export const SectionTitle = styled.h3`
-  font-family: "ZenKakuGothicNewMedium";
+  font-family: "Alata";
+  text-transform: uppercase;
   font-size: 1.4rem;
   text-align: center;
   color: #031f2a;
@@ -268,6 +282,10 @@ export const ViewMoreCommentsButton = styled.button`
 
 export const SocialSectionWrapperOuter = styled.div`
   padding-left: 20px;
+  a {
+    text-decoration: underline;
+    color: blue;
+  }
   p {
     margin-bottom: 0.4rem;
   }

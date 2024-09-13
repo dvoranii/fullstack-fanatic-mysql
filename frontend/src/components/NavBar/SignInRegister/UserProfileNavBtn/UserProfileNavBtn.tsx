@@ -18,7 +18,7 @@ import ProfilePicture from "../../../ProfilePicture/ProfilePicture";
 import { UserContext } from "../../../../context/UserContext";
 
 interface UserProfileNavBtnProps {
-  setIsDropdownVisible?: (visible: boolean) => void; // New prop
+  setIsDropdownVisible?: (visible: boolean) => void;
 }
 
 const UserProfileNavBtn: React.FC<UserProfileNavBtnProps> = ({
@@ -34,7 +34,7 @@ const UserProfileNavBtn: React.FC<UserProfileNavBtnProps> = ({
       if (e) e.stopPropagation();
       const newState = !isDropdownVisible;
       setLocalDropdownVisible(newState);
-      if (setIsDropdownVisible) setIsDropdownVisible(newState); // Pass the state back
+      if (setIsDropdownVisible) setIsDropdownVisible(newState);
     },
     [isDropdownVisible]
   );
@@ -47,7 +47,7 @@ const UserProfileNavBtn: React.FC<UserProfileNavBtnProps> = ({
         !dropdownRef.current.contains(event.target as Node)
       ) {
         setLocalDropdownVisible(false);
-        if (setIsDropdownVisible) setIsDropdownVisible(false); // Update the state
+        if (setIsDropdownVisible) setIsDropdownVisible(false);
       }
     };
 
@@ -75,6 +75,7 @@ const UserProfileNavBtn: React.FC<UserProfileNavBtnProps> = ({
               src={profile?.profile_picture || ""}
               alt="Profile Picture"
               width="50px"
+              border="none"
             />
 
             <ProfileInfoWrapper>

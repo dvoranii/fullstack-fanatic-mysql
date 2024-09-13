@@ -63,6 +63,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                   src={profile.profile_picture || ""}
                   alt={`${profile.name}`}
                   width="150px"
+                  border="4px solid white"
                 />
               </ProfilePictureWrapper>
 

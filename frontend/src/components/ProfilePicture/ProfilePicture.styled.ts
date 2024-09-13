@@ -1,10 +1,14 @@
 import styled from "styled-components";
 
-export const StyledProfilePicture = styled.img<{ width: string }>`
+export const StyledProfilePicture = styled.img<{
+  width: string;
+  border: string;
+  bg?: string;
+}>`
   width: ${(props) => props.width};
   height: ${(props) => props.width};
   border-radius: 50%;
-  border: 4px solid white;
-  background-color: grey;
+  border: ${(props) => props.border};
+  background-color: ${(props) => props.bg};
   object-fit: cover;
 `;

@@ -1,5 +1,8 @@
 import styled from "styled-components";
-export const Burger = styled.div<{ isOpen: boolean }>`
+
+export const Burger = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "isopen",
+})<{ isopen: boolean }>`
   width: 30px;
   height: 30px;
   display: flex;
@@ -10,7 +13,7 @@ export const Burger = styled.div<{ isOpen: boolean }>`
   z-index: 1001;
   margin-top: 1.2rem;
   margin-right: 1.2rem;
-  position: ${({ isOpen }) => (isOpen ? "fixed" : "absolute")};
+  position: ${({ isopen }) => (isopen ? "fixed" : "absolute")};
   right: 20px;
   top: 20px;
 

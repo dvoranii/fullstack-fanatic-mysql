@@ -1,23 +1,25 @@
 import { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 
-const HomePage = lazy(() => import("../pages/HomePage/HomePage"));
-const AboutPage = lazy(() => import("../pages/AboutPage/AboutPage"));
-const TutorialsPage = lazy(
-  () => import("../pages/TutorialsPage/TutorialsPage")
-);
-const TutorialPage = lazy(() => import("../pages/TutorialPage/TutorialPage"));
-const BlogsPage = lazy(() => import("../pages/BlogsPage/BlogsPage"));
+const HomePage = lazy(() => import("../pages/Home/HomePage"));
+const AboutPage = lazy(() => import("../pages/About/AboutPage"));
+const TutorialsPage = lazy(() => import("../pages/Tutorials/TutorialsPage"));
+const TutorialPage = lazy(() => import("../pages/Tutorial/TutorialPage"));
+const BlogsPage = lazy(() => import("../pages/Blogs/BlogsPage"));
 const BlogDetail = lazy(() => import("../components/BlogDetail/BlogDetail"));
-const ContactPage = lazy(() => import("../pages/ContactPage/ContactPage"));
+const ContactPage = lazy(() => import("../pages/Contact/ContactPage"));
 const SignInRegisterPage = lazy(
-  () => import("../pages/SignInRegisterPage/SignInRegisterPage")
+  () => import("../pages/SignInRegister/SignInRegisterPage")
 );
 const UserAccountPage = lazy(
   () => import("../pages/UserProfileLayout/UserAccountPage/UserAccountPage")
 );
 const PublicUserPage = lazy(
   () => import("../pages/UserProfileLayout/PublicUserPage/PublicUserPage")
+);
+const MessageInboxPage = lazy(
+  () =>
+    import("../pages/UserProfileLayout/MessageInboxLayout/MessageInboxLayout")
 );
 
 const Navigation: React.FC = () => {
@@ -32,7 +34,8 @@ const Navigation: React.FC = () => {
         <Route path="/blog/:id" element={<BlogDetail />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/sign-in-register" element={<SignInRegisterPage />} />
-        <Route path="my-account" element={<UserAccountPage />} />
+        <Route path="/my-account" element={<UserAccountPage />} />
+        <Route path="/my-account/inbox" element={<MessageInboxPage />} />
         <Route path="/user/:id" element={<PublicUserPage />} />
       </Routes>
     </Suspense>

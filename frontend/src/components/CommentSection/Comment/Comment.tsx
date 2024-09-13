@@ -88,6 +88,8 @@ const Comment: React.FC<CommentProps> = ({
             src={comment.profile_picture}
             alt={comment.user_name || "Username"}
             width="60px"
+            border="none"
+            bg="black"
           />
         </Link>
         <Link to={`/user/${comment.user_id}`}>
