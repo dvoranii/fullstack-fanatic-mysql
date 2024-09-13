@@ -6,7 +6,7 @@ export const SidebarContainer = styled.div`
   margin-right: 20px;
   box-sizing: border-box;
   height: 100%;
-  border-radius: 40px;
+  border-radius: 14px;
 
   p {
     padding: 5px;

@@ -64,7 +64,7 @@ const UserAccountsPage: React.FC = () => {
         <span>
           <img src={InboxIcon} alt="Inbox Icon" /> Inbox
         </span>
-        <a href="#">127 Connections</a>
+        <a href="#">127 Peers</a>
       </UserProfilePage>
     </>
   );

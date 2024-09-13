@@ -48,7 +48,7 @@ const PublicUserPage: React.FC = () => {
       favouriteBlogs={profile.favouriteBlogs}
       comments={profile.comments || []}
     >
-      <a href="#">127 Connections</a>
+      <a href="#">127 Peers</a>
     </UserProfilePage>
   );
 };

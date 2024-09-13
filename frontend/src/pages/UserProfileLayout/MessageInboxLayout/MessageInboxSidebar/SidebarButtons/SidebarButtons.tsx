@@ -29,7 +29,7 @@ const SidebarButton: React.FC = () => {
       </IconBG>
       <IconBG>
         <NavLink to="/">
-          <IconImg src={HomeIcon} />
+          <IconImg src={HomeIcon} title="Home" />
         </NavLink>
       </IconBG>
     </IconBGWrapper>

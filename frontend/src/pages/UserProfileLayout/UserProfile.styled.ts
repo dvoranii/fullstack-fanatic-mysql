@@ -82,9 +82,15 @@ export const ProfileInfo = styled.div`
     font-family: "ZenKakuGothicNewRegular";
   }
 
-  a {
-    text-decoration: underline;
-    color: blue;
+  button {
+    text-transform: uppercase;
+    padding: 8px 16px;
+    font-weight: bold;
+    background-color: #14213d;
+    color: #f2f2f2f2;
+    letter-spacing: 1.25px;
+    border: none;
+    border-radius: 20px;
   }
 `;
 

@@ -27,11 +27,13 @@ import {
   UserAccountContainer,
   AccountActivitySubBanner,
 } from "./UserProfile.styled";
-import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
-import SocialLinksDisplay from "./SocialLinksDisplay/SocialLinksDisplay";
 import TutorialIcon from "../../assets/images/tutorial-icon.png";
 import BlogIcon from "../../assets/images/blog-icon.png";
+
+import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
+import SocialLinksDisplay from "./SocialLinksDisplay/SocialLinksDisplay";
 import { UserProfilePageProps } from "../../types/UserProfilePageProps";
+import ConnectButton from "./ConnectButton/ConnectButton";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -64,15 +66,20 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                   alt={`${profile.name}`}
                   width="150px"
                   border="4px solid white"
+                  bg="grey"
                 />
               </ProfilePictureWrapper>
 
               <ProfileInfo>
                 <UserName>{profile.display_name || profile.name}</UserName>
                 <UserProfession>{profile.profession}</UserProfession>
+
+                {!isEditable && <ConnectButton href={"#"} text={"Connect"} />}
+
                 {isEditable && (
+                  // add wrapper so I can add underline here, this is a quick fix
                   <a href="#" onClick={onEditProfileClick}>
-                    Edit Profile
+                    <u>Edit Profile</u>
                   </a>
                 )}
               </ProfileInfo>
@@ -85,8 +92,6 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
               <SocialSectionWrapperOuter>
                 <UserInfoSubtitle>Links</UserInfoSubtitle>
                 <SocialLinksDisplay socialLinks={socialLinks} />
-
-                {/* placeholder for the followers and inbox  */}
                 {children}
               </SocialSectionWrapperOuter>
             </ProfileContentWrapper>
