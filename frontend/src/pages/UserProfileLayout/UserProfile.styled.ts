@@ -150,6 +150,7 @@ export const AccountActivityTitle = styled.h2`
   letter-spacing: 0.5px;
   width: 100%;
   text-align: center;
+  padding-top: 7.2rem;
 `;
 
 export const AccountActivity = styled.div`
@@ -190,9 +191,8 @@ export const Section = styled.div`
 `;
 
 export const SectionTitle = styled.h3`
-  font-family: "Alata";
   text-transform: uppercase;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   text-align: center;
   color: #031f2a;
   letter-spacing: 1px;

@@ -10,7 +10,7 @@ export const ButtonIcon = styled.div`
   top: 0px;
   border-radius: 30px 30px 30px 0;
   transition: all 0.3s ease;
-  color: #fff; /* Icon color: white */
+  color: #fff;
 
   &::after {
     content: "";
@@ -33,17 +33,15 @@ export const ButtonIcon = styled.div`
   }
 `;
 
-// Text container
 export const ButtonText = styled.span`
   position: relative;
   z-index: 9999;
   font-family: "Alata";
   text-transform: uppercase;
   transition: color 0.3s ease;
-  color: #ffa000; /* Default orange color */
+  color: #ffa000;
 `;
 
-// Main button container
 export const StyledButton = styled.a`
   width: 100%;
   height: 45px;
@@ -57,12 +55,13 @@ export const StyledButton = styled.a`
   padding-right: 8px;
   margin: 20px 5px;
   transition: all 0.3s ease;
-  box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   color: #ffa000;
   overflow: hidden;
 
   &:hover {
     color: #fff;
+    cursor: pointer;
   }
 
   &:hover ${ButtonIcon} {

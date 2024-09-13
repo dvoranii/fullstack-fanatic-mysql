@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   ProfileBanner,
   ProfilePictureWrapper,
@@ -34,6 +35,7 @@ import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import SocialLinksDisplay from "./SocialLinksDisplay/SocialLinksDisplay";
 import { UserProfilePageProps } from "../../types/UserProfilePageProps";
 import ConnectButton from "./ConnectButton/ConnectButton";
+import MessageUserModal from "./MessageUserModal/MessageUserModal";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -49,6 +51,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
   children,
 }) => {
   const socialLinks = profile.social_links || {};
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <>
@@ -74,7 +77,12 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                 <UserName>{profile.display_name || profile.name}</UserName>
                 <UserProfession>{profile.profession}</UserProfession>
 
-                {!isEditable && <ConnectButton href={"#"} text={"Connect"} />}
+                {!isEditable && (
+                  <ConnectButton
+                    text={"Connect"}
+                    onClick={() => setIsModalOpen(true)}
+                  />
+                )}
 
                 {isEditable && (
                   // add wrapper so I can add underline here, this is a quick fix
@@ -155,6 +163,14 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
           </Section>
         </AccountActivity>
       </UserAccountContainer>
+      <MessageUserModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSendMessage={(subject, message) => {
+          console.log("Message sent to user:", { subject, message });
+        }}
+        userId={String(profile.id)}
+      />
     </>
   );
 };
