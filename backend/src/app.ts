@@ -2,12 +2,15 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import path from "path";
+import profileRoutes from "./routes/profile";
 import tutorialsRoutes from "./routes/tutorials";
 import commentsRoutes from "./routes/comments";
 import blogsRoutes from "./routes/blogs";
 import userRoutes from "./routes/user";
 import favouriteRoutes from "./routes/favourites";
-import profileRoutes from "./routes/profile";
+import conversationsRoutes from "./routes/conversations";
+import messagesRoutes from "./routes/messages";
+
 import cookieParser from "cookie-parser";
 
 const app = express();
@@ -39,6 +42,8 @@ app.use("/api/blogs", blogsRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/favourites", favouriteRoutes);
+app.use("/api/conversations", conversationsRoutes);
+app.use("/api/messages", messagesRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
