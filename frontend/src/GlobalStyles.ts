@@ -4,6 +4,16 @@ import ZenKakuGothicNewMedium from "./assets/fonts/ZenKakuGothicNew-Medium.ttf";
 import ZenKakuGothicNewBold from "./assets/fonts/ZenKakuGothicNew-Bold.ttf";
 import AlataRegular from "./assets/fonts/Alata-Regular.ttf";
 
+//
+
+export const colors = {
+  primary: "#14213D",
+  secondary: "#FFAF2B",
+  white: "#fefefe",
+  black: "#222222",
+  background: "#eeeeee",
+};
+
 export const GlobalStyles = createGlobalStyle`
   @font-face {
     font-family: "ZenKakuGothicNewRegular";

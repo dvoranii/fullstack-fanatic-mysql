@@ -11,8 +11,8 @@ import {
 import validateField from "../utils/validationUtils";
 import { fetchUserProfileAndFavourites } from "../utils/userUtils";
 
-export const useAuthForm = () => {
-  const [isLogin, setIsLogin] = useState(false);
+export const useAuthForm = (defaultToLogin = false) => {
+  const [isLogin, setIsLogin] = useState(defaultToLogin);
   const [error, setError] = useState<string | null>(null);
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
   const { setProfile, setFavouriteTutorials, setFavouriteBlogs } = useUser();
@@ -21,6 +21,11 @@ export const useAuthForm = () => {
   const toggleForm = () => {
     setIsLogin(!isLogin);
     setError(null);
+    if (!isLogin) {
+      navigate("/login");
+    } else {
+      navigate("/register");
+    }
   };
 
   const handleGoogleRegister = async (codeResponse: TokenResponse) => {

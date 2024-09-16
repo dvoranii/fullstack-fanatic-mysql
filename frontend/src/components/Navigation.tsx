@@ -33,7 +33,14 @@ const Navigation: React.FC = () => {
         <Route path="/blogs" element={<BlogsPage />} />
         <Route path="/blog/:id" element={<BlogDetail />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/sign-in-register" element={<SignInRegisterPage />} />
+        <Route
+          path="/register"
+          element={<SignInRegisterPage defaultToLogin={false} />}
+        />
+        <Route
+          path="/login"
+          element={<SignInRegisterPage defaultToLogin={true} />}
+        />
         <Route path="/my-account" element={<UserAccountPage />} />
         <Route path="/my-account/inbox" element={<MessageInboxPage />} />
         <Route path="/user/:id" element={<PublicUserPage />} />

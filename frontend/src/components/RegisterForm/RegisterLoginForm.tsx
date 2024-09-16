@@ -17,8 +17,16 @@ import {
   Divider,
   FormTitle,
 } from "./RegisterLoginForm.styled";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
-const RegisterLoginForm: React.FC = () => {
+interface RegisterLoginFormProps {
+  defaultToLogin?: boolean;
+}
+
+const RegisterLoginForm: React.FC<RegisterLoginFormProps> = ({
+  defaultToLogin = false,
+}) => {
   const {
     isLogin,
     error,
@@ -30,7 +38,18 @@ const RegisterLoginForm: React.FC = () => {
     setError,
     isTermsAccepted,
     setIsTermsAccepted,
-  } = useAuthForm();
+  } = useAuthForm(defaultToLogin);
+
+  const location = useLocation();
+
+  // if the user is already on /register page but clicks the sign in button
+  useEffect(() => {
+    if (location.pathname === "/login" && !isLogin) {
+      toggleForm();
+    } else if (location.pathname === "/register" && isLogin) {
+      toggleForm();
+    }
+  }, [location, isLogin, toggleForm]);
 
   const handleGoogleRegisterClick = useGoogleLogin({
     onSuccess: handleGoogleRegister,

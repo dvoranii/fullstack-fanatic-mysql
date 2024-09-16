@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { colors } from "../../global.styled";
+import { colors } from "../../GlobalStyles";
 
 interface WrapperProps {
   $isLogin: boolean;
@@ -115,7 +115,7 @@ export const RegisterFormTitleWrapper = styled.div<WrapperProps>`
 `;
 
 export const LoginFormTitleWrapper = styled.div<WrapperProps>`
-  padding: 20px;
+  padding: 18px;
   border-top-right-radius: 80px;
   border-top-left-radius: 80px;
   cursor: pointer;
@@ -134,7 +134,9 @@ export const LoginFormTitleWrapper = styled.div<WrapperProps>`
 `;
 
 export const LoginFormWrapperOuter = styled.div<WrapperProps>`
-  background: ${colors.white};
+  background: ${({ $isLogin }) =>
+    $isLogin ? colors.background : colors.white};
+
   position: absolute;
   top: ${({ $isLogin }) => ($isLogin ? "10%" : "91%")};
   width: 100%;
@@ -145,7 +147,6 @@ export const LoginFormWrapperOuter = styled.div<WrapperProps>`
 `;
 
 export const LoginFormWrapperInner = styled.div`
-  padding: 20px;
   display: flex;
   flex-direction: column;
 `;

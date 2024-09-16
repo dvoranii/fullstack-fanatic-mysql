@@ -11,6 +11,7 @@ export const GoogleSignInButton = styled.button`
   margin: 0 auto;
   border-radius: 20px;
   transition: all 150ms ease;
+  background-color: #ffffff;
 
   img {
     margin-right: 10px;

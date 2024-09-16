@@ -8,8 +8,10 @@ import {
   SendButton,
   MessageForm,
   AvatarContainer,
+  CloseBtn,
 } from "./MessageUserModal.styled";
 import { getUserPublicProfile } from "../../../services/userService";
+import CloseIcon from "../../../assets/images/close-icon.png";
 
 interface MessageUserModalProps {
   isOpen: boolean;
@@ -72,6 +74,7 @@ const MessageUserModal: React.FC<MessageUserModalProps> = ({
         <AvatarContainer>
           <UserAvatar src={userAvatarUrl || ""} alt="User Avatar" />
         </AvatarContainer>
+        <CloseBtn src={CloseIcon} />
         <MessageForm>
           <InputField
             type="text"

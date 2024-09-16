@@ -40,6 +40,7 @@ export const ButtonText = styled.span`
   text-transform: uppercase;
   transition: color 0.3s ease;
   color: #ffa000;
+  z-index: 1;
 `;
 
 export const StyledButton = styled.a`

@@ -14,6 +14,7 @@ import {
 import FSFLogo from "../../assets/images/fsf-logo-notext.png";
 import UserProfileNavBtn from "./SignInRegister/UserProfileNavBtn/UserProfileNavBtn";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
+import LoginButton from "./SignInRegister/LoginButton/LoginButton";
 
 const NavBar: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -60,7 +61,16 @@ const NavBar: React.FC = () => {
             Contact
           </NavLinkStyled>
         </NavItem>
-        <NavItem>{profile && <UserProfileNavBtn />}</NavItem>
+        <NavItem>
+          {profile ? (
+            <>
+              <UserProfileNavBtn setIsDropdownVisible={setIsDropdownVisible} />
+              {!isDropdownVisible && <AccountText>Account ▼</AccountText>}
+            </>
+          ) : (
+            <LoginButton />
+          )}
+        </NavItem>
       </NavList>
 
       <BurgerMenu onClick={toggleMobileNav} isOpen={open} />
@@ -92,11 +102,13 @@ const NavBar: React.FC = () => {
           </NavLinkStyled>
         </NavItem>
         <NavItem>
-          {profile && (
+          {profile ? (
             <>
               <UserProfileNavBtn setIsDropdownVisible={setIsDropdownVisible} />
               {!isDropdownVisible && <AccountText>Account ▼</AccountText>}
             </>
+          ) : (
+            <LoginButton />
           )}
         </NavItem>
       </MobileNavList>

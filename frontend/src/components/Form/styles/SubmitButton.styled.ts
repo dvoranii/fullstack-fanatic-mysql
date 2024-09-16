@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { colors } from "../../../global.styled";
+import { colors } from "../../../GlobalStyles";
 
 export const SubmitButton = styled.button`
   padding: 10px;
@@ -18,9 +18,10 @@ export const SubmitButton = styled.button`
   transition: all 150ms ease;
 
   span {
-    color: ${colors.primary};
-    -webkit-text-fill-color: ${colors.white};
-    -webkit-text-stroke: 1px;
+    color: ${colors.white};
+    text-shadow: -1px -1px 0 ${colors.black}, 1px -1px 0 ${colors.black},
+      -1px 1px 0 ${colors.black}, 1px 1px 0 ${colors.black};
+    letter-spacing: 2px;
   }
 
   &:hover {

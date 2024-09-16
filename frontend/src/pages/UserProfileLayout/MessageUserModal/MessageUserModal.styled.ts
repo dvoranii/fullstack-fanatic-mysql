@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-// Modal Overlay (covers the background)
 export const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -8,12 +7,11 @@ export const ModalOverlay = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
-  /* z-index: 999; */
+  z-index: 2;
 `;
 
-// Modal Content (the modal itself)
 export const ModalContent = styled.div`
-  position: fixed; // Fixed to stay in the center of the screen
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -23,9 +21,9 @@ export const ModalContent = styled.div`
   width: 400px;
   box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2);
   border: 2px solid #007bff;
+  z-index: 3;
 `;
 
-// Avatar Container (position it absolutely in the top-right corner of the modal)
 export const AvatarContainer = styled.div`
   position: absolute;
   top: 10px;
@@ -36,20 +34,31 @@ export const AvatarContainer = styled.div`
   border-radius: 50%;
 `;
 
-// User Avatar (styling for the avatar image)
 export const UserAvatar = styled.img`
   width: 100%;
   height: 100%;
 `;
 
-// Message Form container (below the avatar)
+export const CloseBtn = styled.img`
+  width: 25px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px;
+  transition: 150ms ease;
+
+  &:hover {
+    cursor: pointer;
+    filter: invert(1);
+  }
+`;
+
 export const MessageForm = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 70px; // Add margin so the form is below the avatar
+  margin-top: 70px;
 `;
 
-// Input field for the subject
 export const InputField = styled.input`
   background-color: #fff;
   border: none;
@@ -66,7 +75,6 @@ export const InputField = styled.input`
   }
 `;
 
-// Text area for the message
 export const TextArea = styled.textarea`
   background-color: #fff;
   border: none;
@@ -85,7 +93,6 @@ export const TextArea = styled.textarea`
   }
 `;
 
-// Send button
 export const SendButton = styled.button`
   background-color: #14213d;
   color: #fff;
