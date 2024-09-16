@@ -42,7 +42,6 @@ const RegisterLoginForm: React.FC<RegisterLoginFormProps> = ({
 
   const location = useLocation();
 
-  // if the user is already on /register page but clicks the sign in button
   useEffect(() => {
     if (location.pathname === "/login" && !isLogin) {
       toggleForm();
