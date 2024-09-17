@@ -14,10 +14,13 @@ export const ChatWindowContainerOuter = styled.div`
 `;
 
 export const ChatWindowContainerInner = styled.div`
-  border: 1px solid black;
+  border: 1px solid #666666;
+  background-color: #ffffff;
   margin: 0 auto;
   width: 95%;
   height: 100%;
+  overflow-y: scroll;
+  margin-top: 1.8rem;
 `;
 
 export const TextInputWrapper = styled.div`

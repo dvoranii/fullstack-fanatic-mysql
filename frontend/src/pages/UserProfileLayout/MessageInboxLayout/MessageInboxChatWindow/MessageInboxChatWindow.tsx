@@ -12,7 +12,6 @@ import PlusIcon from "../../../../assets/images/account/plus-icon.png";
 import SentMessages from "./SentMessages/SentMessages";
 import { handleTokenExpiration } from "../../../../services/tokenService";
 import { UserContext } from "../../../../context/UserContext";
-// import { getUserPublicProfile } from "../../../../services/userService";
 
 interface MessageInboxChatWindowProps {
   conversationId: number | null;
@@ -59,22 +58,24 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
     }
   };
 
+  // need to figure out real-time update for sending messages so it is
+  // immediately visible in the chat window
   return (
     <ChatWindowContainerOuter>
-      <NewChatBarWrapper>
-        <NewChatBar>
-          New Chat <img src={PlusIcon} alt="" />
-        </NewChatBar>
-      </NewChatBarWrapper>
+      {!conversationId && (
+        <NewChatBarWrapper>
+          <NewChatBar>
+            New Chat <img src={PlusIcon} alt="" />
+          </NewChatBar>
+        </NewChatBarWrapper>
+      )}
 
-      {/* Render messages for the selected conversation */}
       {conversationId && (
         <ChatWindowContainerInner>
           <SentMessages conversationId={conversationId} />
         </ChatWindowContainerInner>
       )}
 
-      {/* Message Input */}
       <TextInputWrapper>
         <ChatInput
           value={newMessage}

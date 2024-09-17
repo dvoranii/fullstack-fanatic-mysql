@@ -9,6 +9,8 @@ export const ConvoHistoryContainer = styled.div`
   }
 `;
 
+export const ConversationWrapper = styled.div``;
+
 export const ReadFilterWrapper = styled.div`
   width: 100%;
   text-align: right;

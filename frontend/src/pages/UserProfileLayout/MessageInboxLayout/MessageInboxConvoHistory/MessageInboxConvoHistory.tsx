@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import {
   ConvoHistoryContainer,
   ReadFilterWrapper,
+  ConversationWrapper,
 } from "./MessageInboxConvoHistory.styled";
 import SearchBar from "../../../../components/SearchBar/SearchBar";
 import { Conversation } from "../../../../types/Conversations";
@@ -51,11 +52,9 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
         setConversations([]);
       }
     };
-
     fetchConversations();
   }, []);
 
-  // Fetch the usernames of the other user in the conversation
   const fetchUserNames = async (conversations: Conversation[]) => {
     const fetchedUserNames: { [key: number]: string } = {};
     for (const conversation of conversations) {
@@ -96,18 +95,16 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
       </ReadFilterWrapper>
       <div>
         {conversations.map((conversation) => (
-          <div key={conversation.id}>
+          <ConversationWrapper key={conversation.id}>
             <p>
               Conversation with&nbsp;
-              {userNames[conversation.id] ||
-                `User ${conversation.user2_id}`}{" "}
-              {/* Display fetched name */}
+              {userNames[conversation.id] || `User ${conversation.user2_id}`}
             </p>
 
             <button onClick={() => onConversationSelect(conversation.id)}>
               Open Conversation
             </button>
-          </div>
+          </ConversationWrapper>
         ))}
       </div>
     </ConvoHistoryContainer>

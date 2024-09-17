@@ -1,9 +1,24 @@
 import styled from "styled-components";
 
-export const SentMessageWrapper = styled.div`
+interface SentMessageWrapperProps {
+  issender: boolean;
+}
+
+export const SentMessageWrapper = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "issender",
+})<SentMessageWrapperProps>`
   padding: 10px;
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 10px;
+  margin: 10px 20px;
+  width: fit-content;
+  max-width: 40%;
+  background-color: ${({ issender }) => (issender ? "#007bff" : "#28a745")};
+  color: white;
+  border-radius: 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-left: ${({ issender }) => (issender ? "auto" : "20px")};
+  margin-right: ${({ issender }) => (issender ? "20px" : "auto")};
 `;
 
 export const SenderName = styled.strong`
@@ -12,13 +27,23 @@ export const SenderName = styled.strong`
 `;
 
 export const MessageText = styled.p`
-  font-size: 1rem;
-  color: #333;
+  font-size: 1.1rem;
+  color: #fff;
+  width: 100%;
+  text-align: left;
 `;
 
-export const MessageTimestamp = styled.p`
+export const TextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const MessageTimestamp = styled.p.withConfig({
+  shouldForwardProp: (prop) => prop !== "issender",
+})<SentMessageWrapperProps>`
   font-size: 0.8rem;
-  color: #888;
+  color: #ddd;
   margin-top: 5px;
   font-style: italic;
+  text-align: ${({ issender }) => (issender ? "right" : "left")};
 `;
