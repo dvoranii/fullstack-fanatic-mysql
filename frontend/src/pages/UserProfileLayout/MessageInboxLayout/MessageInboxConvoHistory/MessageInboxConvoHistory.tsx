@@ -30,14 +30,11 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
     const fetchConversations = async () => {
       const token = await handleTokenExpiration();
       try {
-        const response = await fetch(
-          `${BASE_URL}/api/conversations/conversations`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await fetch(`${BASE_URL}/api/conversations`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         const data = await response.json();
         if (Array.isArray(data)) {
@@ -93,20 +90,19 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
           </span>
         </p>
       </ReadFilterWrapper>
-      <div>
-        {conversations.map((conversation) => (
-          <ConversationWrapper key={conversation.id}>
-            <p>
-              Conversation with&nbsp;
-              {userNames[conversation.id] || `User ${conversation.user2_id}`}
-            </p>
 
-            <button onClick={() => onConversationSelect(conversation.id)}>
-              Open Conversation
-            </button>
-          </ConversationWrapper>
-        ))}
-      </div>
+      {conversations.map((conversation) => (
+        <ConversationWrapper key={conversation.id}>
+          <p>
+            Conversation with&nbsp;
+            {userNames[conversation.id] || `User ${conversation.user2_id}`}
+          </p>
+
+          <button onClick={() => onConversationSelect(conversation.id)}>
+            Open Conversation
+          </button>
+        </ConversationWrapper>
+      ))}
     </ConvoHistoryContainer>
   );
 };

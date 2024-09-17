@@ -23,7 +23,11 @@ export const SentMessageWrapper = styled.div.withConfig({
 
 export const SenderName = styled.strong`
   font-weight: bold;
-  color: #000;
+  color: #fff;
+  font-family: "Alata";
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid white;
+  width: fit-content;
 `;
 
 export const MessageText = styled.p`
@@ -31,6 +35,7 @@ export const MessageText = styled.p`
   color: #fff;
   width: 100%;
   text-align: left;
+  margin-top: 10px;
 `;
 
 export const TextContainer = styled.div`

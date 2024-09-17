@@ -28,7 +28,7 @@ export const addFavourite = async (
   try {
     const token = await handleTokenExpiration();
 
-    const res = await fetch("http://localhost:5000/api/favourites/", {
+    const res = await fetch("http://localhost:5000/api/favourites", {
       method: "POST",
       credentials: "include",
       headers: {

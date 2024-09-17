@@ -7,40 +7,24 @@ import {
   SenderName,
   TextContainer,
 } from "./SentMessages.styled";
-import { getMessagesForConversation } from "../../../../../services/messageService";
 import { getUserPublicProfile } from "../../../../../services/userService";
 import { UserContext } from "../../../../../context/UserContext";
 import ProfilePicture from "../../../../../components/ProfilePicture/ProfilePicture";
 
 interface SentMessagesProps {
-  conversationId: number;
+  messages: Message[];
 }
 
-const SentMessages: React.FC<SentMessagesProps> = ({ conversationId }) => {
-  const [messages, setMessages] = useState<Message[]>([]);
+const SentMessages: React.FC<SentMessagesProps> = ({ messages }) => {
   const [userNames, setUserNames] = useState<{ [key: number]: string }>({});
   const [userPictures, setUserPictures] = useState<{ [key: number]: string }>(
     {}
   );
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { profile } = useContext(UserContext) || {};
   const loggedInUserId = profile?.id;
 
   useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const data = await getMessagesForConversation(conversationId);
-        setMessages(data);
-        await fetchUserNamesAndPictures(data); // Fetch both names and pictures
-      } catch (err) {
-        setError("Failed to load messages");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     const fetchUserNamesAndPictures = async (messages: Message[]) => {
       const fetchedUserNames: { [key: number]: string } = {};
       const fetchedUserPictures: { [key: number]: string } = {};
@@ -53,6 +37,7 @@ const SentMessages: React.FC<SentMessagesProps> = ({ conversationId }) => {
             fetchedUserNames[userId] = profile.user.name;
             fetchedUserPictures[userId] = profile.user.profile_picture || "";
           } catch (error) {
+            setError("Failed to fetch user profile");
             console.error("Failed to fetch user profile", error);
           }
         }
@@ -62,17 +47,18 @@ const SentMessages: React.FC<SentMessagesProps> = ({ conversationId }) => {
       setUserPictures((prev) => ({ ...prev, ...fetchedUserPictures }));
     };
 
-    fetchMessages();
-  }, [conversationId]);
+    if (messages.length > 0) {
+      fetchUserNamesAndPictures(messages);
+    }
+  }, [messages]);
 
-  if (loading) return <p>Loading messages...</p>;
   if (error) return <p>{error}</p>;
 
   return (
     <>
       {messages.map((message) => (
         <SentMessageWrapper
-          key={message.id}
+          key={`${message.id}-${message.sender_id}`}
           issender={message.sender_id === loggedInUserId}
         >
           <ProfilePicture
@@ -82,14 +68,13 @@ const SentMessages: React.FC<SentMessagesProps> = ({ conversationId }) => {
             border="2px solid #ccc"
             bg="#ffffff"
           />
-
           <TextContainer>
             <SenderName>
               {userNames[message.sender_id] || `User ${message.sender_id}`}
             </SenderName>
             <MessageText>{message.content}</MessageText>
             <MessageTimestamp issender={message.sender_id === loggedInUserId}>
-              {message.sent_at}
+              {new Date(message.sent_at).toLocaleString()}
             </MessageTimestamp>
           </TextContainer>
         </SentMessageWrapper>

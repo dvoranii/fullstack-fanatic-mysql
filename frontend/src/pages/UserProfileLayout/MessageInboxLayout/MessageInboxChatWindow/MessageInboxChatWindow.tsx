@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   ChatWindowContainerOuter,
   ChatInput,
@@ -12,6 +12,8 @@ import PlusIcon from "../../../../assets/images/account/plus-icon.png";
 import SentMessages from "./SentMessages/SentMessages";
 import { handleTokenExpiration } from "../../../../services/tokenService";
 import { UserContext } from "../../../../context/UserContext";
+import { io } from "socket.io-client";
+import { Message } from "../../../../types/Message";
 
 interface MessageInboxChatWindowProps {
   conversationId: number | null;
@@ -19,6 +21,7 @@ interface MessageInboxChatWindowProps {
 }
 
 const BASE_URL = "http://localhost:5000";
+const socket = io(BASE_URL);
 
 const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   conversationId,
@@ -28,14 +31,65 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   const loggedInUserId = profile?.id;
 
   const [newMessage, setNewMessage] = useState<string>("");
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      if (conversationId) {
+        const token = await handleTokenExpiration();
+        const response = await fetch(
+          `${BASE_URL}/api/messages/${conversationId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await response.json();
+        setMessages(data);
+      }
+    };
+
+    fetchMessages();
+  }, [conversationId]);
+
+  useEffect(() => {
+    if (conversationId) {
+      socket.on("newMessage", (message) => {
+        console.log("New message received: ", message);
+        if (message.conversation_id === conversationId) {
+          setMessages((prevMessages) => [...prevMessages, message]);
+        }
+      });
+
+      // Clean up the socket listener when component unmounts
+      return () => {
+        socket.off("newMessage");
+      };
+    }
+  }, [conversationId]);
 
   const handleSendMessage = async () => {
     if (!conversationId || newMessage.trim() === "") return;
 
+    // Create a temporary message with default values
+    const tempMessage: Message = {
+      id: Date.now(),
+      conversation_id: conversationId,
+      sender_id: Number(loggedInUserId),
+      receiver_id: Number(userId),
+      subject: "",
+      content: newMessage,
+      is_read: false,
+      sent_at: String(new Date()),
+    };
+
+    setMessages((prevMessages) => [...prevMessages, tempMessage]);
+
     const token = await handleTokenExpiration();
 
     try {
-      const messageResponse = await fetch(`${BASE_URL}/api/messages/messages`, {
+      const messageResponse = await fetch(`${BASE_URL}/api/messages`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -58,8 +112,6 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
     }
   };
 
-  // need to figure out real-time update for sending messages so it is
-  // immediately visible in the chat window
   return (
     <ChatWindowContainerOuter>
       {!conversationId && (
@@ -72,7 +124,7 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
 
       {conversationId && (
         <ChatWindowContainerInner>
-          <SentMessages conversationId={conversationId} />
+          <SentMessages messages={messages} />
         </ChatWindowContainerInner>
       )}
 

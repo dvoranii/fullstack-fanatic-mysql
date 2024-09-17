@@ -9,7 +9,12 @@ export const ConvoHistoryContainer = styled.div`
   }
 `;
 
-export const ConversationWrapper = styled.div``;
+export const ConversationWrapper = styled.div`
+  border: 1px solid grey;
+  border-radius: 4px;
+  margin: 10px;
+  padding: 10px;
+`;
 
 export const ReadFilterWrapper = styled.div`
   width: 100%;

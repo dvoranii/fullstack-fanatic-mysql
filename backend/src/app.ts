@@ -10,6 +10,8 @@ import userRoutes from "./routes/user";
 import favouriteRoutes from "./routes/favourites";
 import conversationsRoutes from "./routes/conversations";
 import messagesRoutes from "./routes/messages";
+import { Server } from "socket.io";
+import http from "http";
 
 import cookieParser from "cookie-parser";
 
@@ -45,5 +47,30 @@ app.use("/api/favourites", favouriteRoutes);
 app.use("/api/conversations", conversationsRoutes);
 app.use("/api/messages", messagesRoutes);
 
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("New client connected:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected:", socket.id);
+  });
+
+  socket.on("sendMessage", (message) => {
+    console.log("New message received:", message);
+    io.emit("newMessage", message);
+  });
+});
+
+export { io };
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

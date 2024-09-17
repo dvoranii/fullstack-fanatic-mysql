@@ -10,17 +10,14 @@ export const createOrGetConversation = async (
 ): Promise<Conversation> => {
   const token = await handleTokenExpiration();
 
-  const conversationResponse = await fetch(
-    `${BASE_URL}/api/conversations/conversations`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ user1_id: loggedInUserId, user2_id: userId }),
-    }
-  );
+  const conversationResponse = await fetch(`${BASE_URL}/api/conversations`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ user1_id: loggedInUserId, user2_id: userId }),
+  });
 
   if (!conversationResponse.ok) {
     throw new Error("Failed to create or get conversation");
@@ -38,7 +35,7 @@ export const sendMessage = async (
 ): Promise<Message> => {
   const token = await handleTokenExpiration();
 
-  const messageResponse = await fetch(`${BASE_URL}/api/messages/messages`, {
+  const messageResponse = await fetch(`${BASE_URL}/api/messages`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -65,15 +62,12 @@ export const getMessagesForConversation = async (
 ): Promise<Message[]> => {
   const token = await handleTokenExpiration();
 
-  const response = await fetch(
-    `${BASE_URL}/api/messages/messages/${conversationId}`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const response = await fetch(`${BASE_URL}/api/messages/${conversationId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   if (!response.ok) {
     throw new Error("Failed to load messages");
