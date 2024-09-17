@@ -12,15 +12,18 @@ import PlusIcon from "../../../../assets/images/account/plus-icon.png";
 import SentMessages from "./SentMessages/SentMessages";
 import { handleTokenExpiration } from "../../../../services/tokenService";
 import { UserContext } from "../../../../context/UserContext";
+// import { getUserPublicProfile } from "../../../../services/userService";
 
 interface MessageInboxChatWindowProps {
   conversationId: number | null;
+  userId: string;
 }
 
 const BASE_URL = "http://localhost:5000";
 
 const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   conversationId,
+  userId,
 }) => {
   const { profile } = useContext(UserContext) || {};
   const loggedInUserId = profile?.id;
@@ -42,7 +45,7 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
         body: JSON.stringify({
           conversation_id: conversationId,
           sender_id: loggedInUserId,
-          receiver_id: conversationId,
+          receiver_id: userId,
           content: newMessage,
         }),
       });

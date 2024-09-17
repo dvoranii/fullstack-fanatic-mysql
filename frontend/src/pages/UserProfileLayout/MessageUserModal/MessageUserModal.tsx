@@ -18,6 +18,9 @@ import {
 } from "../../../services/messageService";
 import CloseIcon from "../../../assets/images/close-icon.png";
 import { UserContext } from "../../../context/UserContext";
+// import { colors } from "../../../GlobalStyles";
+
+const BASE_URL = "http://localhost:5000";
 
 interface MessageUserModalProps {
   isOpen: boolean;
@@ -96,7 +99,10 @@ const MessageUserModal: React.FC<MessageUserModalProps> = ({
       <ModalOverlay onClick={onClose} />
       <ModalContent>
         <AvatarContainer>
-          <UserAvatar src={userAvatarUrl || ""} alt="User Avatar" />
+          <UserAvatar
+            src={`${BASE_URL}${userAvatarUrl}` || ""}
+            alt="User Avatar"
+          />
         </AvatarContainer>
         <CloseBtn src={CloseIcon} onClick={onClose} />
         <MessageForm>
