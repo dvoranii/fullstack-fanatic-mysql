@@ -13,23 +13,21 @@ router.post(
 
     try {
       const connection = await connectionPromise;
+
       const [existingConversation] = await connection.execute<RowDataPacket[]>(
         "SELECT id FROM conversations WHERE (user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)",
         [user1_id, user2_id, user2_id, user1_id]
       );
 
-      // If conversation already exists, return the conversation id
       if (existingConversation.length > 0) {
-        return res.status(200).json(existingConversation[0]);
+        return res.status(200).json({ id: existingConversation[0].id });
       }
 
-      // If no conversation exists, create a new one
       const [result] = await connection.execute<ResultSetHeader>(
         "INSERT INTO conversations (user1_id, user2_id, created_at) VALUES (?, ?, NOW())",
         [user1_id, user2_id]
       );
 
-      // Return the newly created conversation id
       res.status(201).json({ id: result.insertId });
     } catch (err) {
       console.error(err);
@@ -39,10 +37,36 @@ router.post(
 );
 
 router.get(
+  "/conversations/:conversationId",
+  authenticate,
+  async (req: Request, res: Response) => {
+    const { conversationId } = req.params;
+
+    try {
+      const connection = await connectionPromise;
+
+      const [conversation] = await connection.execute<RowDataPacket[]>(
+        "SELECT * FROM conversations WHERE id = ?",
+        [conversationId]
+      );
+
+      if (conversation.length === 0) {
+        return res.status(404).json({ error: "Conversation not found" });
+      }
+
+      res.status(200).json(conversation[0]);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Failed to fetch conversation" });
+    }
+  }
+);
+
+router.get(
   "/conversations",
   authenticate,
   async (req: Request, res: Response) => {
-    const userId = req.user?.userId; // Get the logged-in user's ID from the token
+    const userId = req.user?.userId;
 
     if (!userId) {
       return res.status(400).json({ error: "User ID is required" });
@@ -50,9 +74,10 @@ router.get(
 
     try {
       const connection = await connectionPromise;
+
       const [conversations] = await connection.execute<RowDataPacket[]>(
         `SELECT * FROM conversations 
-       WHERE user1_id = ? OR user2_id = ?`,
+         WHERE user1_id = ? OR user2_id = ?`,
         [userId, userId]
       );
 
@@ -63,27 +88,5 @@ router.get(
     }
   }
 );
-
-// router.get(
-//   "/conversations/:conversation_id",
-//   authenticate,
-//   async (req: Request, res: Response) => {
-//     const { conversation_id } = req.params;
-//     const conversationIdAsNumber = Number(conversation_id);
-
-//     try {
-//       const connection = await connectionPromise;
-//       const [messages] = await connection.execute<RowDataPacket[]>(
-//         "SELECT * FROM messages WHERE conversation_id = ? ORDER BY sent_at",
-//         [conversationIdAsNumber]
-//       );
-
-//       res.status(200).json(messages);
-//     } catch (err) {
-//       console.error(err);
-//       res.status(500).json({ error: "Failed to fetch conversation" });
-//     }
-//   }
-// );
 
 export default router;

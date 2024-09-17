@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import {
   ConvoHistoryContainer,
   ReadFilterWrapper,
@@ -6,6 +6,8 @@ import {
 import SearchBar from "../../../../components/SearchBar/SearchBar";
 import { Conversation } from "../../../../types/Conversations";
 import { handleTokenExpiration } from "../../../../services/tokenService";
+import { UserContext } from "../../../../context/UserContext";
+import { getUserPublicProfile } from "../../../../services/userService";
 
 interface MessageInboxConvoHistoryProps {
   onConversationSelect: (conversationId: number) => void;
@@ -16,7 +18,11 @@ const BASE_URL = "http://localhost:5000";
 const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
   onConversationSelect,
 }) => {
+  const { profile } = useContext(UserContext) || {};
+  const loggedInUserId = profile?.id;
+
   const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [userNames, setUserNames] = useState<{ [key: number]: string }>({});
   const [boldSpan, setBoldSpan] = useState("read");
 
   useEffect(() => {
@@ -35,6 +41,7 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
         const data = await response.json();
         if (Array.isArray(data)) {
           setConversations(data);
+          fetchUserNames(data); // Fetch names of the other users
         } else {
           console.error("Unexpected response format:", data);
           setConversations([]);
@@ -47,6 +54,21 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
 
     fetchConversations();
   }, []);
+
+  // Fetch the usernames of the other user in the conversation
+  const fetchUserNames = async (conversations: Conversation[]) => {
+    const fetchedUserNames: { [key: number]: string } = {};
+    for (const conversation of conversations) {
+      const otherUserId =
+        loggedInUserId === conversation.user1_id
+          ? conversation.user2_id
+          : conversation.user1_id;
+
+      const profile = await getUserPublicProfile(otherUserId.toString());
+      fetchedUserNames[conversation.id] = profile.user.name;
+    }
+    setUserNames(fetchedUserNames);
+  };
 
   const toggleBold = (selectedSpan: string) => {
     setBoldSpan(selectedSpan);
@@ -75,8 +97,13 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
       <div>
         {conversations.map((conversation) => (
           <div key={conversation.id}>
-            <p>Conversation with User {conversation.user2_id}</p>
-            {/* Call onConversationSelect when a conversation is selected */}
+            <p>
+              Conversation with&nbsp;
+              {userNames[conversation.id] ||
+                `User ${conversation.user2_id}`}{" "}
+              {/* Display fetched name */}
+            </p>
+
             <button onClick={() => onConversationSelect(conversation.id)}>
               Open Conversation
             </button>

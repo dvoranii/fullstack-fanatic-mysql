@@ -1,3 +1,4 @@
+// MessageUserModal.tsx
 import React, { useState, useEffect, useContext } from "react";
 import {
   ModalOverlay,
@@ -11,11 +12,12 @@ import {
   CloseBtn,
 } from "./MessageUserModal.styled";
 import { getUserPublicProfile } from "../../../services/userService";
+import {
+  createOrGetConversation,
+  sendMessage,
+} from "../../../services/messageService";
 import CloseIcon from "../../../assets/images/close-icon.png";
-import { Conversation } from "../../../types/Conversations";
-import { Message } from "../../../types/Message";
 import { UserContext } from "../../../context/UserContext";
-import { handleTokenExpiration } from "../../../services/tokenService";
 
 interface MessageUserModalProps {
   isOpen: boolean;
@@ -23,8 +25,6 @@ interface MessageUserModalProps {
   userId: string;
   onSendMessage: (subject: string, message: string) => void;
 }
-
-const BASE_URL = "http://localhost:5000";
 
 const MessageUserModal: React.FC<MessageUserModalProps> = ({
   isOpen,
@@ -45,13 +45,7 @@ const MessageUserModal: React.FC<MessageUserModalProps> = ({
       const fetchUserProfile = async () => {
         try {
           const profileData = await getUserPublicProfile(userId);
-          const avatarUrl = profileData.user.profile_picture;
-
-          if (avatarUrl && avatarUrl.startsWith("/")) {
-            setUserAvatarUrl(`${BASE_URL}${avatarUrl}`);
-          } else {
-            setUserAvatarUrl(avatarUrl || "");
-          }
+          setUserAvatarUrl(profileData.user.profile_picture || "");
         } catch (error) {
           setError("Failed to load user profile.");
           console.error(error);
@@ -71,43 +65,22 @@ const MessageUserModal: React.FC<MessageUserModalProps> = ({
     }
 
     try {
-      const token = await handleTokenExpiration();
+      const numericUserId = Number(userId);
 
-      const conversationResponse = await fetch(
-        `${BASE_URL}/api/conversations/conversations`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-
-          body: JSON.stringify({ user1_id: loggedInUserId, user2_id: userId }),
-        }
+      const conversation = await createOrGetConversation(
+        loggedInUserId,
+        numericUserId
       );
 
-      const conversation: Conversation = await conversationResponse.json();
-      console.log(conversation);
+      await sendMessage(
+        conversation.id,
+        loggedInUserId,
+        numericUserId,
+        subject,
+        message
+      );
 
-      // Send the message
-      const messageResponse = await fetch(`${BASE_URL}/api/messages/messages`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          conversation_id: conversation.id,
-          sender_id: loggedInUserId,
-          receiver_id: userId,
-          subject,
-          content: message,
-        }),
-      });
-
-      const sentMessage: Message = await messageResponse.json();
-      console.log("Message sent:", sentMessage);
-
+      console.log("Message sent successfully");
       onClose();
     } catch (error) {
       console.error("Failed to send message:", error);

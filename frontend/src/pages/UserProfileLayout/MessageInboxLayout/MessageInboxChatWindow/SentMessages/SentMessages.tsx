@@ -6,13 +6,11 @@ import {
   MessageText,
   MessageTimestamp,
 } from "./SentMessages.styled";
-import { handleTokenExpiration } from "../../../../../services/tokenService";
+import { getMessagesForConversation } from "../../../../../services/messageService";
 
 interface SentMessagesProps {
   conversationId: number;
 }
-
-const BASE_URL = "http://localhost:5000";
 
 const SentMessages: React.FC<SentMessagesProps> = ({ conversationId }) => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -21,26 +19,9 @@ const SentMessages: React.FC<SentMessagesProps> = ({ conversationId }) => {
 
   useEffect(() => {
     const fetchMessages = async () => {
-      const token = await handleTokenExpiration();
-
       try {
-        const response = await fetch(
-          `${BASE_URL}/api/messages/messages/${conversationId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        const data = await response.json();
-
-        if (Array.isArray(data)) {
-          setMessages(data);
-        } else {
-          console.error("Unexpected response format:", data);
-          setMessages([]);
-        }
+        const data = await getMessagesForConversation(conversationId);
+        setMessages(data);
       } catch (err) {
         setError("Failed to load messages");
         console.error(err);
