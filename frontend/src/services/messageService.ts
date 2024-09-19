@@ -6,7 +6,8 @@ const BASE_URL = "http://localhost:5000";
 
 export const createOrGetConversation = async (
   loggedInUserId: number,
-  userId: number
+  userId: number,
+  subject: string
 ): Promise<Conversation> => {
   const token = await handleTokenExpiration();
 
@@ -16,7 +17,11 @@ export const createOrGetConversation = async (
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ user1_id: loggedInUserId, user2_id: userId }),
+    body: JSON.stringify({
+      user1_id: loggedInUserId,
+      user2_id: userId,
+      subject,
+    }),
   });
 
   if (!conversationResponse.ok) {

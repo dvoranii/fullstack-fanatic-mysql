@@ -62,7 +62,6 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
         }
       });
 
-      // Clean up the socket listener when component unmounts
       return () => {
         socket.off("newMessage");
       };
@@ -72,7 +71,6 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   const handleSendMessage = async () => {
     if (!conversationId || newMessage.trim() === "") return;
 
-    // Create a temporary message with default values
     const tempMessage: Message = {
       id: Date.now(),
       conversation_id: conversationId,

@@ -14,6 +14,12 @@ export const ConversationWrapper = styled.div`
   border-radius: 4px;
   margin: 10px;
   padding: 10px;
+  transition: all 150ms ease;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #eee;
+  }
 `;
 
 export const ReadFilterWrapper = styled.div`
@@ -41,4 +47,18 @@ export const ReadFilterWrapper = styled.div`
       cursor: pointer;
     }
   }
+`;
+
+export const ProfilePictureWrapper = styled.div`
+  margin-right: 10px;
+`;
+
+export const ConversationDetailsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const SubjectPreview = styled.p`
+  font-size: 0.9rem;
+  color: gray;
 `;

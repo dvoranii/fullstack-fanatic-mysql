@@ -72,7 +72,8 @@ const MessageUserModal: React.FC<MessageUserModalProps> = ({
 
       const conversation = await createOrGetConversation(
         loggedInUserId,
-        numericUserId
+        numericUserId,
+        subject
       );
 
       await sendMessage(

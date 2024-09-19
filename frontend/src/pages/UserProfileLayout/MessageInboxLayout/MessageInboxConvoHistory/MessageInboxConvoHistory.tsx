@@ -3,12 +3,16 @@ import {
   ConvoHistoryContainer,
   ReadFilterWrapper,
   ConversationWrapper,
+  ProfilePictureWrapper,
+  ConversationDetailsWrapper,
+  SubjectPreview,
 } from "./MessageInboxConvoHistory.styled";
 import SearchBar from "../../../../components/SearchBar/SearchBar";
 import { Conversation } from "../../../../types/Conversations";
 import { handleTokenExpiration } from "../../../../services/tokenService";
 import { UserContext } from "../../../../context/UserContext";
 import { getUserPublicProfile } from "../../../../services/userService";
+import ProfilePicture from "../../../../components/ProfilePicture/ProfilePicture";
 
 interface MessageInboxConvoHistoryProps {
   onConversationSelect: (conversationId: number) => void;
@@ -24,6 +28,9 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [userNames, setUserNames] = useState<{ [key: number]: string }>({});
+  const [userPictures, setUserPictures] = useState<{ [key: number]: string }>(
+    {}
+  );
   const [boldSpan, setBoldSpan] = useState("read");
 
   useEffect(() => {
@@ -39,7 +46,8 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
         const data = await response.json();
         if (Array.isArray(data)) {
           setConversations(data);
-          fetchUserNames(data); // Fetch names of the other users
+          // fetchUserNames(data);
+          fetchUserNamesAndPictures(data);
         } else {
           console.error("Unexpected response format:", data);
           setConversations([]);
@@ -52,18 +60,27 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
     fetchConversations();
   }, []);
 
-  const fetchUserNames = async (conversations: Conversation[]) => {
+  const fetchUserNamesAndPictures = async (conversations: Conversation[]) => {
     const fetchedUserNames: { [key: number]: string } = {};
+    const fetchedUserPictures: { [key: number]: string } = {};
+
     for (const conversation of conversations) {
       const otherUserId =
         loggedInUserId === conversation.user1_id
           ? conversation.user2_id
           : conversation.user1_id;
 
-      const profile = await getUserPublicProfile(otherUserId.toString());
-      fetchedUserNames[conversation.id] = profile.user.name;
+      try {
+        const profile = await getUserPublicProfile(otherUserId.toString());
+        fetchedUserNames[conversation.id] = profile.user.name;
+        fetchedUserPictures[conversation.id] =
+          profile.user.profile_picture || "";
+      } catch (error) {
+        console.error("Failed to fetch user profile", error);
+      }
     }
     setUserNames(fetchedUserNames);
+    setUserPictures(fetchedUserPictures);
   };
 
   const toggleBold = (selectedSpan: string) => {
@@ -92,15 +109,28 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
       </ReadFilterWrapper>
 
       {conversations.map((conversation) => (
-        <ConversationWrapper key={conversation.id}>
-          <p>
-            Conversation with&nbsp;
-            {userNames[conversation.id] || `User ${conversation.user2_id}`}
-          </p>
+        <ConversationWrapper
+          key={conversation.id}
+          onClick={() => onConversationSelect(conversation.id)}
+        >
+          <ProfilePictureWrapper>
+            <ProfilePicture
+              src={userPictures[conversation.id] || ""}
+              alt="User Profile Picture"
+              width="45px"
+              border="2px solid #ccc"
+              bg="#ffffff"
+            />
+          </ProfilePictureWrapper>
 
-          <button onClick={() => onConversationSelect(conversation.id)}>
-            Open Conversation
-          </button>
+          <ConversationDetailsWrapper>
+            <p>
+              {userNames[conversation.id] || `User ${conversation.user2_id}`}
+            </p>
+            <SubjectPreview>
+              {conversation.subject || "No subject"}
+            </SubjectPreview>
+          </ConversationDetailsWrapper>
         </ConversationWrapper>
       ))}
     </ConvoHistoryContainer>

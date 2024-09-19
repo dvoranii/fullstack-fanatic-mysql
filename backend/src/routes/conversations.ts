@@ -6,7 +6,7 @@ import { authenticate } from "../middleware/authenticate";
 const router = express.Router();
 
 router.post("/", authenticate, async (req: Request, res: Response) => {
-  const { user1_id, user2_id } = req.body;
+  const { user1_id, user2_id, subject } = req.body;
 
   try {
     const connection = await connectionPromise;
@@ -21,8 +21,8 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
     }
 
     const [result] = await connection.execute<ResultSetHeader>(
-      "INSERT INTO conversations (user1_id, user2_id, created_at) VALUES (?, ?, NOW())",
-      [user1_id, user2_id]
+      "INSERT INTO conversations (user1_id, user2_id,subject, created_at) VALUES (?, ?, NOW())",
+      [user1_id, user2_id, subject]
     );
 
     res.status(201).json({ id: result.insertId });
