@@ -7,4 +7,5 @@ export interface Conversation {
   created_at: string;
   messages: Message[];
   subject: string;
+  is_read: number;
 }

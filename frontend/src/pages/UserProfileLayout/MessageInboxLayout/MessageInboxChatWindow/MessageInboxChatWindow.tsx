@@ -78,7 +78,7 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
       receiver_id: Number(userId),
       subject: "",
       content: newMessage,
-      is_read: false,
+      // is_read: false,
       sent_at: String(new Date()),
     };
 

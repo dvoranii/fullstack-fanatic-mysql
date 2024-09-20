@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useCallback } from "react";
 import {
   ConvoHistoryContainer,
   ReadFilterWrapper,
@@ -33,6 +33,32 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
   );
   const [boldSpan, setBoldSpan] = useState("read");
 
+  const fetchUserNamesAndPictures = useCallback(
+    async (conversations: Conversation[]) => {
+      const fetchedUserNames: { [key: number]: string } = {};
+      const fetchedUserPictures: { [key: number]: string } = {};
+
+      for (const conversation of conversations) {
+        const otherUserId =
+          loggedInUserId === conversation.user1_id
+            ? conversation.user2_id
+            : conversation.user1_id;
+
+        try {
+          const profile = await getUserPublicProfile(otherUserId.toString());
+          fetchedUserNames[conversation.id] = profile.user.name;
+          fetchedUserPictures[conversation.id] =
+            profile.user.profile_picture || "";
+        } catch (error) {
+          console.error("Failed to fetch user profile", error);
+        }
+      }
+      setUserNames(fetchedUserNames);
+      setUserPictures(fetchedUserPictures);
+    },
+    [loggedInUserId]
+  );
+
   useEffect(() => {
     const fetchConversations = async () => {
       const token = await handleTokenExpiration();
@@ -44,9 +70,9 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
         });
 
         const data = await response.json();
+
         if (Array.isArray(data)) {
           setConversations(data);
-          // fetchUserNames(data);
           fetchUserNamesAndPictures(data);
         } else {
           console.error("Unexpected response format:", data);
@@ -58,33 +84,30 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
       }
     };
     fetchConversations();
-  }, []);
-
-  const fetchUserNamesAndPictures = async (conversations: Conversation[]) => {
-    const fetchedUserNames: { [key: number]: string } = {};
-    const fetchedUserPictures: { [key: number]: string } = {};
-
-    for (const conversation of conversations) {
-      const otherUserId =
-        loggedInUserId === conversation.user1_id
-          ? conversation.user2_id
-          : conversation.user1_id;
-
-      try {
-        const profile = await getUserPublicProfile(otherUserId.toString());
-        fetchedUserNames[conversation.id] = profile.user.name;
-        fetchedUserPictures[conversation.id] =
-          profile.user.profile_picture || "";
-      } catch (error) {
-        console.error("Failed to fetch user profile", error);
-      }
-    }
-    setUserNames(fetchedUserNames);
-    setUserPictures(fetchedUserPictures);
-  };
+  }, [fetchUserNamesAndPictures]);
 
   const toggleBold = (selectedSpan: string) => {
     setBoldSpan(selectedSpan);
+  };
+
+  const filteredConversations = (): Conversation[] => {
+    return conversations.filter((conversation: Conversation) => {
+      return boldSpan === "read"
+        ? conversation.is_read === 1
+        : conversation.is_read === 0;
+    });
+  };
+
+  const handleConversationSelect = (conversationId: number) => {
+    setConversations((prevConversations) =>
+      prevConversations.map((conversation) =>
+        conversation.id === conversationId
+          ? { ...conversation, is_read: 1 }
+          : conversation
+      )
+    );
+
+    onConversationSelect(conversationId);
   };
 
   return (
@@ -108,10 +131,10 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
         </p>
       </ReadFilterWrapper>
 
-      {conversations.map((conversation) => (
+      {filteredConversations().map((conversation: Conversation) => (
         <ConversationWrapper
           key={conversation.id}
-          onClick={() => onConversationSelect(conversation.id)}
+          onClick={() => handleConversationSelect(conversation.id)}
         >
           <ProfilePictureWrapper>
             <ProfilePicture

@@ -35,6 +35,11 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
       sent_at: new Date(),
     };
 
+    await connection.execute<ResultSetHeader>(
+      "UPDATE conversations SET is_read = false WHERE id = ? AND user2_id = ?",
+      [conversation_id, receiver_id]
+    );
+
     io.to(`conversation_${conversation_id}`).emit("newMessage", newMessage);
 
     res.status(201).json({ message: "Message sent successfully" });
@@ -54,6 +59,13 @@ router.get("/:conversationId", authenticate, async (req, res) => {
       "SELECT * FROM messages WHERE conversation_id = ? ORDER BY sent_at",
       [conversationIdAsNumber]
     );
+
+    const userId = req.user?.userId;
+    await connection.execute<ResultSetHeader>(
+      "UPDATE conversations SET is_read = true WHERE id = ? AND (user1_id = ? OR user2_id = ?)",
+      [conversationIdAsNumber, userId, userId]
+    );
+
     res.status(200).json(messages);
   } catch (err) {
     console.error(err);

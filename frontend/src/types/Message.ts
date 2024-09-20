@@ -5,6 +5,5 @@ export interface Message {
   receiver_id: number;
   subject: string;
   content: string;
-  is_read: boolean;
   sent_at: string;
 }
