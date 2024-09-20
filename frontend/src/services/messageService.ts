@@ -80,3 +80,20 @@ export const getMessagesForConversation = async (
 
   return await response.json();
 };
+
+export const fetchConversations = async (): Promise<Conversation[]> => {
+  const token = await handleTokenExpiration();
+  const response = await fetch(`${BASE_URL}/api/conversations`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  if (!Array.isArray(data)) {
+    throw new Error("Unexpected response format");
+  }
+
+  return data;
+};

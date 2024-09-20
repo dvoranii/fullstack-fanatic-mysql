@@ -9,16 +9,14 @@ import {
 } from "./MessageInboxConvoHistory.styled";
 import SearchBar from "../../../../components/SearchBar/SearchBar";
 import { Conversation } from "../../../../types/Conversations";
-import { handleTokenExpiration } from "../../../../services/tokenService";
 import { UserContext } from "../../../../context/UserContext";
-import { getUserPublicProfile } from "../../../../services/userService";
+import { fetchConversations } from "../../../../services/messageService";
+import { fetchUserNamesAndPictures } from "../../../../services/userService";
 import ProfilePicture from "../../../../components/ProfilePicture/ProfilePicture";
 
 interface MessageInboxConvoHistoryProps {
   onConversationSelect: (conversationId: number) => void;
 }
-
-const BASE_URL = "http://localhost:5000";
 
 const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
   onConversationSelect,
@@ -33,58 +31,37 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
   );
   const [boldSpan, setBoldSpan] = useState("read");
 
-  const fetchUserNamesAndPictures = useCallback(
+  // Use useCallback to memoize the function and prevent unnecessary re-renders
+  const fetchUserDetails = useCallback(
     async (conversations: Conversation[]) => {
-      const fetchedUserNames: { [key: number]: string } = {};
-      const fetchedUserPictures: { [key: number]: string } = {};
-
-      for (const conversation of conversations) {
-        const otherUserId =
-          loggedInUserId === conversation.user1_id
-            ? conversation.user2_id
-            : conversation.user1_id;
-
-        try {
-          const profile = await getUserPublicProfile(otherUserId.toString());
-          fetchedUserNames[conversation.id] = profile.user.name;
-          fetchedUserPictures[conversation.id] =
-            profile.user.profile_picture || "";
-        } catch (error) {
-          console.error("Failed to fetch user profile", error);
-        }
+      try {
+        const { userNames, userPictures } = await fetchUserNamesAndPictures(
+          conversations,
+          loggedInUserId
+        );
+        setUserNames(userNames);
+        setUserPictures(userPictures);
+      } catch (error) {
+        console.error("Failed to fetch user profiles", error);
       }
-      setUserNames(fetchedUserNames);
-      setUserPictures(fetchedUserPictures);
     },
     [loggedInUserId]
   );
 
   useEffect(() => {
-    const fetchConversations = async () => {
-      const token = await handleTokenExpiration();
+    const getConversations = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/api/conversations`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const data = await response.json();
-
-        if (Array.isArray(data)) {
-          setConversations(data);
-          fetchUserNamesAndPictures(data);
-        } else {
-          console.error("Unexpected response format:", data);
-          setConversations([]);
-        }
+        const data = await fetchConversations();
+        setConversations(data);
+        fetchUserDetails(data);
       } catch (error) {
         console.error("Failed to fetch conversations:", error);
         setConversations([]);
       }
     };
-    fetchConversations();
-  }, [fetchUserNamesAndPictures]);
+
+    getConversations();
+  }, [fetchUserDetails]);
 
   const toggleBold = (selectedSpan: string) => {
     setBoldSpan(selectedSpan);

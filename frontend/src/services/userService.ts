@@ -1,6 +1,7 @@
 import { User } from "../types/User";
 import { handleTokenExpiration } from "./tokenService";
 import { PublicProfile } from "../types/PublicProfileType";
+import { Conversation } from "../types/Conversations";
 
 export const getUserProfile = async (): Promise<User> => {
   const token = await handleTokenExpiration();
@@ -35,4 +36,32 @@ export const getUserPublicProfile = async (
   }
 
   return res.json();
+};
+
+export const fetchUserNamesAndPictures = async (
+  conversations: Conversation[],
+  loggedInUserId: number | undefined
+): Promise<{
+  userNames: { [key: number]: string };
+  userPictures: { [key: number]: string };
+}> => {
+  const fetchedUserNames: { [key: number]: string } = {};
+  const fetchedUserPictures: { [key: number]: string } = {};
+
+  for (const conversation of conversations) {
+    const otherUserId =
+      loggedInUserId === conversation.user1_id
+        ? conversation.user2_id
+        : conversation.user1_id;
+
+    try {
+      const profile = await getUserPublicProfile(otherUserId.toString());
+      fetchedUserNames[conversation.id] = profile.user.name;
+      fetchedUserPictures[conversation.id] = profile.user.profile_picture || "";
+    } catch (error) {
+      console.error("Failed to fetch public user profile", error);
+    }
+  }
+
+  return { userNames: fetchedUserNames, userPictures: fetchedUserPictures };
 };
