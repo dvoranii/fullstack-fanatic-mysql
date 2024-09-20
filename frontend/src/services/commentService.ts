@@ -1,21 +1,15 @@
 import { CommentType } from "../types/Comment";
-import { handleTokenExpiration } from "./tokenService";
+import { apiCall } from "../utils/apiUtils";
 
 export const fetchComments = async (
   contentType: string,
   contentId: number
 ): Promise<CommentType[]> => {
-  const token = await handleTokenExpiration();
-  const url = `/api/comments/${contentType}/${contentId}?includeLikedStatus=true`;
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!response.ok) throw new Error("Failed to fetch comments");
-  const data = await response.json();
+  const endpoint = `/api/comments/${contentType}/${contentId}?includeLikedStatus=true`;
 
-  return data as CommentType[];
+  const { data } = await apiCall<CommentType[]>(endpoint);
+
+  return data;
 };
 
 export const submitComment = async (
@@ -23,21 +17,18 @@ export const submitComment = async (
   contentType: string,
   newComment: string
 ): Promise<CommentType> => {
-  const token = await handleTokenExpiration();
-  const response = await fetch("/api/comments", {
+  const endpoint = `/api/comments`;
+
+  // Destructure `data` from the response
+  const { data } = await apiCall<CommentType>(endpoint, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
     body: JSON.stringify({
       content_id: contentId,
       content_type: contentType,
       content: newComment,
     }),
   });
-  if (!response.ok) throw new Error("Failed to submit comment");
-  const data = await response.json();
+
   return data;
 };
 
@@ -51,14 +42,11 @@ export const submitReply = async ({
   content_type: "tutorial" | "blog";
   content: string;
   parent_comment_id: number;
-}) => {
-  const token = await handleTokenExpiration();
-  const res = await fetch("http://localhost:5000/api/comments/reply", {
+}): Promise<CommentType> => {
+  const endpoint = `/api/comments/reply`;
+
+  const { data } = await apiCall<CommentType>(endpoint, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
     body: JSON.stringify({
       content_id,
       content_type,
@@ -67,52 +55,37 @@ export const submitReply = async ({
     }),
   });
 
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text);
-  }
-
-  return res.json();
+  return data;
 };
 
 export const updateComment = async (
   id: number,
   editedComment: string
 ): Promise<CommentType> => {
-  const token = await handleTokenExpiration();
-  const response = await fetch(`/api/comments/${id}`, {
+  const endpoint = `/api/comments/${id}`;
+
+  const { data } = await apiCall<CommentType>(endpoint, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
     body: JSON.stringify({ content: editedComment }),
   });
-  if (!response.ok) throw new Error("Failed to update comment");
-  const data = await response.json();
+
   return data;
 };
 
 export const deleteComment = async (id: number): Promise<void> => {
-  const token = await handleTokenExpiration();
-  const response = await fetch(`/api/comments/${id}`, {
+  const endpoint = `/api/comments/${id}`;
+
+  await apiCall<void>(endpoint, {
     method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   });
-  if (!response.ok) throw new Error("Failed to delete comment");
 };
 
 export const toggleLike = async (id: number): Promise<number> => {
-  const token = await handleTokenExpiration();
-  const response = await fetch(`/api/comments/${id}/toggle-like`, {
+  const endpoint = `/api/comments/${id}/toggle-like`;
+
+  const { data } = await apiCall<{ likes: number }>(endpoint, {
     method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   });
-  if (!response.ok) throw new Error("Failed to toggle like");
-  const data = await response.json();
+
   return data.likes;
 };

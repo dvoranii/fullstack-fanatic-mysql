@@ -1,22 +1,15 @@
 import { Conversation } from "../types/Conversations";
 import { Message } from "../types/Message";
-import { handleTokenExpiration } from "./tokenService";
-
-const BASE_URL = "http://localhost:5000";
+import { apiCall } from "../utils/apiUtils";
 
 export const createOrGetConversation = async (
   loggedInUserId: number,
   userId: number,
   subject: string
 ): Promise<Conversation> => {
-  const token = await handleTokenExpiration();
-
-  const conversationResponse = await fetch(`${BASE_URL}/api/conversations`, {
+  const endpoint = `/api/conversations`;
+  const { data } = await apiCall<Conversation>(endpoint, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
     body: JSON.stringify({
       user1_id: loggedInUserId,
       user2_id: userId,
@@ -24,11 +17,7 @@ export const createOrGetConversation = async (
     }),
   });
 
-  if (!conversationResponse.ok) {
-    throw new Error("Failed to create or get conversation");
-  }
-
-  return await conversationResponse.json();
+  return data;
 };
 
 export const sendMessage = async (
@@ -38,14 +27,9 @@ export const sendMessage = async (
   subject: string,
   content: string
 ): Promise<Message> => {
-  const token = await handleTokenExpiration();
-
-  const messageResponse = await fetch(`${BASE_URL}/api/messages`, {
+  const endpoint = `/api/messages`;
+  const { data } = await apiCall<Message>(endpoint, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
     body: JSON.stringify({
       conversation_id: conversationId,
       sender_id: loggedInUserId,
@@ -55,45 +39,25 @@ export const sendMessage = async (
     }),
   });
 
-  if (!messageResponse.ok) {
-    throw new Error("Failed to send message");
-  }
-
-  return await messageResponse.json();
+  return data;
 };
 
 export const getMessagesForConversation = async (
   conversationId: number
 ): Promise<Message[]> => {
-  const token = await handleTokenExpiration();
-
-  const response = await fetch(`${BASE_URL}/api/messages/${conversationId}`, {
+  const endpoint = `/api/messages/${conversationId}`;
+  const { data } = await apiCall<Message[]>(endpoint, {
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   });
 
-  if (!response.ok) {
-    throw new Error("Failed to load messages");
-  }
-
-  return await response.json();
+  return data;
 };
 
 export const fetchConversations = async (): Promise<Conversation[]> => {
-  const token = await handleTokenExpiration();
-  const response = await fetch(`${BASE_URL}/api/conversations`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+  const endpoint = `/api/conversations`;
+  const { data } = await apiCall<Conversation[]>(endpoint, {
+    method: "GET",
   });
-
-  const data = await response.json();
-
-  if (!Array.isArray(data)) {
-    throw new Error("Unexpected response format");
-  }
 
   return data;
 };

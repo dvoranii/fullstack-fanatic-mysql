@@ -1,120 +1,89 @@
 import { AuthRequestBody } from "../types/AuthRequest";
 import { LoginRequestBody } from "../types/LoginRequestBody";
 import { User } from "../types/User";
+import { apiCall } from "../utils/apiUtils";
 
 export const registerUser = async (requestBody: AuthRequestBody) => {
-  const res = await fetch("http://localhost:5000/api/users/register", {
+  const endpoint = `/api/users/register`;
+  const { status, data } = await apiCall<User>(endpoint, {
     method: "POST",
     credentials: "include",
+    body: JSON.stringify(requestBody),
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(requestBody),
   });
 
-  if (res.status === 409) {
-    const text = await res.text();
-    throw new Error(text);
+  // Handle status codes (if necessary)
+  if (status === 409) {
+    throw new Error("User already exists.");
   }
 
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text);
-  }
-
-  return res.json();
+  return data;
 };
 
 export const loginUser = async (
   requestBody: LoginRequestBody
 ): Promise<User> => {
-  const res = await fetch("http://localhost:5000/api/users/login", {
+  const endpoint = `/api/users/login`;
+  const { data } = await apiCall<User>(endpoint, {
     method: "POST",
     credentials: "include",
+    body: JSON.stringify(requestBody),
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(requestBody),
   });
 
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text);
-  }
-
-  return res.json();
+  return data;
 };
 
 export const googleRegister = async (token: string) => {
-  const res = await fetch("http://localhost:5000/api/users/google-register", {
+  const endpoint = `/api/users/google-register`;
+  const { status, data } = await apiCall<{ message: string }>(endpoint, {
     method: "POST",
     credentials: "include",
+    body: JSON.stringify({ token }),
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ token }),
   });
 
-  if (res.status === 409) {
+  if (status === 409) {
     return { status: 409, message: "User already exists" };
   }
 
-  const contentType = res.headers.get("content-type");
-
-  if (!res.ok) {
-    const errorText =
-      contentType && contentType.includes("application/json")
-        ? await res.json()
-        : await res.text();
-    throw new Error(errorText);
-  }
-
-  const data = await res.json();
   if (data.message) {
     localStorage.setItem("accessToken", data.message);
   }
 
-  return data;
+  return { status, message: data.message };
 };
 
 export const googleLogin = async (token: string) => {
-  const res = await fetch("http://localhost:5000/api/users/google-login", {
+  const endpoint = `/api/users/google-login`;
+  const { status, data } = await apiCall<{ message: string }>(endpoint, {
     method: "POST",
     credentials: "include",
+    body: JSON.stringify({ token }),
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ token }),
   });
 
-  const contentType = res.headers.get("content-type");
-
-  if (!res.ok) {
-    const errorText =
-      contentType && contentType.includes("application/json")
-        ? await res.json()
-        : await res.text();
-    throw new Error(errorText);
-  }
-
-  const data = await res.json();
   if (data.message) {
     localStorage.setItem("accessToken", data.message);
   }
 
-  return data;
+  return { status, message: data.message };
 };
 
 export const refreshJwt = async () => {
-  const res = await fetch("http://localhost:5000/api/users/refresh-token", {
+  const endpoint = `/api/users/refresh-token`;
+  const { data } = await apiCall<{ token: string }>(endpoint, {
     method: "POST",
     credentials: "include",
   });
 
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text);
-  }
-
-  return res.json();
+  return data;
 };

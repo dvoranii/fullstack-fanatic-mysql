@@ -1,3 +1,4 @@
+import { InboxWrapper, FollowersWrapper } from "./UserAccountPage.styled";
 import { useContext, useState } from "react";
 import { UserContext } from "../../../context/UserContext";
 import UserProfilePage from "../UserProfile";
@@ -61,10 +62,15 @@ const UserAccountsPage: React.FC = () => {
         onBannerChange={handleBannerChange}
         onBannerUpload={handleBannerUpload}
       >
-        <span>
-          <img src={InboxIcon} alt="Inbox Icon" /> Inbox
-        </span>
-        <a href="#">127 Peers</a>
+        <InboxWrapper>
+          <a href="/my-account/inbox">
+            <img src={InboxIcon} alt="Inbox Icon" /> Inbox
+          </a>
+        </InboxWrapper>
+
+        <FollowersWrapper>
+          <a href="#">127 Peers</a>
+        </FollowersWrapper>
       </UserProfilePage>
     </>
   );

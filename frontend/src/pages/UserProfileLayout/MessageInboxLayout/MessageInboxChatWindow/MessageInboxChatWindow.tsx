@@ -10,10 +10,13 @@ import {
 } from "./MessageInboxChatWindow.styled";
 import PlusIcon from "../../../../assets/images/account/plus-icon.png";
 import SentMessages from "./SentMessages/SentMessages";
-import { handleTokenExpiration } from "../../../../services/tokenService";
 import { UserContext } from "../../../../context/UserContext";
 import { io } from "socket.io-client";
 import { Message } from "../../../../types/Message";
+import {
+  getMessagesForConversation,
+  sendMessage,
+} from "../../../../services/messageService";
 
 interface MessageInboxChatWindowProps {
   conversationId: number | null;
@@ -36,17 +39,12 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   useEffect(() => {
     const fetchMessages = async () => {
       if (conversationId) {
-        const token = await handleTokenExpiration();
-        const response = await fetch(
-          `${BASE_URL}/api/messages/${conversationId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data = await response.json();
-        setMessages(data);
+        try {
+          const messagesData = await getMessagesForConversation(conversationId);
+          setMessages(messagesData);
+        } catch (error) {
+          console.error("Failed to fetch messages:", error);
+        }
       }
     };
 
@@ -71,6 +69,7 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   const handleSendMessage = async () => {
     if (!conversationId || newMessage.trim() === "") return;
 
+    // Optimistically update the UI with the new message
     const tempMessage: Message = {
       id: Date.now(),
       conversation_id: conversationId,
@@ -78,32 +77,19 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
       receiver_id: Number(userId),
       subject: "",
       content: newMessage,
-      // is_read: false,
       sent_at: String(new Date()),
     };
 
     setMessages((prevMessages) => [...prevMessages, tempMessage]);
 
-    const token = await handleTokenExpiration();
-
     try {
-      const messageResponse = await fetch(`${BASE_URL}/api/messages`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          conversation_id: conversationId,
-          sender_id: loggedInUserId,
-          receiver_id: userId,
-          content: newMessage,
-        }),
-      });
-
-      const sentMessage = await messageResponse.json();
-      console.log("Message sent:", sentMessage);
-
+      await sendMessage(
+        conversationId,
+        Number(loggedInUserId),
+        Number(userId),
+        "",
+        newMessage
+      );
       setNewMessage("");
     } catch (error) {
       console.error("Failed to send message:", error);
