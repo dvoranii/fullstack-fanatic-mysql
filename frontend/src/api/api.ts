@@ -14,7 +14,6 @@ export const registerUser = async (requestBody: AuthRequestBody) => {
     },
   });
 
-  // Handle status codes (if necessary)
   if (status === 409) {
     throw new Error("User already exists.");
   }

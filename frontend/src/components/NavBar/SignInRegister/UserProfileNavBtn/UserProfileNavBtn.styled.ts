@@ -10,7 +10,7 @@ export const DropdownWrapper = styled.div.withConfig({
   background-color: white;
   border-radius: 20px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 10px;
+  /* padding: 10px; */
   width: 220px;
   z-index: 1000;
   opacity: ${(props) => (props.isdropdownvisible ? 1 : 0)};
@@ -29,7 +29,14 @@ export const DropdownWrapper = styled.div.withConfig({
   }
 `;
 
+export const DropdownItemWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+`;
+
 export const ProfilePictureAndInfoWrapper = styled.div`
+  padding: 10px;
   display: flex;
   @media (max-width: 915px) {
     display: none;
@@ -59,7 +66,7 @@ export const ViewProfileButton = styled(NavLink)`
   border: none;
   border-radius: 20px;
   color: #222;
-  padding: 5px 10px;
+  padding: 4px 10px;
   margin-top: 0.8rem;
   text-align: center;
   width: 75%;
@@ -80,23 +87,27 @@ export const ViewProfileButton = styled(NavLink)`
   }
 `;
 
-export const DropdownItem = styled.button`
-  padding: 8px 0;
+export const DropdownItem = styled(NavLink)`
+  padding: 8px;
+  transition: 150ms ease;
+  &:hover {
+    background-color: #f0f0f0;
+  }
+`;
+export const DropdownItemLogoutBtn = styled.button`
+  padding: 8px;
+  font-size: 16px;
   cursor: pointer;
   background: none;
   border: none;
   text-align: left;
   width: 100%;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
   transition: 150ms ease;
-  /* padding-left: 0.8rem; */
 
   &:hover {
     background-color: #f0f0f0;
-  }
-
-  &:last-child {
-    border-bottom-left-radius: 14px;
-    border-bottom-right-radius: 14px;
   }
 
   @media (max-width: 915px) {

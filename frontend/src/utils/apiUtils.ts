@@ -6,14 +6,13 @@ export async function apiCall<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<{ status: number; data: T }> {
-  const token = await handleTokenExpiration();
+  const token = (await handleTokenExpiration()) as string | null;
 
-  // Do not set Content-Type if the body is FormData (browser handles it)
   const isFormData = options.body instanceof FormData;
 
   const headers: HeadersInit = {
     ...(token && { Authorization: `Bearer ${token}` }),
-    ...(!isFormData && { "Content-Type": "application/json" }), // Only set Content-Type for non-FormData requests
+    ...(!isFormData && { "Content-Type": "application/json" }),
     ...options.headers,
   };
 
@@ -27,7 +26,6 @@ export async function apiCall<T>(
   const status = response.status;
   let data;
 
-  // Handle JSON responses differently from FormData responses
   try {
     data = await response.json();
   } catch (error) {

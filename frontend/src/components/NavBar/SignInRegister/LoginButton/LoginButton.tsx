@@ -1,4 +1,4 @@
-import { /*LoginButtonWrapper,*/ LoginBtn } from "./LoginButton.styled";
+import { LoginBtn } from "./LoginButton.styled";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const LoginButton: React.FC = () => {
@@ -14,11 +14,7 @@ const LoginButton: React.FC = () => {
     }
   };
 
-  return (
-    // <LoginButtonWrapper>
-    <LoginBtn onClick={handleSignInClick}>Sign In</LoginBtn>
-    // </LoginButtonWrapper>
-  );
+  return <LoginBtn onClick={handleSignInClick}>Sign In</LoginBtn>;
 };
 
 export default LoginButton;

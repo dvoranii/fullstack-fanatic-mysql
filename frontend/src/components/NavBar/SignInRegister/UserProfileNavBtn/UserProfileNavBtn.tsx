@@ -3,10 +3,12 @@ import ProfileIconBlack from "../../../../assets/images/profile-icon-black.png";
 import { useAuthUtils } from "../../../../utils/useAuthUtils";
 import {
   DropdownWrapper,
+  DropdownItemWrapper,
   ProfileName,
   ProfileProfession,
   ViewProfileButton,
   DropdownItem,
+  DropdownItemLogoutBtn,
   DropdownDivider,
   ProfileIconImg,
   ProfileInfoWrapper,
@@ -88,13 +90,20 @@ const UserProfileNavBtn: React.FC<UserProfileNavBtnProps> = ({
           </ViewProfileButtonWrapper>
 
           <DropdownDivider />
-          <AccountTitle>Account</AccountTitle>
 
-          <DropdownItem>Settings</DropdownItem>
-          <DropdownItem>Subscriptions</DropdownItem>
-          <DropdownItem>Help</DropdownItem>
+          <DropdownItemWrapper>
+            <AccountTitle>Account</AccountTitle>
+            <DropdownItem to="#">Settings</DropdownItem>
+            <DropdownItem to="#">Subscriptions</DropdownItem>
+            <DropdownItem to="#">Help</DropdownItem>
+          </DropdownItemWrapper>
+
           <DropdownDivider />
-          <DropdownItem onClick={logOut}>Log Out</DropdownItem>
+          <DropdownItemWrapper>
+            <DropdownItemLogoutBtn onClick={logOut}>
+              Log Out
+            </DropdownItemLogoutBtn>
+          </DropdownItemWrapper>
         </DropdownWrapper>
       )}
     </div>
