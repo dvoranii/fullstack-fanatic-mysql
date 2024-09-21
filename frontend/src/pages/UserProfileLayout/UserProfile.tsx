@@ -36,6 +36,7 @@ import SocialLinksDisplay from "./SocialLinksDisplay/SocialLinksDisplay";
 import { UserProfilePageProps } from "../../types/UserProfilePageProps";
 import ConnectButton from "./ConnectButton/ConnectButton";
 import MessageUserModal from "./MessageUserModal/MessageUserModal";
+import FollowButton from "./FollowButton/FollowButton";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -79,10 +80,12 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
 
                 {!isEditable && (
                   <ConnectButton
-                    text={"Connect"}
+                    text={"Message"}
                     onClick={() => setIsModalOpen(true)}
                   />
                 )}
+
+                {!isEditable && <FollowButton userId={profile.id} />}
 
                 {isEditable && (
                   // add wrapper so I can add underline here, this is a quick fix

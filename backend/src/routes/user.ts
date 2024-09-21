@@ -10,6 +10,7 @@ import {
   verifyRefreshToken,
 } from "../utils/jwtUtils";
 import bcrypt from "bcrypt";
+import { authenticate } from "../middleware/authenticate";
 
 dotenv.config();
 
@@ -330,5 +331,96 @@ router.get("/user-profile/:id", async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to fetch public profile" });
   }
 });
+
+router.post(
+  "/:id/follow",
+  authenticate,
+  async (req: Request, res: Response) => {
+    const followerId = req.user?.userId;
+    const followedId = parseInt(req.params.id);
+
+    if (!followerId || !followedId) {
+      return res.status(400).json({ message: "Invalid user IDs" });
+    }
+
+    try {
+      const connection = await connectionPromise;
+      await connection.execute(
+        "INSERT INTO followers (follower_id, followed_id) VALUES (?, ?)",
+        [followerId, followedId]
+      );
+
+      res.status(200).json({ message: "User followed successfully" });
+    } catch (error: unknown) {
+      if (error instanceof Error && "code" in error) {
+        const sqlError = error as { code: string };
+        if (sqlError.code === "ER_DUP_ENTRY") {
+          return res
+            .status(409)
+            .json({ message: "Already following this user" });
+        }
+      }
+
+      console.error("Error following user: ", error);
+      res.status(500).json({ error: "Failed to follow user" });
+    }
+  }
+);
+
+router.delete(
+  "/:id/follow",
+  authenticate,
+  async (req: Request, res: Response) => {
+    const followerId = req.user?.userId;
+    const followedId = parseInt(req.params.id);
+
+    if (!followerId || !followedId) {
+      return res.status(400).json({ message: "Invalid user IDs" });
+    }
+
+    try {
+      const connection = await connectionPromise;
+      await connection.execute(
+        "DELETE FROM followers WHERE follower_id = ? AND followed_id = ?",
+        [followerId, followedId]
+      );
+
+      res.status(200).json({ message: "User unfollowed successfully" });
+    } catch (error) {
+      console.error("Error unfollowing user: ", error);
+      res.status(500).json({ error: "Failed to unfollow user" });
+    }
+  }
+);
+
+router.get(
+  "/:id/followers",
+  authenticate,
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const followerId = req.user?.userId;
+
+    try {
+      const connection = await connectionPromise;
+
+      const [followersCountResult] = await connection.execute<RowDataPacket[]>(
+        "SELECT COUNT(*) AS followersCount FROM followers WHERE followed_id = ?",
+        [id]
+      );
+      const followersCount = followersCountResult[0].followersCount || 0;
+
+      const [isFollowingResult] = await connection.execute<RowDataPacket[]>(
+        "SELECT COUNT(*) AS isFollowing FROM followers WHERE follower_id = ? AND followed_id = ?",
+        [followerId, id]
+      );
+      const isFollowing = isFollowingResult[0].isFollowing > 0;
+
+      res.status(200).json({ followersCount, isFollowing });
+    } catch (error) {
+      console.error("Error fetching follow state: ", error);
+      res.status(500).json({ message: "Failed to fetch followers" });
+    }
+  }
+);
 
 export default router;
