@@ -77,12 +77,20 @@ export const googleLogin = async (token: string) => {
   return { status, message: data.message };
 };
 
+// hard code endpoint
 export const refreshJwt = async () => {
-  const endpoint = `/api/users/refresh-token`;
-  const { data } = await apiCall<{ token: string }>(endpoint, {
-    method: "POST",
-    credentials: "include",
-  });
+  const response = await fetch(
+    `http://localhost:5000/api/users/refresh-token`,
+    {
+      method: "POST",
+      credentials: "include",
+    }
+  );
 
+  if (!response.ok) {
+    throw new Error("Failed to refresh JWT");
+  }
+
+  const data = await response.json();
   return data;
 };
