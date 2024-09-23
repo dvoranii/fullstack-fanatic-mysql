@@ -11,7 +11,6 @@ export const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
-
   top: 0;
   left: 0;
   width: 100%;
@@ -19,7 +18,6 @@ export const Nav = styled.nav`
 
   @media screen and (max-width: 915px) {
     height: 100px;
-    position: fixed;
   }
 `;
 
@@ -76,6 +74,7 @@ export const MobileNavList = styled.ul<{ open: boolean }>`
 export const NavItem = styled.li`
   margin: 0 1rem;
   position: relative;
+  display: flex;
 `;
 
 export const NavPipe = styled.span`
@@ -94,6 +93,9 @@ export const NavLinkStyled = styled(NavLink)<NavLinkStyledProps>`
   padding-right: 2.2rem;
   position: relative;
   font-family: "ZenKakuGothicNewMedium", sans-serif;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 
   &::after {
     content: "";
@@ -126,16 +128,5 @@ export const NavLinkStyled = styled(NavLink)<NavLinkStyledProps>`
 
   &:last-child {
     padding-right: 1.2rem;
-  }
-`;
-
-export const AccountText = styled.span`
-  font-size: 14px;
-  color: #222;
-  margin-top: 0.25rem;
-  display: none;
-
-  @media (max-width: 915px) {
-    display: block;
   }
 `;

@@ -323,3 +323,5 @@ export const SocialSectionWrapperOuter = styled.div`
     }
   }
 `;
+
+export const FollowersWrapper = styled.div``;

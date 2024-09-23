@@ -1,33 +1,20 @@
 // FollowButton.tsx
-import { useState, useEffect } from "react";
-import {
-  fetchFollowState,
-  followUser,
-  unfollowUser,
-} from "../../../services/followService";
+// import { useState } from "react";
+import { followUser, unfollowUser } from "../../../services/followService";
 
 interface FollowButtonProps {
   userId: number;
+  isFollowing: boolean;
+  setIsFollowing: (isFollowing: boolean) => void;
+  setFollowersCount: (count: number | ((prevCount: number) => number)) => void;
 }
 
-const FollowButton: React.FC<FollowButtonProps> = ({ userId }) => {
-  const [isFollowing, setIsFollowing] = useState(false);
-  const [followersCount, setFollowersCount] = useState(0);
-
-  useEffect(() => {
-    const fetchState = async () => {
-      try {
-        const followState = await fetchFollowState(userId);
-        setIsFollowing(followState.isFollowing);
-        setFollowersCount(followState.followersCount);
-      } catch (error) {
-        console.error("Error fetching follow state:", error);
-      }
-    };
-
-    fetchState();
-  }, [userId]);
-
+const FollowButton: React.FC<FollowButtonProps> = ({
+  userId,
+  isFollowing,
+  setIsFollowing,
+  setFollowersCount,
+}) => {
   const handleFollowToggle = async () => {
     try {
       if (isFollowing) {
@@ -46,7 +33,7 @@ const FollowButton: React.FC<FollowButtonProps> = ({ userId }) => {
 
   return (
     <button onClick={handleFollowToggle}>
-      {isFollowing ? "Unfollow" : "Follow"} ({followersCount})
+      {isFollowing ? "Unfollow" : "Follow"}
     </button>
   );
 };

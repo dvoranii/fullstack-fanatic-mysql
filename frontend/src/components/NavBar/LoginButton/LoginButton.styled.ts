@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import { colors } from "../../../../GlobalStyles";
+import { colors } from "../../../GlobalStyles";
 
-// export const LoginButtonWrapper = styled.div``;
 export const LoginBtn = styled.button`
   padding: 8px 16px;
   border-radius: 20px;

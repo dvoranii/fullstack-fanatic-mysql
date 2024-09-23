@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ProfileBanner,
   ProfilePictureWrapper,
@@ -27,6 +27,7 @@ import {
   BannerUploadWrapper,
   UserAccountContainer,
   AccountActivitySubBanner,
+  FollowersWrapper,
 } from "./UserProfile.styled";
 import TutorialIcon from "../../assets/images/tutorial-icon.png";
 import BlogIcon from "../../assets/images/blog-icon.png";
@@ -37,6 +38,7 @@ import { UserProfilePageProps } from "../../types/UserProfilePageProps";
 import ConnectButton from "./ConnectButton/ConnectButton";
 import MessageUserModal from "./MessageUserModal/MessageUserModal";
 import FollowButton from "./FollowButton/FollowButton";
+import { fetchFollowState } from "../../services/followService";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -53,6 +55,22 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
 }) => {
   const socialLinks = profile.social_links || {};
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followersCount, setFollowersCount] = useState(0);
+
+  useEffect(() => {
+    const fetchFollowData = async () => {
+      try {
+        const followState = await fetchFollowState(profile.id);
+        setIsFollowing(followState.isFollowing);
+        setFollowersCount(followState.followersCount);
+      } catch (error) {
+        console.error("Error fetching follow state:", error);
+      }
+    };
+
+    fetchFollowData();
+  }, [profile.id]);
 
   return (
     <>
@@ -85,7 +103,14 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                   />
                 )}
 
-                {!isEditable && <FollowButton userId={profile.id} />}
+                {!isEditable && (
+                  <FollowButton
+                    userId={profile.id}
+                    isFollowing={isFollowing}
+                    setIsFollowing={setIsFollowing}
+                    setFollowersCount={setFollowersCount}
+                  />
+                )}
 
                 {isEditable && (
                   // add wrapper so I can add underline here, this is a quick fix
@@ -104,6 +129,13 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                 <UserInfoSubtitle>Links</UserInfoSubtitle>
                 <SocialLinksDisplay socialLinks={socialLinks} />
                 {children}
+
+                <FollowersWrapper>
+                  <p>
+                    {followersCount}{" "}
+                    {followersCount > 1 ? "Followers" : "Follower"}
+                  </p>
+                </FollowersWrapper>
               </SocialSectionWrapperOuter>
             </ProfileContentWrapper>
           </ProfileBanner>

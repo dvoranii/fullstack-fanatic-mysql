@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import useUser from "../../hooks/useUser";
 import {
   Nav,
@@ -9,17 +9,17 @@ import {
   Logo,
   NavLinkStyled,
   MobileNavList,
-  AccountText,
+  // NotificationUserProfileWrapper,
 } from "./NavBar.styled";
 import FSFLogo from "../../assets/images/fsf-logo-notext.png";
-import UserProfileNavBtn from "./SignInRegister/UserProfileNavBtn/UserProfileNavBtn";
+import UserProfileNavBtn from "./UserProfileNavBtn/UserProfileNavBtn";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
-import LoginButton from "./SignInRegister/LoginButton/LoginButton";
+import LoginButton from "./LoginButton/LoginButton";
+import NotificationButton from "./NotificationButton/NotificationButton";
 
 const NavBar: React.FC = () => {
   const [open, setOpen] = useState(false);
   const { profile } = useUser();
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
   const toggleMobileNav = () => {
     setOpen(!open);
@@ -64,8 +64,8 @@ const NavBar: React.FC = () => {
         <NavItem>
           {profile ? (
             <>
-              <UserProfileNavBtn setIsDropdownVisible={setIsDropdownVisible} />
-              {!isDropdownVisible && <AccountText>Account ▼</AccountText>}
+              <NotificationButton />
+              <UserProfileNavBtn />
             </>
           ) : (
             <LoginButton />
@@ -104,8 +104,8 @@ const NavBar: React.FC = () => {
         <NavItem>
           {profile ? (
             <>
-              <UserProfileNavBtn setIsDropdownVisible={setIsDropdownVisible} />
-              {!isDropdownVisible && <AccountText>Account ▼</AccountText>}
+              <NotificationButton />
+              <UserProfileNavBtn />
             </>
           ) : (
             <LoginButton />
