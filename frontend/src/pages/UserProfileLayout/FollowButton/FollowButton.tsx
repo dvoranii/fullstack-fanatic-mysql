@@ -1,5 +1,3 @@
-// FollowButton.tsx
-// import { useState } from "react";
 import { followUser, unfollowUser } from "../../../services/followService";
 
 interface FollowButtonProps {

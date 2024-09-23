@@ -27,7 +27,7 @@ import {
   BannerUploadWrapper,
   UserAccountContainer,
   AccountActivitySubBanner,
-  FollowersWrapper,
+  FollowsWrapper,
 } from "./UserProfile.styled";
 import TutorialIcon from "../../assets/images/tutorial-icon.png";
 import BlogIcon from "../../assets/images/blog-icon.png";
@@ -38,7 +38,10 @@ import { UserProfilePageProps } from "../../types/UserProfilePageProps";
 import ConnectButton from "./ConnectButton/ConnectButton";
 import MessageUserModal from "./MessageUserModal/MessageUserModal";
 import FollowButton from "./FollowButton/FollowButton";
-import { fetchFollowState } from "../../services/followService";
+import {
+  fetchFollowersState,
+  fetchFollowingState,
+} from "../../services/followService";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -55,17 +58,21 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
 }) => {
   const socialLinks = profile.social_links || {};
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isFollowing, setIsFollowing] = useState(false);
   const [followersCount, setFollowersCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
+  const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
     const fetchFollowData = async () => {
       try {
-        const followState = await fetchFollowState(profile.id);
-        setIsFollowing(followState.isFollowing);
-        setFollowersCount(followState.followersCount);
+        const followersState = await fetchFollowersState(profile.id);
+        const followingState = await fetchFollowingState(profile.id);
+
+        setFollowersCount(followersState.followersCount);
+        setIsFollowing(followersState.isFollowing);
+        setFollowingCount(followingState.followingCount);
       } catch (error) {
-        console.error("Error fetching follow state:", error);
+        console.error("Error fetching follow data:", error);
       }
     };
 
@@ -130,12 +137,15 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                 <SocialLinksDisplay socialLinks={socialLinks} />
                 {children}
 
-                <FollowersWrapper>
+                <FollowsWrapper>
                   <p>
                     {followersCount}{" "}
-                    {followersCount > 1 ? "Followers" : "Follower"}
+                    {followersCount === 1 ? "Follower" : "Followers"}
                   </p>
-                </FollowersWrapper>
+                </FollowsWrapper>
+                <FollowsWrapper>
+                  <p>{followingCount} Following</p>
+                </FollowsWrapper>
               </SocialSectionWrapperOuter>
             </ProfileContentWrapper>
           </ProfileBanner>

@@ -423,4 +423,28 @@ router.get(
   }
 );
 
+router.get(
+  "/:id/following",
+  authenticate,
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    try {
+      const connection = await connectionPromise;
+
+      const [followingCountResult] = await connection.execute<RowDataPacket[]>(
+        "SELECT COUNT(*) AS followingCount FROM followers WHERE follower_id = ?",
+        [id]
+      );
+
+      const followingCount = followingCountResult[0].followingCount || 0;
+
+      res.status(200).json({ followingCount });
+    } catch (error) {
+      console.error("Error fetching following count: ", error);
+      res.status(500).json({ message: "Failed to fetch following count" });
+    }
+  }
+);
+
 export default router;

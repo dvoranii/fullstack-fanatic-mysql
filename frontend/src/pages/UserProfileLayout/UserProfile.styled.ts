@@ -324,4 +324,4 @@ export const SocialSectionWrapperOuter = styled.div`
   }
 `;
 
-export const FollowersWrapper = styled.div``;
+export const FollowsWrapper = styled.div``;
