@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { apiCall } from "../../../utils/apiUtils";
 import { Link, useParams } from "react-router-dom";
 import ProfilePicture from "../../../components/ProfilePicture/ProfilePicture";
 import { User } from "../../../types/User";
+import { unfollowUser } from "../../../services/followService";
+import { UserContext } from "../../../context/UserContext";
 
 interface FollowingResponse {
   following: User[];
@@ -13,6 +15,7 @@ interface FollowingListProps {
 }
 
 const FollowingList: React.FC<FollowingListProps> = ({ userId }) => {
+  const { profile } = useContext(UserContext) || {};
   const { id } = useParams<{ id: string }>();
   const effectiveUserId = userId || Number(id);
   const [following, setFollowing] = useState<User[]>([]);
@@ -34,12 +37,24 @@ const FollowingList: React.FC<FollowingListProps> = ({ userId }) => {
     fetchFollowing();
   }, [effectiveUserId]);
 
-  //   need to handle this properly as well, optimistic UI update included
   const handleUnfollow = async (followingId: number) => {
+    const removedUser = following.find((user) => user.id === followingId);
+
+    // Optimistically remove the user from the UI state
+    setFollowing((prev) => prev.filter((user) => user.id !== followingId));
+
     try {
-      await apiCall(`/api/users/${followingId}/follow`, { method: "DELETE" });
-      setFollowing((prev) => prev.filter((user) => user.id !== followingId));
+      const status = await unfollowUser(followingId);
+      if (status !== 200) {
+        if (removedUser) {
+          setFollowing((prev) => [...prev, removedUser]);
+        }
+        console.error("Error: Failed to unfollow the user.");
+      }
     } catch (error) {
+      if (removedUser) {
+        setFollowing((prev) => [...prev, removedUser]);
+      }
       console.error("Error unfollowing user:", error);
     }
   };
@@ -59,7 +74,11 @@ const FollowingList: React.FC<FollowingListProps> = ({ userId }) => {
               />
               <span>{user.name}</span>
             </Link>
-            <button onClick={() => handleUnfollow(user.id)}>Unfollow</button>
+
+            {profile?.id === effectiveUserId && (
+              <button onClick={() => handleUnfollow(user.id)}>Unfollow</button>
+            )}
+
             <button onClick={() => console.log(`Message ${user.name}`)}>
               Message
             </button>
