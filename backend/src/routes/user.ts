@@ -447,4 +447,56 @@ router.get(
   }
 );
 
+router.get(
+  "/:id/followers-list",
+  authenticate,
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    try {
+      const connection = await connectionPromise;
+
+      const [followers] = await connection.execute<RowDataPacket[]>(
+        `SELECT u.id, u.name, u.profile_picture
+         FROM followers f
+         JOIN users u ON f.follower_id = u.id
+         WHERE f.followed_id = ?`,
+        [id]
+      );
+
+      res.status(200).json({ followers });
+    } catch (error) {
+      console.error("Error fetching followers list: ", error);
+      res.status(500).json({ message: "Failed to fetch followers list" });
+    }
+  }
+);
+
+router.get(
+  "/:id/following-list",
+  authenticate,
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    console.log(id);
+
+    try {
+      const connection = await connectionPromise;
+
+      const [following] = await connection.execute<RowDataPacket[]>(
+        `SELECT u.id, u.name, u.profile_picture
+       FROM followers f
+       JOIN users u ON f.followed_id = u.id
+       WHERE f.follower_id = ?`,
+        [id]
+      );
+
+      res.status(200).json({ following });
+    } catch (error) {
+      console.error("Error fetching following list: ", error);
+      res.status(500).json({ message: "Failed to fetch following list" });
+    }
+  }
+);
+
 export default router;

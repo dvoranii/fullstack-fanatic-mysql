@@ -1,5 +1,6 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useContext } from "react";
 import { Route, Routes } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 const HomePage = lazy(() => import("../pages/Home/HomePage"));
 const AboutPage = lazy(() => import("../pages/About/AboutPage"));
@@ -21,8 +22,11 @@ const MessageInboxPage = lazy(
   () =>
     import("../pages/UserProfileLayout/MessageInboxLayout/MessageInboxLayout")
 );
+import FollowersList from "../pages/UserProfileLayout/FollowersList/FollowersList";
+import FollowingList from "../pages/UserProfileLayout/FollowingList/FollowingList";
 
 const Navigation: React.FC = () => {
+  const { profile } = useContext(UserContext) || {};
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
@@ -44,6 +48,14 @@ const Navigation: React.FC = () => {
         <Route path="/my-account" element={<UserAccountPage />} />
         <Route path="/my-account/inbox" element={<MessageInboxPage />} />
         <Route path="/user/:id" element={<PublicUserPage />} />
+        <Route
+          path="/my-account/followers"
+          element={<FollowersList userId={Number(profile?.id)} />}
+        />
+        <Route
+          path="/my-account/following"
+          element={<FollowingList userId={Number(profile?.id)} />}
+        />
       </Routes>
     </Suspense>
   );

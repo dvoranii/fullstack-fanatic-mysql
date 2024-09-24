@@ -1,4 +1,4 @@
-import { InboxWrapper } from "./UserAccountPage.styled";
+import { InboxWrapper, InboxImgWrapper } from "./UserAccountPage.styled";
 import { useContext, useState } from "react";
 import { UserContext } from "../../../context/UserContext";
 import UserProfilePage from "../UserProfile";
@@ -64,7 +64,10 @@ const UserAccountsPage: React.FC = () => {
       >
         <InboxWrapper>
           <a href="/my-account/inbox">
-            <img src={InboxIcon} alt="Inbox Icon" /> Inbox
+            <InboxImgWrapper>
+              <img src={InboxIcon} alt="Inbox Icon" />
+            </InboxImgWrapper>
+            Inbox
           </a>
         </InboxWrapper>
       </UserProfilePage>
