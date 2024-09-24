@@ -9,6 +9,7 @@ export interface UserProfilePageProps {
   favouriteBlogs: Blog[];
   comments: CommentType[];
   isEditable?: boolean;
+  isOwnProfile: boolean;
   onEditProfileClick?: () => void;
   onBannerChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBannerUpload?: () => void;

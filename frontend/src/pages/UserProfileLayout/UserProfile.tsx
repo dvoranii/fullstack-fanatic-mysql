@@ -42,6 +42,7 @@ import {
   fetchFollowersState,
   fetchFollowingState,
 } from "../../services/followService";
+import { Link } from "react-router-dom";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -51,6 +52,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
   favouriteBlogs,
   comments,
   isEditable = false,
+  isOwnProfile,
   onEditProfileClick,
   onBannerChange,
   onBannerUpload,
@@ -138,13 +140,27 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                 {children}
 
                 <FollowsWrapper>
-                  <p>
+                  <Link
+                    to={
+                      isOwnProfile
+                        ? "/my-account/followers"
+                        : `/user/${profile.id}/followers`
+                    }
+                  >
                     {followersCount}{" "}
                     {followersCount === 1 ? "Follower" : "Followers"}
-                  </p>
+                  </Link>
                 </FollowsWrapper>
                 <FollowsWrapper>
-                  <p>{followingCount} Following</p>
+                  <Link
+                    to={
+                      isOwnProfile
+                        ? "/my-account/following"
+                        : `/user/${profile.id}/following`
+                    }
+                  >
+                    {followingCount} Following
+                  </Link>
                 </FollowsWrapper>
               </SocialSectionWrapperOuter>
             </ProfileContentWrapper>

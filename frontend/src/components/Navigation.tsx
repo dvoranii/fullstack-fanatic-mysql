@@ -27,6 +27,7 @@ import FollowingList from "../pages/UserProfileLayout/FollowingList/FollowingLis
 
 const Navigation: React.FC = () => {
   const { profile } = useContext(UserContext) || {};
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
@@ -56,6 +57,8 @@ const Navigation: React.FC = () => {
           path="/my-account/following"
           element={<FollowingList userId={Number(profile?.id)} />}
         />
+        <Route path="/user/:id/followers" element={<FollowersList />} />
+        <Route path="/user/:id/following" element={<FollowingList />} />
       </Routes>
     </Suspense>
   );

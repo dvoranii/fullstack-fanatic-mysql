@@ -47,6 +47,7 @@ const PublicUserPage: React.FC = () => {
       favouriteTutorials={profile.favouriteTutorials}
       favouriteBlogs={profile.favouriteBlogs}
       comments={profile.comments || []}
+      isOwnProfile={false}
     ></UserProfilePage>
   );
 };

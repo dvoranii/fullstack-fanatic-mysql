@@ -58,6 +58,7 @@ const UserAccountsPage: React.FC = () => {
         favouriteBlogs={favouriteBlogs || []}
         comments={comments || []}
         isEditable={true}
+        isOwnProfile={true}
         onEditProfileClick={() => setIsModalOpen(true)}
         onBannerChange={handleBannerChange}
         onBannerUpload={handleBannerUpload}
