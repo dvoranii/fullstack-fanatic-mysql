@@ -41,7 +41,7 @@ const FollowersList: React.FC<FollowersListProps> = ({ userId }) => {
       <ul>
         {followers.map((follower) => (
           <li key={follower.id}>
-            <Link to={`/users/${follower.id}`}>
+            <Link to={`/user/${follower.id}`}>
               <ProfilePicture
                 src={follower.profile_picture || ""}
                 alt={follower.name}
