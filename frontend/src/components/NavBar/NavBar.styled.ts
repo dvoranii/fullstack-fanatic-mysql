@@ -85,6 +85,9 @@ export const NavPipe = styled.span`
 
 export const SmallFontSpan = styled.span`
   font-size: 0.75em;
+  display: flex;
+  align-items: flex-end;
+  padding-left: 0.2rem;
 `;
 
 export const NavLinkStyled = styled(NavLink)<NavLinkStyledProps>`

@@ -22,8 +22,8 @@ const MessageInboxPage = lazy(
   () =>
     import("../pages/UserProfileLayout/MessageInboxLayout/MessageInboxLayout")
 );
-import FollowersList from "../pages/UserProfileLayout/FollowersList/FollowersList";
-import FollowingList from "../pages/UserProfileLayout/FollowingList/FollowingList";
+import FollowersList from "../pages/UserProfileLayout/FollowList/FollowersList/FollowersList";
+import FollowingList from "../pages/UserProfileLayout/FollowList/FollowingList/FollowingList";
 
 const Navigation: React.FC = () => {
   const { profile } = useContext(UserContext) || {};

@@ -86,7 +86,4 @@ export const GlobalStyles = createGlobalStyle`
     font-family: inherit;
     cursor: pointer;
   }
-
-
-
 `;

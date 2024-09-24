@@ -457,7 +457,7 @@ router.get(
       const connection = await connectionPromise;
 
       const [followers] = await connection.execute<RowDataPacket[]>(
-        `SELECT u.id, u.name, u.profile_picture
+        `SELECT u.id, u.name, u.profile_picture, u.profession
          FROM followers f
          JOIN users u ON f.follower_id = u.id
          WHERE f.followed_id = ?`,
@@ -484,7 +484,7 @@ router.get(
       const connection = await connectionPromise;
 
       const [following] = await connection.execute<RowDataPacket[]>(
-        `SELECT u.id, u.name, u.profile_picture
+        `SELECT u.id, u.name, u.profile_picture, u.profession
        FROM followers f
        JOIN users u ON f.followed_id = u.id
        WHERE f.follower_id = ?`,
