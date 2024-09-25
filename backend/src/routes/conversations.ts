@@ -64,6 +64,32 @@ router.get(
   }
 );
 
+router.patch(
+  "/:conversationId/read",
+  authenticate,
+  async (req: Request, res: Response) => {
+    const { conversationId } = req.params;
+    const userId = req.user?.userId;
+
+    console.log("hit");
+
+    try {
+      const connection = await connectionPromise;
+
+      // Update the conversation's is_read status to true (1)
+      await connection.execute<ResultSetHeader>(
+        "UPDATE conversations SET is_read = 1 WHERE id = ? AND (user1_id = ? OR user2_id = ?)",
+        [conversationId, userId, userId]
+      );
+
+      res.status(200).json({ message: "Conversation marked as read" });
+    } catch (err) {
+      console.error("Failed to update conversation status:", err);
+      res.status(500).json({ error: "Failed to mark conversation as read" });
+    }
+  }
+);
+
 router.get("/", authenticate, async (req: Request, res: Response) => {
   const userId = req.user?.userId;
 

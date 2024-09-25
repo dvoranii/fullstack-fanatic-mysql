@@ -59,3 +59,13 @@ export const fetchConversations = async (): Promise<Conversation[]> => {
 
   return data;
 };
+
+export const updateConversationReadStatus = async (conversationId: number) => {
+  const endpoint = `/api/conversations/${conversationId}/read`;
+  const { data } = await apiCall(endpoint, {
+    method: "PATCH",
+  });
+
+  console.log(data);
+  return data;
+};

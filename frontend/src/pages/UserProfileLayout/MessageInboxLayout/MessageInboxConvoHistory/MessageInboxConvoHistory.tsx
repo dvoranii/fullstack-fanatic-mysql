@@ -10,7 +10,10 @@ import {
 import SearchBar from "../../../../components/SearchBar/SearchBar";
 import { Conversation } from "../../../../types/Conversations";
 import { UserContext } from "../../../../context/UserContext";
-import { fetchConversations } from "../../../../services/messageService";
+import {
+  fetchConversations,
+  updateConversationReadStatus,
+} from "../../../../services/messageService";
 import { fetchUserNamesAndPictures } from "../../../../services/userService";
 import ProfilePicture from "../../../../components/ProfilePicture/ProfilePicture";
 
@@ -30,6 +33,7 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
     {}
   );
   const [boldSpan, setBoldSpan] = useState("read");
+  const [unreadCount, setUnreadCount] = useState<number>(0);
 
   // Use useCallback to memoize the function and prevent unnecessary re-renders
   const fetchUserDetails = useCallback(
@@ -54,6 +58,12 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
         const data = await fetchConversations();
         setConversations(data);
         fetchUserDetails(data);
+
+        const unreadConversations = data.filter(
+          (conversation: Conversation) => conversation.is_read === 0
+        );
+
+        setUnreadCount(unreadConversations.length);
       } catch (error) {
         console.error("Failed to fetch conversations:", error);
         setConversations([]);
@@ -75,7 +85,8 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
     });
   };
 
-  const handleConversationSelect = (conversationId: number) => {
+  const handleConversationSelect = async (conversationId: number) => {
+    // Update in frontend state immediately for better UX
     setConversations((prevConversations) =>
       prevConversations.map((conversation) =>
         conversation.id === conversationId
@@ -83,6 +94,19 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
           : conversation
       )
     );
+
+    const selectedConversation = conversations.find(
+      (conversation) => conversation.id === conversationId
+    );
+    if (selectedConversation && selectedConversation.is_read === 0) {
+      setUnreadCount((prevCount) => prevCount - 1);
+    }
+
+    try {
+      await updateConversationReadStatus(conversationId);
+    } catch (error) {
+      console.error("Failed to update conversation as read:", error);
+    }
 
     onConversationSelect(conversationId);
   };
@@ -103,7 +127,7 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
             onClick={() => toggleBold("unread")}
             className={boldSpan === "unread" ? "bold" : "normal"}
           >
-            UNREAD
+            UNREAD {unreadCount > 0 && <span>({unreadCount})</span>}
           </span>
         </p>
       </ReadFilterWrapper>
