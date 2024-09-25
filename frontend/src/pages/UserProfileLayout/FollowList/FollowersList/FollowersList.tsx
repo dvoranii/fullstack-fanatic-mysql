@@ -10,6 +10,7 @@ import { Link, useParams } from "react-router-dom";
 import { User } from "../../../../types/User";
 import ProfilePicture from "../../../../components/ProfilePicture/ProfilePicture";
 import { PageWrapper } from "../../../../PageWrapper.styled";
+import MessageUserModal from "../../MessageUserModal/MessageUserModal";
 
 interface FollowersResponse {
   followers: User[];
@@ -24,6 +25,9 @@ const FollowersList: React.FC<FollowersListProps> = ({ userId }) => {
   const effectiveUserId = userId || Number(id);
 
   const [followers, setFollowers] = useState<User[]>([]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!effectiveUserId) return;
@@ -41,6 +45,16 @@ const FollowersList: React.FC<FollowersListProps> = ({ userId }) => {
 
     fetchFollowers();
   }, [effectiveUserId]);
+
+  const handleOpenMessageModal = (userId: string) => {
+    setSelectedUserId(userId);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseMessageModal = () => {
+    setSelectedUserId(null);
+    setIsModalOpen(false);
+  };
 
   return (
     <>
@@ -64,7 +78,9 @@ const FollowersList: React.FC<FollowersListProps> = ({ userId }) => {
                     <span>{user.profession}</span>
                   </Link>
                   <FollowButtonsWrapper>
-                    <button onClick={() => console.log(`Message ${user.name}`)}>
+                    <button
+                      onClick={() => handleOpenMessageModal(user.id.toString())}
+                    >
                       Message
                     </button>
                   </FollowButtonsWrapper>
@@ -78,6 +94,19 @@ const FollowersList: React.FC<FollowersListProps> = ({ userId }) => {
           </ul>
         </FollowListWrapper>
       </PageWrapper>
+
+      {selectedUserId && (
+        <MessageUserModal
+          isOpen={isModalOpen}
+          onClose={handleCloseMessageModal}
+          userId={selectedUserId}
+          onSendMessage={(subject, message) =>
+            console.log(
+              `Message sent to user ${selectedUserId}: ${subject}, ${message}`
+            )
+          }
+        />
+      )}
     </>
   );
 };
