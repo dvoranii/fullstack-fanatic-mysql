@@ -7,19 +7,17 @@ import { io } from "../app";
 const router = express.Router();
 
 router.post("/", authenticate, async (req: Request, res: Response) => {
-  const { conversation_id, sender_id, receiver_id, subject, content } =
-    req.body;
+  const { conversation_id, sender_id, receiver_id, content } = req.body;
 
   try {
     const connection = await connectionPromise;
 
     const [result] = await connection.execute<ResultSetHeader>(
-      "INSERT INTO messages (conversation_id, sender_id, receiver_id, subject, content, is_read, sent_at) VALUES (?, ?, ?, ?, ?, 0, NOW())",
+      "INSERT INTO messages (conversation_id, sender_id, receiver_id, content, sent_at) VALUES (?, ?, ?, ?, NOW())",
       [
         conversation_id || null,
         sender_id || null,
         receiver_id || null,
-        subject || null,
         content || null,
       ]
     );
@@ -29,9 +27,7 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
       conversation_id,
       sender_id,
       receiver_id,
-      subject,
       content,
-      is_read: 0,
       sent_at: new Date(),
     };
 

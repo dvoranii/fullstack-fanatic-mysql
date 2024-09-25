@@ -174,7 +174,12 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
         )}
       </BannerWrapperOuter>
 
-      <ProfilePlaceholder />
+      {/* might need different approach */}
+      {!isEditable ? (
+        <ProfilePlaceholder height="300px" />
+      ) : (
+        <ProfilePlaceholder height="190px" />
+      )}
 
       <AccountActivityTitle>Account Activity</AccountActivityTitle>
       <AccountActivitySubBanner>

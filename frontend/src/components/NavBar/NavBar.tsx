@@ -9,6 +9,7 @@ import {
   Logo,
   NavLinkStyled,
   MobileNavList,
+  LogoWrapper,
   // NotificationUserProfileWrapper,
 } from "./NavBar.styled";
 import FSFLogo from "../../assets/images/fsf-logo-notext.png";
@@ -28,19 +29,21 @@ const NavBar: React.FC = () => {
   return (
     <Nav>
       <NavLinkStyled to="/" underlinewidth="0%">
-        <Logo src={FSFLogo} />
+        <LogoWrapper>
+          <Logo src={FSFLogo} />
+        </LogoWrapper>
       </NavLinkStyled>
 
       <NavList>
         <NavItem>
           <NavLinkStyled to="/" underlinewidth="60%">
-            Home <SmallFontSpan>▼</SmallFontSpan>
+            Home&nbsp;<SmallFontSpan>▼</SmallFontSpan>
           </NavLinkStyled>
           <NavPipe>|</NavPipe>
         </NavItem>
         <NavItem>
           <NavLinkStyled to="/about" underlinewidth="62%">
-            About <SmallFontSpan>▼</SmallFontSpan>
+            About&nbsp;<SmallFontSpan>▼</SmallFontSpan>
           </NavLinkStyled>
           <NavPipe>|</NavPipe>
         </NavItem>

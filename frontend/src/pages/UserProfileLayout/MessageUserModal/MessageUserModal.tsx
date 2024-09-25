@@ -18,7 +18,6 @@ import {
 } from "../../../services/messageService";
 import CloseIcon from "../../../assets/images/close-icon.png";
 import { UserContext } from "../../../context/UserContext";
-// import { colors } from "../../../GlobalStyles";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -42,13 +41,24 @@ const MessageUserModal: React.FC<MessageUserModalProps> = ({
   const [userAvatarUrl, setUserAvatarUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [conversationExists, setConversationExists] = useState<boolean>(false);
 
   useEffect(() => {
     if (isOpen) {
-      const fetchUserProfile = async () => {
+      const fetchUserProfileAndConversation = async () => {
         try {
           const profileData = await getUserPublicProfile(userId);
           setUserAvatarUrl(profileData.user.profile_picture || "");
+
+          const conversation = await createOrGetConversation(
+            Number(loggedInUserId),
+            Number(userId),
+            ""
+          );
+
+          if (conversation.id) {
+            setConversationExists(true);
+          }
         } catch (error) {
           setError("Failed to load user profile.");
           console.error(error);
@@ -57,9 +67,9 @@ const MessageUserModal: React.FC<MessageUserModalProps> = ({
         }
       };
 
-      fetchUserProfile();
+      fetchUserProfileAndConversation();
     }
-  }, [isOpen, userId]);
+  }, [isOpen, userId, loggedInUserId, subject]);
 
   const handleSendMessage = async () => {
     if (!loggedInUserId) {
@@ -73,14 +83,13 @@ const MessageUserModal: React.FC<MessageUserModalProps> = ({
       const conversation = await createOrGetConversation(
         loggedInUserId,
         numericUserId,
-        subject
+        conversationExists ? "" : subject
       );
 
       await sendMessage(
         conversation.id,
         loggedInUserId,
         numericUserId,
-        subject,
         message
       );
 
@@ -107,12 +116,14 @@ const MessageUserModal: React.FC<MessageUserModalProps> = ({
         </AvatarContainer>
         <CloseBtn src={CloseIcon} onClick={onClose} />
         <MessageForm>
-          <InputField
-            type="text"
-            placeholder="SUBJECT"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-          />
+          {!conversationExists && (
+            <InputField
+              type="text"
+              placeholder="SUBJECT"
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+            />
+          )}
           <TextArea
             placeholder="MESSAGE"
             value={message}

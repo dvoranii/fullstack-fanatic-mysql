@@ -55,6 +55,7 @@ export const ProfileContentWrapper = styled.div`
   grid-template-columns: 1fr 2fr 1fr;
   min-height: 200px;
   min-width: 55%;
+  user-select: none;
 
   @media (max-width: 959px) {
     grid-template-columns: 1fr 1fr;
@@ -94,11 +95,11 @@ export const ProfileInfo = styled.div`
   }
 `;
 
-export const ProfilePlaceholder = styled.div`
-  height: 190px;
+export const ProfilePlaceholder = styled.div<{ height?: string }>`
+  height: ${(props) => props.height || "190px"};
 
   @media (max-width: 959px) {
-    height: 250px;
+    height: ${(props) => props.height || "250px"};
   }
 `;
 

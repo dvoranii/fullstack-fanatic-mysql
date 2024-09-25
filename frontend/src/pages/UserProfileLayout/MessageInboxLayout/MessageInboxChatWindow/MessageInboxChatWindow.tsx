@@ -87,7 +87,6 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
         conversationId,
         Number(loggedInUserId),
         Number(userId),
-        "",
         newMessage
       );
       setNewMessage("");

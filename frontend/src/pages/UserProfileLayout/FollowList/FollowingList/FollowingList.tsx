@@ -12,6 +12,7 @@ import ProfilePicture from "../../../../components/ProfilePicture/ProfilePicture
 import { User } from "../../../../types/User";
 import { unfollowUser } from "../../../../services/followService";
 import { UserContext } from "../../../../context/UserContext";
+import MessageUserModal from "../../MessageUserModal/MessageUserModal";
 
 interface FollowingResponse {
   following: User[];
@@ -26,6 +27,9 @@ const FollowingList: React.FC<FollowingListProps> = ({ userId }) => {
   const { id } = useParams<{ id: string }>();
   const effectiveUserId = userId || Number(id);
   const [following, setFollowing] = useState<User[]>([]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!effectiveUserId) return;
@@ -66,6 +70,16 @@ const FollowingList: React.FC<FollowingListProps> = ({ userId }) => {
     }
   };
 
+  const handleOpenMessageModal = (userId: string) => {
+    setSelectedUserId(userId);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseMessageModal = () => {
+    setSelectedUserId(null);
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       <FollowTitleBanner>
@@ -94,7 +108,9 @@ const FollowingList: React.FC<FollowingListProps> = ({ userId }) => {
                         Unfollow
                       </button>
                     )}
-                    <button onClick={() => console.log(`Message ${user.name}`)}>
+                    <button
+                      onClick={() => handleOpenMessageModal(user.id.toString())}
+                    >
                       Message
                     </button>
                   </FollowButtonsWrapper>
@@ -108,6 +124,19 @@ const FollowingList: React.FC<FollowingListProps> = ({ userId }) => {
           </ul>
         </FollowListWrapper>
       </PageWrapper>
+
+      {selectedUserId && (
+        <MessageUserModal
+          isOpen={isModalOpen}
+          onClose={handleCloseMessageModal}
+          userId={selectedUserId}
+          onSendMessage={(subject, message) =>
+            console.log(
+              `Message sent to user ${selectedUserId}: ${subject}, ${message}`
+            )
+          }
+        />
+      )}
     </>
   );
 };

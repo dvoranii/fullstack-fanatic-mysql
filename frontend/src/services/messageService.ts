@@ -24,7 +24,6 @@ export const sendMessage = async (
   conversationId: number,
   loggedInUserId: number,
   receiverId: number,
-  subject: string,
   content: string
 ): Promise<Message> => {
   const endpoint = `/api/messages`;
@@ -34,7 +33,6 @@ export const sendMessage = async (
       conversation_id: conversationId,
       sender_id: loggedInUserId,
       receiver_id: receiverId,
-      subject,
       content,
     }),
   });

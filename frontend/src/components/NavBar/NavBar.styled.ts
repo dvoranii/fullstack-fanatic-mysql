@@ -85,8 +85,7 @@ export const NavPipe = styled.span`
 
 export const SmallFontSpan = styled.span`
   font-size: 0.75em;
-  display: flex;
-  align-items: flex-end;
+
   padding-left: 0.2rem;
 `;
 
@@ -97,8 +96,6 @@ export const NavLinkStyled = styled(NavLink)<NavLinkStyledProps>`
   position: relative;
   font-family: "ZenKakuGothicNewMedium", sans-serif;
   width: 100%;
-  display: flex;
-  justify-content: center;
 
   &::after {
     content: "";
@@ -131,5 +128,12 @@ export const NavLinkStyled = styled(NavLink)<NavLinkStyledProps>`
 
   &:last-child {
     padding-right: 1.2rem;
+  }
+`;
+
+export const LogoWrapper = styled.div`
+  @media screen and (max-width: 913px) {
+    display: flex;
+    justify-content: flex-start;
   }
 `;

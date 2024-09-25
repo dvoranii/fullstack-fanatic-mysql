@@ -4,7 +4,9 @@ interface DropdownWrapperProps {
   alignRight?: boolean;
 }
 
-export const DropdownWrapper = styled.div<DropdownWrapperProps>`
+export const DropdownWrapper = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "alignRight",
+})<DropdownWrapperProps>`
   position: absolute;
   top: 50px;
   ${(props) => (props.alignRight ? "right: 0;" : "left: 0;")}

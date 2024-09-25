@@ -37,6 +37,7 @@ router.get(
   authenticate,
   async (req: Request, res: Response) => {
     const { conversationId } = req.params;
+    const userId = req.user?.userId;
 
     try {
       const connection = await connectionPromise;
@@ -49,6 +50,11 @@ router.get(
       if (conversation.length === 0) {
         return res.status(404).json({ error: "Conversation not found" });
       }
+
+      await connection.execute<ResultSetHeader>(
+        "UPDATE conversations SET is_read = true WHERE id = ? AND (user1_id = ? OR user2_id = ?)",
+        [conversationId, userId, userId]
+      );
 
       res.status(200).json(conversation[0]);
     } catch (err) {
