@@ -16,7 +16,7 @@ import FSFLogo from "../../assets/images/fsf-logo-notext.png";
 import UserProfileNavBtn from "./UserProfileNavBtn/UserProfileNavBtn";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
 import LoginButton from "./LoginButton/LoginButton";
-import NotificationButton from "./NotificationButton/NotificationButton";
+import NotificationButton from "./Notifications/Notifications";
 
 const NavBar: React.FC = () => {
   const [open, setOpen] = useState(false);

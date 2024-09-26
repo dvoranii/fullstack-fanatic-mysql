@@ -6,20 +6,16 @@ import {
   NavIconWrapper,
   NotificationCounter,
   NotificationContentWrapper,
-  NotificationItem,
-  NotificationMessage,
-  NotificationLinkWrapper,
-} from "./NotificationButton.styled";
+} from "./Notifications.styled";
 import Dropdown from "../Dropdown/Dropdown";
 import {
   fetchNotifications,
   markNotificationAsRead,
 } from "../../../services/notificationsService";
 import { Notification } from "../../../types/Notifications";
-import ProfilePicture from "../../ProfilePicture/ProfilePicture";
-import { Link } from "react-router-dom";
+import NotificationItem from "./NotificationItem/NotificationItem"; // Import the new NotificationItem
 
-const NotificationButton: React.FC = () => {
+const Notifications: React.FC = () => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -98,35 +94,6 @@ const NotificationButton: React.FC = () => {
     fetchUserNotifications();
   }, []);
 
-  const renderNotificationMessage = (notification: Notification) => {
-    switch (notification.type) {
-      case "like":
-        return `${notification.sender_name} liked your comment`;
-      case "reply":
-        return `${notification.sender_name} replied to your comment`;
-      case "follow":
-        return `${notification.sender_name} followed you`;
-      case "message":
-        return `You have a new message from ${notification.sender_name}`;
-      default:
-        return "Unknown notification type";
-    }
-  };
-
-  const renderNotificationLink = (notification: Notification) => {
-    switch (notification.type) {
-      case "like":
-      case "reply":
-        return <Link to="#">View&nbsp;Comment</Link>;
-      case "follow":
-        return <Link to="#">View&nbsp;Followers</Link>;
-      case "message":
-        return <Link to="/my-account/inbox">Visit&nbsp;Inbox</Link>;
-      default:
-        return null;
-    }
-  };
-
   return (
     <div ref={containerRef}>
       <NavIconWrapper>
@@ -155,27 +122,12 @@ const NotificationButton: React.FC = () => {
                 {notifications.length === 0 ? (
                   <p>No notifications currently</p>
                 ) : (
-                  notifications.map((notification, index) => (
-                    <div key={`${notification.id}-${index}`}>
-                      <NotificationItem
-                        isUnread={!notification.is_read}
-                        onClick={() => markAsRead(notification.id)}
-                      >
-                        <ProfilePicture
-                          src={notification.sender_profile_picture}
-                          alt={"User Profile Picture"}
-                          width={"40px"}
-                          border={"1px solid black"}
-                        />
-                        <NotificationMessage>
-                          {renderNotificationMessage(notification)}
-                        </NotificationMessage>
-                        <NotificationLinkWrapper>
-                          {renderNotificationLink(notification)}
-                        </NotificationLinkWrapper>
-                      </NotificationItem>
-                      <hr />
-                    </div>
+                  notifications.map((notification) => (
+                    <NotificationItem
+                      key={notification.id}
+                      notification={notification}
+                      markAsRead={markAsRead}
+                    />
                   ))
                 )}
               </InfiniteScroll>
@@ -187,37 +139,4 @@ const NotificationButton: React.FC = () => {
   );
 };
 
-export default NotificationButton;
-
-{
-  /* <Dropdown isVisible={isDropdownVisible} alignRight>
-<NotificationContentWrapper>
-  {notifications.length === 0 ? (
-    <p>No notifications currently</p>
-  ) : (
-    notifications.slice(0, 9).map((notification) => (
-      <div>
-        <NotificationItem
-          isUnread={!notification.is_read}
-          onClick={() => markAsRead(notification.id)}
-        >
-          <ProfilePicture
-            src={notification.sender_profile_picture}
-            alt={"User Profile Picture"}
-            width={"40px"}
-            border={"1px solid black"}
-          />
-          <NotificationMessage>
-            {renderNotificationMessage(notification)}
-          </NotificationMessage>
-          <NotificationLinkWrapper>
-            {renderNotificationLink(notification)}
-          </NotificationLinkWrapper>
-        </NotificationItem>
-        <hr />
-      </div>
-    ))
-  )}
-</NotificationContentWrapper>
-</Dropdown> */
-}
+export default Notifications;

@@ -8,6 +8,7 @@ import AlataRegular from "./assets/fonts/Alata-Regular.ttf";
 
 export const colors = {
   primary: "#14213D",
+  primary_hover: "#0047BE",
   secondary: "#FFAF2B",
   white: "#fefefe",
   black: "#222222",
