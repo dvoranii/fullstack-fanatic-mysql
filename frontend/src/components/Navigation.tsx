@@ -1,6 +1,7 @@
 import { Suspense, lazy, useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import LoadingSpinner from "./LoadingSpinner/LoadingSpinner";
 
 const HomePage = lazy(() => import("../pages/Home/HomePage"));
 const AboutPage = lazy(() => import("../pages/About/AboutPage"));
@@ -29,7 +30,7 @@ const Navigation: React.FC = () => {
   const { profile } = useContext(UserContext) || {};
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<LoadingSpinner />}>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
