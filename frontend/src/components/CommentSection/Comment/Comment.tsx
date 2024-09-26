@@ -13,7 +13,7 @@ import {
   TrashBinButton,
 } from "./Comment.styled";
 import ProfilePicture from "../../ProfilePicture/ProfilePicture";
-import { CommentProps } from "../../../types/CommentProps";
+import { CommentProps } from "../../../types/Comment/CommentProps";
 import like1 from "../../../assets/images/like-1.png";
 import like2 from "../../../assets/images/like-2.png";
 import { UserContext } from "../../../context/UserContext";

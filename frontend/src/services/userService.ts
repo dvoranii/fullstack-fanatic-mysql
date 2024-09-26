@@ -1,4 +1,4 @@
-import { User } from "../types/User";
+import { User } from "../types/User/User";
 import { apiCall } from "../utils/apiUtils";
 import { PublicProfile } from "../types/PublicProfileType";
 import { Conversation } from "../types/Conversations";

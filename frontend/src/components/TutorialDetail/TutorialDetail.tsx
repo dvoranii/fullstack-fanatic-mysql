@@ -5,7 +5,7 @@ import { tutorialContent } from "../../assets/tutorialContent";
 import Accordion from "../Accordion/Accordion";
 import { TutorialDetailWrapper } from "./TutorialDetail.styled";
 import Title from "../Title/Title";
-import { TutorialContentItem } from "../../types/TutorialContentItem";
+import { TutorialContentItem } from "../../types/Tutorial/TutorialContentItem";
 
 const TutorialDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();

@@ -3,9 +3,9 @@
 import { getUserProfile } from "../services/userService";
 import { getUserFavourites } from "../services/favouritesService";
 import { handleTokenExpiration } from "../services/tokenService";
-import { User } from "../types/User";
-import { Tutorial } from "../types/Tutorial";
-import { Blog } from "../types/Blog";
+import { User } from "../types/User/User";
+import { Tutorial } from "../types/Tutorial/Tutorial";
+import { Blog } from "../types/Blog/Blog";
 
 export const fetchUserProfileAndFavourites = async (
   setProfile: (profile: User) => void,

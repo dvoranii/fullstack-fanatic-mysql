@@ -34,7 +34,7 @@ import BlogIcon from "../../assets/images/blog-icon.png";
 
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import SocialLinksDisplay from "./SocialLinksDisplay/SocialLinksDisplay";
-import { UserProfilePageProps } from "../../types/UserProfilePageProps";
+import { UserProfilePageProps } from "../../types/User/UserProfilePageProps";
 import ConnectButton from "./ConnectButton/ConnectButton";
 import MessageUserModal from "./MessageUserModal/MessageUserModal";
 import FollowButton from "./FollowButton/FollowButton";

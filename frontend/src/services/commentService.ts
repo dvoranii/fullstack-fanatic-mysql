@@ -1,4 +1,4 @@
-import { CommentType } from "../types/Comment";
+import { CommentType } from "../types/Comment/Comment";
 import { apiCall } from "../utils/apiUtils";
 
 export const fetchComments = async (

@@ -1,6 +1,6 @@
 import tutorial_1_thumbnail from "../assets/images/tutorials/deployment-thumbnail.png";
 import tutorial_2_thumbnail from "../assets/images/tutorials/csrf-thumbnail.png";
-import { TutorialContentItem } from "../types/TutorialContentItem";
+import { TutorialContentItem } from "../types/Tutorial/TutorialContentItem";
 
 export const tutorialContent: TutorialContentItem[] = [
   {

@@ -7,7 +7,7 @@ import {
 import { useState, useEffect } from "react";
 import { apiCall } from "../../../../utils/apiUtils";
 import { Link, useParams } from "react-router-dom";
-import { User } from "../../../../types/User";
+import { User } from "../../../../types/User/User";
 import ProfilePicture from "../../../../components/ProfilePicture/ProfilePicture";
 import { PageWrapper } from "../../../../PageWrapper.styled";
 import MessageUserModal from "../../MessageUserModal/MessageUserModal";

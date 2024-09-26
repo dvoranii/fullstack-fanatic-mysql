@@ -9,8 +9,8 @@ import {
   FormButton,
 } from "./CommentSection.styled";
 import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmationModal";
-import { CommentType } from "../../types/Comment";
-import { CommentSectionProps } from "../../types/CommentSectionProps";
+import { CommentType } from "../../types/Comment/Comment";
+import { CommentSectionProps } from "../../types/Comment/CommentSectionProps";
 import {
   fetchComments,
   submitComment,

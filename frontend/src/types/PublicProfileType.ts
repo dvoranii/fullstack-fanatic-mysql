@@ -1,7 +1,7 @@
-import { Blog } from "./Blog";
-import { Tutorial } from "./Tutorial";
-import { User } from "./User";
-import { CommentType } from "./Comment";
+import { Blog } from "./Blog/Blog";
+import { Tutorial } from "./Tutorial/Tutorial";
+import { User } from "./User/User";
+import { CommentType } from "./Comment/Comment";
 
 export interface PublicProfile {
   id: number;

@@ -1,5 +1,6 @@
-import { Step } from "./Accordion";
-export interface BlogContentItem {
+import { Step } from "../Accordion";
+
+export interface TutorialContentItem {
   id: number;
   title: string;
   created_at: string;

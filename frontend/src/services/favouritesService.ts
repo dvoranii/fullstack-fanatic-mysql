@@ -1,5 +1,5 @@
-import { Tutorial } from "../types/Tutorial";
-import { Blog } from "../types/Blog";
+import { Tutorial } from "../types/Tutorial/Tutorial";
+import { Blog } from "../types/Blog/Blog";
 import { apiCall } from "../utils/apiUtils";
 
 export const getUserFavourites = async (): Promise<{

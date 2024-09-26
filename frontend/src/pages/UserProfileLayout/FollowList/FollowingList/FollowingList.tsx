@@ -9,7 +9,7 @@ import { PageWrapper } from "../../../../PageWrapper.styled";
 import { apiCall } from "../../../../utils/apiUtils";
 import { Link, useParams } from "react-router-dom";
 import ProfilePicture from "../../../../components/ProfilePicture/ProfilePicture";
-import { User } from "../../../../types/User";
+import { User } from "../../../../types/User/User";
 import { unfollowUser } from "../../../../services/followService";
 import { UserContext } from "../../../../context/UserContext";
 import MessageUserModal from "../../MessageUserModal/MessageUserModal";

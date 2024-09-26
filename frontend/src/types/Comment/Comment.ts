@@ -1,4 +1,4 @@
-import { ContentType } from "./ContentType";
+import { ContentType } from "../Content/ContentType";
 export interface CommentType {
   id: number;
   content_id: number;

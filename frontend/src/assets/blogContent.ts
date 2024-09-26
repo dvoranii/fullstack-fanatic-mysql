@@ -1,4 +1,4 @@
-import { BlogContentItem } from "../types/BlogContentItem";
+import { BlogContentItem } from "../types/Blog/BlogContentItem";
 
 export const blogContent: BlogContentItem[] = [
   {

@@ -1,6 +1,6 @@
 import { AuthRequestBody } from "../types/AuthRequest";
 import { LoginRequestBody } from "../types/LoginRequestBody";
-import { User } from "../types/User";
+import { User } from "../types/User/User";
 import { apiCall } from "../utils/apiUtils";
 
 export const registerUser = async (requestBody: AuthRequestBody) => {

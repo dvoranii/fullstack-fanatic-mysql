@@ -1,7 +1,7 @@
 import { User } from "./User";
-import { Tutorial } from "./Tutorial";
-import { Blog } from "./Blog";
-import { CommentType } from "./Comment";
+import { Tutorial } from "../Tutorial/Tutorial";
+import { Blog } from "../Blog/Blog";
+import { CommentType } from "../Comment/Comment";
 
 export interface UserProfilePageProps {
   profile: User;
