@@ -168,8 +168,12 @@ router.post("/reply", authenticate, async (req: Request, res: Response) => {
         parentCommentOwner[0].user_id !== userId
       ) {
         await connection.execute(
-          "INSERT INTO notifications (user_id, type, content, is_read, created_at) VALUES (?, 'reply', ?, 0, NOW())",
-          [parentCommentOwner[0].user_id, `Someone replied to your comment`]
+          "INSERT INTO notifications (user_id, type, sender_id, content, is_read, created_at) VALUES (?, 'reply', ?, ?, 0, NOW())",
+          [
+            parentCommentOwner[0].user_id,
+            userId,
+            "Someone replied to your comment",
+          ]
         );
       }
 
@@ -230,8 +234,8 @@ router.put(
 
       if (commentOwner.length > 0 && commentOwner[0].user_id !== userId) {
         await connection.execute(
-          "INSERT INTO notifications (user_id, type, content, is_read, created_at) VALUES (?, 'like', 'Someone liked your comment', 0, NOW())",
-          [commentOwner[0].user_id]
+          "INSERT INTO notifications (user_id, type, sender_id, content, is_read, created_at) VALUES (?, 'like', ?, 'Someone liked your comment', 0, NOW())",
+          [commentOwner[0].user_id, userId]
         );
       }
 

@@ -38,8 +38,8 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
 
     if (sender_id !== receiver_id) {
       await connection.execute(
-        "INSERT INTO notifications (user_id, type, content, is_read, created_at) VALUES (?, 'message', 'You have a new message', 0, NOW())",
-        [receiver_id]
+        "INSERT INTO notifications (user_id, type, sender_id, content, is_read, created_at) VALUES (?, 'message', ?, 'You have a new message', 0, NOW())",
+        [receiver_id, sender_id]
       );
     }
 

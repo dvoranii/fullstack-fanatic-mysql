@@ -98,6 +98,7 @@ const NotificationButton: React.FC = () => {
                   {notification.type === "like" && (
                     <p>Someone liked your comment</p>
                   )}
+
                   {notification.type === "reply" && (
                     <p>Someone replied to your comment</p>
                   )}
@@ -108,6 +109,7 @@ const NotificationButton: React.FC = () => {
                     <p>You have a new message</p>
                   )}
                   {!notification.is_read && <strong>New</strong>}
+                  <hr />
                 </div>
               ))
             )}

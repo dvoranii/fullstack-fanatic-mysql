@@ -14,7 +14,7 @@ const LoginButton: React.FC = () => {
     }
   };
 
-  return <LoginBtn onClick={handleSignInClick}>Sign In</LoginBtn>;
+  return <LoginBtn onClick={handleSignInClick}>Sign&nbsp;In</LoginBtn>;
 };
 
 export default LoginButton;

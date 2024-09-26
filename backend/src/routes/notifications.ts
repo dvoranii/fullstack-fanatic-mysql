@@ -4,7 +4,6 @@ import { authenticate } from "../middleware/authenticate";
 
 const router = express.Router();
 
-// Fetch notifications for the logged-in user
 router.get("/", authenticate, async (req: Request, res: Response) => {
   const userId = req.user?.userId;
 

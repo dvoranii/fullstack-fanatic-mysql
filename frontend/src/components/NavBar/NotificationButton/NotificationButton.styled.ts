@@ -35,4 +35,12 @@ export const NotificationCounter = styled.div`
 
 export const NotificationContentWrapper = styled.div`
   padding: 10px;
+
+  hr {
+    opacity: 0.5;
+  }
+
+  &:nth-child(1) {
+    width: 300px;
+  }
 `;

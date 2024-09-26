@@ -13,7 +13,7 @@ export const DropdownWrapper = styled.div.withConfig({
   background-color: white;
   border-radius: 20px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  width: 220px;
+  min-width: 220px;
   z-index: 1000;
   transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 `;
