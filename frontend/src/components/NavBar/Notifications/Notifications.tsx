@@ -13,7 +13,8 @@ import {
   markNotificationAsRead,
 } from "../../../services/notificationsService";
 import { Notification } from "../../../types/Notifications";
-import NotificationItem from "./NotificationItem/NotificationItem"; // Import the new NotificationItem
+import NotificationItem from "./NotificationItem/NotificationItem";
+import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
 
 const Notifications: React.FC = () => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
@@ -116,7 +117,7 @@ const Notifications: React.FC = () => {
                 dataLength={notifications.length}
                 next={loadMoreNotifications}
                 hasMore={hasMore}
-                loader={<h4>Loading...</h4>}
+                loader={<LoadingSpinner width="30px" color="#3498db" />}
                 scrollableTarget="scrollableDiv"
               >
                 {notifications.length === 0 ? (
