@@ -122,11 +122,12 @@ const Notifications: React.FC = () => {
                 {notifications.length === 0 ? (
                   <p>No notifications currently</p>
                 ) : (
-                  notifications.map((notification) => (
+                  notifications.map((notification, index) => (
                     <NotificationItem
-                      key={notification.id}
+                      key={`${notification.id}-${index}`}
                       notification={notification}
                       markAsRead={markAsRead}
+                      isLast={index === notifications.length - 1}
                     />
                   ))
                 )}

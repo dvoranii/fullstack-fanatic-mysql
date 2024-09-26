@@ -13,11 +13,13 @@ import { Link } from "react-router-dom";
 interface NotificationItemProps {
   notification: Notification;
   markAsRead: (id: number) => void;
+  isLast: boolean;
 }
 
 const NotificationItem: React.FC<NotificationItemProps> = ({
   notification,
   markAsRead,
+  isLast,
 }) => {
   const renderNotificationMessage = () => {
     switch (notification.type) {
@@ -70,7 +72,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
           {formatTimeAgo(notification.created_at)}
         </time>
       </NotificationTimeWrapper>
-      <hr />
+      {!isLast && <hr />}
     </>
   );
 };
