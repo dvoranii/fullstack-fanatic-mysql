@@ -71,8 +71,6 @@ router.patch(
     const { conversationId } = req.params;
     const userId = req.user?.userId;
 
-    console.log("hit");
-
     try {
       const connection = await connectionPromise;
 

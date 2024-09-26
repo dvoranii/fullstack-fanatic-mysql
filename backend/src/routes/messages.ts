@@ -36,6 +36,13 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
       [conversation_id, receiver_id]
     );
 
+    if (sender_id !== receiver_id) {
+      await connection.execute(
+        "INSERT INTO notifications (user_id, type, content, is_read, created_at) VALUES (?, 'message', 'You have a new message', 0, NOW())",
+        [receiver_id]
+      );
+    }
+
     io.to(`conversation_${conversation_id}`).emit("newMessage", newMessage);
 
     res.status(201).json({ message: "Message sent successfully" });

@@ -350,6 +350,13 @@ router.post(
         [followerId, followedId]
       );
 
+      if (followerId !== followedId) {
+        await connection.execute(
+          "INSERT INTO notifications (user_id, type, content, is_read, created_at) VALUES (?, 'follow', 'Someone followed you', 0, NOW())",
+          [followedId]
+        );
+      }
+
       res.status(200).json({ message: "User followed successfully" });
     } catch (error: unknown) {
       if (error instanceof Error && "code" in error) {

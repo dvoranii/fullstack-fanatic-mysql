@@ -143,6 +143,7 @@ router.post("/reply", authenticate, async (req: Request, res: Response) => {
 
   try {
     const connection = await connectionPromise;
+
     const [results] = await connection.query<ResultSetHeader>(
       "INSERT INTO comments (content_id, content_type, content, user_id, parent_comment_id) VALUES (?, ?, ?, ?, ?)",
       [content_id, content_type, content, userId, parent_comment_id || null]
@@ -157,6 +158,21 @@ router.post("/reply", authenticate, async (req: Request, res: Response) => {
     );
 
     if (newReply.length > 0) {
+      const [parentCommentOwner] = await connection.query<RowDataPacket[]>(
+        "SELECT user_id FROM comments WHERE id = ?",
+        [parent_comment_id]
+      );
+
+      if (
+        parentCommentOwner.length > 0 &&
+        parentCommentOwner[0].user_id !== userId
+      ) {
+        await connection.execute(
+          "INSERT INTO notifications (user_id, type, content, is_read, created_at) VALUES (?, 'reply', ?, 0, NOW())",
+          [parentCommentOwner[0].user_id, `Someone replied to your comment`]
+        );
+      }
+
       res.json(newReply[0]);
     } else {
       res
@@ -206,6 +222,18 @@ router.put(
         "UPDATE comments SET likes = ? WHERE id = ?",
         [totalLikes, id]
       );
+
+      const [commentOwner] = await connection.query<RowDataPacket[]>(
+        "SELECT user_id FROM comments WHERE id = ?",
+        [id]
+      );
+
+      if (commentOwner.length > 0 && commentOwner[0].user_id !== userId) {
+        await connection.execute(
+          "INSERT INTO notifications (user_id, type, content, is_read, created_at) VALUES (?, 'like', 'Someone liked your comment', 0, NOW())",
+          [commentOwner[0].user_id]
+        );
+      }
 
       res.json({ id, likes: totalLikes });
     } catch (err) {

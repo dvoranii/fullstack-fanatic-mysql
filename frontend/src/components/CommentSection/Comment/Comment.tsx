@@ -153,7 +153,9 @@ const Comment: React.FC<CommentProps> = ({
                   gap: "0.5rem",
                 }}
               >
-                <FormButton onClick={handleReply}>Submit Reply</FormButton>
+                <FormButton onClick={handleReply} variant="submit">
+                  Submit Reply
+                </FormButton>
                 <TrashBinButton onClick={() => setShowReplyForm(false)} />
               </div>
             </ReplyFormWrapper>

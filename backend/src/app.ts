@@ -10,6 +10,7 @@ import userRoutes from "./routes/user";
 import favouriteRoutes from "./routes/favourites";
 import conversationsRoutes from "./routes/conversations";
 import messagesRoutes from "./routes/messages";
+import notificationsRoutes from "./routes/notifications";
 import { Server } from "socket.io";
 import http from "http";
 
@@ -46,6 +47,7 @@ app.use("/api/profile", profileRoutes);
 app.use("/api/favourites", favouriteRoutes);
 app.use("/api/conversations", conversationsRoutes);
 app.use("/api/messages", messagesRoutes);
+app.use("/api/notifications", notificationsRoutes);
 
 const server = http.createServer(app);
 

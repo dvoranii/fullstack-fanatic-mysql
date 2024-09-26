@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import discardIcon from "../../../assets/images/discard-icon.png";
+import { colors } from "../../../GlobalStyles";
 
 interface CommentWrapperProps {
   isreply: boolean;
@@ -97,9 +98,11 @@ export const ReplyFormWrapper = styled.div`
   margin-top: 0.5rem;
 `;
 
-export const FormButton = styled.button`
+export const FormButton = styled.button<{ variant?: "submit" | "default" }>`
   border-radius: 4px;
-  background: none;
+  background: ${({ variant }) =>
+    variant === "submit" ? `${colors.secondary} ` : "none"};
+  padding: ${({ variant }) => (variant === "submit" ? "8px" : "none")};
   color: #fff;
   border: none;
   height: 40px;
