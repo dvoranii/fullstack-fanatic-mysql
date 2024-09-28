@@ -1,11 +1,15 @@
 import express, { Request, Response } from "express";
 import connectionPromise from "../db";
 import { authenticate } from "../middleware/authenticate";
+import { RowDataPacket } from "mysql2";
 
 const router = express.Router();
 
 router.get("/", authenticate, async (req: Request, res: Response) => {
   const userId = req.user?.userId;
+  const page = parseInt(req.query.page as string) || 1; // Get the page from query or default to 1
+  const limit = 5; // Show 4 notifications at a time
+  const offset = (page - 1) * limit; // Calculate the offset for pagination
 
   if (!userId) {
     return res.status(400).json({ error: "Invalid user ID" });
@@ -13,19 +17,31 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
 
   try {
     const connection = await connectionPromise;
-    const [notifications] = await connection.execute(
-      "SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC",
-      [userId]
+
+    const [notifications] = await connection.query<RowDataPacket[]>(
+      `SELECT n.*, u.name as sender_name, u.profile_picture as sender_profile_picture
+         FROM notifications n
+         JOIN users u ON n.sender_id = u.id
+         WHERE n.user_id = ?
+         ORDER BY n.created_at DESC
+         LIMIT ? OFFSET ?`,
+      [userId, limit, offset]
     );
 
-    res.status(200).json(notifications);
+    const [totalCountResult] = await connection.query<RowDataPacket[]>(
+      "SELECT COUNT(*) as total FROM notifications WHERE user_id = ?",
+      [userId]
+    );
+    const totalCount = totalCountResult[0]?.total || 0;
+    const hasMore = page * limit < totalCount;
+
+    res.status(200).json({ notifications, hasMore });
   } catch (error) {
     console.error("Error fetching notifications:", error);
     res.status(500).json({ error: "Failed to fetch notifications" });
   }
 });
 
-// Mark a notification as read
 router.patch("/:id/read", authenticate, async (req: Request, res: Response) => {
   const userId = req.user?.userId;
   const notificationId = req.params.id;

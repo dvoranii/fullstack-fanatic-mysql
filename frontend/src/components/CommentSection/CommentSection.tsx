@@ -10,6 +10,7 @@ import {
   SeeMoreButton,
   CommentTextareaWrapper,
   ProfilePictureWrapper,
+  RepliesWrapper,
 } from "./CommentSection.styled";
 import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmationModal";
 import { CommentType } from "../../types/Comment/Comment";
@@ -116,13 +117,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     }
   };
 
-  // const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-  //   setNewComment(e.target.value);
-  //   if (error) {
-  //     setError(null);
-  //   }
-  // };
-
   const handleEditCommentChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
@@ -138,17 +132,34 @@ const CommentSection: React.FC<CommentSectionProps> = ({
       return;
     }
 
+    const originalComment = comments.find((comment) => comment.id === id);
+
+    if (!originalComment) {
+      setError("Original comment not found.");
+      return;
+    }
+
+    setComments((prevComments) =>
+      prevComments.map((comment) =>
+        comment.id === id ? { ...comment, content: editedComment } : comment
+      )
+    );
+
+    setEditingCommentId(null);
+    setEditedComment("");
+    setError(null);
+
     try {
-      const data = await updateComment(id, editedComment);
-      setComments(
-        comments.map((comment) => (comment.id === id ? data : comment))
-      );
-      setEditingCommentId(null);
-      setEditedComment("");
-      setError(null);
+      await updateComment(id, editedComment);
     } catch (error) {
-      console.error("Fetch error:", error);
+      console.error("Failed to update comment:", error);
       setError("Failed to update comment");
+
+      setComments((prevComments) =>
+        prevComments.map((comment) =>
+          comment.id === id ? originalComment : comment
+        )
+      );
     }
   };
 
@@ -221,7 +232,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
           onReplySubmit={handleReply}
         >
           {comment.replies && comment.replies.length > 0 && (
-            <div style={{ marginLeft: "2rem", marginTop: "0.5rem" }}>
+            <RepliesWrapper>
               {renderComments(
                 comment.replies.slice(0, visibleRepliesCount),
                 true
@@ -232,7 +243,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
                   See more replies
                 </SeeMoreButton>
               )}
-            </div>
+            </RepliesWrapper>
           )}
         </Comment>
       );

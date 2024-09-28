@@ -352,7 +352,7 @@ router.post(
 
       if (followerId !== followedId) {
         await connection.execute(
-          "INSERT INTO notifications (user_id, type, sender_id, content, is_read, created_at) VALUES (?, 'follow', ?, 'Someone followed you', 0, NOW())",
+          "INSERT INTO notifications (user_id, type, sender_id, content, is_read, created_at) VALUES (?, 'follow', ?, 0, NOW())",
           [followedId, followerId]
         );
       }

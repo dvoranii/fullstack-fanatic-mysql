@@ -90,3 +90,8 @@ export const ProfilePictureWrapper = styled.div`
     margin-top: -30px;
   }
 `;
+
+export const RepliesWrapper = styled.div`
+  margin-left: 2rem;
+  margin-top: 0.5rem;
+`;

@@ -98,11 +98,18 @@ export const ReplyFormWrapper = styled.div`
   margin-top: 0.5rem;
 `;
 
-export const FormButton = styled.button<{ variant?: "submit" | "default" }>`
+export const FormButton = styled.button<{
+  variant?: "submit" | "edit" | "default";
+}>`
   border-radius: 4px;
   background: ${({ variant }) =>
-    variant === "submit" ? `${colors.secondary} ` : "none"};
-  padding: ${({ variant }) => (variant === "submit" ? "8px" : "none")};
+    variant === "submit"
+      ? `${colors.secondary}`
+      : variant === "edit"
+      ? `${colors.primary}`
+      : "none"};
+  padding: ${({ variant }) =>
+    variant === "submit" ? "8px" : variant === "edit" ? "8px" : "none"};
   color: #fff;
   border: none;
   height: 40px;
