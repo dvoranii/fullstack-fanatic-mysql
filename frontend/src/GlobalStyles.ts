@@ -87,4 +87,8 @@ export const GlobalStyles = createGlobalStyle`
     font-family: inherit;
     cursor: pointer;
   }
+
+  ::placeholder {
+    font-family:"ZenKakuGothicNewRegular", Arial, Helvetica, sans-serif; ;
+  }
 `;
