@@ -7,6 +7,9 @@ import {
   FormWrapper,
   FormTextArea,
   FormButton,
+  SeeMoreButton,
+  CommentTextareaWrapper,
+  ProfilePictureWrapper,
 } from "./CommentSection.styled";
 import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmationModal";
 import { CommentType } from "../../types/Comment/Comment";
@@ -20,6 +23,9 @@ import {
 } from "../../services/commentService";
 import Comment from "./Comment/Comment";
 import { UserContext } from "../../context/UserContext";
+import ProfilePicture from "../ProfilePicture/ProfilePicture";
+
+const BATCH_SIZE = 5;
 
 const CommentSection: React.FC<CommentSectionProps> = ({
   contentId,
@@ -33,6 +39,10 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
   const { profile } = useContext(UserContext) || {};
+
+  const [visibleReplies, setVisibleReplies] = useState<{
+    [commentId: number]: number;
+  }>({});
 
   useEffect(() => {
     const fetchCommentsData = async () => {
@@ -85,6 +95,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     }
   };
 
+  // fetch more replies
+
   const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -104,12 +116,12 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     }
   };
 
-  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setNewComment(e.target.value);
-    if (error) {
-      setError(null);
-    }
-  };
+  // const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  //   setNewComment(e.target.value);
+  //   if (error) {
+  //     setError(null);
+  //   }
+  // };
 
   const handleEditCommentChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>
@@ -180,31 +192,51 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     setCommentToDelete(null);
   };
 
+  const showMoreReplies = (commentId: number) => {
+    setVisibleReplies((prev) => ({
+      ...prev,
+      [commentId]: (prev[commentId] || 1) + BATCH_SIZE,
+    }));
+  };
+
   const renderComments = (comments: CommentType[], isReply = false) => {
-    return comments.map((comment) => (
-      <Comment
-        key={comment.id}
-        comment={comment}
-        isEditing={editingCommentId === comment.id}
-        editedComment={editedComment}
-        handleEditChange={handleEditCommentChange}
-        onEdit={() => {
-          setEditingCommentId(comment.id);
-          setEditedComment(comment.content);
-        }}
-        onDelete={() => handleDelete(comment.id)}
-        onSave={handleUpdate}
-        onCancelEdit={() => setEditingCommentId(null)}
-        isReply={isReply}
-        onReplySubmit={handleReply}
-      >
-        {comment.replies && comment.replies.length > 0 && (
-          <div style={{ marginLeft: "2rem", marginTop: "0.5rem" }}>
-            {renderComments(comment.replies, true)}
-          </div>
-        )}
-      </Comment>
-    ));
+    return comments.map((comment) => {
+      const visibleRepliesCount = visibleReplies[comment.id] || 1;
+
+      return (
+        <Comment
+          key={comment.id}
+          comment={comment}
+          isEditing={editingCommentId === comment.id}
+          editedComment={editedComment}
+          handleEditChange={handleEditCommentChange}
+          onEdit={() => {
+            setEditingCommentId(comment.id);
+            setEditedComment(comment.content);
+          }}
+          onDelete={() => handleDelete(comment.id)}
+          onSave={handleUpdate}
+          onCancelEdit={() => setEditingCommentId(null)}
+          isReply={isReply}
+          onReplySubmit={handleReply}
+        >
+          {comment.replies && comment.replies.length > 0 && (
+            <div style={{ marginLeft: "2rem", marginTop: "0.5rem" }}>
+              {renderComments(
+                comment.replies.slice(0, visibleRepliesCount),
+                true
+              )}
+
+              {comment.replies.length > visibleRepliesCount && (
+                <SeeMoreButton onClick={() => showMoreReplies(comment.id)}>
+                  See more replies
+                </SeeMoreButton>
+              )}
+            </div>
+          )}
+        </Comment>
+      );
+    });
   };
 
   return (
@@ -215,10 +247,25 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         {renderComments(comments)}
       </CommentSectionWrapperInner>
       {profile && (
-        <FormWrapper onSubmit={handleCommentSubmit}>
-          <FormTextArea value={newComment} onChange={handleCommentChange} />
-          <FormButton type="submit">Add Comment</FormButton>
-        </FormWrapper>
+        <CommentTextareaWrapper>
+          <ProfilePictureWrapper>
+            <ProfilePicture
+              src={profile.profile_picture || ""}
+              alt={""}
+              width={"90px"}
+              border={"3px solid rgba(0,0,0,0.4)"}
+            />
+          </ProfilePictureWrapper>
+
+          <FormWrapper onSubmit={handleCommentSubmit}>
+            <FormTextArea
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Add comment..."
+            />
+            <FormButton type="submit">Add Comment</FormButton>
+          </FormWrapper>
+        </CommentTextareaWrapper>
       )}
       {showDeleteModal && (
         <DeleteConfirmationModal
