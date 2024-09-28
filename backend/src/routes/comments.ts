@@ -13,17 +13,35 @@ router.get(
     const { contentType, contentId } = req.params;
     const userId = req.user?.userId;
     const includeLikedStatus = req.query.includeLikedStatus === "true";
+    const parentCommentId = req.query.parentCommentId;
+    const limit = parseInt(req.query.limit as string) || 5; // Default to 5 replies
+    const offset = parseInt(req.query.offset as string) || 0;
 
     try {
       const connection = await connectionPromise;
-      const [rows] = await connection.query<RowDataPacket[]>(
-        `SELECT c.*, u.name as user_name, u.profile_picture 
-       FROM comments c 
-       JOIN users u ON c.user_id = u.id 
-       WHERE c.content_type = ? AND c.content_id = ? 
-       ORDER BY c.created_at DESC`,
-        [contentType, contentId]
-      );
+
+      let query, params;
+
+      // If parentCommentId is provided, fetch only the replies for that comment
+      if (parentCommentId) {
+        query = `SELECT c.*, u.name as user_name, u.profile_picture 
+                 FROM comments c 
+                 JOIN users u ON c.user_id = u.id 
+                 WHERE c.parent_comment_id = ? 
+                 ORDER BY c.created_at ASC 
+                 LIMIT ? OFFSET ?`;
+        params = [parentCommentId, limit, offset];
+      } else {
+        // Fetch top-level comments
+        query = `SELECT c.*, u.name as user_name, u.profile_picture 
+                 FROM comments c 
+                 JOIN users u ON c.user_id = u.id 
+                 WHERE c.content_type = ? AND c.content_id = ? 
+                 ORDER BY c.created_at DESC`;
+        params = [contentType, contentId];
+      }
+
+      const [rows] = await connection.query<RowDataPacket[]>(query, params);
 
       const commentMap = new Map<number, Comment>();
 

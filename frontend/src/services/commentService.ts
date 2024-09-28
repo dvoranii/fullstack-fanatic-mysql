@@ -89,3 +89,25 @@ export const toggleLike = async (id: number): Promise<number> => {
 
   return data.likes;
 };
+
+export const fetchCommentsWithParams = async ({
+  contentType,
+  contentId,
+  parentCommentId = null,
+  limit = 5,
+  offset = 0,
+}: {
+  contentType: string;
+  contentId: number;
+  parentCommentId?: number | null;
+  limit?: number;
+  offset?: number;
+}): Promise<CommentType[]> => {
+  let endpoint = `/api/comments/${contentType}/${contentId}?limit=${limit}&offset=${offset}`;
+  if (parentCommentId) {
+    endpoint += `&parentCommentId=${parentCommentId}`;
+  }
+
+  const { data } = await apiCall<CommentType[]>(endpoint);
+  return data;
+};

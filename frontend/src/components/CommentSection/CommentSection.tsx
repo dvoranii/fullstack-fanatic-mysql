@@ -21,6 +21,7 @@ import {
   updateComment,
   deleteComment,
   submitReply,
+  fetchCommentsWithParams,
 } from "../../services/commentService";
 import Comment from "./Comment/Comment";
 import { UserContext } from "../../context/UserContext";
@@ -203,11 +204,37 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     setCommentToDelete(null);
   };
 
-  const showMoreReplies = (commentId: number) => {
-    setVisibleReplies((prev) => ({
-      ...prev,
-      [commentId]: (prev[commentId] || 1) + BATCH_SIZE,
-    }));
+  const showMoreReplies = async (commentId: number) => {
+    const currentVisibleCount = visibleReplies[commentId] || 0;
+    try {
+      const newReplies = await fetchCommentsWithParams({
+        contentType,
+        contentId,
+        parentCommentId: commentId, // fetch replies for this comment
+        limit: BATCH_SIZE,
+        offset: currentVisibleCount,
+      });
+
+      // Add the new replies to the current comment
+      setComments((prevComments) =>
+        prevComments.map((comment) => {
+          if (comment.id === commentId) {
+            return {
+              ...comment,
+              replies: [...(comment.replies || []), ...newReplies],
+            };
+          }
+          return comment;
+        })
+      );
+
+      setVisibleReplies((prev) => ({
+        ...prev,
+        [commentId]: currentVisibleCount + BATCH_SIZE,
+      }));
+    } catch (error) {
+      console.error("Failed to fetch replies", error);
+    }
   };
 
   const renderComments = (comments: CommentType[], isReply = false) => {
