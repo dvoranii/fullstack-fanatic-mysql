@@ -16,12 +16,12 @@ import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmati
 import { CommentType } from "../../types/Comment/Comment";
 import { CommentSectionProps } from "../../types/Comment/CommentSectionProps";
 import {
-  fetchComments,
+  fetchTopLevelComments,
+  fetchReplies,
   submitComment,
   updateComment,
   deleteComment,
   submitReply,
-  fetchCommentsWithParams,
 } from "../../services/commentService";
 import Comment from "./Comment/Comment";
 import { UserContext } from "../../context/UserContext";
@@ -49,10 +49,11 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   useEffect(() => {
     const fetchCommentsData = async () => {
       try {
-        const data = await fetchComments(contentType, contentId);
+        const data = await fetchTopLevelComments(contentType, contentId);
+
         setComments(data);
       } catch (error) {
-        console.error("Fetch error:", error);
+        console.error("Failed to fetch comments:", error);
         setError("Failed to fetch comments");
       }
     };
@@ -204,50 +205,95 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     setCommentToDelete(null);
   };
 
-  const showMoreReplies = async (commentId: number) => {
-    const currentVisibleCount = visibleReplies[commentId] || 0;
+  // const showMoreReplies = async (parentCommentId: number) => {
+  //   const currentVisibleCount = visibleReplies[parentCommentId] || 0;
+
+  //   console.log(currentVisibleCount);
+
+  //   const newReplies = await fetchReplies(
+  //     parentCommentId,
+  //     contentType,
+  //     contentId,
+  //     BATCH_SIZE,
+  //     currentVisibleCount
+  //   );
+
+  //   console.log(newReplies);
+
+  //   setVisibleReplies((prev) => ({
+  //     ...prev,
+  //     [parentCommentId]: currentVisibleCount + BATCH_SIZE,
+  //   }));
+  // };
+
+  const showMoreReplies = async (parentCommentId: number) => {
+    const currentVisibleCount = visibleReplies[parentCommentId] || 0;
+
     try {
-      const newReplies = await fetchCommentsWithParams({
+      // Fetch more replies for the given parentCommentId
+      const newReplies = await fetchReplies(
+        parentCommentId,
         contentType,
         contentId,
-        parentCommentId: commentId, // fetch replies for this comment
-        limit: BATCH_SIZE,
-        offset: currentVisibleCount,
-      });
+        BATCH_SIZE,
+        currentVisibleCount
+      );
 
-      // Add the new replies to the current comment
+      console.log(newReplies);
+
+      // Append new replies to the correct comment
       setComments((prevComments) =>
         prevComments.map((comment) => {
-          if (comment.id === commentId) {
+          if (comment.id === parentCommentId) {
             return {
               ...comment,
               replies: [...(comment.replies || []), ...newReplies],
             };
           }
+
+          if (comment.replies && comment.replies.length > 0) {
+            return {
+              ...comment,
+              replies: comment.replies.map((reply) => {
+                if (reply.id === parentCommentId) {
+                  return {
+                    ...reply,
+                    replies: [...(reply.replies || []), ...newReplies],
+                  };
+                }
+                return reply;
+              }),
+            };
+          }
+
           return comment;
         })
       );
 
+      // Update visible replies count
       setVisibleReplies((prev) => ({
         ...prev,
-        [commentId]: currentVisibleCount + BATCH_SIZE,
+        [parentCommentId]: currentVisibleCount + BATCH_SIZE,
       }));
     } catch (error) {
-      console.error("Failed to fetch replies", error);
+      console.error("Failed to fetch replies:", error);
     }
   };
 
-  const renderComments = (comments: CommentType[], isReply = false) => {
+  const renderComments = (
+    comments: CommentType[],
+    isReply = false,
+    parentCommentId?: number
+  ) => {
     return comments.map((comment) => {
-      const visibleRepliesCount = visibleReplies[comment.id] || 1;
+      const replies = comment.replies || [];
 
       return (
         <Comment
-          key={comment.id}
+          key={isReply ? `${parentCommentId}-${comment.id}` : comment.id}
           comment={comment}
           isEditing={editingCommentId === comment.id}
           editedComment={editedComment}
-          handleEditChange={handleEditCommentChange}
           onEdit={() => {
             setEditingCommentId(comment.id);
             setEditedComment(comment.content);
@@ -257,15 +303,21 @@ const CommentSection: React.FC<CommentSectionProps> = ({
           onCancelEdit={() => setEditingCommentId(null)}
           isReply={isReply}
           onReplySubmit={handleReply}
+          handleEditChange={handleEditCommentChange}
         >
-          {comment.replies && comment.replies.length > 0 && (
+          {comment.has_replies && (
             <RepliesWrapper>
-              {renderComments(
-                comment.replies.slice(0, visibleRepliesCount),
-                true
+              {replies.length > 0 && (
+                <>
+                  {renderComments(
+                    replies, // Render all replies
+                    true, // We are rendering replies
+                    comment.id // Pass the current comment's ID as the parentCommentId
+                  )}
+                </>
               )}
 
-              {comment.replies.length > visibleRepliesCount && (
+              {replies.length === 0 && (
                 <SeeMoreButton onClick={() => showMoreReplies(comment.id)}>
                   See more replies
                 </SeeMoreButton>

@@ -34,8 +34,8 @@ export const NotificationCounter = styled.div`
 `;
 
 export const NotificationContentWrapper = styled.div`
-  padding: 10px;
+  padding: 20px;
   width: 350px;
-  height: 300px;
+  height: 200px;
   overflow-y: auto;
 `;

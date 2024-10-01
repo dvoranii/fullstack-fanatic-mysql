@@ -1,13 +1,30 @@
 import { CommentType } from "../types/Comment/Comment";
 import { apiCall } from "../utils/apiUtils";
 
-export const fetchComments = async (
+// Fetch top-level comments (parent_comment_id IS NULL)
+export const fetchTopLevelComments = async (
   contentType: string,
   contentId: number
 ): Promise<CommentType[]> => {
-  const endpoint = `/api/comments/${contentType}/${contentId}?includeLikedStatus=true`;
+  const endpoint = `/api/comments/${contentType}/${contentId}?&parentCommentId=null&includeLikedStatus=true`;
 
   const { data } = await apiCall<CommentType[]>(endpoint);
+  // console.log(data);
+  return data;
+};
+
+// Fetch replies for a specific comment (based on parent_comment_id)
+export const fetchReplies = async (
+  parentCommentId: number,
+  contentType: string,
+  contentId: number,
+  limit = 5,
+  offset = 0
+): Promise<CommentType[]> => {
+  const endpoint = `/api/comments/${contentType}/${contentId}?limit=${limit}&offset=${offset}&parentCommentId=${parentCommentId}`;
+
+  const { data } = await apiCall<CommentType[]>(endpoint);
+  console.log(data);
 
   return data;
 };
@@ -88,26 +105,4 @@ export const toggleLike = async (id: number): Promise<number> => {
   });
 
   return data.likes;
-};
-
-export const fetchCommentsWithParams = async ({
-  contentType,
-  contentId,
-  parentCommentId = null,
-  limit = 5,
-  offset = 0,
-}: {
-  contentType: string;
-  contentId: number;
-  parentCommentId?: number | null;
-  limit?: number;
-  offset?: number;
-}): Promise<CommentType[]> => {
-  let endpoint = `/api/comments/${contentType}/${contentId}?limit=${limit}&offset=${offset}`;
-  if (parentCommentId) {
-    endpoint += `&parentCommentId=${parentCommentId}`;
-  }
-
-  const { data } = await apiCall<CommentType[]>(endpoint);
-  return data;
 };

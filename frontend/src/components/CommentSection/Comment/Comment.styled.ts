@@ -74,7 +74,7 @@ export const CommentActions = styled.div`
 export const LikesWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 1.4rem;
+  margin-top: 0.4rem;
   img {
     width: 25px;
     cursor: pointer;

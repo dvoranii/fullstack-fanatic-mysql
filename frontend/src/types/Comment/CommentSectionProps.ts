@@ -1,4 +1,4 @@
-import { ContentType } from "../ContentType";
+import { ContentType } from "../Content/ContentType";
 export interface CommentSectionProps {
   contentId: number;
   contentType: ContentType;

@@ -12,4 +12,5 @@ export interface Comment {
   likedByUser?: boolean;
   parent_comment_id?: number;
   replies?: Comment[];
+  has_replies?: boolean;
 }
