@@ -80,6 +80,8 @@ const Comment: React.FC<CommentProps> = ({
     }
   };
 
+  console.log(children);
+
   return (
     <CommentWrapper isreply={isReply} {...restProps}>
       <ProfilePictureWrapper onClick={handleProfileClick}>
@@ -166,7 +168,8 @@ const Comment: React.FC<CommentProps> = ({
           )}
         </CommentActions>
 
-        <div style={{ width: "100%" }}>{children}</div>
+        {/* make sure the unecessary 0 does not render */}
+        {children !== 0 && <div style={{ width: "100%" }}>{children}</div>}
       </CommentItem>
     </CommentWrapper>
   );

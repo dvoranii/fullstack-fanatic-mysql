@@ -205,27 +205,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     setCommentToDelete(null);
   };
 
-  // const showMoreReplies = async (parentCommentId: number) => {
-  //   const currentVisibleCount = visibleReplies[parentCommentId] || 0;
-
-  //   console.log(currentVisibleCount);
-
-  //   const newReplies = await fetchReplies(
-  //     parentCommentId,
-  //     contentType,
-  //     contentId,
-  //     BATCH_SIZE,
-  //     currentVisibleCount
-  //   );
-
-  //   console.log(newReplies);
-
-  //   setVisibleReplies((prev) => ({
-  //     ...prev,
-  //     [parentCommentId]: currentVisibleCount + BATCH_SIZE,
-  //   }));
-  // };
-
   const showMoreReplies = async (parentCommentId: number) => {
     const currentVisibleCount = visibleReplies[parentCommentId] || 0;
 
@@ -308,13 +287,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
           {comment.has_replies && (
             <RepliesWrapper>
               {replies.length > 0 && (
-                <>
-                  {renderComments(
-                    replies, // Render all replies
-                    true, // We are rendering replies
-                    comment.id // Pass the current comment's ID as the parentCommentId
-                  )}
-                </>
+                <>{renderComments(replies, true, comment.id)}</>
               )}
 
               {replies.length === 0 && (
