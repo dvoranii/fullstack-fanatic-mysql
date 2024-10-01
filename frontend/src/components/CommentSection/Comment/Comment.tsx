@@ -80,8 +80,6 @@ const Comment: React.FC<CommentProps> = ({
     }
   };
 
-  console.log(children);
-
   return (
     <CommentWrapper isreply={isReply} {...restProps}>
       <ProfilePictureWrapper onClick={handleProfileClick}>

@@ -4,12 +4,16 @@ import { apiCall } from "../utils/apiUtils";
 // Fetch top-level comments (parent_comment_id IS NULL)
 export const fetchTopLevelComments = async (
   contentType: string,
-  contentId: number
-): Promise<CommentType[]> => {
-  const endpoint = `/api/comments/${contentType}/${contentId}?&parentCommentId=null&includeLikedStatus=true`;
+  contentId: number,
+  page: number
+): Promise<{ comments: CommentType[]; hasMore: boolean }> => {
+  const endpoint = `/api/comments/${contentType}/${contentId}?page=${page}&parentCommentId=null&includeLikedStatus=true`;
 
-  const { data } = await apiCall<CommentType[]>(endpoint);
-  // console.log(data);
+  const { data } = await apiCall<{ comments: CommentType[]; hasMore: boolean }>(
+    endpoint
+  );
+
+  console.log(data);
   return data;
 };
 
@@ -18,15 +22,15 @@ export const fetchReplies = async (
   parentCommentId: number,
   contentType: string,
   contentId: number,
-  limit = 5,
-  offset = 0
+  limit: number,
+  offset: number
 ): Promise<CommentType[]> => {
-  const endpoint = `/api/comments/${contentType}/${contentId}?limit=${limit}&offset=${offset}&parentCommentId=${parentCommentId}`;
+  // Hit the same route used for fetching comments but pass parentCommentId to get replies
+  const endpoint = `/api/comments/${contentType}/${contentId}?parentCommentId=${parentCommentId}&limit=${limit}&offset=${offset}`;
+  const { data } = await apiCall<{ comments: CommentType[] }>(endpoint);
 
-  const { data } = await apiCall<CommentType[]>(endpoint);
-  console.log(data);
-
-  return data;
+  // Return the comments (which are actually replies in this case)
+  return data.comments || [];
 };
 
 export const submitComment = async (

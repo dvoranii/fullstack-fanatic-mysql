@@ -26,7 +26,10 @@ import {
 import Comment from "./Comment/Comment";
 import { UserContext } from "../../context/UserContext";
 import ProfilePicture from "../ProfilePicture/ProfilePicture";
+import InfiniteScroll from "react-infinite-scroll-component";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
+// for later use
 const BATCH_SIZE = 5;
 
 const CommentSection: React.FC<CommentSectionProps> = ({
@@ -41,7 +44,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
   const { profile } = useContext(UserContext) || {};
-
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const [visibleReplies, setVisibleReplies] = useState<{
     [commentId: number]: number;
   }>({});
@@ -49,9 +53,16 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   useEffect(() => {
     const fetchCommentsData = async () => {
       try {
-        const data = await fetchTopLevelComments(contentType, contentId);
+        const { comments: fetchedComments, hasMore } =
+          await fetchTopLevelComments(contentType, contentId, page);
 
-        setComments(data);
+        setComments((prevComments) => [
+          ...prevComments,
+          ...fetchedComments.filter(
+            (newComment) => !prevComments.some((c) => c.id === newComment.id)
+          ),
+        ]);
+        setHasMore(hasMore);
       } catch (error) {
         console.error("Failed to fetch comments:", error);
         setError("Failed to fetch comments");
@@ -59,7 +70,11 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     };
 
     fetchCommentsData();
-  }, [contentId, contentType]);
+  }, [contentId, contentType, page]);
+
+  const loadMoreComments = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
 
   const handleReply = async (parentCommentId: number, replyContent: string) => {
     if (replyContent.trim() === "") return;
@@ -218,7 +233,10 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         currentVisibleCount
       );
 
-      console.log(newReplies);
+      console.log(newReplies); // Ensure newReplies is an array
+
+      // Guard to ensure newReplies is always an array
+      const repliesToAdd = Array.isArray(newReplies) ? newReplies : [];
 
       // Append new replies to the correct comment
       setComments((prevComments) =>
@@ -226,7 +244,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
           if (comment.id === parentCommentId) {
             return {
               ...comment,
-              replies: [...(comment.replies || []), ...newReplies],
+              replies: [...(comment.replies || []), ...repliesToAdd],
             };
           }
 
@@ -237,7 +255,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
                 if (reply.id === parentCommentId) {
                   return {
                     ...reply,
-                    replies: [...(reply.replies || []), ...newReplies],
+                    replies: [...(reply.replies || []), ...repliesToAdd],
                   };
                 }
                 return reply;
@@ -264,12 +282,12 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     isReply = false,
     parentCommentId?: number
   ) => {
-    return comments.map((comment) => {
+    return comments.map((comment, index) => {
       const replies = comment.replies || [];
 
       return (
         <Comment
-          key={isReply ? `${parentCommentId}-${comment.id}` : comment.id}
+          key={isReply ? `${parentCommentId}-${index}` : comment.id}
           comment={comment}
           isEditing={editingCommentId === comment.id}
           editedComment={editedComment}
@@ -303,12 +321,29 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   };
 
   return (
-    <CommentSectionWrapperOuter>
-      <CommentSectionTitle>Comments</CommentSectionTitle>
-      {error && <ErrorMessage error={error} />}
-      <CommentSectionWrapperInner>
-        {renderComments(comments)}
-      </CommentSectionWrapperInner>
+    <>
+      <CommentSectionWrapperOuter>
+        <CommentSectionTitle>Comments</CommentSectionTitle>
+        {error && <ErrorMessage error={error} />}
+        <CommentSectionWrapperInner id="scrollableDiv">
+          <InfiniteScroll
+            dataLength={comments.length}
+            next={loadMoreComments}
+            hasMore={hasMore}
+            loader={<LoadingSpinner />}
+            scrollableTarget="scrollableDiv"
+          >
+            {renderComments(comments)}
+          </InfiniteScroll>
+        </CommentSectionWrapperInner>
+
+        {showDeleteModal && (
+          <DeleteConfirmationModal
+            onConfirm={confirmDelete}
+            onCancel={cancelDelete}
+          />
+        )}
+      </CommentSectionWrapperOuter>
       {profile && (
         <CommentTextareaWrapper>
           <ProfilePictureWrapper>
@@ -330,13 +365,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
           </FormWrapper>
         </CommentTextareaWrapper>
       )}
-      {showDeleteModal && (
-        <DeleteConfirmationModal
-          onConfirm={confirmDelete}
-          onCancel={cancelDelete}
-        />
-      )}
-    </CommentSectionWrapperOuter>
+    </>
   );
 };
 
