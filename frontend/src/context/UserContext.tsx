@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { User } from "../types/User/User";
-import { fetchUserProfileAndFavourites } from "../utils/userUtils";
+import { fetchUserProfileFavouritesAndComments } from "../utils/userUtils";
 import { addFavourite, removeFavourite } from "../services/favouritesService";
 import { Tutorial } from "../types/Tutorial/Tutorial";
 import { Blog } from "../types/Blog/Blog";
@@ -20,10 +20,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchUserProfileAndFavourites(
+    fetchUserProfileFavouritesAndComments(
       setProfile,
       setFavouriteTutorials,
       setFavouriteBlogs,
+      setComments,
       setError,
       setLoading
     );

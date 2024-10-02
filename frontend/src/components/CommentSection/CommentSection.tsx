@@ -20,7 +20,6 @@ import {
   fetchReplies,
   submitComment,
   updateComment,
-  deleteComment,
   submitReply,
 } from "../../services/commentService";
 import Comment from "./Comment/Comment";
@@ -28,6 +27,11 @@ import { UserContext } from "../../context/UserContext";
 import ProfilePicture from "../ProfilePicture/ProfilePicture";
 import InfiniteScroll from "react-infinite-scroll-component";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import { useDeleteComment } from "../../hooks/useDeleteComment";
+import {
+  addRepliesToCommentTree,
+  addReplyToComments,
+} from "../../utils/commentUtils";
 
 // for later use
 const BATCH_SIZE = 5;
@@ -35,20 +39,65 @@ const BATCH_SIZE = 5;
 const CommentSection: React.FC<CommentSectionProps> = ({
   contentId,
   contentType,
+  commentId,
 }) => {
   const [comments, setComments] = useState<CommentType[]>([]);
   const [newComment, setNewComment] = useState("");
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [editedComment, setEditedComment] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
   const { profile } = useContext(UserContext) || {};
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [visibleReplies, setVisibleReplies] = useState<{
     [commentId: number]: number;
   }>({});
+  const [loadingTargetComment, setLoadingTargetComment] = useState(true);
+
+  const { showDeleteModal, handleDelete, confirmDelete, cancelDelete } =
+    useDeleteComment(setComments, setError);
+
+  useEffect(() => {
+    const loadComments = async () => {
+      try {
+        const { comments: fetchedComments, hasMore: more } =
+          await fetchTopLevelComments(contentType, contentId, page);
+
+        setComments((prevComments) => [
+          ...prevComments,
+          ...fetchedComments.filter(
+            (newComment) => !prevComments.some((c) => c.id === newComment.id)
+          ),
+        ]);
+        setHasMore(more);
+
+        if (commentId && !document.getElementById(`comment-${commentId}`)) {
+          setPage((prevPage) => prevPage + 1);
+        } else {
+          setLoadingTargetComment(false);
+        }
+      } catch (error) {
+        console.error("Failed to fetch comments:", error);
+      }
+    };
+
+    if (loadingTargetComment) {
+      loadComments();
+    }
+  }, [contentId, contentType, page, commentId, comments, loadingTargetComment]);
+
+  useEffect(() => {
+    if (commentId && !loadingTargetComment) {
+      const targetComment = document.getElementById(`comment-${commentId}`);
+      if (targetComment) {
+        targetComment.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [comments, commentId, loadingTargetComment]);
+
+  const loadMoreComments = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
 
   useEffect(() => {
     const fetchCommentsData = async () => {
@@ -72,31 +121,14 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     fetchCommentsData();
   }, [contentId, contentType, page]);
 
-  const loadMoreComments = () => {
-    setPage((prevPage) => prevPage + 1);
-  };
-
-  // Helper function to recursively add replies
-  const addReplyToComments = (
-    comments: CommentType[],
-    newReply: CommentType
-  ): CommentType[] => {
-    return comments.map((comment) => {
-      if (comment.id === newReply.parent_comment_id) {
-        return {
-          ...comment,
-          replies: [...(comment.replies || []), newReply],
-        };
-      } else if (comment.replies && comment.replies.length > 0) {
-        return {
-          ...comment,
-          replies: addReplyToComments(comment.replies, newReply),
-        };
-      } else {
-        return comment;
+  useEffect(() => {
+    if (commentId && comments.length > 0) {
+      const targetComment = document.getElementById(`comment-${commentId}`);
+      if (targetComment) {
+        targetComment.scrollIntoView({ behavior: "smooth" });
       }
-    });
-  };
+    }
+  }, [commentId, comments]);
 
   const handleReply = async (parentCommentId: number, replyContent: string) => {
     if (replyContent.trim() === "") return;
@@ -109,15 +141,12 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         parent_comment_id: parentCommentId,
       });
 
-      // Update the state with the new reply
       setComments((prevComments) => addReplyToComments(prevComments, newReply));
     } catch (error) {
       console.error("Failed to submit reply", error);
       setError("Failed to submit reply");
     }
   };
-
-  // fetch more replies
 
   const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -184,70 +213,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     }
   };
 
-  const handleDelete = (id: number) => {
-    setShowDeleteModal(true);
-    setCommentToDelete(id);
-  };
-
-  const confirmDelete = async () => {
-    if (commentToDelete !== null) {
-      try {
-        await deleteComment(commentToDelete);
-
-        setComments((prevComments) => {
-          const removeCommentById = (
-            comments: CommentType[],
-            id: number
-          ): CommentType[] => {
-            return comments
-              .filter((comment) => comment.id !== id)
-              .map((comment) => ({
-                ...comment,
-                replies: removeCommentById(comment.replies || [], id),
-              }));
-          };
-
-          return removeCommentById(prevComments, commentToDelete);
-        });
-
-        setShowDeleteModal(false);
-        setCommentToDelete(null);
-      } catch (error) {
-        console.error("Fetch error: ", error);
-        setError("Failed to delete comment");
-      }
-    }
-  };
-
-  const cancelDelete = () => {
-    setShowDeleteModal(false);
-    setCommentToDelete(null);
-  };
-
-  const addRepliesToCommentTree = (
-    comments: CommentType[],
-    parentId: number,
-    replies: CommentType[]
-  ): CommentType[] => {
-    return comments.map((comment) => {
-      if (comment.id === parentId) {
-        return {
-          ...comment,
-          replies: [...(comment.replies || []), ...replies],
-        };
-      }
-
-      if (comment.replies && comment.replies.length > 0) {
-        return {
-          ...comment,
-          replies: addRepliesToCommentTree(comment.replies, parentId, replies),
-        };
-      }
-
-      return comment;
-    });
-  };
-
   const showMoreReplies = async (parentCommentId: number) => {
     const currentVisibleCount = visibleReplies[parentCommentId] || 0;
 
@@ -286,35 +251,37 @@ const CommentSection: React.FC<CommentSectionProps> = ({
       const replies = comment.replies || [];
 
       return (
-        <Comment
-          key={isReply ? `${parentCommentId}-${index}` : comment.id}
-          comment={comment}
-          isLiked={comment.likedByUser ?? false}
-          isEditing={editingCommentId === comment.id}
-          editedComment={editedComment}
-          onEdit={() => {
-            setEditingCommentId(comment.id);
-            setEditedComment(comment.content);
-          }}
-          onDelete={() => handleDelete(comment.id)}
-          onSave={handleUpdate}
-          onCancelEdit={() => setEditingCommentId(null)}
-          isReply={isReply}
-          onReplySubmit={handleReply}
-          handleEditChange={handleEditCommentChange}
-        >
-          {replies.length > 0 && (
-            <RepliesWrapper>
-              {renderComments(replies, true, comment.id)}
-            </RepliesWrapper>
-          )}
+        <div id={`comment-${comment.id}`} key={comment.id}>
+          <Comment
+            key={isReply ? `${parentCommentId}-${index}` : comment.id}
+            comment={comment}
+            isLiked={comment.likedByUser ?? false}
+            isEditing={editingCommentId === comment.id}
+            editedComment={editedComment}
+            onEdit={() => {
+              setEditingCommentId(comment.id);
+              setEditedComment(comment.content);
+            }}
+            onDelete={() => handleDelete(comment.id)}
+            onSave={handleUpdate}
+            onCancelEdit={() => setEditingCommentId(null)}
+            isReply={isReply}
+            onReplySubmit={handleReply}
+            handleEditChange={handleEditCommentChange}
+          >
+            {replies.length > 0 && (
+              <RepliesWrapper>
+                {renderComments(replies, true, comment.id)}
+              </RepliesWrapper>
+            )}
 
-          {replies.length === 0 && comment.has_replies && (
-            <SeeMoreButton onClick={() => showMoreReplies(comment.id)}>
-              See more replies
-            </SeeMoreButton>
-          )}
-        </Comment>
+            {replies.length === 0 && comment.has_replies && (
+              <SeeMoreButton onClick={() => showMoreReplies(comment.id)}>
+                See more replies
+              </SeeMoreButton>
+            )}
+          </Comment>
+        </div>
       );
     });
   };
@@ -328,7 +295,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
           <InfiniteScroll
             dataLength={comments.length}
             next={loadMoreComments}
-            hasMore={hasMore}
+            hasMore={hasMore || loadingTargetComment}
             loader={<LoadingSpinner />}
             scrollableTarget="scrollableDiv"
           >

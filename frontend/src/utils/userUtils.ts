@@ -6,11 +6,14 @@ import { handleTokenExpiration } from "../services/tokenService";
 import { User } from "../types/User/User";
 import { Tutorial } from "../types/Tutorial/Tutorial";
 import { Blog } from "../types/Blog/Blog";
+import { fetchUserComments } from "../services/commentService";
+import { CommentType } from "../types/Comment/Comment";
 
-export const fetchUserProfileAndFavourites = async (
+export const fetchUserProfileFavouritesAndComments = async (
   setProfile: (profile: User) => void,
   setFavouriteTutorials: (tutorials: Tutorial[]) => void,
   setFavouriteBlogs: (blogs: Blog[]) => void,
+  setComments: (comments: CommentType[]) => void,
   setError: (error: string | null) => void,
   setLoading?: (loading: boolean) => void
 ) => {
@@ -27,6 +30,9 @@ export const fetchUserProfileAndFavourites = async (
     const userFavourites = await getUserFavourites();
     setFavouriteTutorials(userFavourites.tutorials);
     setFavouriteBlogs(userFavourites.blogs);
+
+    const userComments = await fetchUserComments();
+    setComments(userComments);
   } catch (err) {
     setError("Failed to load user data");
     console.error("Failed to fetch user data:", err);

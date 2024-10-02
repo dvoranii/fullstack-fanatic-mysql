@@ -36,8 +36,13 @@ const Navigation: React.FC = () => {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/tutorials" element={<TutorialsPage />} />
         <Route path="/tutorial/:id" element={<TutorialPage />} />
+        <Route
+          path="/tutorial/:id/comments/:commentId"
+          element={<TutorialPage />}
+        />
         <Route path="/blogs" element={<BlogsPage />} />
         <Route path="/blog/:id" element={<BlogDetail />} />
+        <Route path="/blog/:id/comments/:commentId" element={<BlogDetail />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route
           path="/register"

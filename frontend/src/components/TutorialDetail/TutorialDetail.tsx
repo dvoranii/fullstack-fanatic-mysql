@@ -8,7 +8,7 @@ import Title from "../Title/Title";
 import { TutorialContentItem } from "../../types/Tutorial/TutorialContentItem";
 
 const TutorialDetail: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id, commentId } = useParams<{ id: string; commentId?: string }>();
 
   const tutorial: TutorialContentItem | undefined = tutorialContent.find(
     (tutorial) => tutorial.id === Number(id)
@@ -26,7 +26,11 @@ const TutorialDetail: React.FC = () => {
     <TutorialDetailWrapper>
       <Title textContent={tutorial.title} />
       <Accordion steps={tutorial.steps} />
-      <CommentSection contentId={tutorial.id} contentType="tutorial" />
+      <CommentSection
+        contentId={tutorial.id}
+        contentType="tutorial"
+        commentId={commentId ? Number(commentId) : undefined}
+      />
     </TutorialDetailWrapper>
   );
 };

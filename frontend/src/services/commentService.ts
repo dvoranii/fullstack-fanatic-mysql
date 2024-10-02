@@ -105,3 +105,13 @@ export const toggleLike = async (id: number): Promise<number> => {
 
   return data.likes;
 };
+
+export const fetchUserComments = async (): Promise<CommentType[]> => {
+  const endpoint = `/api/comments/user`;
+
+  const { data } = await apiCall<{ comments: CommentType[] }>(endpoint, {
+    method: "GET",
+  });
+
+  return data.comments;
+};

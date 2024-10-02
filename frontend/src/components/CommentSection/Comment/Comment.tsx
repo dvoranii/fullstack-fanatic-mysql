@@ -103,7 +103,10 @@ const Comment: React.FC<CommentProps> = ({
             <>
               <FormTextArea value={editedComment} onChange={handleEditChange} />
               <CommentActions>
-                <FormButton onClick={() => onSave(comment.id)} variant="edit">
+                <FormButton
+                  onClick={() => onSave(comment.id, editedComment)}
+                  variant="edit"
+                >
                   Save
                 </FormButton>
                 <FormButton onClick={onCancelEdit} variant="edit">

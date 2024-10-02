@@ -7,7 +7,7 @@ export interface CommentProps {
   handleEditChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onEdit: () => void;
   onDelete: () => void;
-  onSave: (id: number) => void;
+  onSave: (id: number, updatedContent: string) => Promise<void>;
   onCancelEdit: () => void;
   isLiked?: boolean;
   isReply: boolean;

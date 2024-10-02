@@ -257,4 +257,30 @@ router.delete("/:id", authenticate, async (req: Request, res: Response) => {
   }
 });
 
+// Fetch user comments
+
+// Add this to your comments.ts backend route
+router.get("/user", authenticate, async (req: Request, res: Response) => {
+  const userId = req.user?.userId;
+
+  try {
+    const connection = await connectionPromise;
+
+    const [rows] = await connection.query<RowDataPacket[]>(
+      `
+      SELECT c.*, u.name as user_name, u.profile_picture
+      FROM comments c
+      JOIN users u ON c.user_id = u.id
+      WHERE c.user_id = ?
+      ORDER BY c.created_at DESC
+      `,
+      [userId]
+    );
+
+    res.json({ comments: rows as Comment[] });
+  } catch (err) {
+    res.status(500).json({ error: (err as Error).message });
+  }
+});
+
 export default router;

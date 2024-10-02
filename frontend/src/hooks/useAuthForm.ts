@@ -9,13 +9,14 @@ import {
   loginUser,
 } from "../api/api";
 import validateField from "../utils/validationUtils";
-import { fetchUserProfileAndFavourites } from "../utils/userUtils";
+import { fetchUserProfileFavouritesAndComments } from "../utils/userUtils";
 
 export const useAuthForm = (defaultToLogin = false) => {
   const [isLogin, setIsLogin] = useState(defaultToLogin);
   const [error, setError] = useState<string | null>(null);
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
-  const { setProfile, setFavouriteTutorials, setFavouriteBlogs } = useUser();
+  const { setProfile, setFavouriteTutorials, setFavouriteBlogs, setComments } =
+    useUser();
   const navigate = useNavigate();
 
   const toggleForm = () => {
@@ -37,10 +38,11 @@ export const useAuthForm = (defaultToLogin = false) => {
         return;
       }
 
-      await fetchUserProfileAndFavourites(
+      await fetchUserProfileFavouritesAndComments(
         setProfile,
         setFavouriteTutorials,
         setFavouriteBlogs,
+        setComments,
         setError
       );
 
@@ -55,10 +57,11 @@ export const useAuthForm = (defaultToLogin = false) => {
     try {
       await googleLogin(codeResponse.access_token);
 
-      await fetchUserProfileAndFavourites(
+      await fetchUserProfileFavouritesAndComments(
         setProfile,
         setFavouriteTutorials,
         setFavouriteBlogs,
+        setComments,
         setError
       );
 
@@ -108,10 +111,11 @@ export const useAuthForm = (defaultToLogin = false) => {
 
     try {
       await registerUser({ email, password, name: username });
-      await fetchUserProfileAndFavourites(
+      await fetchUserProfileFavouritesAndComments(
         setProfile,
         setFavouriteTutorials,
         setFavouriteBlogs,
+        setComments,
         setError
       );
 
@@ -160,10 +164,11 @@ export const useAuthForm = (defaultToLogin = false) => {
 
       localStorage.setItem("accessToken", token);
 
-      await fetchUserProfileAndFavourites(
+      await fetchUserProfileFavouritesAndComments(
         setProfile,
         setFavouriteTutorials,
         setFavouriteBlogs,
+        setComments,
         setError
       );
 
