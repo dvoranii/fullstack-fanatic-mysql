@@ -217,24 +217,27 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
 
           <Section>
             <CommentHistory>
-              {comments.map((comment) => (
-                <CommentItem key={comment.id}>
-                  <CommentText>{comment.content}</CommentText>
-                  {comment.content_type === "tutorial" ? (
-                    <CommentLink
-                      href={`/tutorial/${comment.content_id}/comments/${comment.id}`}
-                    >
-                      View Content
-                    </CommentLink>
-                  ) : (
-                    <CommentLink
-                      href={`/blog/${comment.content_id}/comments/${comment.id}`}
-                    >
-                      View Content
-                    </CommentLink>
-                  )}
-                </CommentItem>
-              ))}
+              {comments
+                .filter((comment) => comment.parent_comment_id === null) // Only show top-level comments
+                .map((comment) => (
+                  <CommentItem key={comment.id}>
+                    <CommentText>{comment.content}</CommentText>
+                    {comment.content_type === "tutorial" ? (
+                      <CommentLink
+                        href={`/tutorial/${comment.content_id}/comments/${comment.id}`}
+                      >
+                        View Content
+                      </CommentLink>
+                    ) : (
+                      <CommentLink
+                        href={`/blog/${comment.content_id}/comments/${comment.id}`}
+                      >
+                        View Content
+                      </CommentLink>
+                    )}
+                  </CommentItem>
+                ))}
+
               <ViewMoreCommentsButton>See More</ViewMoreCommentsButton>
             </CommentHistory>
           </Section>
