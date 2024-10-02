@@ -25,6 +25,7 @@ import ReplyIcon from "../../../assets/images/reply-icon.png";
 
 const Comment: React.FC<CommentProps> = ({
   comment,
+  isLiked: initialIsLiked,
   isEditing,
   editedComment,
   handleEditChange,
@@ -38,21 +39,21 @@ const Comment: React.FC<CommentProps> = ({
   ...restProps
 }) => {
   const { profile } = useContext(UserContext) || {};
-  const [isLiked, setIsLiked] = useState(comment.likedByUser ?? false);
+  const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likes, setLikes] = useState(comment.likes);
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [replyContent, setReplyContent] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    setIsLiked(comment.likedByUser ?? false);
-  }, [comment.likedByUser, profile?.id]);
+    setIsLiked(initialIsLiked);
+  }, [initialIsLiked, profile?.id]);
 
   const handleLikeClick = async () => {
     try {
       const updatedLikes = await toggleLike(comment.id);
       setLikes(updatedLikes);
-      setIsLiked((prev) => !prev);
+      setIsLiked((prevIsLiked) => !prevIsLiked);
     } catch (error) {
       console.error("Failed to toggle like", error);
     }
@@ -79,8 +80,6 @@ const Comment: React.FC<CommentProps> = ({
       console.error("Failed to submit reply", error);
     }
   };
-
-  console.log(children);
 
   return (
     <CommentWrapper isreply={isReply} {...restProps}>

@@ -11,9 +11,8 @@ const fetchReplies = async (
   parentCommentId: number,
   limit: number,
   offset: number,
-  userId?: number // Make userId optional, since it may not be present if the user isn't authenticated
+  userId?: number
 ): Promise<{ replies: Comment[]; hasMore: boolean }> => {
-  // Query to fetch replies for the parent comment
   const replyQuery = `
     SELECT c.*, u.name as user_name, u.profile_picture, 
            EXISTS (SELECT 1 FROM comments r WHERE r.parent_comment_id = c.id) as has_replies
@@ -24,38 +23,30 @@ const fetchReplies = async (
     LIMIT ? OFFSET ?
   `;
 
-  // Execute the query to fetch replies
   const [replies]: [RowDataPacket[]] = await connection.query(replyQuery, [
     parentCommentId,
     limit,
     offset,
   ]);
 
-  // Map reply IDs for querying likes
   const replyIds = replies.map((reply) => reply.id);
 
-  // Array to hold liked replies
   let likedReplies: RowDataPacket[] = [];
 
-  // Fetch liked replies if there are replies and userId is available
   if (replyIds.length > 0 && userId) {
-    // This query checks which replies have been liked by the current user
     [likedReplies] = await connection.query(
       `SELECT comment_id FROM comment_likes WHERE user_id = ? AND comment_id IN (?)`,
       [userId, replyIds]
     );
   }
 
-  // Map the liked replies to their IDs
   const likedReplyIds = likedReplies.map((row) => row.comment_id);
 
-  // Attach `likedByUser` to each reply
   const repliesWithLikedStatus = replies.map((reply) => ({
     ...reply,
-    likedByUser: likedReplyIds.includes(reply.id), // Add likedByUser property
+    likedByUser: likedReplyIds.includes(reply.id),
   }));
 
-  // Check if there are more replies to fetch
   const hasMore = repliesWithLikedStatus.length === limit;
 
   return { replies: repliesWithLikedStatus as Comment[], hasMore };

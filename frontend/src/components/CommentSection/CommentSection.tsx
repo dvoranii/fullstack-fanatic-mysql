@@ -260,6 +260,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         currentVisibleCount
       );
 
+      console.log(newReplies);
+
       const repliesToAdd = Array.isArray(newReplies) ? newReplies : [];
 
       setComments((prevComments) =>
@@ -287,6 +289,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         <Comment
           key={isReply ? `${parentCommentId}-${index}` : comment.id}
           comment={comment}
+          isLiked={comment.likedByUser ?? false}
           isEditing={editingCommentId === comment.id}
           editedComment={editedComment}
           onEdit={() => {

@@ -9,6 +9,7 @@ export interface CommentProps {
   onDelete: () => void;
   onSave: (id: number) => void;
   onCancelEdit: () => void;
+  isLiked?: boolean;
   isReply: boolean;
   children?: ReactNode;
   onReplySubmit: (

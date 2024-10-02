@@ -1,7 +1,6 @@
 import { CommentType } from "../types/Comment/Comment";
 import { apiCall } from "../utils/apiUtils";
 
-// Fetch top-level comments (parent_comment_id IS NULL)
 export const fetchTopLevelComments = async (
   contentType: string,
   contentId: number,
@@ -13,11 +12,9 @@ export const fetchTopLevelComments = async (
     endpoint
   );
 
-  // console.log(data);
   return data;
 };
 
-// Fetch replies for a specific comment (based on parent_comment_id)
 export const fetchReplies = async (
   parentCommentId: number,
   contentType: string,
@@ -25,9 +22,10 @@ export const fetchReplies = async (
   limit: number,
   offset: number
 ): Promise<CommentType[]> => {
-  const endpoint = `/api/comments/${contentType}/${contentId}?parentCommentId=${parentCommentId}&limit=${limit}&offset=${offset}`;
+  const endpoint = `/api/comments/${contentType}/${contentId}?parentCommentId=${parentCommentId}&limit=${limit}&offset=${offset}&includeLikedStatus=true`;
   const { data } = await apiCall<{ comments: CommentType[] }>(endpoint);
 
+  console.log(data);
   return data.comments || [];
 };
 
@@ -38,7 +36,6 @@ export const submitComment = async (
 ): Promise<CommentType> => {
   const endpoint = `/api/comments`;
 
-  // Destructure `data` from the response
   const { data } = await apiCall<CommentType>(endpoint, {
     method: "POST",
     body: JSON.stringify({
