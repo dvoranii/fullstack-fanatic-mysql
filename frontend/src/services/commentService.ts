@@ -13,7 +13,7 @@ export const fetchTopLevelComments = async (
     endpoint
   );
 
-  console.log(data);
+  // console.log(data);
   return data;
 };
 
@@ -25,11 +25,9 @@ export const fetchReplies = async (
   limit: number,
   offset: number
 ): Promise<CommentType[]> => {
-  // Hit the same route used for fetching comments but pass parentCommentId to get replies
   const endpoint = `/api/comments/${contentType}/${contentId}?parentCommentId=${parentCommentId}&limit=${limit}&offset=${offset}`;
   const { data } = await apiCall<{ comments: CommentType[] }>(endpoint);
 
-  // Return the comments (which are actually replies in this case)
   return data.comments || [];
 };
 

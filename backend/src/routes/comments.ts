@@ -19,23 +19,20 @@ const fetchRepliesRecursively = async (
     ORDER BY c.created_at ASC
   `;
 
-  // Fetch the direct replies of the comment (TypeScript will infer the type here)
   const [replies]: [RowDataPacket[]] = await connection.query(replyQuery, [
     commentId,
   ]);
 
-  // If no replies are found, return an empty array
   if (!replies || replies.length === 0) {
     return [];
   }
 
-  // For each reply, recursively fetch its replies
   const repliesWithNestedReplies: Comment[] = await Promise.all(
     replies.map(async (reply) => {
       const nestedReplies = await fetchRepliesRecursively(connection, reply.id); // Recursion
       return {
         ...(reply as unknown as Comment),
-        replies: nestedReplies, // Attach nested replies
+        replies: nestedReplies,
       };
     })
   );
@@ -156,6 +153,7 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
     content_id: number;
     content_type: "tutorial" | "blog";
     content: string;
+    parent_comment_id?: number;
   };
   const { userId } = req.user!;
 

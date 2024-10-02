@@ -76,6 +76,28 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     setPage((prevPage) => prevPage + 1);
   };
 
+  // Helper function to recursively add replies
+  const addReplyToComments = (
+    comments: CommentType[],
+    newReply: CommentType
+  ): CommentType[] => {
+    return comments.map((comment) => {
+      if (comment.id === newReply.parent_comment_id) {
+        return {
+          ...comment,
+          replies: [...(comment.replies || []), newReply],
+        };
+      } else if (comment.replies && comment.replies.length > 0) {
+        return {
+          ...comment,
+          replies: addReplyToComments(comment.replies, newReply),
+        };
+      } else {
+        return comment;
+      }
+    });
+  };
+
   const handleReply = async (parentCommentId: number, replyContent: string) => {
     if (replyContent.trim() === "") return;
 
@@ -87,26 +109,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         parent_comment_id: parentCommentId,
       });
 
-      // Recursive function to add the new reply to the correct parent comment
-      const addReplyToComments = (comments: CommentType[]): CommentType[] => {
-        return comments.map((comment) => {
-          if (comment.id === parentCommentId) {
-            return {
-              ...comment,
-              replies: [...(comment.replies || []), newReply],
-            };
-          } else if (comment.replies) {
-            return {
-              ...comment,
-              replies: addReplyToComments(comment.replies),
-            };
-          } else {
-            return comment;
-          }
-        });
-      };
-
-      setComments((prevComments) => addReplyToComments(prevComments));
+      // Update the state with the new reply
+      setComments((prevComments) => addReplyToComments(prevComments, newReply));
     } catch (error) {
       console.error("Failed to submit reply", error);
       setError("Failed to submit reply");
@@ -220,11 +224,34 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     setCommentToDelete(null);
   };
 
+  const addRepliesToCommentTree = (
+    comments: CommentType[],
+    parentId: number,
+    replies: CommentType[]
+  ): CommentType[] => {
+    return comments.map((comment) => {
+      if (comment.id === parentId) {
+        return {
+          ...comment,
+          replies: [...(comment.replies || []), ...replies],
+        };
+      }
+
+      if (comment.replies && comment.replies.length > 0) {
+        return {
+          ...comment,
+          replies: addRepliesToCommentTree(comment.replies, parentId, replies),
+        };
+      }
+
+      return comment;
+    });
+  };
+
   const showMoreReplies = async (parentCommentId: number) => {
     const currentVisibleCount = visibleReplies[parentCommentId] || 0;
 
     try {
-      // Fetch more replies for the given parentCommentId
       const newReplies = await fetchReplies(
         parentCommentId,
         contentType,
@@ -233,41 +260,12 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         currentVisibleCount
       );
 
-      console.log(newReplies); // Ensure newReplies is an array
-
-      // Guard to ensure newReplies is always an array
       const repliesToAdd = Array.isArray(newReplies) ? newReplies : [];
 
-      // Append new replies to the correct comment
       setComments((prevComments) =>
-        prevComments.map((comment) => {
-          if (comment.id === parentCommentId) {
-            return {
-              ...comment,
-              replies: [...(comment.replies || []), ...repliesToAdd],
-            };
-          }
-
-          if (comment.replies && comment.replies.length > 0) {
-            return {
-              ...comment,
-              replies: comment.replies.map((reply) => {
-                if (reply.id === parentCommentId) {
-                  return {
-                    ...reply,
-                    replies: [...(reply.replies || []), ...repliesToAdd],
-                  };
-                }
-                return reply;
-              }),
-            };
-          }
-
-          return comment;
-        })
+        addRepliesToCommentTree(prevComments, parentCommentId, repliesToAdd)
       );
 
-      // Update visible replies count
       setVisibleReplies((prev) => ({
         ...prev,
         [parentCommentId]: currentVisibleCount + BATCH_SIZE,
@@ -302,18 +300,16 @@ const CommentSection: React.FC<CommentSectionProps> = ({
           onReplySubmit={handleReply}
           handleEditChange={handleEditCommentChange}
         >
-          {comment.has_replies && (
+          {replies.length > 0 && (
             <RepliesWrapper>
-              {replies.length > 0 && (
-                <>{renderComments(replies, true, comment.id)}</>
-              )}
-
-              {replies.length === 0 && (
-                <SeeMoreButton onClick={() => showMoreReplies(comment.id)}>
-                  See more replies
-                </SeeMoreButton>
-              )}
+              {renderComments(replies, true, comment.id)}
             </RepliesWrapper>
+          )}
+
+          {replies.length === 0 && comment.has_replies && (
+            <SeeMoreButton onClick={() => showMoreReplies(comment.id)}>
+              See more replies
+            </SeeMoreButton>
           )}
         </Comment>
       );
