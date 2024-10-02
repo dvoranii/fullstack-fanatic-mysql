@@ -6,38 +6,31 @@ import { authenticate } from "../middleware/authenticate";
 
 const router = express.Router();
 
-// Declare the recursive function at the top, outside of the router handler
-const fetchRepliesRecursively = async (
+const fetchReplies = async (
   connection: any,
-  commentId: number
-): Promise<Comment[]> => {
+  parentCommentId: number,
+  limit: number,
+  offset: number
+): Promise<{ replies: Comment[]; hasMore: boolean }> => {
   const replyQuery = `
-    SELECT c.*, u.name as user_name, u.profile_picture 
+    SELECT c.*, u.name as user_name, u.profile_picture, 
+           EXISTS (SELECT 1 FROM comments r WHERE r.parent_comment_id = c.id) as has_replies
     FROM comments c 
     JOIN users u ON c.user_id = u.id 
-    WHERE c.parent_comment_id = ? 
+    WHERE c.parent_comment_id = ?
     ORDER BY c.created_at ASC
+    LIMIT ? OFFSET ?
   `;
 
   const [replies]: [RowDataPacket[]] = await connection.query(replyQuery, [
-    commentId,
+    parentCommentId,
+    limit,
+    offset,
   ]);
 
-  if (!replies || replies.length === 0) {
-    return [];
-  }
+  const hasMore = replies.length === limit; // If the number of fetched replies matches the limit, we assume there are more
 
-  const repliesWithNestedReplies: Comment[] = await Promise.all(
-    replies.map(async (reply) => {
-      const nestedReplies = await fetchRepliesRecursively(connection, reply.id); // Recursion
-      return {
-        ...(reply as unknown as Comment),
-        replies: nestedReplies,
-      };
-    })
-  );
-
-  return repliesWithNestedReplies;
+  return { replies: replies as Comment[], hasMore };
 };
 
 // Your main route handler
@@ -97,16 +90,19 @@ router.get(
       if (parentCommentId) {
         commentsWithReplies = await Promise.all(
           commentsWithReplies.map(async (comment) => {
-            const replies = await fetchRepliesRecursively(
+            const { replies, hasMore } = await fetchReplies(
               connection,
-              comment.id
+              comment.id,
+              limit,
+              offset
             );
 
             console.log("First level reply: ", comment);
             console.log("Nested reply: ", replies);
             return {
               ...comment,
-              replies, // Attach replies to the comment
+              replies,
+              hasMoreReplies: hasMore,
             };
           })
         );
