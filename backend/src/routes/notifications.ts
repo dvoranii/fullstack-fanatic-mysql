@@ -7,9 +7,9 @@ const router = express.Router();
 
 router.get("/", authenticate, async (req: Request, res: Response) => {
   const userId = req.user?.userId;
-  const page = parseInt(req.query.page as string) || 1; // Get the page from query or default to 1
-  const limit = 5; // Show 4 notifications at a time
-  const offset = (page - 1) * limit; // Calculate the offset for pagination
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = 5;
+  const offset = (page - 1) * limit;
 
   if (!userId) {
     return res.status(400).json({ error: "Invalid user ID" });

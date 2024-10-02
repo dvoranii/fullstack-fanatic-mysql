@@ -148,7 +148,6 @@ router.put(
           ? JSON.stringify(JSON.parse(social_links))
           : userInfo.social_links;
 
-      // Update user profile in the database
       await connection.execute(
         `UPDATE users SET display_name = ?, profession = ?, bio = ?, social_links = ? WHERE id = ?`,
         [safeDisplayName, safeProfession, safeBio, safeSocialLinks, userId]

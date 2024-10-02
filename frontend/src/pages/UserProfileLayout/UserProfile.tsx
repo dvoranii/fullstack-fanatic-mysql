@@ -122,7 +122,6 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                 )}
 
                 {isEditable && (
-                  // add wrapper so I can add underline here, this is a quick fix
                   <a href="#" onClick={onEditProfileClick}>
                     <u>Edit Profile</u>
                   </a>
