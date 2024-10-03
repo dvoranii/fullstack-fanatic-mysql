@@ -19,7 +19,7 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
     const connection = await connectionPromise;
 
     const [notifications] = await connection.query<RowDataPacket[]>(
-      `SELECT n.*, u.name as sender_name, u.profile_picture as sender_profile_picture
+      `SELECT n.*, u.name as sender_name, u.profile_picture as sender_profile_picture, u.id as sender_id
          FROM notifications n
          JOIN users u ON n.sender_id = u.id
          WHERE n.user_id = ?

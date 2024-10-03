@@ -13,7 +13,6 @@ export const CommentWrapper = styled.div.withConfig({
   align-items: flex-start;
   padding: 1rem 0;
   border-bottom: 1px solid #ddd;
-  margin-left: ${({ isreply }) => (isreply ? "2rem" : "0")};
   flex-direction: row;
   position: relative;
 
@@ -27,7 +26,7 @@ export const CommentWrapper = styled.div.withConfig({
     &:before {
     content: '';
     position: absolute;
-    left: -6.5rem;
+    left: -4.8rem;
     top: 0;
     bottom: 0;
     width: 2px;

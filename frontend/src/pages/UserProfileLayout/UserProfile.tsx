@@ -20,7 +20,7 @@ import {
   CommentItem,
   CommentText,
   CommentLink,
-  ViewMoreCommentsButton,
+  ViewMoreCommentsLink,
   ViewAllButton,
   SocialSectionWrapperOuter,
   ProfilePlaceholder,
@@ -217,28 +217,28 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
 
           <Section>
             <CommentHistory>
-              {comments
-                .filter((comment) => comment.parent_comment_id === null) // Only show top-level comments
-                .map((comment) => (
-                  <CommentItem key={comment.id}>
-                    <CommentText>{comment.content}</CommentText>
-                    {comment.content_type === "tutorial" ? (
-                      <CommentLink
-                        href={`/tutorial/${comment.content_id}/comments/${comment.id}`}
-                      >
-                        View Content
-                      </CommentLink>
-                    ) : (
-                      <CommentLink
-                        href={`/blog/${comment.content_id}/comments/${comment.id}`}
-                      >
-                        View Content
-                      </CommentLink>
-                    )}
-                  </CommentItem>
-                ))}
+              {comments.slice(0, 5).map((comment) => (
+                <CommentItem key={comment.id}>
+                  <CommentText>{comment.content}</CommentText>
+                  {comment.content_type === "tutorial" ? (
+                    <CommentLink
+                      href={`/tutorial/${comment.content_id}/comments/${comment.id}`}
+                    >
+                      View in Tutorial
+                    </CommentLink>
+                  ) : (
+                    <CommentLink
+                      href={`/blog/${comment.content_id}/comments/${comment.id}`}
+                    >
+                      View in Blog
+                    </CommentLink>
+                  )}
+                </CommentItem>
+              ))}
 
-              <ViewMoreCommentsButton>See More</ViewMoreCommentsButton>
+              <ViewMoreCommentsLink to="/my-account/comment-history">
+                See All Comments
+              </ViewMoreCommentsLink>
             </CommentHistory>
           </Section>
         </AccountActivity>

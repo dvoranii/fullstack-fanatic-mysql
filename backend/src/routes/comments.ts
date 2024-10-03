@@ -257,27 +257,47 @@ router.delete("/:id", authenticate, async (req: Request, res: Response) => {
   }
 });
 
-// Fetch user comments
-
-// Add this to your comments.ts backend route
+// only returning top level comments for now
 router.get("/user", authenticate, async (req: Request, res: Response) => {
   const userId = req.user?.userId;
+
+  // Optional pagination parameters
+  const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 5;
+  const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+  const offset = (page - 1) * limit;
 
   try {
     const connection = await connectionPromise;
 
-    const [rows] = await connection.query<RowDataPacket[]>(
-      `
+    let query = `
       SELECT c.*, u.name as user_name, u.profile_picture
       FROM comments c
       JOIN users u ON c.user_id = u.id
-      WHERE c.user_id = ?
+      WHERE c.user_id = ? AND c.parent_comment_id IS NULL
       ORDER BY c.created_at DESC
-      `,
-      [userId]
-    );
+    `;
 
-    res.json({ comments: rows as Comment[] });
+    const queryParams: any[] = [userId, limit, offset];
+
+    if (limit !== undefined && page !== undefined) {
+      const offset = (page - 1) * limit;
+      query += ` LIMIT ? OFFSET ?`;
+      queryParams.push(limit, offset);
+    }
+
+    const [rows] = await connection.query<RowDataPacket[]>(query, queryParams);
+
+    let hasMore: boolean | undefined = undefined;
+    if (limit !== undefined && page !== undefined) {
+      const [totalCountResult] = await connection.query<RowDataPacket[]>(
+        "SELECT COUNT(*) as total FROM comments WHERE user_id = ? AND parent_comment_id IS NULL",
+        [userId]
+      );
+      const totalCount = totalCountResult[0]?.total || 0;
+      hasMore = page * limit < totalCount;
+    }
+
+    res.status(200).json({ comments: rows as Comment[], hasMore });
   } catch (err) {
     res.status(500).json({ error: (err as Error).message });
   }

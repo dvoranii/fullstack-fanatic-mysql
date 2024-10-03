@@ -11,6 +11,7 @@ export const fetchNotifications = async (
   }>(endpoint, {
     method: "GET",
   });
+
   return data;
 };
 

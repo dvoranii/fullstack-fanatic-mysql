@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { PageWrapper } from "../../PageWrapper.styled";
+import { Link } from "react-router-dom";
 
 export const UserAccountContainer = styled(PageWrapper)`
   display: flex;
@@ -274,9 +275,7 @@ export const CommentLink = styled.a`
   }
 `;
 
-export const ViewMoreCommentsButton = styled.button`
-  background-color: transparent;
-  border: none;
+export const ViewMoreCommentsLink = styled(Link)`
   color: #007bff;
   font-size: 14px;
   cursor: pointer;

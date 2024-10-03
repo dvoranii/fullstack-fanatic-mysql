@@ -25,6 +25,7 @@ const MessageInboxPage = lazy(
 );
 import FollowersList from "../pages/UserProfileLayout/FollowList/FollowersList/FollowersList";
 import FollowingList from "../pages/UserProfileLayout/FollowList/FollowingList/FollowingList";
+import CommentHistory from "../pages/UserProfileLayout/CommentHistory/CommentHistory";
 
 const Navigation: React.FC = () => {
   const { profile } = useContext(UserContext) || {};
@@ -65,6 +66,10 @@ const Navigation: React.FC = () => {
         />
         <Route path="/user/:id/followers" element={<FollowersList />} />
         <Route path="/user/:id/following" element={<FollowingList />} />
+        <Route
+          path="/my-account/comment-history"
+          element={<CommentHistory />}
+        />
       </Routes>
     </Suspense>
   );

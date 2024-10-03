@@ -15,8 +15,6 @@ const UserAccountsPage: React.FC = () => {
 
   if (!profile) return <p>No user logged in</p>;
 
-  console.log(comments);
-
   const handleBannerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {

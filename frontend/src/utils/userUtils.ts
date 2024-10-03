@@ -31,7 +31,7 @@ export const fetchUserProfileFavouritesAndComments = async (
     setFavouriteTutorials(userFavourites.tutorials);
     setFavouriteBlogs(userFavourites.blogs);
 
-    const userComments = await fetchUserComments();
+    const { comments: userComments } = await fetchUserComments();
     setComments(userComments);
   } catch (err) {
     setError("Failed to load user data");

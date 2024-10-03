@@ -106,12 +106,35 @@ export const toggleLike = async (id: number): Promise<number> => {
   return data.likes;
 };
 
-export const fetchUserComments = async (): Promise<CommentType[]> => {
-  const endpoint = `/api/comments/user`;
+export const fetchUserComments = async (
+  page?: number,
+  limit?: number
+): Promise<{ comments: CommentType[]; hasMore?: boolean }> => {
+  let endpoint = `/api/comments/user`;
 
-  const { data } = await apiCall<{ comments: CommentType[] }>(endpoint, {
+  if (page !== undefined && limit !== undefined) {
+    endpoint += `?page=${page}&limit=${limit}`;
+  }
+
+  const { data } = await apiCall<{
+    comments: CommentType[];
+    hasMore?: boolean;
+  }>(endpoint, { method: "GET" });
+
+  return {
+    comments: data.comments,
+    hasMore: data.hasMore,
+  };
+};
+
+export const fetchCommentChain = async (
+  commentId: number
+): Promise<CommentType[]> => {
+  const endpoint = `/api/comments/comment-chain/${commentId}`;
+
+  const { data } = await apiCall<{ commentChain: CommentType[] }>(endpoint, {
     method: "GET",
   });
 
-  return data.comments;
+  return data.commentChain;
 };
