@@ -76,8 +76,6 @@ router.get(
               userId
             );
 
-            console.log("First level reply: ", comment);
-            console.log("Nested reply: ", replies);
             return {
               ...comment,
               replies,
@@ -224,6 +222,8 @@ router.put(
     const { id } = req.params as { id: string };
     const { userId } = req.user!;
 
+    console.log(id);
+
     try {
       const totalLikes = await toggleLike(Number(id), userId);
 
@@ -303,4 +303,30 @@ router.get("/user", authenticate, async (req: Request, res: Response) => {
   }
 });
 
+router.get(
+  "/all-comments",
+  authenticate,
+  async (req: Request, res: Response) => {
+    console.log(req.params);
+    try {
+      const connection = await connectionPromise;
+
+      const commentsQuery = `
+      SELECT c.*, u.name as user_name, u.profile_picture
+      FROM comments c
+      JOIN users u ON c.user_id = u.id
+      ORDER BY c.created_at DESC
+    `;
+
+      const [comments] = await connection.query<RowDataPacket[]>(commentsQuery);
+
+      res.status(200).json({ comments });
+
+      // Query to fetch all comments with user info
+    } catch (err) {
+      console.error("Error fetching all comments:", err);
+      res.status(500).json({ error: (err as Error).message });
+    }
+  }
+);
 export default router;

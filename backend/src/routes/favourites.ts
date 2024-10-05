@@ -40,13 +40,6 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
   const { userId: user_id, googleId: google_id } = req.user!;
 
   try {
-    console.log("Adding Favourite:", {
-      item_id,
-      content_type,
-      user_id,
-      google_id,
-    });
-
     const connection = await connectionPromise;
 
     const [existing] = await connection.query<RowDataPacket[]>(
@@ -72,13 +65,6 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
 router.delete("/", authenticate, async (req: Request, res: Response) => {
   const { item_id, content_type } = req.body;
   const { userId: user_id, googleId: google_id } = req.user!;
-
-  console.log("Deleting Favourite:", {
-    item_id,
-    content_type,
-    user_id,
-    google_id,
-  });
 
   if (!item_id || !content_type) {
     return res.status(400).json({ error: "Missing required parameters" });

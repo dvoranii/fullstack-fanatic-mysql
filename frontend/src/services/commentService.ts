@@ -127,14 +127,22 @@ export const fetchUserComments = async (
   };
 };
 
-export const fetchCommentChain = async (
-  commentId: number
-): Promise<CommentType[]> => {
-  const endpoint = `/api/comments/comment-chain/${commentId}`;
+export const fetchAllComments = async (): Promise<CommentType[]> => {
+  const endpoint = `/api/comments/all-comments`;
 
-  const { data } = await apiCall<{ commentChain: CommentType[] }>(endpoint, {
-    method: "GET",
-  });
+  try {
+    const { data } = await apiCall<{
+      comments: CommentType[];
+    }>(endpoint, {
+      method: "GET",
+    });
 
-  return data.commentChain;
+    console.log(data);
+    return data.comments;
+  } catch (error) {
+    console.error("Error fetching all comments:", error);
+    throw new Error("Failed to fetch all comments");
+  }
 };
+
+fetchAllComments();

@@ -44,8 +44,6 @@ export const CommentHistory: React.FC = () => {
 
       setHasMore(newHasMore ?? false);
       setPage((prevPage) => prevPage + 1);
-
-      console.log(userComments, newHasMore);
     } catch (error) {
       setError("Failed to load comments.");
       console.error(error);

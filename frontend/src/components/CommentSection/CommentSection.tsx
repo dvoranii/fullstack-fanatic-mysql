@@ -31,6 +31,8 @@ import { useDeleteComment } from "../../hooks/useDeleteComment";
 import {
   addRepliesToCommentTree,
   addReplyToComments,
+  updateCommentInTree,
+  findCommentById,
 } from "../../utils/commentUtils";
 
 // for later use
@@ -62,6 +64,13 @@ const CommentSection: React.FC<CommentSectionProps> = ({
       try {
         const { comments: fetchedComments, hasMore: more } =
           await fetchTopLevelComments(contentType, contentId, page);
+
+        if (fetchedComments.length === 0 && !more) {
+          setHasMore(false);
+          setLoadingTargetComment(false);
+          console.error("Target comment not found.");
+          return;
+        }
 
         setComments((prevComments) => [
           ...prevComments,
@@ -182,7 +191,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
       return;
     }
 
-    const originalComment = comments.find((comment) => comment.id === id);
+    const originalComment = findCommentById(comments, id);
 
     if (!originalComment) {
       setError("Original comment not found.");
@@ -191,7 +200,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
 
     setComments((prevComments) =>
       prevComments.map((comment) =>
-        comment.id === id ? { ...comment, content: editedComment } : comment
+        updateCommentInTree(comment, id, editedComment)
       )
     );
 
@@ -207,7 +216,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
 
       setComments((prevComments) =>
         prevComments.map((comment) =>
-          comment.id === id ? originalComment : comment
+          updateCommentInTree(comment, id, originalComment.content)
         )
       );
     }
@@ -224,8 +233,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         BATCH_SIZE,
         currentVisibleCount
       );
-
-      console.log(newReplies);
 
       const repliesToAdd = Array.isArray(newReplies) ? newReplies : [];
 
