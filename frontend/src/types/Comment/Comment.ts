@@ -14,4 +14,5 @@ export interface CommentType {
   likedByUser?: boolean;
   replies?: CommentType[];
   has_replies?: boolean;
+  hasMoreReplies?: boolean;
 }

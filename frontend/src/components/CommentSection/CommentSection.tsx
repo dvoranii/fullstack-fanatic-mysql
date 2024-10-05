@@ -35,7 +35,6 @@ import {
   findCommentById,
 } from "../../utils/commentUtils";
 
-// for later use
 const BATCH_SIZE = 5;
 
 const CommentSection: React.FC<CommentSectionProps> = ({
@@ -151,6 +150,14 @@ const CommentSection: React.FC<CommentSectionProps> = ({
       });
 
       setComments((prevComments) => addReplyToComments(prevComments, newReply));
+
+      setComments((prevComments) =>
+        prevComments.map((comment) =>
+          comment.id === parentCommentId
+            ? { ...comment, hasMoreReplies: true }
+            : comment
+        )
+      );
     } catch (error) {
       console.error("Failed to submit reply", error);
       setError("Failed to submit reply");
@@ -230,20 +237,33 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         parentCommentId,
         contentType,
         contentId,
-        BATCH_SIZE,
+        BATCH_SIZE, // Use a batch size for lazy loading
         currentVisibleCount
       );
 
       const repliesToAdd = Array.isArray(newReplies) ? newReplies : [];
 
+      // Append new replies while keeping the existing replies
       setComments((prevComments) =>
         addRepliesToCommentTree(prevComments, parentCommentId, repliesToAdd)
       );
 
+      // Update visible replies count
       setVisibleReplies((prev) => ({
         ...prev,
-        [parentCommentId]: currentVisibleCount + BATCH_SIZE,
+        [parentCommentId]: currentVisibleCount + repliesToAdd.length,
       }));
+
+      // If fewer than BATCH_SIZE replies were fetched, it means there are no more to fetch
+      if (repliesToAdd.length < BATCH_SIZE) {
+        setComments((prevComments) =>
+          prevComments.map((comment) =>
+            comment.id === parentCommentId
+              ? { ...comment, hasMoreReplies: false }
+              : comment
+          )
+        );
+      }
     } catch (error) {
       console.error("Failed to fetch replies:", error);
     }
@@ -282,7 +302,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
               </RepliesWrapper>
             )}
 
-            {replies.length === 0 && comment.has_replies && (
+            {comment.has_replies && comment.hasMoreReplies && (
               <SeeMoreButton onClick={() => showMoreReplies(comment.id)}>
                 See more replies
               </SeeMoreButton>

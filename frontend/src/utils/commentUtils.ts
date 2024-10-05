@@ -23,21 +23,31 @@ export const addReplyToComments = (
 
 export const addRepliesToCommentTree = (
   comments: CommentType[],
-  parentId: number,
-  replies: CommentType[]
+  parentCommentId: number,
+  newReplies: CommentType[]
 ): CommentType[] => {
   return comments.map((comment) => {
-    if (comment.id === parentId) {
+    const replies = comment.replies || [];
+
+    if (comment.id === parentCommentId) {
+      const updatedReplies = [
+        ...replies.filter(
+          (existingReply) =>
+            !newReplies.some((newReply) => newReply.id === existingReply.id)
+        ),
+        ...newReplies,
+      ];
+
       return {
         ...comment,
-        replies: [...(comment.replies || []), ...replies],
+        replies: updatedReplies,
       };
     }
 
-    if (comment.replies && comment.replies.length > 0) {
+    if (replies.length > 0) {
       return {
         ...comment,
-        replies: addRepliesToCommentTree(comment.replies, parentId, replies),
+        replies: addRepliesToCommentTree(replies, parentCommentId, newReplies),
       };
     }
 

@@ -24,9 +24,11 @@ router.get(
     const { contentType, contentId } = req.params;
     const userId = req.user?.userId;
     const includeLikedStatus = req.query.includeLikedStatus === "true";
+
+    // Use page for top-level comments, and limit/offset for replies
     const page = parseInt(req.query.page as string) || 1;
-    const limit = 5;
-    const offset = (page - 1) * limit;
+    const limit = parseInt(req.query.limit as string) || 5;
+    const offset = parseInt(req.query.offset as string) || 0;
 
     const parentCommentId = req.query.parentCommentId
       ? parseInt(req.query.parentCommentId as string, 10)
@@ -35,24 +37,35 @@ router.get(
     try {
       const connection = await connectionPromise;
 
-      let commentsQuery = `
-        SELECT c.*, u.name as user_name, u.profile_picture, 
-               EXISTS (SELECT 1 FROM comments r WHERE r.parent_comment_id = c.id) as has_replies 
-        FROM comments c 
-        JOIN users u ON c.user_id = u.id 
-        WHERE c.content_type = ? AND c.content_id = ?
-        ${
-          parentCommentId
-            ? "AND c.parent_comment_id = ?"
-            : "AND c.parent_comment_id IS NULL"
-        }
-        ORDER BY c.created_at DESC
-        LIMIT ? OFFSET ? 
-      `;
+      let commentsQuery;
+      let params;
 
-      const params = parentCommentId
-        ? [contentType, contentId, parentCommentId, limit, offset]
-        : [contentType, contentId, limit, offset];
+      if (!parentCommentId) {
+        // Fetch top-level comments using page
+        const offset = (page - 1) * limit;
+        commentsQuery = `
+          SELECT c.*, u.name as user_name, u.profile_picture, 
+                 EXISTS (SELECT 1 FROM comments r WHERE r.parent_comment_id = c.id) as has_replies 
+          FROM comments c 
+          JOIN users u ON c.user_id = u.id 
+          WHERE c.content_type = ? AND c.content_id = ? AND c.parent_comment_id IS NULL
+          ORDER BY c.created_at DESC
+          LIMIT ? OFFSET ?
+        `;
+        params = [contentType, contentId, limit, offset];
+      } else {
+        // Fetch replies using limit and offset
+        commentsQuery = `
+          SELECT c.*, u.name as user_name, u.profile_picture, 
+                 EXISTS (SELECT 1 FROM comments r WHERE r.parent_comment_id = c.id) as has_replies 
+          FROM comments c 
+          JOIN users u ON c.user_id = u.id 
+          WHERE c.content_type = ? AND c.content_id = ? AND c.parent_comment_id = ?
+          ORDER BY c.created_at ASC
+          LIMIT ? OFFSET ?
+        `;
+        params = [contentType, contentId, parentCommentId, limit, offset];
+      }
 
       const [rows] = await connection.query<RowDataPacket[]>(
         commentsQuery,
@@ -66,6 +79,7 @@ router.get(
       let commentsWithReplies: Comment[] = rows as Comment[];
 
       if (parentCommentId) {
+        // For replies, continue fetching nested replies using recursion if needed
         commentsWithReplies = await Promise.all(
           commentsWithReplies.map(async (comment) => {
             const { replies, hasMore } = await fetchReplies(
@@ -85,6 +99,7 @@ router.get(
         );
       }
 
+      // Fetch liked status if required
       if (includeLikedStatus && userId) {
         const likedCommentIds = await fetchCommentLikes(userId);
 
@@ -100,14 +115,22 @@ router.get(
         setLikedStatus(commentsWithReplies);
       }
 
-      const totalCount = await fetchTotalComments(
-        contentType,
-        Number(contentId)
-      );
+      // For top-level comments, calculate hasMore based on totalCount
+      if (!parentCommentId) {
+        const totalCount = await fetchTotalComments(
+          contentType,
+          Number(contentId)
+        );
+        const hasMore = offset + limit < totalCount;
+        return res.json({ comments: commentsWithReplies, hasMore });
+      }
 
-      const hasMore = offset + limit < totalCount;
-
-      res.json({ comments: commentsWithReplies, hasMore });
+      // For replies, use offset-based hasMore
+      const hasMoreReplies = commentsWithReplies.length === limit;
+      return res.json({
+        comments: commentsWithReplies,
+        hasMore: hasMoreReplies,
+      });
     } catch (err) {
       res.status(500).json({ error: (err as Error).message });
     }

@@ -37,22 +37,37 @@ export const fetchReplies = async (
 
   const likedReplyIds = likedReplies.map((row) => row.comment_id);
 
-  const repliesWithLikedStatus: Comment[] = replies.map((reply) => ({
-    id: reply.id,
-    content_id: reply.content_id,
-    content_type: reply.content_type,
-    content: reply.content,
-    created_at: reply.created_at,
-    likes: reply.likes,
-    user_id: reply.user_id,
-    google_id: reply.google_id || null,
-    user_name: reply.user_name,
-    profile_picture: reply.profile_picture || null,
-    parent_comment_id: reply.parent_comment_id,
-    has_replies: reply.has_replies === 1,
-    likedByUser: likedReplyIds.includes(reply.id),
-    replies: [],
-  }));
+  const repliesWithLikedStatus: Comment[] = await Promise.all(
+    replies.map(async (reply) => {
+      // Fetch nested replies for each reply
+      const { replies: nestedReplies, hasMore: nestedHasMore } =
+        await fetchReplies(
+          connection,
+          reply.id,
+          limit, // You can decide to limit nested replies differently if needed
+          0, // Start from offset 0 for nested replies
+          userId
+        );
+
+      return {
+        id: reply.id,
+        content_id: reply.content_id,
+        content_type: reply.content_type,
+        content: reply.content,
+        created_at: reply.created_at,
+        likes: reply.likes,
+        user_id: reply.user_id,
+        google_id: reply.google_id || null,
+        user_name: reply.user_name,
+        profile_picture: reply.profile_picture || null,
+        parent_comment_id: reply.parent_comment_id,
+        has_replies: reply.has_replies === 1,
+        likedByUser: likedReplyIds.includes(reply.id),
+        replies: nestedReplies, // Include the nested replies
+        hasMoreReplies: nestedHasMore, // If needed, include whether more replies exist for this reply
+      };
+    })
+  );
 
   const hasMore = repliesWithLikedStatus.length === limit;
 

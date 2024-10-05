@@ -12,7 +12,18 @@ export const fetchTopLevelComments = async (
     endpoint
   );
 
-  return data;
+  // Add hasMoreReplies as part of each top-level comment
+  const commentsWithHasMoreReplies = data.comments.map((comment) => ({
+    ...comment,
+    hasMoreReplies: comment.has_replies, // Initialize based on has_replies
+  }));
+
+  console.log(data);
+
+  return {
+    comments: commentsWithHasMoreReplies,
+    hasMore: data.hasMore,
+  };
 };
 
 export const fetchReplies = async (
@@ -23,9 +34,9 @@ export const fetchReplies = async (
   offset: number
 ): Promise<CommentType[]> => {
   const endpoint = `/api/comments/${contentType}/${contentId}?parentCommentId=${parentCommentId}&limit=${limit}&offset=${offset}&includeLikedStatus=true`;
+
   const { data } = await apiCall<{ comments: CommentType[] }>(endpoint);
 
-  console.log(data);
   return data.comments || [];
 };
 
@@ -127,22 +138,17 @@ export const fetchUserComments = async (
   };
 };
 
-export const fetchAllComments = async (): Promise<CommentType[]> => {
-  const endpoint = `/api/comments/all-comments`;
+// export const fetchAllComments = async (): Promise<CommentType[]> => {
+//   const endpoint = `/api/comments/all-comments`;
 
-  try {
-    const { data } = await apiCall<{
-      comments: CommentType[];
-    }>(endpoint, {
-      method: "GET",
-    });
+//   try {
+//     const { data } = await apiCall<{ comments: CommentType[] }>(endpoint, {
+//       method: "GET",
+//     });
 
-    console.log(data);
-    return data.comments;
-  } catch (error) {
-    console.error("Error fetching all comments:", error);
-    throw new Error("Failed to fetch all comments");
-  }
-};
-
-fetchAllComments();
+//     return data.comments;
+//   } catch (error) {
+//     console.error("Error fetching all comments:", error);
+//     throw new Error("Failed to fetch all comments");
+//   }
+// };
