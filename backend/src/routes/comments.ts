@@ -25,9 +25,9 @@ router.get(
     const userId = req.user?.userId;
     const includeLikedStatus = req.query.includeLikedStatus === "true";
 
-    // Use page for top-level comments, and limit/offset for replies
     const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 5;
+    const topLevelLimit = parseInt(req.query.topLevelLimit as string) || 5; // Top-level batch size
+    const replyLimit = parseInt(req.query.replyLimit as string) || 3; // Reply batch size
     const offset = parseInt(req.query.offset as string) || 0;
 
     const parentCommentId = req.query.parentCommentId
@@ -41,8 +41,8 @@ router.get(
       let params;
 
       if (!parentCommentId) {
-        // Fetch top-level comments using page
-        const offset = (page - 1) * limit;
+        // Fetching top-level comments
+        const offset = (page - 1) * topLevelLimit;
         commentsQuery = `
           SELECT c.*, u.name as user_name, u.profile_picture, 
                  EXISTS (SELECT 1 FROM comments r WHERE r.parent_comment_id = c.id) as has_replies 
@@ -52,9 +52,9 @@ router.get(
           ORDER BY c.created_at DESC
           LIMIT ? OFFSET ?
         `;
-        params = [contentType, contentId, limit, offset];
+        params = [contentType, contentId, topLevelLimit, offset];
       } else {
-        // Fetch replies using limit and offset
+        // Fetching replies
         commentsQuery = `
           SELECT c.*, u.name as user_name, u.profile_picture, 
                  EXISTS (SELECT 1 FROM comments r WHERE r.parent_comment_id = c.id) as has_replies 
@@ -64,7 +64,7 @@ router.get(
           ORDER BY c.created_at ASC
           LIMIT ? OFFSET ?
         `;
-        params = [contentType, contentId, parentCommentId, limit, offset];
+        params = [contentType, contentId, parentCommentId, replyLimit, offset];
       }
 
       const [rows] = await connection.query<RowDataPacket[]>(
@@ -79,13 +79,12 @@ router.get(
       let commentsWithReplies: Comment[] = rows as Comment[];
 
       if (parentCommentId) {
-        // For replies, continue fetching nested replies using recursion if needed
         commentsWithReplies = await Promise.all(
           commentsWithReplies.map(async (comment) => {
             const { replies, hasMore } = await fetchReplies(
               connection,
               comment.id,
-              limit,
+              replyLimit, // Use the reply-specific batch size here
               offset,
               userId
             );
@@ -99,7 +98,6 @@ router.get(
         );
       }
 
-      // Fetch liked status if required
       if (includeLikedStatus && userId) {
         const likedCommentIds = await fetchCommentLikes(userId);
 
@@ -115,18 +113,18 @@ router.get(
         setLikedStatus(commentsWithReplies);
       }
 
-      // For top-level comments, calculate hasMore based on totalCount
+      // Top-level comments: calculate `hasMore` based on totalCount
       if (!parentCommentId) {
         const totalCount = await fetchTotalComments(
           contentType,
           Number(contentId)
         );
-        const hasMore = offset + limit < totalCount;
+        const hasMore = offset + topLevelLimit < totalCount;
         return res.json({ comments: commentsWithReplies, hasMore });
       }
 
-      // For replies, use offset-based hasMore
-      const hasMoreReplies = commentsWithReplies.length === limit;
+      // Replies: calculate `hasMore` based on reply-specific limit
+      const hasMoreReplies = commentsWithReplies.length === replyLimit;
       return res.json({
         comments: commentsWithReplies,
         hasMore: hasMoreReplies,
@@ -162,6 +160,7 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
     res.status(500).json({ error: (err as Error).message });
   }
 });
+
 router.put("/:id", authenticate, async (req: Request, res: Response) => {
   const { id } = req.params as { id: string };
   const { content } = req.body as { content: string };

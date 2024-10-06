@@ -1,5 +1,5 @@
 import { RowDataPacket } from "mysql2";
-import { Comment } from "../types/Comment"; // Import your Comment type
+import { Comment } from "../types/Comment";
 
 export const fetchReplies = async (
   connection: any,
@@ -18,13 +18,14 @@ export const fetchReplies = async (
     LIMIT ? OFFSET ?
   `;
 
+  // Fetch `limit + 1` replies to check if there are more
   const [replies]: [RowDataPacket[]] = await connection.query(replyQuery, [
     parentCommentId,
-    limit,
+    limit + 1, // Fetch one more reply than the limit
     offset,
   ]);
 
-  const replyIds = replies.map((reply) => reply.id);
+  const replyIds = replies.slice(0, limit).map((reply) => reply.id); // Only use up to the limit
 
   let likedReplies: RowDataPacket[] = [];
 
@@ -38,14 +39,14 @@ export const fetchReplies = async (
   const likedReplyIds = likedReplies.map((row) => row.comment_id);
 
   const repliesWithLikedStatus: Comment[] = await Promise.all(
-    replies.map(async (reply) => {
+    replies.slice(0, limit).map(async (reply) => {
       // Fetch nested replies for each reply
       const { replies: nestedReplies, hasMore: nestedHasMore } =
         await fetchReplies(
           connection,
           reply.id,
-          limit, // You can decide to limit nested replies differently if needed
-          0, // Start from offset 0 for nested replies
+          limit, // Use the same limit for nested replies
+          0, // Offset starts at 0 for nested replies
           userId
         );
 
@@ -64,12 +65,13 @@ export const fetchReplies = async (
         has_replies: reply.has_replies === 1,
         likedByUser: likedReplyIds.includes(reply.id),
         replies: nestedReplies, // Include the nested replies
-        hasMoreReplies: nestedHasMore, // If needed, include whether more replies exist for this reply
+        hasMoreReplies: nestedHasMore, // Include if there are more nested replies
       };
     })
   );
 
-  const hasMore = repliesWithLikedStatus.length === limit;
+  // If we fetched more than the limit, set `hasMore` to true
+  const hasMore = replies.length > limit;
 
   return { replies: repliesWithLikedStatus, hasMore };
 };

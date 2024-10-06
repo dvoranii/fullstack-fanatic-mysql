@@ -35,7 +35,8 @@ import {
   findCommentById,
 } from "../../utils/commentUtils";
 
-const BATCH_SIZE = 5;
+const TOP_LEVEL_BATCH_SIZE = 5;
+const REPLY_BATCH_SIZE = 3;
 
 const CommentSection: React.FC<CommentSectionProps> = ({
   contentId,
@@ -62,7 +63,12 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     const loadComments = async () => {
       try {
         const { comments: fetchedComments, hasMore: more } =
-          await fetchTopLevelComments(contentType, contentId, page);
+          await fetchTopLevelComments(
+            contentType,
+            contentId,
+            page,
+            TOP_LEVEL_BATCH_SIZE
+          );
 
         if (fetchedComments.length === 0 && !more) {
           setHasMore(false);
@@ -111,7 +117,12 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     const fetchCommentsData = async () => {
       try {
         const { comments: fetchedComments, hasMore } =
-          await fetchTopLevelComments(contentType, contentId, page);
+          await fetchTopLevelComments(
+            contentType,
+            contentId,
+            page,
+            TOP_LEVEL_BATCH_SIZE
+          );
 
         setComments((prevComments) => [
           ...prevComments,
@@ -233,11 +244,11 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     const currentVisibleCount = visibleReplies[parentCommentId] || 0;
 
     try {
-      const newReplies = await fetchReplies(
+      const { comments: newReplies, hasMore } = await fetchReplies(
         parentCommentId,
         contentType,
         contentId,
-        BATCH_SIZE, // Use a batch size for lazy loading
+        REPLY_BATCH_SIZE, // Use reply-specific batch size here
         currentVisibleCount
       );
 
@@ -254,12 +265,12 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         [parentCommentId]: currentVisibleCount + repliesToAdd.length,
       }));
 
-      // If fewer than BATCH_SIZE replies were fetched, it means there are no more to fetch
-      if (repliesToAdd.length < BATCH_SIZE) {
+      // Update hasMoreReplies for the comment
+      if (!hasMore) {
         setComments((prevComments) =>
           prevComments.map((comment) =>
             comment.id === parentCommentId
-              ? { ...comment, hasMoreReplies: false }
+              ? { ...comment, hasMoreReplies: false } // Set hasMoreReplies to false when no more replies
               : comment
           )
         );

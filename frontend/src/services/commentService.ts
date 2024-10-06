@@ -4,9 +4,10 @@ import { apiCall } from "../utils/apiUtils";
 export const fetchTopLevelComments = async (
   contentType: string,
   contentId: number,
-  page: number
+  page: number,
+  limit: number // Add limit parameter
 ): Promise<{ comments: CommentType[]; hasMore: boolean }> => {
-  const endpoint = `/api/comments/${contentType}/${contentId}?page=${page}&parentCommentId=null&includeLikedStatus=true`;
+  const endpoint = `/api/comments/${contentType}/${contentId}?page=${page}&parentCommentId=null&limit=${limit}&includeLikedStatus=true`;
 
   const { data } = await apiCall<{ comments: CommentType[]; hasMore: boolean }>(
     endpoint
@@ -18,8 +19,6 @@ export const fetchTopLevelComments = async (
     hasMoreReplies: comment.has_replies, // Initialize based on has_replies
   }));
 
-  console.log(data);
-
   return {
     comments: commentsWithHasMoreReplies,
     hasMore: data.hasMore,
@@ -30,14 +29,20 @@ export const fetchReplies = async (
   parentCommentId: number,
   contentType: string,
   contentId: number,
-  limit: number,
+  limit: number, // Add limit parameter
   offset: number
-): Promise<CommentType[]> => {
+): Promise<{ comments: CommentType[]; hasMore: boolean }> => {
   const endpoint = `/api/comments/${contentType}/${contentId}?parentCommentId=${parentCommentId}&limit=${limit}&offset=${offset}&includeLikedStatus=true`;
 
   const { data } = await apiCall<{ comments: CommentType[] }>(endpoint);
+  console.log(data);
 
-  return data.comments || [];
+  const hasMore = data.comments.length === limit;
+
+  return {
+    comments: data.comments || [],
+    hasMore, // Return hasMore based on the fetched data
+  };
 };
 
 export const submitComment = async (
