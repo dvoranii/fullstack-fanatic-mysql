@@ -54,7 +54,7 @@ router.get(
         `;
         params = [contentType, contentId, topLevelLimit, offset];
       } else {
-        // Fetching replies
+        // Fetching replies, but fetching `replyLimit + 1` to check if there are more
         commentsQuery = `
           SELECT c.*, u.name as user_name, u.profile_picture, 
                  EXISTS (SELECT 1 FROM comments r WHERE r.parent_comment_id = c.id) as has_replies 
@@ -64,7 +64,13 @@ router.get(
           ORDER BY c.created_at ASC
           LIMIT ? OFFSET ?
         `;
-        params = [contentType, contentId, parentCommentId, replyLimit, offset];
+        params = [
+          contentType,
+          contentId,
+          parentCommentId,
+          replyLimit + 1,
+          offset,
+        ]; // Fetch `replyLimit + 1`
       }
 
       const [rows] = await connection.query<RowDataPacket[]>(
@@ -79,12 +85,18 @@ router.get(
       let commentsWithReplies: Comment[] = rows as Comment[];
 
       if (parentCommentId) {
+        // Check if there are more replies than the limit
+        const hasMoreReplies = commentsWithReplies.length > replyLimit;
+
+        // Trim the array to only `replyLimit` number of replies
+        commentsWithReplies = commentsWithReplies.slice(0, replyLimit);
+
         commentsWithReplies = await Promise.all(
           commentsWithReplies.map(async (comment) => {
             const { replies, hasMore } = await fetchReplies(
               connection,
               comment.id,
-              replyLimit, // Use the reply-specific batch size here
+              replyLimit,
               offset,
               userId
             );
@@ -96,6 +108,12 @@ router.get(
             };
           })
         );
+
+        // Return the replies and the flag for more replies
+        return res.json({
+          comments: commentsWithReplies,
+          hasMore: hasMoreReplies, // Now we have hasMoreReplies properly defined
+        });
       }
 
       if (includeLikedStatus && userId) {
@@ -122,13 +140,6 @@ router.get(
         const hasMore = offset + topLevelLimit < totalCount;
         return res.json({ comments: commentsWithReplies, hasMore });
       }
-
-      // Replies: calculate `hasMore` based on reply-specific limit
-      const hasMoreReplies = commentsWithReplies.length === replyLimit;
-      return res.json({
-        comments: commentsWithReplies,
-        hasMore: hasMoreReplies,
-      });
     } catch (err) {
       res.status(500).json({ error: (err as Error).message });
     }

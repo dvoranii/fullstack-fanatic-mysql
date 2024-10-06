@@ -29,19 +29,21 @@ export const fetchReplies = async (
   parentCommentId: number,
   contentType: string,
   contentId: number,
-  limit: number, // Add limit parameter
+  limit: number,
   offset: number
 ): Promise<{ comments: CommentType[]; hasMore: boolean }> => {
   const endpoint = `/api/comments/${contentType}/${contentId}?parentCommentId=${parentCommentId}&limit=${limit}&offset=${offset}&includeLikedStatus=true`;
 
-  const { data } = await apiCall<{ comments: CommentType[] }>(endpoint);
-  console.log(data);
+  const { data } = await apiCall<{
+    hasMore: boolean;
+    comments: CommentType[];
+  }>(endpoint);
 
-  const hasMore = data.comments.length === limit;
+  console.log(data);
 
   return {
     comments: data.comments || [],
-    hasMore, // Return hasMore based on the fetched data
+    hasMore: data.hasMore,
   };
 };
 
