@@ -38,8 +38,6 @@ export const fetchReplies = async (
     comments: CommentType[];
   }>(endpoint);
 
-  console.log(data);
-
   return {
     comments: data.comments || [],
     hasMore: data.hasMore,
@@ -144,38 +142,16 @@ export const fetchUserComments = async (
   };
 };
 
-// export const fetchMatchingReply = async (
-//   id: number
-// ): Promise<CommentType[]> => {
-//   let endpoint = `/api/comments/all-comments`;
-
-//   if (id) {
-//     endpoint += `?id=${id}`; // Append query param to URL
-//   }
-
-//   try {
-//     const { data } = await apiCall<{ comments: CommentType[] }>(endpoint, {
-//       method: "GET",
-//     });
-
-//     return data.comments;
-//   } catch (error) {
-//     console.error("Error fetching all comments:", error);
-//     throw new Error("Failed to fetch all comments");
-//   }
-// };
-
 export const fetchReplyAndParent = async (
   id: number
 ): Promise<CommentType[]> => {
   let endpoint = `/api/comments/reply-and-parent`;
 
   if (id) {
-    endpoint += `?id=${id}`; // Append query param to URL
+    endpoint += `?id=${id}`;
   }
 
   try {
-    // Adjust the expected structure of the API response
     const { data } = await apiCall<{
       initialComment: CommentType;
       topLevelComment: CommentType;
@@ -183,7 +159,6 @@ export const fetchReplyAndParent = async (
       method: "GET",
     });
 
-    // Merge both comments into a single array for setting in state
     return [data.initialComment, data.topLevelComment];
   } catch (error) {
     console.error("Error fetching comments:", error);

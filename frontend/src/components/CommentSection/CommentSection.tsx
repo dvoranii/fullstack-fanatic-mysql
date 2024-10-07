@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from "react";
+
 import ErrorMessage from "../Form/ErrorMessage";
 import {
   CommentSectionWrapperOuter,
@@ -16,7 +17,7 @@ import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmati
 import { CommentType } from "../../types/Comment/Comment";
 import { CommentSectionProps } from "../../types/Comment/CommentSectionProps";
 import {
-  fetchTopLevelComments,
+  // fetchTopLevelComments,
   fetchReplies,
   submitComment,
   updateComment,
@@ -35,6 +36,10 @@ import {
   updateCommentInTree,
   findCommentById,
 } from "../../utils/commentUtils";
+import { useScrollToComment } from "../../hooks/useScrollToComment";
+import { useLoadComments } from "../../hooks/useLoadComments";
+import { useLoadInitialTopLevelComments } from "../../hooks/useLoadInitialTopLevelComments";
+// import { useFindAndScrollToComment } from "../../hooks/useFindAndScrollToComment";
 
 const TOP_LEVEL_BATCH_SIZE = 5;
 const REPLY_BATCH_SIZE = 3;
@@ -60,120 +65,65 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   const { showDeleteModal, handleDelete, confirmDelete, cancelDelete } =
     useDeleteComment(setComments, setError);
 
-  const manualCommentId = 77;
+  useLoadComments({
+    contentId,
+    contentType,
+    page,
+    commentId,
+    TOP_LEVEL_BATCH_SIZE,
+    comments,
+    loadingTargetComment,
+    setComments,
+    setHasMore,
+    setPage,
+    setLoadingTargetComment,
+  });
+
+  useLoadInitialTopLevelComments({
+    contentId,
+    contentType,
+    page,
+    TOP_LEVEL_BATCH_SIZE,
+    setComments,
+    setHasMore,
+    setError,
+  });
+
+  const [parentCommentId, setParentCommentId] = useState<number | null>(null);
+  const [loadingParentAndReply, setLoadingParentAndReply] = useState(true);
 
   useEffect(() => {
     const loadReplyAndParent = async () => {
-      try {
-        const matchingComment = await fetchReplyAndParent(manualCommentId);
-        console.log("Reply and Parent Comments:", matchingComment);
-      } catch (err) {
-        console.error("Failed to load reply and parent comments", err);
-        setError("Failed to load reply and parent comments");
+      if (commentId) {
+        try {
+          const [, parentComment] = await fetchReplyAndParent(
+            Number(commentId)
+          );
+
+          setParentCommentId(parentComment.id);
+
+          showMoreReplies(parentComment.id);
+
+          const replyElement = document.getElementById(`comment-${commentId}`);
+          if (replyElement) {
+            replyElement.scrollIntoView({ behavior: "smooth" });
+          }
+
+          setLoadingParentAndReply(false);
+        } catch (error) {
+          console.error("Failed to load reply and parent comments:", error);
+        }
       }
     };
 
     loadReplyAndParent();
-  }, [manualCommentId]);
+  }, [commentId]);
 
-  useEffect(() => {
-    const loadComments = async () => {
-      try {
-        const { comments: fetchedComments, hasMore: more } =
-          await fetchTopLevelComments(
-            contentType,
-            contentId,
-            page,
-            TOP_LEVEL_BATCH_SIZE
-          );
-
-        if (fetchedComments.length === 0 && !more) {
-          setHasMore(false);
-          setLoadingTargetComment(false);
-
-          if (!document.getElementById(`comment-${commentId}`)) {
-            console.error("Target comment not found.");
-          }
-
-          return;
-        }
-
-        setComments((prevComments) => [
-          ...prevComments,
-          ...fetchedComments.filter(
-            (newComment) => !prevComments.some((c) => c.id === newComment.id)
-          ),
-        ]);
-        setHasMore(more);
-
-        if (commentId && !document.getElementById(`comment-${commentId}`)) {
-          if (more) {
-            setPage((prevPage) => prevPage + 1);
-          } else {
-            setLoadingTargetComment(false);
-            console.error("Target comment not found");
-          }
-        } else {
-          setLoadingTargetComment(false);
-        }
-      } catch (error) {
-        console.error("Failed to fetch comments:", error);
-      }
-    };
-
-    if (loadingTargetComment) {
-      loadComments();
-    }
-  }, [contentId, contentType, page, commentId, comments, loadingTargetComment]);
-
-  useEffect(() => {
-    if (commentId && !loadingTargetComment) {
-      const targetComment = document.getElementById(`comment-${commentId}`);
-      if (targetComment) {
-        targetComment.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  }, [comments, commentId, loadingTargetComment]);
+  useScrollToComment(parentCommentId, comments, loadingParentAndReply);
 
   const loadMoreComments = () => {
     setPage((prevPage) => prevPage + 1);
   };
-
-  useEffect(() => {
-    const fetchCommentsData = async () => {
-      try {
-        const { comments: fetchedComments, hasMore } =
-          await fetchTopLevelComments(
-            contentType,
-            contentId,
-            page,
-            TOP_LEVEL_BATCH_SIZE
-          );
-
-        setComments((prevComments) => [
-          ...prevComments,
-          ...fetchedComments.filter(
-            (newComment) => !prevComments.some((c) => c.id === newComment.id)
-          ),
-        ]);
-        setHasMore(hasMore);
-      } catch (error) {
-        console.error("Failed to fetch comments:", error);
-        setError("Failed to fetch comments");
-      }
-    };
-
-    fetchCommentsData();
-  }, [contentId, contentType, page]);
-
-  useEffect(() => {
-    if (commentId && comments.length > 0) {
-      const targetComment = document.getElementById(`comment-${commentId}`);
-      if (targetComment) {
-        targetComment.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  }, [commentId, comments]);
 
   const handleReply = async (parentCommentId: number, replyContent: string) => {
     if (replyContent.trim() === "") return;
@@ -266,6 +216,43 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     }
   };
 
+  // const showMoreReplies = async (parentCommentId: number) => {
+  //   const currentVisibleCount = visibleReplies[parentCommentId] || 0;
+
+  //   try {
+  //     const { comments: newReplies, hasMore } = await fetchReplies(
+  //       parentCommentId,
+  //       contentType,
+  //       contentId,
+  //       REPLY_BATCH_SIZE,
+  //       currentVisibleCount
+  //     );
+
+  //     const repliesToAdd = Array.isArray(newReplies) ? newReplies : [];
+
+  //     setComments((prevComments) =>
+  //       addRepliesToCommentTree(prevComments, parentCommentId, repliesToAdd)
+  //     );
+
+  //     setVisibleReplies((prev) => ({
+  //       ...prev,
+  //       [parentCommentId]: currentVisibleCount + repliesToAdd.length,
+  //     }));
+
+  //     if (!hasMore) {
+  //       setComments((prevComments) =>
+  //         prevComments.map((comment) =>
+  //           comment.id === parentCommentId
+  //             ? { ...comment, hasMoreReplies: false }
+  //             : comment
+  //         )
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to fetch replies:", error);
+  //   }
+  // };
+
   const showMoreReplies = async (parentCommentId: number) => {
     const currentVisibleCount = visibleReplies[parentCommentId] || 0;
 
@@ -280,6 +267,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
 
       const repliesToAdd = Array.isArray(newReplies) ? newReplies : [];
 
+      // Use addRepliesToCommentTree to properly add the replies to the parent comment
       setComments((prevComments) =>
         addRepliesToCommentTree(prevComments, parentCommentId, repliesToAdd)
       );
@@ -290,6 +278,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
       }));
 
       if (!hasMore) {
+        // Mark the parent comment as having no more replies to load
         setComments((prevComments) =>
           prevComments.map((comment) =>
             comment.id === parentCommentId
