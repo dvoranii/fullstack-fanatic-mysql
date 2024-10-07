@@ -102,7 +102,9 @@ const CommentSection: React.FC<CommentSectionProps> = ({
 
           setParentCommentId(parentComment.id);
 
-          showMoreReplies(parentComment.id);
+          if (parentComment.id !== commentId) {
+            showMoreReplies(parentComment.id);
+          }
 
           const replyElement = document.getElementById(`comment-${commentId}`);
           if (replyElement) {
