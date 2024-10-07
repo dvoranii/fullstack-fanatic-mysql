@@ -5,7 +5,7 @@ export const fetchTopLevelComments = async (
   contentType: string,
   contentId: number,
   page: number,
-  limit: number // Add limit parameter
+  limit: number
 ): Promise<{ comments: CommentType[]; hasMore: boolean }> => {
   const endpoint = `/api/comments/${contentType}/${contentId}?page=${page}&parentCommentId=null&limit=${limit}&includeLikedStatus=true`;
 
@@ -13,10 +13,9 @@ export const fetchTopLevelComments = async (
     endpoint
   );
 
-  // Add hasMoreReplies as part of each top-level comment
   const commentsWithHasMoreReplies = data.comments.map((comment) => ({
     ...comment,
-    hasMoreReplies: comment.has_replies, // Initialize based on has_replies
+    hasMoreReplies: comment.has_replies,
   }));
 
   return {
@@ -145,8 +144,14 @@ export const fetchUserComments = async (
   };
 };
 
-// export const fetchAllComments = async (): Promise<CommentType[]> => {
-//   const endpoint = `/api/comments/all-comments`;
+// export const fetchMatchingReply = async (
+//   id: number
+// ): Promise<CommentType[]> => {
+//   let endpoint = `/api/comments/all-comments`;
+
+//   if (id) {
+//     endpoint += `?id=${id}`; // Append query param to URL
+//   }
 
 //   try {
 //     const { data } = await apiCall<{ comments: CommentType[] }>(endpoint, {
@@ -159,3 +164,29 @@ export const fetchUserComments = async (
 //     throw new Error("Failed to fetch all comments");
 //   }
 // };
+
+export const fetchReplyAndParent = async (
+  id: number
+): Promise<CommentType[]> => {
+  let endpoint = `/api/comments/reply-and-parent`;
+
+  if (id) {
+    endpoint += `?id=${id}`; // Append query param to URL
+  }
+
+  try {
+    // Adjust the expected structure of the API response
+    const { data } = await apiCall<{
+      initialComment: CommentType;
+      topLevelComment: CommentType;
+    }>(endpoint, {
+      method: "GET",
+    });
+
+    // Merge both comments into a single array for setting in state
+    return [data.initialComment, data.topLevelComment];
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+    throw new Error("Failed to fetch comments");
+  }
+};

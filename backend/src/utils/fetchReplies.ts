@@ -18,14 +18,13 @@ export const fetchReplies = async (
     LIMIT ? OFFSET ?
   `;
 
-  // Fetch `limit + 1` replies to check if there are more
   const [replies]: [RowDataPacket[]] = await connection.query(replyQuery, [
     parentCommentId,
-    limit + 1, // Fetch one more reply than the limit
+    limit + 1,
     offset,
   ]);
 
-  const replyIds = replies.slice(0, limit).map((reply) => reply.id); // Only use up to the limit
+  const replyIds = replies.slice(0, limit).map((reply) => reply.id);
 
   let likedReplies: RowDataPacket[] = [];
 
@@ -40,15 +39,8 @@ export const fetchReplies = async (
 
   const repliesWithLikedStatus: Comment[] = await Promise.all(
     replies.slice(0, limit).map(async (reply) => {
-      // Fetch nested replies for each reply
       const { replies: nestedReplies, hasMore: nestedHasMore } =
-        await fetchReplies(
-          connection,
-          reply.id,
-          limit, // Use the same limit for nested replies
-          0, // Offset starts at 0 for nested replies
-          userId
-        );
+        await fetchReplies(connection, reply.id, limit, 0, userId);
 
       return {
         id: reply.id,
@@ -64,13 +56,12 @@ export const fetchReplies = async (
         parent_comment_id: reply.parent_comment_id,
         has_replies: reply.has_replies === 1,
         likedByUser: likedReplyIds.includes(reply.id),
-        replies: nestedReplies, // Include the nested replies
-        hasMoreReplies: nestedHasMore, // Include if there are more nested replies
+        replies: nestedReplies,
+        hasMoreReplies: nestedHasMore,
       };
     })
   );
 
-  // If we fetched more than the limit, set `hasMore` to true
   const hasMore = replies.length > limit;
 
   return { replies: repliesWithLikedStatus, hasMore };

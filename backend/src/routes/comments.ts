@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import connectionPromise from "../db";
-import { RowDataPacket, ResultSetHeader } from "mysql2";
+import { RowDataPacket, ResultSetHeader } from "mysql2/promise";
 import { Comment } from "../types/Comment";
 import { authenticate } from "../middleware/authenticate";
 import { fetchReplies } from "../utils/fetchReplies";
@@ -13,6 +13,7 @@ import {
   toggleLike,
   fetchCommentLikes,
   fetchTotalComments,
+  findTopLevelComment,
 } from "../services/commentService";
 
 const router = express.Router();
@@ -337,29 +338,61 @@ router.get("/user", authenticate, async (req: Request, res: Response) => {
 });
 
 router.get(
-  "/all-comments",
+  "/reply-and-parent",
   authenticate,
   async (req: Request, res: Response) => {
-    console.log(req.params);
+    const { id } = req.query;
+    console.log("Query params received:", req.query);
+
     try {
       const connection = await connectionPromise;
 
-      const commentsQuery = `
-      SELECT c.*, u.name as user_name, u.profile_picture
+      // Query to get the initial comment by id
+      let commentsQuery = `
+      SELECT c.*, u.name as user_name, u.profile_picture, c.parent_comment_id
       FROM comments c
       JOIN users u ON c.user_id = u.id
-      ORDER BY c.created_at DESC
+      WHERE c.id = ?
     `;
 
-      const [comments] = await connection.query<RowDataPacket[]>(commentsQuery);
+      const params: any[] = [Number(id)];
 
-      res.status(200).json({ comments });
+      const [comments] = await connection.query<RowDataPacket[]>(
+        commentsQuery,
+        params
+      );
 
-      // Query to fetch all comments with user info
+      if (comments.length === 0) {
+        return res.status(404).json({ message: "Comment not found" });
+      }
+
+      const initialComment = comments[0];
+
+      if (initialComment.parent_comment_id === null) {
+        console.log(`Comment with id ${id} is a top-level comment`);
+        return res.status(200).json({
+          initialComment,
+          topLevelComment: initialComment, // Since it's already a top-level comment
+        });
+      }
+
+      // Call the helper function to traverse upwards and find the top-level comment
+      const topLevelComment = await findTopLevelComment(Number(id), connection);
+
+      if (topLevelComment) {
+        console.log(`The top-level parent comment is:`, topLevelComment);
+      }
+
+      // Return both the initial comment and the top-level parent comment
+      res.status(200).json({
+        initialComment, // The comment requested by id
+        topLevelComment, // The top-level parent comment found
+      });
     } catch (err) {
       console.error("Error fetching all comments:", err);
       res.status(500).json({ error: (err as Error).message });
     }
   }
 );
+
 export default router;

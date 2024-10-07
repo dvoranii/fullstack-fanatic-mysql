@@ -1,5 +1,6 @@
-import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { FieldPacket, ResultSetHeader, RowDataPacket } from "mysql2";
 import connectionPromise from "../db";
+import { Connection } from "mysql2/promise";
 
 export const insertComment = async (
   content_id: number,
@@ -129,3 +130,43 @@ export const fetchTotalComments = async (
   );
   return totalCountResult[0]?.total || 0;
 };
+
+export async function findTopLevelComment(
+  commentId: number,
+  connection: Connection // Use the connection passed as a parameter
+): Promise<RowDataPacket | null> {
+  try {
+    let currentCommentId = commentId;
+
+    while (currentCommentId) {
+      const [rows]: [RowDataPacket[], FieldPacket[]] = await connection.query(
+        `SELECT id, parent_comment_id, content 
+         FROM comments 
+         WHERE id = ?`,
+        [currentCommentId]
+      );
+
+      if (rows.length === 0) {
+        console.log(`Comment with id ${currentCommentId} not found.`);
+        return null;
+      }
+
+      const comment = rows[0];
+
+      if (comment.parent_comment_id === null) {
+        // If we reach a top-level comment, log and exit the loop
+        console.log(`The top-level parent comment is:`, comment);
+        return comment;
+      } else {
+        // Continue traversing upwards
+        currentCommentId = comment.parent_comment_id;
+      }
+    }
+  } catch (error) {
+    console.error(
+      "Error while traversing to find the top-level comment:",
+      error
+    );
+  }
+  return null;
+}

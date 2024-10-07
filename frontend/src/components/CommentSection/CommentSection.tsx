@@ -21,6 +21,7 @@ import {
   submitComment,
   updateComment,
   submitReply,
+  fetchReplyAndParent,
 } from "../../services/commentService";
 import Comment from "./Comment/Comment";
 import { UserContext } from "../../context/UserContext";
@@ -59,6 +60,22 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   const { showDeleteModal, handleDelete, confirmDelete, cancelDelete } =
     useDeleteComment(setComments, setError);
 
+  const manualCommentId = 77;
+
+  useEffect(() => {
+    const loadReplyAndParent = async () => {
+      try {
+        const matchingComment = await fetchReplyAndParent(manualCommentId);
+        console.log("Reply and Parent Comments:", matchingComment);
+      } catch (err) {
+        console.error("Failed to load reply and parent comments", err);
+        setError("Failed to load reply and parent comments");
+      }
+    };
+
+    loadReplyAndParent();
+  }, [manualCommentId]);
+
   useEffect(() => {
     const loadComments = async () => {
       try {
@@ -73,7 +90,11 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         if (fetchedComments.length === 0 && !more) {
           setHasMore(false);
           setLoadingTargetComment(false);
-          console.error("Target comment not found.");
+
+          if (!document.getElementById(`comment-${commentId}`)) {
+            console.error("Target comment not found.");
+          }
+
           return;
         }
 
@@ -86,7 +107,12 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         setHasMore(more);
 
         if (commentId && !document.getElementById(`comment-${commentId}`)) {
-          setPage((prevPage) => prevPage + 1);
+          if (more) {
+            setPage((prevPage) => prevPage + 1);
+          } else {
+            setLoadingTargetComment(false);
+            console.error("Target comment not found");
+          }
         } else {
           setLoadingTargetComment(false);
         }
@@ -248,29 +274,26 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         parentCommentId,
         contentType,
         contentId,
-        REPLY_BATCH_SIZE, // Use reply-specific batch size here
+        REPLY_BATCH_SIZE,
         currentVisibleCount
       );
 
       const repliesToAdd = Array.isArray(newReplies) ? newReplies : [];
 
-      // Append new replies while keeping the existing replies
       setComments((prevComments) =>
         addRepliesToCommentTree(prevComments, parentCommentId, repliesToAdd)
       );
 
-      // Update visible replies count
       setVisibleReplies((prev) => ({
         ...prev,
         [parentCommentId]: currentVisibleCount + repliesToAdd.length,
       }));
 
-      // Update hasMoreReplies for the comment
       if (!hasMore) {
         setComments((prevComments) =>
           prevComments.map((comment) =>
             comment.id === parentCommentId
-              ? { ...comment, hasMoreReplies: false } // Set hasMoreReplies to false when no more replies
+              ? { ...comment, hasMoreReplies: false }
               : comment
           )
         );

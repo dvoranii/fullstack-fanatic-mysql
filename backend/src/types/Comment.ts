@@ -13,4 +13,5 @@ export interface Comment {
   parent_comment_id?: number;
   replies?: Comment[];
   has_replies?: boolean;
+  hasMoreReplies?: boolean;
 }
