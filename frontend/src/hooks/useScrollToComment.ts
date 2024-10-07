@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { CommentType } from "../types/Comment/Comment";
 
 // Define the hook
@@ -7,13 +7,19 @@ export const useScrollToComment = (
   comments: CommentType[],
   loadingTargetComment: boolean
 ) => {
+  const [hasScrolledToComment, setHasScrolledToComment] = useState(false);
   useEffect(() => {
-    // Check if we have a valid commentId and comments are loaded
-    if (commentId && comments.length > 0 && !loadingTargetComment) {
+    if (
+      commentId &&
+      comments.length > 0 &&
+      !loadingTargetComment &&
+      !hasScrolledToComment
+    ) {
       const targetComment = document.getElementById(`comment-${commentId}`);
       if (targetComment) {
         targetComment.scrollIntoView({ behavior: "smooth" });
+        setHasScrolledToComment(true);
       }
     }
-  }, [commentId, comments, loadingTargetComment]);
+  }, [commentId, comments, loadingTargetComment, hasScrolledToComment]);
 };

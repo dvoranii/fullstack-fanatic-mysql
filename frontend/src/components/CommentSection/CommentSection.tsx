@@ -39,7 +39,6 @@ import {
 import { useScrollToComment } from "../../hooks/useScrollToComment";
 import { useLoadComments } from "../../hooks/useLoadComments";
 import { useLoadInitialTopLevelComments } from "../../hooks/useLoadInitialTopLevelComments";
-// import { useFindAndScrollToComment } from "../../hooks/useFindAndScrollToComment";
 
 const TOP_LEVEL_BATCH_SIZE = 5;
 const REPLY_BATCH_SIZE = 3;
@@ -102,13 +101,25 @@ const CommentSection: React.FC<CommentSectionProps> = ({
 
           setParentCommentId(parentComment.id);
 
+          // Check if this is a nested reply
           if (parentComment.id !== commentId) {
-            showMoreReplies(parentComment.id);
-          }
-
-          const replyElement = document.getElementById(`comment-${commentId}`);
-          if (replyElement) {
-            replyElement.scrollIntoView({ behavior: "smooth" });
+            showMoreReplies(parentComment.id, () => {
+              // Scroll to the reply comment after replies are loaded
+              const replyElement = document.getElementById(
+                `comment-${commentId}`
+              );
+              if (replyElement) {
+                replyElement.scrollIntoView({ behavior: "smooth" });
+              }
+            });
+          } else {
+            // If it's a top-level comment, scroll directly
+            const targetElement = document.getElementById(
+              `comment-${commentId}`
+            );
+            if (targetElement) {
+              targetElement.scrollIntoView({ behavior: "smooth" });
+            }
           }
 
           setLoadingParentAndReply(false);
@@ -218,44 +229,10 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     }
   };
 
-  // const showMoreReplies = async (parentCommentId: number) => {
-  //   const currentVisibleCount = visibleReplies[parentCommentId] || 0;
-
-  //   try {
-  //     const { comments: newReplies, hasMore } = await fetchReplies(
-  //       parentCommentId,
-  //       contentType,
-  //       contentId,
-  //       REPLY_BATCH_SIZE,
-  //       currentVisibleCount
-  //     );
-
-  //     const repliesToAdd = Array.isArray(newReplies) ? newReplies : [];
-
-  //     setComments((prevComments) =>
-  //       addRepliesToCommentTree(prevComments, parentCommentId, repliesToAdd)
-  //     );
-
-  //     setVisibleReplies((prev) => ({
-  //       ...prev,
-  //       [parentCommentId]: currentVisibleCount + repliesToAdd.length,
-  //     }));
-
-  //     if (!hasMore) {
-  //       setComments((prevComments) =>
-  //         prevComments.map((comment) =>
-  //           comment.id === parentCommentId
-  //             ? { ...comment, hasMoreReplies: false }
-  //             : comment
-  //         )
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error("Failed to fetch replies:", error);
-  //   }
-  // };
-
-  const showMoreReplies = async (parentCommentId: number) => {
+  const showMoreReplies = async (
+    parentCommentId: number,
+    callback?: () => void
+  ) => {
     const currentVisibleCount = visibleReplies[parentCommentId] || 0;
 
     try {
@@ -269,7 +246,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({
 
       const repliesToAdd = Array.isArray(newReplies) ? newReplies : [];
 
-      // Use addRepliesToCommentTree to properly add the replies to the parent comment
       setComments((prevComments) =>
         addRepliesToCommentTree(prevComments, parentCommentId, repliesToAdd)
       );
@@ -280,7 +256,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({
       }));
 
       if (!hasMore) {
-        // Mark the parent comment as having no more replies to load
         setComments((prevComments) =>
           prevComments.map((comment) =>
             comment.id === parentCommentId
@@ -288,6 +263,10 @@ const CommentSection: React.FC<CommentSectionProps> = ({
               : comment
           )
         );
+      }
+
+      if (callback) {
+        callback();
       }
     } catch (error) {
       console.error("Failed to fetch replies:", error);
