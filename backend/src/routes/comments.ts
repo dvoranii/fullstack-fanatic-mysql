@@ -27,8 +27,8 @@ router.get(
     const includeLikedStatus = req.query.includeLikedStatus === "true";
 
     const page = parseInt(req.query.page as string) || 1;
-    const topLevelLimit = parseInt(req.query.topLevelLimit as string) || 5; // Top-level batch size
-    const replyLimit = parseInt(req.query.replyLimit as string) || 3; // Reply batch size
+    const topLevelLimit = parseInt(req.query.topLevelLimit as string) || 5;
+    const replyLimit = parseInt(req.query.replyLimit as string) || 3;
     const offset = parseInt(req.query.offset as string) || 0;
 
     const parentCommentId = req.query.parentCommentId
@@ -71,7 +71,7 @@ router.get(
           parentCommentId,
           replyLimit + 1,
           offset,
-        ]; // Fetch `replyLimit + 1`
+        ];
       }
 
       const [rows] = await connection.query<RowDataPacket[]>(
@@ -86,10 +86,8 @@ router.get(
       let commentsWithReplies: Comment[] = rows as Comment[];
 
       if (parentCommentId) {
-        // Check if there are more replies than the limit
         const hasMoreReplies = commentsWithReplies.length > replyLimit;
 
-        // Trim the array to only `replyLimit` number of replies
         commentsWithReplies = commentsWithReplies.slice(0, replyLimit);
 
         commentsWithReplies = await Promise.all(
@@ -110,10 +108,9 @@ router.get(
           })
         );
 
-        // Return the replies and the flag for more replies
         return res.json({
           comments: commentsWithReplies,
-          hasMore: hasMoreReplies, // Now we have hasMoreReplies properly defined
+          hasMore: hasMoreReplies,
         });
       }
 
@@ -132,7 +129,6 @@ router.get(
         setLikedStatus(commentsWithReplies);
       }
 
-      // Top-level comments: calculate `hasMore` based on totalCount
       if (!parentCommentId) {
         const totalCount = await fetchTotalComments(
           contentType,
@@ -291,7 +287,6 @@ router.delete("/:id", authenticate, async (req: Request, res: Response) => {
   }
 });
 
-// only returning top level comments for now
 router.get("/user", authenticate, async (req: Request, res: Response) => {
   const userId = req.user?.userId;
 
@@ -307,7 +302,7 @@ router.get("/user", authenticate, async (req: Request, res: Response) => {
       SELECT c.*, u.name as user_name, u.profile_picture
       FROM comments c
       JOIN users u ON c.user_id = u.id
-      WHERE c.user_id = ? AND c.parent_comment_id IS NULL
+      WHERE c.user_id = ?
       ORDER BY c.created_at DESC
     `;
 
@@ -324,7 +319,7 @@ router.get("/user", authenticate, async (req: Request, res: Response) => {
     let hasMore: boolean | undefined = undefined;
     if (limit !== undefined && page !== undefined) {
       const [totalCountResult] = await connection.query<RowDataPacket[]>(
-        "SELECT COUNT(*) as total FROM comments WHERE user_id = ? AND parent_comment_id IS NULL",
+        "SELECT COUNT(*) as total FROM comments WHERE user_id = ?",
         [userId]
       );
       const totalCount = totalCountResult[0]?.total || 0;
@@ -347,7 +342,6 @@ router.get(
     try {
       const connection = await connectionPromise;
 
-      // Query to get the initial comment by id
       let commentsQuery = `
       SELECT c.*, u.name as user_name, u.profile_picture, c.parent_comment_id
       FROM comments c
