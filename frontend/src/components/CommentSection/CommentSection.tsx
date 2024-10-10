@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-
+import { useParams } from "react-router-dom";
 import ErrorMessage from "../Form/ErrorMessage";
 import {
   CommentSectionWrapperOuter,
@@ -17,7 +17,6 @@ import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmati
 import { CommentType } from "../../types/Comment/Comment";
 import { CommentSectionProps } from "../../types/Comment/CommentSectionProps";
 import {
-  // fetchTopLevelComments,
   fetchReplies,
   submitComment,
   updateComment,
@@ -46,7 +45,7 @@ const REPLY_BATCH_SIZE = 3;
 const CommentSection: React.FC<CommentSectionProps> = ({
   contentId,
   contentType,
-  commentId,
+  commentId: propCommentId, // Alias the prop `commentId` as `propCommentId`.
 }) => {
   const [comments, setComments] = useState<CommentType[]>([]);
   const [newComment, setNewComment] = useState("");
@@ -60,15 +59,23 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     [commentId: number]: number;
   }>({});
   const [loadingTargetComment, setLoadingTargetComment] = useState(true);
-
   const { showDeleteModal, handleDelete, confirmDelete, cancelDelete } =
     useDeleteComment(setComments, setError);
+
+  // Use `useParams` to extract `commentId` from the URL.
+  const { commentId: urlCommentId } = useParams<{ commentId: string }>();
+  const numericCommentId = urlCommentId
+    ? parseInt(urlCommentId, 10)
+    : propCommentId;
+
+  const [parentCommentId, setParentCommentId] = useState<number | null>(null);
+  const [loadingParentAndReply, setLoadingParentAndReply] = useState(true);
 
   useLoadComments({
     contentId,
     contentType,
     page,
-    commentId,
+    commentId: numericCommentId,
     TOP_LEVEL_BATCH_SIZE,
     comments,
     loadingTargetComment,
@@ -88,49 +95,46 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     setError,
   });
 
-  const [parentCommentId, setParentCommentId] = useState<number | null>(null);
-  const [loadingParentAndReply, setLoadingParentAndReply] = useState(true);
+  const waitForElementAndScroll = (
+    elementId: string,
+    attempts = 5,
+    interval = 300
+  ) => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    } else if (attempts > 0) {
+      setTimeout(() => {
+        waitForElementAndScroll(elementId, attempts - 1, interval);
+      }, interval);
+    }
+  };
 
   useEffect(() => {
+    if (!numericCommentId) return; // Ensure `commentId` is defined before running this effect.
+
     const loadReplyAndParent = async () => {
-      if (commentId) {
-        try {
-          const [, parentComment] = await fetchReplyAndParent(
-            Number(commentId)
-          );
+      try {
+        const [, parentComment] = await fetchReplyAndParent(
+          Number(numericCommentId)
+        );
 
-          setParentCommentId(parentComment.id);
+        setParentCommentId(parentComment.id);
 
-          // Check if this is a nested reply
-          if (parentComment.id !== commentId) {
-            showMoreReplies(parentComment.id, () => {
-              // Scroll to the reply comment after replies are loaded
-              const replyElement = document.getElementById(
-                `comment-${commentId}`
-              );
-              if (replyElement) {
-                replyElement.scrollIntoView({ behavior: "smooth" });
-              }
-            });
-          } else {
-            // If it's a top-level comment, scroll directly
-            const targetElement = document.getElementById(
-              `comment-${commentId}`
-            );
-            if (targetElement) {
-              targetElement.scrollIntoView({ behavior: "smooth" });
-            }
-          }
-
-          setLoadingParentAndReply(false);
-        } catch (error) {
-          console.error("Failed to load reply and parent comments:", error);
+        if (parentComment.id !== numericCommentId) {
+          await showMoreReplies(parentComment.id, () => {
+            waitForElementAndScroll(`comment-${numericCommentId}`, 10, 300);
+          });
         }
+
+        setLoadingParentAndReply(false);
+      } catch (error) {
+        console.error("Failed to load reply and parent comments:", error);
       }
     };
 
     loadReplyAndParent();
-  }, [commentId]);
+  }, [numericCommentId]);
 
   useScrollToComment(parentCommentId, comments, loadingParentAndReply);
 
@@ -149,15 +153,16 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         parent_comment_id: parentCommentId,
       });
 
-      setComments((prevComments) => addReplyToComments(prevComments, newReply));
+      // Use addReplyToComments and ensure hasMoreReplies is set in the same update
+      setComments((prevComments) => {
+        const updatedComments = addReplyToComments(prevComments, newReply);
 
-      setComments((prevComments) =>
-        prevComments.map((comment) =>
+        return updatedComments.map((comment) =>
           comment.id === parentCommentId
             ? { ...comment, hasMoreReplies: true }
             : comment
-        )
-      );
+        );
+      });
     } catch (error) {
       console.error("Failed to submit reply", error);
       setError("Failed to submit reply");

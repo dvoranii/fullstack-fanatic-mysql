@@ -8,6 +8,7 @@ export const useScrollToComment = (
   loadingTargetComment: boolean
 ) => {
   const [hasScrolledToComment, setHasScrolledToComment] = useState(false);
+
   useEffect(() => {
     if (
       commentId &&

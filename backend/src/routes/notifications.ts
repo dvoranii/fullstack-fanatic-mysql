@@ -19,12 +19,16 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
     const connection = await connectionPromise;
 
     const [notifications] = await connection.query<RowDataPacket[]>(
-      `SELECT n.*, u.name as sender_name, u.profile_picture as sender_profile_picture, u.id as sender_id
-         FROM notifications n
-         JOIN users u ON n.sender_id = u.id
-         WHERE n.user_id = ?
-         ORDER BY n.created_at DESC
-         LIMIT ? OFFSET ?`,
+      `
+      SELECT n.*, u.name as sender_name, u.profile_picture as sender_profile_picture, u.id as sender_id,
+             c.id as comment_id, c.parent_comment_id, c.content_id, c.content_type
+      FROM notifications n
+      LEFT JOIN users u ON n.sender_id = u.id
+      LEFT JOIN comments c ON n.comment_id = c.id
+      WHERE n.user_id = ?
+      ORDER BY n.created_at DESC
+      LIMIT ? OFFSET ?
+    `,
       [userId, limit, offset]
     );
 

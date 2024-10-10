@@ -37,14 +37,32 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   };
 
   const renderNotificationLink = () => {
+    const { content_id, content_type, comment_id } = notification;
+
     switch (notification.type) {
       case "like":
       case "reply":
-        return <Link to="#">View&nbsp;Comment</Link>;
+        if (content_type === "tutorial") {
+          return (
+            <Link to={`/tutorial/${content_id}/comments/${comment_id}`}>
+              View&nbsp;Comment
+            </Link>
+          );
+        } else if (content_type === "blog") {
+          return (
+            <Link to={`/blog/${content_id}/comments/${comment_id}`}>
+              View&nbsp;Comment
+            </Link>
+          );
+        }
+        return null;
+
       case "follow":
         return <Link to="/my-account/followers">View&nbsp;Followers</Link>;
+
       case "message":
         return <Link to="/my-account/inbox">Visit&nbsp;Inbox</Link>;
+
       default:
         return null;
     }

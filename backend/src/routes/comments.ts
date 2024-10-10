@@ -228,8 +228,14 @@ router.post("/reply", authenticate, async (req: Request, res: Response) => {
         parentCommentOwner[0].user_id !== userId
       ) {
         await connection.execute(
-          "INSERT INTO notifications (user_id, type, sender_id, is_read, created_at) VALUES (?, 'reply', ?, 0, NOW())",
-          [parentCommentOwner[0].user_id, userId]
+          "INSERT INTO notifications (user_id, type, sender_id, comment_id, content_id, content_type, is_read, created_at) VALUES (?, 'reply', ?, ?, ?, ?, 0, NOW())",
+          [
+            parentCommentOwner[0].user_id,
+            userId,
+            parent_comment_id,
+            content_id,
+            content_type,
+          ]
         );
       }
 
@@ -377,7 +383,6 @@ router.get(
         console.log(`The top-level parent comment is:`, topLevelComment);
       }
 
-      // Return both the initial comment and the top-level parent comment
       res.status(200).json({
         initialComment, // The comment requested by id
         topLevelComment, // The top-level parent comment found

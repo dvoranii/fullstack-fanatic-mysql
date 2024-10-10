@@ -7,4 +7,7 @@ export interface Notification {
   sender_name: string;
   sender_profile_picture: string;
   created_at: Date;
+  comment_id?: number;
+  content_id?: number;
+  content_type?: "tutorial" | "blog";
 }

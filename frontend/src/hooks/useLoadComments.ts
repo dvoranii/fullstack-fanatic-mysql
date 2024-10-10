@@ -40,14 +40,6 @@ export const useLoadComments = ({
             TOP_LEVEL_BATCH_SIZE
           );
 
-        // If no comments were fetched and there are no more comments to load
-        if (fetchedComments.length === 0 && !more) {
-          setHasMore(false);
-          setLoadingTargetComment(false);
-          return;
-        }
-
-        // Append the fetched comments to the existing ones
         setComments((prevComments) => [
           ...prevComments,
           ...fetchedComments.filter(
@@ -56,15 +48,20 @@ export const useLoadComments = ({
         ]);
         setHasMore(more);
 
-        // Check if the target comment is in the DOM after all comments have been loaded
-        if (commentId && !document.getElementById(`comment-${commentId}`)) {
-          if (more) {
-            // If more comments exist, load the next page to continue searching
-            setPage((prevPage) => prevPage + 1);
-          } else {
-            // If no more comments and target comment isn't found
-            console.error("Target comment not found.");
+        if (commentId) {
+          const targetElement = document.getElementById(`comment-${commentId}`);
+
+          if (targetElement || !more) {
+            if (!targetElement) {
+              console.warn(
+                "Target comment not found in loaded comments but no more comments to fetch."
+              );
+            }
             setLoadingTargetComment(false);
+          } else {
+            if (more) {
+              setPage((prevPage) => prevPage + 1);
+            }
           }
         } else {
           setLoadingTargetComment(false);

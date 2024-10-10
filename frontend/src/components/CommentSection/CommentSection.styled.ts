@@ -18,6 +18,7 @@ export const CommentSectionWrapperInner = styled.ul`
   gap: 1.2rem;
   height: 600px;
   overflow-y: auto;
+  overflow-x: auto;
 `;
 
 export const FormWrapper = styled.form`

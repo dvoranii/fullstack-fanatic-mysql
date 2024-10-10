@@ -32,7 +32,6 @@ import {
 } from "./UserProfile.styled";
 import TutorialIcon from "../../assets/images/tutorial-icon.png";
 import BlogIcon from "../../assets/images/blog-icon.png";
-
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import SocialLinksDisplay from "./SocialLinksDisplay/SocialLinksDisplay";
 import { UserProfilePageProps } from "../../types/User/UserProfilePageProps";

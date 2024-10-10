@@ -159,6 +159,8 @@ export const fetchReplyAndParent = async (
       method: "GET",
     });
 
+    console.log(data.initialComment, data.topLevelComment);
+
     return [data.initialComment, data.topLevelComment];
   } catch (error) {
     console.error("Error fetching comments:", error);
