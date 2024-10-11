@@ -46,7 +46,7 @@ const TutorialsPage: React.FC = () => {
         {tutorialContent.map((tutorial) => (
           <TutorialItemWrapper key={tutorial.id}>
             <CardInner className={flipped[tutorial.id] ? "is-flipped" : ""}>
-              <CardFace className="card__face card__face--front">
+              <CardFace>
                 {tutorial.isPremium ? (
                   <PremiumThumbnailWrapperOuter>
                     <ThumbnailBannerWrapper>
@@ -102,8 +102,8 @@ const TutorialsPage: React.FC = () => {
                   <img src={FlipIconFront} alt="Flip" />
                 </FlipIconWrapper>
               </CardFace>
-              <CardFace className="card__face card__face--back">
-                <div className="card__content">
+              <CardFace back>
+                <div>
                   <h3>{tutorial.title}</h3>
                   <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed

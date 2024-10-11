@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { colors } from "../../GlobalStyles";
 
 export const TutorialList = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   flex-wrap: wrap;
   gap: 1rem;
   margin-top: 1.2rem;
@@ -71,7 +72,7 @@ export const PremiumBanner = styled.div`
     rgba(255, 175, 43, 1) 83%
   );
   position: absolute;
-  bottom: 35%;
+  bottom: 28%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -113,10 +114,17 @@ export const FlipIconWrapper = styled.div`
   position: absolute;
   bottom: 20px;
   right: 20px;
+  height: 10%;
+  user-select: none;
 
   img {
     width: 30px;
     height: 30px;
+    transition: all 150ms ease;
+
+    &:hover {
+      filter: brightness(1.5);
+    }
   }
 `;
 
@@ -133,28 +141,20 @@ export const CardInner = styled.div`
   }
 `;
 
-export const CardFace = styled.div`
+export const CardFace = styled.div<{ back?: boolean }>`
   position: absolute;
   width: 100%;
   height: 100%;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   border-radius: 16px;
   box-shadow: 0px 3px 18px 3px rgba(0, 0, 0, 0.2);
   overflow: hidden;
-
-  &.card__face--front {
-    background: #f8f8f8;
-    display: flex;
-    flex-direction: column;
-  }
-
-  &.card__face--back {
-    background: #ffffff;
-    transform: rotateY(180deg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: ${({ back }) => (back ? "#ffffff" : "#f8f8f8")};
+  transform: ${({ back }) => (back ? "rotateY(180deg)" : "rotateY(0)")};
+  padding: ${({ back }) => (back ? "16px" : "0")};
+  align-items: ${({ back }) => (back ? "center" : "initial")};
+  justify-content: ${({ back }) => (back ? "center" : "space-between")};
 `;
