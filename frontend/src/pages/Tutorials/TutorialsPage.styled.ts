@@ -14,21 +14,21 @@ export const TutorialItemWrapper = styled.div`
   flex-direction: column;
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
-  background-color: #f8f8f8;
-  padding-bottom: 24px;
-  width: 300px; /* Set a fixed width for each tutorial item */
+  width: 300px;
+  perspective: 900px;
+  max-height: 350px;
 `;
 
 export const TutorialThumbnail = styled(Link)`
   text-decoration: none;
   position: relative;
   color: inherit;
-  width: 100%; /* Make sure the thumbnail takes the full width of the wrapper */
+  width: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center content like the image and title */
+  align-items: center;
+  user-select: none;
 
   &:hover {
     background: #f5f5f5;
@@ -54,7 +54,6 @@ export const TutorialThumbnail = styled(Link)`
 export const ThumbnailBannerWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: #d9d9d9;
   padding: 12px;
   user-select: none;
 `;
@@ -78,14 +77,11 @@ export const PremiumBanner = styled.div`
   justify-content: center;
   align-items: center;
   padding: 4px 0px;
-  /* border-bottom: 2px solid black;
-  border-top: 2px solid black; */
 
   p {
     font-family: "Alata";
     text-transform: uppercase;
     font-size: 1.6rem;
-    /* font-weight: bold; */
     color: ${colors.white};
     text-shadow: 1px 1px 0 black, -1px 1px 0 black, 1px -1px 0 black,
       -1px -1px 0 black;
@@ -95,5 +91,70 @@ export const PremiumBanner = styled.div`
   img {
     width: 35px;
     margin-left: 10px;
+  }
+`;
+
+export const PremiumThumbnailWrapperOuter = styled.div`
+  cursor: not-allowed;
+  &:hover {
+    cursor: not-allowed;
+  }
+
+  ${ThumbnailBannerWrapper} {
+    cursor: not-allowed;
+  }
+
+  ${TutorialThumbnail} {
+    cursor: not-allowed;
+  }
+`;
+
+export const FlipIconWrapper = styled.div`
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+
+  img {
+    width: 30px;
+    height: 30px;
+  }
+`;
+
+export const CardInner = styled.div`
+  position: relative;
+  width: 100%;
+  height: 400px;
+  transition: transform 1s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+
+  &.is-flipped {
+    transform: rotateY(180deg);
+  }
+`;
+
+export const CardFace = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  box-shadow: 0px 3px 18px 3px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+
+  &.card__face--front {
+    background: #f8f8f8;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &.card__face--back {
+    background: #ffffff;
+    transform: rotateY(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
   }
 `;

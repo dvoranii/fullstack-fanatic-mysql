@@ -7,12 +7,14 @@ const FavouriteButton: React.FC<FavouriteButtonProps> = ({
   isFavourited,
   onClick,
   altText,
+  isDisabled = false,
 }) => {
   return (
     <FavouriteButtonImg
       src={isFavourited ? FavouriteIconImgFilled : FavouriteIconImg}
       alt={altText}
-      onClick={onClick}
+      onClick={isDisabled ? undefined : onClick}
+      isDisabled={isDisabled}
     />
   );
 };

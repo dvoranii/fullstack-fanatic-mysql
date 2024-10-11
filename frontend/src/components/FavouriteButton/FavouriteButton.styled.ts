@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
-export const FavouriteButtonImg = styled.img`
+export const FavouriteButtonImg = styled.img<{ isDisabled?: boolean }>`
   width: 25px;
 
   &:hover {
-    cursor: pointer;
+    cursor: ${({ isDisabled }) => (isDisabled ? "not-allowed" : "pointer")};
   }
 `;

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import Title from "../../components/Title/Title";
 import { PageWrapper } from "../../PageWrapper.styled";
 import {
@@ -8,12 +8,18 @@ import {
   TutorialThumbnail,
   BeginnerStarIcon,
   PremiumBanner,
+  PremiumThumbnailWrapperOuter,
+  FlipIconWrapper,
+  CardFace,
+  CardInner,
 } from "./TutorialsPage.styled";
 import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
 import BeginnerStarImg from "../../assets/images/1-green-star.png";
 import { UserContext } from "../../context/UserContext";
 import { tutorialContent } from "../../assets/tutorialContent";
 import PremiumLockImg from "../../assets/images/tutorials/lock.png";
+import FlipIconFront from "../../assets/images/tutorials/flip-icon.png";
+import FlipIconBack from "../../assets/images/tutorials/flip-icon-backside.png";
 
 const TutorialsPage: React.FC = () => {
   const {
@@ -23,11 +29,15 @@ const TutorialsPage: React.FC = () => {
     loading,
   } = useContext(UserContext) || {};
 
+  const [flipped, setFlipped] = useState<{ [key: string]: boolean }>({});
+
+  const handleFlip = (id: string) => {
+    setFlipped((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
-
-  console.log(tutorialContent[2].isPremium);
 
   return (
     <PageWrapper>
@@ -35,52 +45,78 @@ const TutorialsPage: React.FC = () => {
       <TutorialList>
         {tutorialContent.map((tutorial) => (
           <TutorialItemWrapper key={tutorial.id}>
-            {tutorial.isPremium ? (
-              // Render premium tutorial layout, just update the styling
-              <div>
-                <ThumbnailBannerWrapper>
-                  <BeginnerStarIcon src={BeginnerStarImg} />
-                  {/* update profile/user to have isPremium enabled as well, but this will go along with stripe implementation */}
-                  {profile && (
-                    <FavouriteButton
-                      isFavourited={favouriteTutorials.some(
-                        (favTutorial) => favTutorial.id === tutorial.id
+            <CardInner className={flipped[tutorial.id] ? "is-flipped" : ""}>
+              <CardFace className="card__face card__face--front">
+                {tutorial.isPremium ? (
+                  <PremiumThumbnailWrapperOuter>
+                    <ThumbnailBannerWrapper>
+                      <BeginnerStarIcon src={BeginnerStarImg} />
+
+                      {profile && (
+                        <FavouriteButton
+                          isFavourited={favouriteTutorials.some(
+                            (favTutorial) => favTutorial.id === tutorial.id
+                          )}
+                          onClick={() =>
+                            toggleFavourite(tutorial.id, "tutorial")
+                          }
+                          altText="Tutorial Favourite Button"
+                          isDisabled={tutorial.isPremium}
+                        />
                       )}
-                      onClick={() => toggleFavourite(tutorial.id, "tutorial")}
-                      altText="Tutorial Favourite Button"
-                    />
-                  )}
-                </ThumbnailBannerWrapper>
-                <TutorialThumbnail to={`/tutorial/${tutorial.id}`}>
-                  <h2 title={tutorial.title}>PREMIUM: {tutorial.title}</h2>
-                  <img src={tutorial.image} alt={tutorial.title} />
-                  <PremiumBanner>
-                    <p>Premium</p>
-                    <img src={PremiumLockImg} alt="lock" />
-                  </PremiumBanner>
-                </TutorialThumbnail>
-              </div>
-            ) : (
-              // Render regular tutorial layout
-              <div>
-                <ThumbnailBannerWrapper>
-                  <BeginnerStarIcon src={BeginnerStarImg} />
-                  {profile && (
-                    <FavouriteButton
-                      isFavourited={favouriteTutorials.some(
-                        (favTutorial) => favTutorial.id === tutorial.id
+                    </ThumbnailBannerWrapper>
+                    <TutorialThumbnail to={`/tutorial/${tutorial.id}`}>
+                      <h2 title={tutorial.title}>PREMIUM: {tutorial.title}</h2>
+                      <img src={tutorial.image} alt={tutorial.title} />
+                      <PremiumBanner>
+                        <p>Premium</p>
+                        <img src={PremiumLockImg} alt="Lock" />
+                      </PremiumBanner>
+                    </TutorialThumbnail>
+                  </PremiumThumbnailWrapperOuter>
+                ) : (
+                  <div>
+                    <ThumbnailBannerWrapper>
+                      <BeginnerStarIcon src={BeginnerStarImg} />
+                      {profile && (
+                        <FavouriteButton
+                          isFavourited={favouriteTutorials.some(
+                            (favTutorial) => favTutorial.id === tutorial.id
+                          )}
+                          onClick={() =>
+                            toggleFavourite(tutorial.id, "tutorial")
+                          }
+                          altText="Tutorial Favourite Button"
+                        />
                       )}
-                      onClick={() => toggleFavourite(tutorial.id, "tutorial")}
-                      altText="Tutorial Favourite Button"
-                    />
-                  )}
-                </ThumbnailBannerWrapper>
-                <TutorialThumbnail to={`/tutorial/${tutorial.id}`}>
-                  <h2 title={tutorial.title}>{tutorial.title}</h2>
-                  <img src={tutorial.image} alt={tutorial.title} />
-                </TutorialThumbnail>
-              </div>
-            )}
+                    </ThumbnailBannerWrapper>
+                    <TutorialThumbnail to={`/tutorial/${tutorial.id}`}>
+                      <h2 title={tutorial.title}>{tutorial.title}</h2>
+                      <img src={tutorial.image} alt={tutorial.title} />
+                    </TutorialThumbnail>
+                  </div>
+                )}
+                <FlipIconWrapper
+                  onClick={() => handleFlip(String(tutorial.id))}
+                >
+                  <img src={FlipIconFront} alt="Flip" />
+                </FlipIconWrapper>
+              </CardFace>
+              <CardFace className="card__face card__face--back">
+                <div className="card__content">
+                  <h3>{tutorial.title}</h3>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                    id erat a magna lobortis dictum.
+                  </p>
+                  <FlipIconWrapper
+                    onClick={() => handleFlip(String(tutorial.id))}
+                  >
+                    <img src={FlipIconBack} alt="Flip" />
+                  </FlipIconWrapper>
+                </div>
+              </CardFace>
+            </CardInner>
           </TutorialItemWrapper>
         ))}
       </TutorialList>
