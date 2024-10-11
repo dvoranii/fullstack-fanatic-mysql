@@ -45,7 +45,7 @@ const REPLY_BATCH_SIZE = 3;
 const CommentSection: React.FC<CommentSectionProps> = ({
   contentId,
   contentType,
-  commentId: propCommentId, // Alias the prop `commentId` as `propCommentId`.
+  commentId: propCommentId,
 }) => {
   const [comments, setComments] = useState<CommentType[]>([]);
   const [newComment, setNewComment] = useState("");
@@ -62,7 +62,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   const { showDeleteModal, handleDelete, confirmDelete, cancelDelete } =
     useDeleteComment(setComments, setError);
 
-  // Use `useParams` to extract `commentId` from the URL.
   const { commentId: urlCommentId } = useParams<{ commentId: string }>();
   const numericCommentId = urlCommentId
     ? parseInt(urlCommentId, 10)
@@ -70,6 +69,10 @@ const CommentSection: React.FC<CommentSectionProps> = ({
 
   const [parentCommentId, setParentCommentId] = useState<number | null>(null);
   const [loadingParentAndReply, setLoadingParentAndReply] = useState(true);
+
+  const [allRepliesVisible, setAllRepliesVisible] = useState<{
+    [parentCommentId: number]: boolean;
+  }>({});
 
   useLoadComments({
     contentId,
@@ -111,7 +114,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   };
 
   useEffect(() => {
-    if (!numericCommentId) return; // Ensure `commentId` is defined before running this effect.
+    if (!numericCommentId) return;
 
     const loadReplyAndParent = async () => {
       try {
@@ -153,16 +156,20 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         parent_comment_id: parentCommentId,
       });
 
-      // Use addReplyToComments and ensure hasMoreReplies is set in the same update
       setComments((prevComments) => {
         const updatedComments = addReplyToComments(prevComments, newReply);
-
         return updatedComments.map((comment) =>
           comment.id === parentCommentId
-            ? { ...comment, hasMoreReplies: true }
+            ? {
+                ...comment,
+                hasMoreReplies: false,
+                has_replies: true,
+              }
             : comment
         );
       });
+
+      setAllRepliesVisible((prev) => ({ ...prev, [parentCommentId]: true }));
     } catch (error) {
       console.error("Failed to submit reply", error);
       setError("Failed to submit reply");
@@ -261,6 +268,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
       }));
 
       if (!hasMore) {
+        // setAllRepliesVisible((prev) => ({ ...prev, [parentCommentId]: true }));
         setComments((prevComments) =>
           prevComments.map((comment) =>
             comment.id === parentCommentId
@@ -311,11 +319,13 @@ const CommentSection: React.FC<CommentSectionProps> = ({
               </RepliesWrapper>
             )}
 
-            {comment.has_replies && comment.hasMoreReplies && (
-              <SeeMoreButton onClick={() => showMoreReplies(comment.id)}>
-                See more replies
-              </SeeMoreButton>
-            )}
+            {comment.has_replies &&
+              comment.hasMoreReplies && // This ensures the button appears only if there are more replies to fetch
+              !allRepliesVisible[comment.id] && (
+                <SeeMoreButton onClick={() => showMoreReplies(comment.id)}>
+                  See more replies
+                </SeeMoreButton>
+              )}
           </Comment>
         </div>
       );
