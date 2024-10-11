@@ -6,4 +6,5 @@ export interface TutorialContentItem {
   created_at: string;
   steps: Step[];
   image: string;
+  isPremium: boolean;
 }

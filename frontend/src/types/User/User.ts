@@ -10,4 +10,5 @@ export interface User {
   bio?: string;
   social_links?: { [key: string]: string };
   banner_image?: string;
+  isPremium: boolean;
 }

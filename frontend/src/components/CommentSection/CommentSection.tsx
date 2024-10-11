@@ -268,7 +268,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({
       }));
 
       if (!hasMore) {
-        // setAllRepliesVisible((prev) => ({ ...prev, [parentCommentId]: true }));
         setComments((prevComments) =>
           prevComments.map((comment) =>
             comment.id === parentCommentId
@@ -320,7 +319,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
             )}
 
             {comment.has_replies &&
-              comment.hasMoreReplies && // This ensures the button appears only if there are more replies to fetch
+              comment.hasMoreReplies &&
               !allRepliesVisible[comment.id] && (
                 <SeeMoreButton onClick={() => showMoreReplies(comment.id)}>
                   See more replies

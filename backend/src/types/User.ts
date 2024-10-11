@@ -8,4 +8,5 @@ export interface UserPayload {
   bio?: string;
   socialLinks?: { [key: string]: string };
   bannerImage?: string;
+  isPremium: boolean;
 }

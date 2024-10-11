@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { colors } from "../../GlobalStyles";
 
 export const TutorialList = styled.div`
   display: flex;
@@ -21,6 +22,7 @@ export const TutorialItemWrapper = styled.div`
 
 export const TutorialThumbnail = styled(Link)`
   text-decoration: none;
+  position: relative;
   color: inherit;
   width: 100%; /* Make sure the thumbnail takes the full width of the wrapper */
   box-sizing: border-box;
@@ -60,4 +62,38 @@ export const ThumbnailBannerWrapper = styled.div`
 export const BeginnerStarIcon = styled.img`
   width: 35px;
   height: 35px;
+`;
+
+export const PremiumBanner = styled.div`
+  background: linear-gradient(
+    180deg,
+    rgba(255, 175, 43, 1) 10%,
+    rgba(255, 222, 166, 1) 50%,
+    rgba(255, 175, 43, 1) 83%
+  );
+  position: absolute;
+  bottom: 35%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 0px;
+  /* border-bottom: 2px solid black;
+  border-top: 2px solid black; */
+
+  p {
+    font-family: "Alata";
+    text-transform: uppercase;
+    font-size: 1.6rem;
+    /* font-weight: bold; */
+    color: ${colors.white};
+    text-shadow: 1px 1px 0 black, -1px 1px 0 black, 1px -1px 0 black,
+      -1px -1px 0 black;
+    letter-spacing: 2px;
+  }
+
+  img {
+    width: 35px;
+    margin-left: 10px;
+  }
 `;

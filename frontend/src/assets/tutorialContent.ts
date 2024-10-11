@@ -1,5 +1,6 @@
 import tutorial_1_thumbnail from "../assets/images/tutorials/deployment-thumbnail.png";
 import tutorial_2_thumbnail from "../assets/images/tutorials/csrf-thumbnail.png";
+import tutorial_3_thumbnail from "../assets/images/tutorials/network-request.png";
 import { TutorialContentItem } from "../types/Tutorial/TutorialContentItem";
 
 export const tutorialContent: TutorialContentItem[] = [
@@ -18,6 +19,7 @@ export const tutorialContent: TutorialContentItem[] = [
       },
     ],
     image: tutorial_1_thumbnail,
+    isPremium: false,
   },
   {
     id: 2,
@@ -34,5 +36,23 @@ export const tutorialContent: TutorialContentItem[] = [
       },
     ],
     image: tutorial_2_thumbnail,
+    isPremium: false,
+  },
+  {
+    id: 3,
+    title: "Javascript and Network Requests: A Comprehensive Breakdown",
+    created_at: "2024-10-10",
+    steps: [
+      {
+        title: "Step 1: GET Requests",
+        content: "Content for JS & Network requests...",
+      },
+      {
+        title: "Step 2: POST Request",
+        content: "Content forJS & Network requests...",
+      },
+    ],
+    image: tutorial_3_thumbnail,
+    isPremium: true,
   },
 ];
