@@ -54,6 +54,10 @@ const SentMessages: React.FC<SentMessagesProps> = ({ messages }) => {
 
   if (error) return <p>{error}</p>;
 
+  if (!Array.isArray(messages)) {
+    return <p>No messages available</p>;
+  }
+
   return (
     <>
       {messages.map((message) => (

@@ -99,7 +99,7 @@ const TutorialsPage: React.FC = () => {
                 <FlipIconWrapper
                   onClick={() => handleFlip(String(tutorial.id))}
                 >
-                  <img src={FlipIconFront} alt="Flip" />
+                  <img src={FlipIconFront} alt="Flip" title="Read more" />
                 </FlipIconWrapper>
               </CardFace>
               <CardFace back>
@@ -112,7 +112,7 @@ const TutorialsPage: React.FC = () => {
                   <FlipIconWrapper
                     onClick={() => handleFlip(String(tutorial.id))}
                   >
-                    <img src={FlipIconBack} alt="Flip" />
+                    <img src={FlipIconBack} alt="Flip" title="View thumbnail" />
                   </FlipIconWrapper>
                 </div>
               </CardFace>

@@ -1,4 +1,5 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import {
   ChatWindowContainerOuter,
   ChatInput,
@@ -17,6 +18,7 @@ import {
   getMessagesForConversation,
   sendMessage,
 } from "../../../../services/messageService";
+import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
 
 interface MessageInboxChatWindowProps {
   conversationId: number | null;
@@ -35,20 +37,50 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
 
   const [newMessage, setNewMessage] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  const loadMoreMessages = async () => {
+    if (!conversationId) return;
+
+    try {
+      const newMessages = await getMessagesForConversation(
+        conversationId,
+        page,
+        10
+      );
+
+      // Prepend new messages at the beginning of the list to maintain order
+      setMessages((prevMessages) => [...prevMessages, ...newMessages]);
+
+      if (newMessages.length === 0) {
+        setHasMore(false);
+      } else {
+        setPage((prevPage) => prevPage + 1);
+      }
+    } catch (error) {
+      console.error("Failed to load more messages:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchMessages = async () => {
+    const fetchInitialMessages = async () => {
       if (conversationId) {
         try {
-          const messagesData = await getMessagesForConversation(conversationId);
-          setMessages(messagesData);
+          const initialMessages = await getMessagesForConversation(
+            conversationId,
+            1
+          );
+          console.log("Initial messages:", initialMessages);
+          setMessages(initialMessages);
+          setPage(2);
         } catch (error) {
-          console.error("Failed to fetch messages:", error);
+          console.error("Failed to fetch messages: ", error);
         }
       }
     };
-
-    fetchMessages();
+    fetchInitialMessages();
   }, [conversationId]);
 
   useEffect(() => {
@@ -106,8 +138,17 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
       )}
 
       {conversationId && (
-        <ChatWindowContainerInner>
-          <SentMessages messages={messages} />
+        <ChatWindowContainerInner ref={chatContainerRef} id="scrollableDiv">
+          <InfiniteScroll
+            dataLength={messages.length}
+            next={loadMoreMessages}
+            hasMore={hasMore}
+            // inverse={true}
+            scrollableTarget="scrollableDiv"
+            loader={<LoadingSpinner />}
+          >
+            <SentMessages messages={messages} />
+          </InfiniteScroll>
         </ChatWindowContainerInner>
       )}
 

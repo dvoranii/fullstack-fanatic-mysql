@@ -54,22 +54,36 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
 
 router.get("/:conversationId", authenticate, async (req, res) => {
   const { conversationId } = req.params;
+  const userId = req.user?.userId;
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 10;
+  const offset = (page - 1) * limit;
 
-  const conversationIdAsNumber = Number(conversationId);
+  console.log({ page, limit, offset, conversationId });
+
   try {
+    if (isNaN(limit) || isNaN(offset)) {
+      throw new Error("Invalid limit or offset value");
+    }
     const connection = await connectionPromise;
     const [messages] = await connection.execute<RowDataPacket[]>(
-      "SELECT * FROM messages WHERE conversation_id = ? ORDER BY sent_at",
-      [conversationIdAsNumber]
+      `SELECT * FROM messages WHERE conversation_id = ? ORDER BY sent_at ASC LIMIT ${limit} OFFSET ${offset}`,
+      [Number(conversationId)]
     );
 
-    const userId = req.user?.userId;
     await connection.execute<ResultSetHeader>(
       "UPDATE conversations SET is_read = true WHERE id = ? AND (user1_id = ? OR user2_id = ?)",
-      [conversationIdAsNumber, userId, userId]
+      [Number(conversationId), userId, userId]
     );
 
-    res.status(200).json(messages);
+    const [totalCountResult] = await connection.execute<RowDataPacket[]>(
+      "SELECT COUNT(*) as total FROM messages WHERE conversation_id = ?",
+      [Number(conversationId)]
+    );
+    const totalCount = totalCountResult[0]?.total || 0;
+    const hasMore = page * limit < totalCount;
+
+    res.status(200).json({ messages, hasMore });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to fetch messages" });

@@ -18,8 +18,8 @@ export const ChatWindowContainerInner = styled.div`
   background-color: #ffffff;
   margin: 0 auto;
   width: 95%;
-  height: 100%;
-  overflow-y: scroll;
+  height: calc(100vh - 200px);
+  overflow-y: auto;
   margin-top: 1.8rem;
 `;
 

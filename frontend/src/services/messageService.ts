@@ -41,14 +41,22 @@ export const sendMessage = async (
 };
 
 export const getMessagesForConversation = async (
-  conversationId: number
+  conversationId: number,
+  page: number = 1,
+  limit: number = 10
 ): Promise<Message[]> => {
-  const endpoint = `/api/messages/${conversationId}`;
-  const { data } = await apiCall<Message[]>(endpoint, {
-    method: "GET",
-  });
+  const endpoint = `/api/messages/${conversationId}?page=${page}&limit=${limit}`;
 
-  return data;
+  const { data } = await apiCall<{ messages: Message[]; hasMore: boolean }>(
+    endpoint,
+    {
+      method: "GET",
+    }
+  );
+
+  console.log(data);
+
+  return data.messages;
 };
 
 export const fetchConversations = async (): Promise<Conversation[]> => {
