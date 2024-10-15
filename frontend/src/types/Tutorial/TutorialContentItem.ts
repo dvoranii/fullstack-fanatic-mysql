@@ -7,4 +7,7 @@ export interface TutorialContentItem {
   steps: Step[];
   image: string;
   isPremium: boolean;
+  availableForPurchase: boolean;
+  accessLevel: "free" | "monthly" | "yearly" | "one-off";
+  price?: number;
 }

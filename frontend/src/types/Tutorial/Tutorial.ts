@@ -6,4 +6,7 @@ export interface Tutorial {
   isFavourited: boolean;
   image: string;
   isPremium: boolean;
+  availableForPurchase: boolean;
+  accessLevel: "free" | "monthly" | "yearly" | "one-off";
+  price?: number;
 }

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { colors } from "../../../GlobalStyles";
 
 export const CommentItem = styled.div`
-  padding: 16px;
+  padding: 28px;
   border-bottom: 1px solid #ddd;
   margin-bottom: 8px;
   background-color: #f9f9f9;
@@ -53,7 +53,7 @@ export const ErrorMessage = styled.div`
 `;
 
 export const CommentHistoryWrapper = styled.div`
-  height: 400px;
+  height: 600px;
   overflow-y: auto;
 `;
 

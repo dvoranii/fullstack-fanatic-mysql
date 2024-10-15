@@ -3,11 +3,34 @@ import { Link } from "react-router-dom";
 import { colors } from "../../GlobalStyles";
 
 export const TutorialList = styled.div`
+  max-width: 80vw;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  place-items: center;
+  height: fit-content;
+  overflow-y: visible;
+  padding: 3.2rem;
   flex-wrap: wrap;
-  gap: 1rem;
+  column-gap: 1.2rem;
+  row-gap: 2.2rem;
   margin-top: 1.2rem;
+
+  @media (max-width: 1697px) {
+    max-width: 90vw;
+  }
+
+  @media (max-width: 1089px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 849px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 570px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export const TutorialItemWrapper = styled.div`
@@ -15,9 +38,19 @@ export const TutorialItemWrapper = styled.div`
   flex-direction: column;
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
-  width: 300px;
+  width: clamp(220px, 20vw, 300px);
+  height: clamp(320px, 28vw, 350px);
   perspective: 900px;
   max-height: 350px;
+
+  @media screen and (max-width: 621px) {
+    width: clamp(200px, 25vw, 280px);
+    height: clamp(320px, 28vw, 350px);
+  }
+  @media screen and (max-width: 570px) {
+    width: clamp(250px, 22vw, 300px);
+    height: clamp(350px, 30vw, 400px);
+  }
 `;
 
 export const TutorialThumbnail = styled(Link)`
@@ -112,7 +145,7 @@ export const PremiumThumbnailWrapperOuter = styled.div`
 
 export const FlipIconWrapper = styled.div`
   position: absolute;
-  bottom: 20px;
+  bottom: 10px;
   right: 20px;
   height: 10%;
   user-select: none;

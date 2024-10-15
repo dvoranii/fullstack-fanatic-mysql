@@ -143,7 +143,6 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
             dataLength={messages.length}
             next={loadMoreMessages}
             hasMore={hasMore}
-            // inverse={true}
             scrollableTarget="scrollableDiv"
             loader={<LoadingSpinner />}
           >

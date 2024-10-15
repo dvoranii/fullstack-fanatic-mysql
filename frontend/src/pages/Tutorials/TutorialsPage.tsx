@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import Title from "../../components/Title/Title";
-import { PageWrapper } from "../../PageWrapper.styled";
+import Pagination from "../../components/Pagination/Pagination";
+
 import {
   TutorialList,
   TutorialItemWrapper,
@@ -30,6 +31,19 @@ const TutorialsPage: React.FC = () => {
   } = useContext(UserContext) || {};
 
   const [flipped, setFlipped] = useState<{ [key: string]: boolean }>({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loadedTutorials, setLoadedTutorials] = useState<number>(8);
+  const tutorialsPerPage = 8;
+
+  const totalTutorials = tutorialContent.length;
+  const totalPages = Math.ceil(totalTutorials / tutorialsPerPage);
+
+  const handleLoadMore = () => {
+    setLoadedTutorials((prev) => prev + tutorialsPerPage);
+  };
+
+  const startIdx = (currentPage - 1) * tutorialsPerPage;
+  const endIdx = Math.min(startIdx + tutorialsPerPage, loadedTutorials);
 
   const handleFlip = (id: string) => {
     setFlipped((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -40,10 +54,10 @@ const TutorialsPage: React.FC = () => {
   }
 
   return (
-    <PageWrapper>
+    <>
       <Title textContent="Tutorials" />
       <TutorialList>
-        {tutorialContent.map((tutorial) => (
+        {tutorialContent.slice(startIdx, endIdx).map((tutorial) => (
           <TutorialItemWrapper key={tutorial.id}>
             <CardInner className={flipped[tutorial.id] ? "is-flipped" : ""}>
               <CardFace>
@@ -66,7 +80,7 @@ const TutorialsPage: React.FC = () => {
                       )}
                     </ThumbnailBannerWrapper>
                     <TutorialThumbnail to={`/tutorial/${tutorial.id}`}>
-                      <h2 title={tutorial.title}>PREMIUM: {tutorial.title}</h2>
+                      <h2 title={tutorial.title}>{tutorial.title}</h2>
                       <img src={tutorial.image} alt={tutorial.title} />
                       <PremiumBanner>
                         <p>Premium</p>
@@ -120,7 +134,14 @@ const TutorialsPage: React.FC = () => {
           </TutorialItemWrapper>
         ))}
       </TutorialList>
-    </PageWrapper>
+
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={(page) => setCurrentPage(page)}
+        onLoadMore={handleLoadMore}
+      />
+    </>
   );
 };
 

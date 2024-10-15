@@ -7,10 +7,10 @@ interface SentMessageWrapperProps {
 export const SentMessageWrapper = styled.div.withConfig({
   shouldForwardProp: (prop) => prop !== "issender",
 })<SentMessageWrapperProps>`
-  padding: 10px;
+  padding: 10px 20px;
   margin: 10px 20px;
   width: fit-content;
-  max-width: 40%;
+  max-width: 60%;
   background-color: ${({ issender }) => (issender ? "#007bff" : "#28a745")};
   color: white;
   border-radius: 10px;
