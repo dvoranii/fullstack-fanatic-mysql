@@ -29,6 +29,7 @@ export const tutorialContent: TutorialContentItem[] = [
     availableForPurchase: false,
     accessLevel: "free",
     difficulty: "beginner",
+    backContent: "Learn how to set up and deploy your server step by step.",
   },
   {
     id: 2,
@@ -49,6 +50,8 @@ export const tutorialContent: TutorialContentItem[] = [
     availableForPurchase: false,
     accessLevel: "free",
     difficulty: "beginner",
+    backContent:
+      "Master CSRF protection techniques to secure your web applications.",
   },
   {
     id: 3,
@@ -69,6 +72,8 @@ export const tutorialContent: TutorialContentItem[] = [
     availableForPurchase: false,
     accessLevel: "free",
     difficulty: "intermediate",
+    backContent:
+      "Learn how JavaScript interacts with APIs using GET and POST requests.",
   },
   {
     id: 4,
@@ -89,6 +94,8 @@ export const tutorialContent: TutorialContentItem[] = [
     availableForPurchase: true,
     accessLevel: "one-off",
     difficulty: "advanced",
+    backContent:
+      "Learn the fundamentals of web application security, including OWASP guidelines and building secure apps.",
   },
   {
     id: 5,
@@ -110,6 +117,8 @@ export const tutorialContent: TutorialContentItem[] = [
     accessLevel: "yearly",
     price: 5,
     difficulty: "intermediate",
+    backContent:
+      "Dive deep into form handling in web development, from validation to security best practices.",
   },
   {
     id: 6,
@@ -131,6 +140,8 @@ export const tutorialContent: TutorialContentItem[] = [
     accessLevel: "monthly",
     price: 3,
     difficulty: "intermediate",
+    backContent:
+      "Master DNS configuration and deploy your application with ease, ensuring optimal performance.",
   },
   {
     id: 7,
@@ -151,6 +162,8 @@ export const tutorialContent: TutorialContentItem[] = [
     availableForPurchase: false,
     accessLevel: "free",
     difficulty: "beginner",
+    backContent:
+      "Get started with frontend development, building projects using HTML, CSS, and JavaScript.",
   },
   {
     id: 8,
@@ -171,6 +184,8 @@ export const tutorialContent: TutorialContentItem[] = [
     availableForPurchase: false,
     accessLevel: "free",
     difficulty: "beginner",
+    backContent:
+      "Improve your website’s performance by optimizing images, reducing load times, and enhancing user experience.",
   },
   {
     id: 9,
@@ -191,5 +206,7 @@ export const tutorialContent: TutorialContentItem[] = [
     availableForPurchase: false,
     accessLevel: "free",
     difficulty: "intermediate",
+    backContent:
+      "Make your web applications fully responsive with CSS techniques and media queries.",
   },
 ];

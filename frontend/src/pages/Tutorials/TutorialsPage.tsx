@@ -166,10 +166,7 @@ const TutorialsPage: React.FC = () => {
               <CardFace back>
                 <div>
                   <h3>{tutorial.title}</h3>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                    id erat a magna lobortis dictum.
-                  </p>
+                  <p>{tutorial.backContent}</p>
                   <FlipIconWrapper
                     onClick={() => handleFlip(String(tutorial.id))}
                   >
