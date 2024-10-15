@@ -34,6 +34,7 @@ const TutorialsPage: React.FC = () => {
     profile,
     favouriteTutorials = [],
     toggleFavourite = () => {},
+    cartItems = [],
     addItemToCart = () => {},
     loading,
   } = useContext(UserContext) || {};
@@ -95,6 +96,10 @@ const TutorialsPage: React.FC = () => {
       ));
   };
 
+  const isItemInCart = (id: number) => {
+    return cartItems.some((item) => item.id === id);
+  };
+
   const handleAddToCart = (tutorial: TutorialContentItem) => {
     const cartItem = {
       id: tutorial.id,
@@ -118,95 +123,115 @@ const TutorialsPage: React.FC = () => {
     <>
       <Title textContent="Tutorials" pseudoRight="-3px" pseudoWidth="120px" />
       <TutorialList>
-        {tutorialContent.slice(startIdx, endIdx).map((tutorial) => (
-          <TutorialItemWrapper key={tutorial.id}>
-            <CardInner className={flipped[tutorial.id] ? "is-flipped" : ""}>
-              <CardFace>
-                {tutorial.isPremium ? (
-                  <PremiumThumbnailWrapperOuter>
-                    <ThumbnailBannerWrapper>
-                      <DifficultyStarsWrapper>
-                        {" "}
-                        {renderStars(tutorial.difficulty)}
-                      </DifficultyStarsWrapper>
+        {tutorialContent.slice(startIdx, endIdx).map((tutorial) => {
+          const alreadyInCart = isItemInCart(tutorial.id); // Check if item is already in cart
 
-                      {profile && (
-                        <FavouriteButton
-                          isFavourited={favouriteTutorials.some(
-                            (favTutorial) => favTutorial.id === tutorial.id
-                          )}
-                          onClick={() =>
-                            toggleFavourite(tutorial.id, "tutorial")
-                          }
-                          altText="Tutorial Favourite Button"
-                          isDisabled={tutorial.isPremium}
-                        />
-                      )}
-                    </ThumbnailBannerWrapper>
-                    <TutorialThumbnail to={`/tutorial/${tutorial.id}`}>
-                      <h2 title={tutorial.title}>{tutorial.title}</h2>
-                      <img src={tutorial.image} alt={tutorial.title} />
-                      <PremiumBanner>
-                        <p>Premium</p>
-                        <img src={PremiumLockImg} alt="Lock" />
-                      </PremiumBanner>
-                    </TutorialThumbnail>
-                  </PremiumThumbnailWrapperOuter>
-                ) : (
-                  <div>
-                    <ThumbnailBannerWrapper>
-                      <DifficultyStarsWrapper>
-                        {renderStars(tutorial.difficulty)}
-                      </DifficultyStarsWrapper>
+          return (
+            <TutorialItemWrapper key={tutorial.id}>
+              <CardInner className={flipped[tutorial.id] ? "is-flipped" : ""}>
+                <CardFace>
+                  {tutorial.isPremium ? (
+                    <PremiumThumbnailWrapperOuter>
+                      <ThumbnailBannerWrapper>
+                        <DifficultyStarsWrapper>
+                          {renderStars(tutorial.difficulty)}
+                        </DifficultyStarsWrapper>
 
-                      {profile && (
-                        <FavouriteButton
-                          isFavourited={favouriteTutorials.some(
-                            (favTutorial) => favTutorial.id === tutorial.id
-                          )}
-                          onClick={() =>
-                            toggleFavourite(tutorial.id, "tutorial")
-                          }
-                          altText="Tutorial Favourite Button"
-                        />
-                      )}
-                    </ThumbnailBannerWrapper>
-                    <TutorialThumbnail to={`/tutorial/${tutorial.id}`}>
-                      <h2 title={tutorial.title}>{tutorial.title}</h2>
-                      <img src={tutorial.image} alt={tutorial.title} />
-                    </TutorialThumbnail>
-                  </div>
-                )}
-                <BottomIconsWrapper>
-                  {tutorial.availableForPurchase && (
-                    <AddToCartWrapper>
-                      <button onClick={() => handleAddToCart(tutorial)}>
-                        <img src={AddToCardImg} alt="Add to cart" />
-                      </button>
-                    </AddToCartWrapper>
+                        {profile && (
+                          <FavouriteButton
+                            isFavourited={favouriteTutorials.some(
+                              (favTutorial) => favTutorial.id === tutorial.id
+                            )}
+                            onClick={() =>
+                              toggleFavourite(tutorial.id, "tutorial")
+                            }
+                            altText="Tutorial Favourite Button"
+                            isDisabled={tutorial.isPremium}
+                          />
+                        )}
+                      </ThumbnailBannerWrapper>
+                      <TutorialThumbnail to={`/tutorial/${tutorial.id}`}>
+                        <h2 title={tutorial.title}>{tutorial.title}</h2>
+                        <img src={tutorial.image} alt={tutorial.title} />
+                        <PremiumBanner>
+                          <p>Premium</p>
+                          <img src={PremiumLockImg} alt="Lock" />
+                        </PremiumBanner>
+                      </TutorialThumbnail>
+                    </PremiumThumbnailWrapperOuter>
+                  ) : (
+                    <div>
+                      <ThumbnailBannerWrapper>
+                        <DifficultyStarsWrapper>
+                          {renderStars(tutorial.difficulty)}
+                        </DifficultyStarsWrapper>
+
+                        {profile && (
+                          <FavouriteButton
+                            isFavourited={favouriteTutorials.some(
+                              (favTutorial) => favTutorial.id === tutorial.id
+                            )}
+                            onClick={() =>
+                              toggleFavourite(tutorial.id, "tutorial")
+                            }
+                            altText="Tutorial Favourite Button"
+                          />
+                        )}
+                      </ThumbnailBannerWrapper>
+                      <TutorialThumbnail to={`/tutorial/${tutorial.id}`}>
+                        <h2 title={tutorial.title}>{tutorial.title}</h2>
+                        <img src={tutorial.image} alt={tutorial.title} />
+                      </TutorialThumbnail>
+                    </div>
                   )}
-                  <FlipIconWrapper
-                    onClick={() => handleFlip(String(tutorial.id))}
-                  >
-                    <img src={FlipIconFront} alt="Flip" title="Read more" />
-                  </FlipIconWrapper>
-                </BottomIconsWrapper>
-              </CardFace>
-              <CardFace back>
-                <div>
-                  <h3>{tutorial.title}</h3>
-                  <p>{tutorial.backContent}</p>
+                  <BottomIconsWrapper>
+                    {tutorial.availableForPurchase && (
+                      <AddToCartWrapper>
+                        <button
+                          onClick={() => handleAddToCart(tutorial)}
+                          disabled={alreadyInCart} // Disable if already in cart
+                          style={{
+                            opacity: alreadyInCart ? 0.5 : 1, // Lower opacity if in cart
+                            cursor: alreadyInCart ? "not-allowed" : "pointer", // Change cursor if in cart
+                          }}
+                        >
+                          <img
+                            src={AddToCardImg}
+                            alt="Add to cart"
+                            title={
+                              alreadyInCart ? "Added to Cart" : "Add to Cart"
+                            }
+                          />
+                        </button>
+                      </AddToCartWrapper>
+                    )}
+                    <FlipIconWrapper
+                      onClick={() => handleFlip(String(tutorial.id))}
+                    >
+                      <img src={FlipIconFront} alt="Flip" title="Read more" />
+                    </FlipIconWrapper>
+                  </BottomIconsWrapper>
+                </CardFace>
+                <CardFace back>
+                  <div>
+                    <h3>{tutorial.title}</h3>
+                    <p>{tutorial.backContent}</p>
 
-                  <FlipIconWrapper
-                    onClick={() => handleFlip(String(tutorial.id))}
-                  >
-                    <img src={FlipIconBack} alt="Flip" title="View thumbnail" />
-                  </FlipIconWrapper>
-                </div>
-              </CardFace>
-            </CardInner>
-          </TutorialItemWrapper>
-        ))}
+                    <FlipIconWrapper
+                      onClick={() => handleFlip(String(tutorial.id))}
+                    >
+                      <img
+                        src={FlipIconBack}
+                        alt="Flip"
+                        title="View thumbnail"
+                      />
+                    </FlipIconWrapper>
+                  </div>
+                </CardFace>
+              </CardInner>
+            </TutorialItemWrapper>
+          );
+        })}
       </TutorialList>
 
       <Pagination
