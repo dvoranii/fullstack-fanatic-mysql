@@ -10,4 +10,5 @@ export interface TutorialContentItem {
   availableForPurchase: boolean;
   accessLevel: "free" | "monthly" | "yearly" | "one-off";
   price?: number;
+  difficulty: "beginner" | "intermediate" | "advanced";
 }

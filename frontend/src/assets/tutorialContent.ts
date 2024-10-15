@@ -28,6 +28,7 @@ export const tutorialContent: TutorialContentItem[] = [
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
+    difficulty: "beginner",
   },
   {
     id: 2,
@@ -47,6 +48,7 @@ export const tutorialContent: TutorialContentItem[] = [
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
+    difficulty: "beginner",
   },
   {
     id: 3,
@@ -66,6 +68,7 @@ export const tutorialContent: TutorialContentItem[] = [
     isPremium: true,
     availableForPurchase: false,
     accessLevel: "free",
+    difficulty: "intermediate",
   },
   {
     id: 4,
@@ -85,6 +88,7 @@ export const tutorialContent: TutorialContentItem[] = [
     isPremium: true,
     availableForPurchase: true,
     accessLevel: "one-off",
+    difficulty: "advanced",
   },
   {
     id: 5,
@@ -105,6 +109,7 @@ export const tutorialContent: TutorialContentItem[] = [
     availableForPurchase: true,
     accessLevel: "yearly",
     price: 5,
+    difficulty: "intermediate",
   },
   {
     id: 6,
@@ -125,6 +130,7 @@ export const tutorialContent: TutorialContentItem[] = [
     availableForPurchase: true,
     accessLevel: "monthly",
     price: 3,
+    difficulty: "intermediate",
   },
   {
     id: 7,
@@ -144,6 +150,7 @@ export const tutorialContent: TutorialContentItem[] = [
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
+    difficulty: "beginner",
   },
   {
     id: 8,
@@ -163,6 +170,7 @@ export const tutorialContent: TutorialContentItem[] = [
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
+    difficulty: "beginner",
   },
   {
     id: 9,
@@ -182,5 +190,6 @@ export const tutorialContent: TutorialContentItem[] = [
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
+    difficulty: "intermediate",
   },
 ];

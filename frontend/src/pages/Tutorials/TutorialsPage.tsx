@@ -7,15 +7,18 @@ import {
   TutorialItemWrapper,
   ThumbnailBannerWrapper,
   TutorialThumbnail,
-  BeginnerStarIcon,
+  StarIcon,
   PremiumBanner,
   PremiumThumbnailWrapperOuter,
   FlipIconWrapper,
   CardFace,
   CardInner,
+  DifficultyStarsWrapper,
 } from "./TutorialsPage.styled";
 import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
-import BeginnerStarImg from "../../assets/images/1-green-star.png";
+import BeginnerStarImg from "../../assets/images/tutorials/1-beginner-star.png";
+import IntermediateStarImg from "../../assets/images/tutorials/2-intermediate-stars.png";
+import AdvancedStarImg from "../../assets/images/tutorials/3-advanced-stars.png";
 import { UserContext } from "../../context/UserContext";
 import { tutorialContent } from "../../assets/tutorialContent";
 import PremiumLockImg from "../../assets/images/tutorials/lock.png";
@@ -49,6 +52,44 @@ const TutorialsPage: React.FC = () => {
     setFlipped((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
+  const renderStars = (difficulty: string) => {
+    let starImg: string;
+    let starCount: number;
+    let titleText: string | undefined;
+
+    switch (difficulty) {
+      case "beginner":
+        starImg = BeginnerStarImg;
+        starCount = 1;
+        titleText = "Beginner";
+        break;
+      case "intermediate":
+        starImg = IntermediateStarImg;
+        starCount = 2;
+        titleText = "Intermediate";
+        break;
+      case "advanced":
+        starImg = AdvancedStarImg;
+        starCount = 3;
+        titleText = "Advanced";
+        break;
+      default:
+        starImg = BeginnerStarImg;
+        starCount = 1;
+    }
+
+    return Array(starCount)
+      .fill(null)
+      .map((_, index) => (
+        <StarIcon
+          key={index}
+          src={starImg}
+          alt={`${difficulty} stars`}
+          title={titleText}
+        />
+      ));
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -64,7 +105,10 @@ const TutorialsPage: React.FC = () => {
                 {tutorial.isPremium ? (
                   <PremiumThumbnailWrapperOuter>
                     <ThumbnailBannerWrapper>
-                      <BeginnerStarIcon src={BeginnerStarImg} />
+                      <DifficultyStarsWrapper>
+                        {" "}
+                        {renderStars(tutorial.difficulty)}
+                      </DifficultyStarsWrapper>
 
                       {profile && (
                         <FavouriteButton
@@ -91,7 +135,10 @@ const TutorialsPage: React.FC = () => {
                 ) : (
                   <div>
                     <ThumbnailBannerWrapper>
-                      <BeginnerStarIcon src={BeginnerStarImg} />
+                      <DifficultyStarsWrapper>
+                        {renderStars(tutorial.difficulty)}
+                      </DifficultyStarsWrapper>
+
                       {profile && (
                         <FavouriteButton
                           isFavourited={favouriteTutorials.some(

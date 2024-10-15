@@ -15,6 +15,7 @@ export const PageButton = styled.button<{ isActive?: boolean }>`
   padding: 0rem 1rem;
   cursor: pointer;
   font-size: 1.2rem;
+  user-select: none;
 
   &:disabled {
     background-color: #ccc;

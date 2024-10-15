@@ -92,9 +92,15 @@ export const ThumbnailBannerWrapper = styled.div`
   user-select: none;
 `;
 
-export const BeginnerStarIcon = styled.img`
-  width: 35px;
-  height: 35px;
+export const StarIcon = styled.img`
+  width: 30px;
+  height: 30px;
+  margin-right: 2px;
+`;
+
+export const DifficultyStarsWrapper = styled.div`
+  display: flex;
+  width: fit-content;
 `;
 
 export const PremiumBanner = styled.div`
