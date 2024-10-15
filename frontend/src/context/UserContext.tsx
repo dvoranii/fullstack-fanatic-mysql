@@ -6,6 +6,7 @@ import { Tutorial } from "../types/Tutorial/Tutorial";
 import { Blog } from "../types/Blog/Blog";
 import { CommentType } from "../types/Comment/Comment";
 import { UserContextType } from "../types/User/UserContextType";
+import { CartItem } from "../types/CartItem";
 
 export const UserContext = createContext<UserContextType | undefined>(
   undefined
@@ -18,6 +19,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [comments, setComments] = useState<CommentType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [cartItems, setCartItems] = useState(() => {
+    const storedCartItems = sessionStorage.getItem("cartItems");
+    return storedCartItems ? JSON.parse(storedCartItems) : [];
+  });
 
   useEffect(() => {
     fetchUserProfileFavouritesAndComments(
@@ -30,7 +35,24 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     );
   }, []);
 
-  // Helper function for optimistic UI update
+  useEffect(() => {
+    sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  const addItemToCart = (item: CartItem) => {
+    setCartItems((prevItems: CartItem[]) => [...prevItems, item]);
+  };
+
+  const removeItemFromCart = (id: number) => {
+    setCartItems((prevItems: CartItem[]) =>
+      prevItems.filter((item: CartItem) => item.id !== id)
+    );
+  };
+
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
   const updateFavourites = <T extends { id: number }>(
     isCurrentlyFavourited: boolean,
     itemId: number,
@@ -119,6 +141,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         toggleFavourite,
         comments,
         setComments,
+        cartItems,
+        addItemToCart,
+        removeItemFromCart,
+        clearCart,
         loading,
         error,
       }}

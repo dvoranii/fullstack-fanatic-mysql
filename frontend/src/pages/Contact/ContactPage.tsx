@@ -4,7 +4,7 @@ import { PageWrapper } from "../../PageWrapper.styled";
 const ContactPage: React.FC = () => {
   return (
     <PageWrapper>
-      <Title textContent="Contact" />
+      <Title textContent="Contact" pseudoRight="5px" />
     </PageWrapper>
   );
 };

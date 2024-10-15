@@ -7,7 +7,7 @@ import tutorial_6_thumbnail from "../assets/images/tutorials/dns-thumbnail.png";
 import tutorial_7_thumbnail from "../assets/images/tutorials/frontend-thumbnail.png";
 import tutorial_8_thumbnail from "../assets/images/tutorials/web-performance-thumbnail.png";
 import tutorial_9_thumbnail from "../assets/images/tutorials/responsive-design-thumbnail.png";
-import { TutorialContentItem } from "../types/Tutorial/TutorialContentItem";
+import { TutorialContentItem } from "../types/Tutorial/Tutorial";
 
 export const tutorialContent: TutorialContentItem[] = [
   {
@@ -69,8 +69,9 @@ export const tutorialContent: TutorialContentItem[] = [
     ],
     image: tutorial_3_thumbnail,
     isPremium: true,
-    availableForPurchase: false,
-    accessLevel: "free",
+    availableForPurchase: true,
+    accessLevel: "monthly",
+    price: 3.5,
     difficulty: "intermediate",
     backContent:
       "Learn how JavaScript interacts with APIs using GET and POST requests.",
@@ -92,7 +93,8 @@ export const tutorialContent: TutorialContentItem[] = [
     image: tutorial_4_thumbnail,
     isPremium: true,
     availableForPurchase: true,
-    accessLevel: "one-off",
+    accessLevel: "yearly",
+    price: 5.0,
     difficulty: "advanced",
     backContent:
       "Learn the fundamentals of web application security, including OWASP guidelines and building secure apps.",
@@ -138,7 +140,7 @@ export const tutorialContent: TutorialContentItem[] = [
     isPremium: true,
     availableForPurchase: true,
     accessLevel: "monthly",
-    price: 3,
+    price: 3.5,
     difficulty: "intermediate",
     backContent:
       "Master DNS configuration and deploy your application with ease, ensuring optimal performance.",

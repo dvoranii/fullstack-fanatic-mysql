@@ -14,6 +14,8 @@ import {
   CardFace,
   CardInner,
   DifficultyStarsWrapper,
+  BottomIconsWrapper,
+  AddToCartWrapper,
 } from "./TutorialsPage.styled";
 import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
 import BeginnerStarImg from "../../assets/images/tutorials/1-beginner-star.png";
@@ -24,12 +26,15 @@ import { tutorialContent } from "../../assets/tutorialContent";
 import PremiumLockImg from "../../assets/images/tutorials/lock.png";
 import FlipIconFront from "../../assets/images/tutorials/flip-icon.png";
 import FlipIconBack from "../../assets/images/tutorials/flip-icon-backside.png";
+import AddToCardImg from "../../assets/images/add-to-cart-icon.png";
+import { TutorialContentItem } from "../../types/Tutorial/Tutorial";
 
 const TutorialsPage: React.FC = () => {
   const {
     profile,
     favouriteTutorials = [],
     toggleFavourite = () => {},
+    addItemToCart = () => {},
     loading,
   } = useContext(UserContext) || {};
 
@@ -90,13 +95,28 @@ const TutorialsPage: React.FC = () => {
       ));
   };
 
+  const handleAddToCart = (tutorial: TutorialContentItem) => {
+    const cartItem = {
+      id: tutorial.id,
+      title: tutorial.title,
+      created_at: tutorial.created_at,
+      image: tutorial.image,
+      isPremium: tutorial.isPremium,
+      availableForPurchase: tutorial.availableForPurchase,
+      accessLevel: tutorial.accessLevel,
+      price: tutorial.price || 0,
+      type: "tutorial" as const,
+    };
+    addItemToCart(cartItem);
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
 
   return (
     <>
-      <Title textContent="Tutorials" />
+      <Title textContent="Tutorials" pseudoRight="-3px" pseudoWidth="120px" />
       <TutorialList>
         {tutorialContent.slice(startIdx, endIdx).map((tutorial) => (
           <TutorialItemWrapper key={tutorial.id}>
@@ -157,16 +177,26 @@ const TutorialsPage: React.FC = () => {
                     </TutorialThumbnail>
                   </div>
                 )}
-                <FlipIconWrapper
-                  onClick={() => handleFlip(String(tutorial.id))}
-                >
-                  <img src={FlipIconFront} alt="Flip" title="Read more" />
-                </FlipIconWrapper>
+                <BottomIconsWrapper>
+                  {tutorial.availableForPurchase && (
+                    <AddToCartWrapper>
+                      <button onClick={() => handleAddToCart(tutorial)}>
+                        <img src={AddToCardImg} alt="Add to cart" />
+                      </button>
+                    </AddToCartWrapper>
+                  )}
+                  <FlipIconWrapper
+                    onClick={() => handleFlip(String(tutorial.id))}
+                  >
+                    <img src={FlipIconFront} alt="Flip" title="Read more" />
+                  </FlipIconWrapper>
+                </BottomIconsWrapper>
               </CardFace>
               <CardFace back>
                 <div>
                   <h3>{tutorial.title}</h3>
                   <p>{tutorial.backContent}</p>
+
                   <FlipIconWrapper
                     onClick={() => handleFlip(String(tutorial.id))}
                   >

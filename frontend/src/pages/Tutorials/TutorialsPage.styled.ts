@@ -180,7 +180,9 @@ export const CardInner = styled.div`
   }
 `;
 
-export const CardFace = styled.div<{ back?: boolean }>`
+export const CardFace = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "back",
+})<{ back?: boolean }>`
   position: absolute;
   width: 100%;
   height: 100%;
@@ -196,4 +198,29 @@ export const CardFace = styled.div<{ back?: boolean }>`
   padding: ${({ back }) => (back ? "16px" : "0")};
   align-items: ${({ back }) => (back ? "center" : "initial")};
   justify-content: ${({ back }) => (back ? "center" : "space-between")};
+`;
+
+export const BottomIconsWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const AddToCartWrapper = styled.div`
+  user-select: none;
+
+  button {
+    border: none;
+    background: transparent;
+  }
+  img {
+    width: 35px;
+    margin-left: 10px;
+    margin-bottom: 5px;
+
+    transition: all 150ms ease;
+    &:hover {
+      filter: brightness(0.9);
+    }
+  }
 `;

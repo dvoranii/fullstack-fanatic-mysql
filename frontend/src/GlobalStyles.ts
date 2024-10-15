@@ -3,8 +3,8 @@ import ZenKakuGothicNewRegular from "./assets/fonts/ZenKakuGothicNew-Regular.ttf
 import ZenKakuGothicNewMedium from "./assets/fonts/ZenKakuGothicNew-Medium.ttf";
 import ZenKakuGothicNewBold from "./assets/fonts/ZenKakuGothicNew-Bold.ttf";
 import AlataRegular from "./assets/fonts/Alata-Regular.ttf";
-
-//
+import AnybodyMedium from "./assets/fonts/Anybody-Medium.ttf";
+import AnybodySemiBold from "./assets/fonts/Anybody-SemiBold.ttf";
 
 export const colors = {
   primary: "#14213D",
@@ -44,6 +44,21 @@ export const GlobalStyles = createGlobalStyle`
     src: url(${AlataRegular}) format("truetype");
     font-weight: 400;
     font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Anybody";
+    src: url(${AnybodyMedium}) format("truetype");
+    font-weight: 400;
+    font-style:normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Anybody";
+    src: url(${AnybodySemiBold}) format("truetype");
+    font-weight: 500;
+    font-style:normal;
     font-display: swap;
   }
 

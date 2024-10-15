@@ -2,11 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import NotificationBell from "../../../assets/images/notification-bell.png";
 import {
-  NavIconImg,
-  NavIconWrapper,
   NotificationCounter,
   NotificationContentWrapper,
 } from "./Notifications.styled";
+import { NavIconWrapper, NavIconImg } from "../../NavBar/NavBar.styled";
 import Dropdown from "../Dropdown/Dropdown";
 import {
   fetchNotifications,

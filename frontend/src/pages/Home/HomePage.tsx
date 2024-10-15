@@ -9,7 +9,7 @@ const HomePage: React.FC = () => {
 
   return (
     <PageWrapper>
-      <Title textContent="Home" />
+      <Title textContent="Home" pseudoRight="4px" pseudoWidth="85px" />
       {!profile && <Link to="register">No account? Sign up!</Link>}
     </PageWrapper>
   );

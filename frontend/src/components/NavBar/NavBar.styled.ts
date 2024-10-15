@@ -66,6 +66,10 @@ export const MobileNavList = styled.ul<{ open: boolean }>`
   li:first-child {
     margin-top: 6.4rem;
   }
+  li:last-child {
+    margin-left: 0;
+  }
+
   li {
     margin-top: 2.4rem;
   }
@@ -136,4 +140,28 @@ export const LogoWrapper = styled.div`
     display: flex;
     justify-content: flex-start;
   }
+`;
+
+export const NavIconWrapper = styled.div`
+  position: relative;
+  display: flex;
+`;
+
+export const NavIconImg = styled.img.withConfig({
+  shouldForwardProp: (prop) => prop !== "hoverEffect",
+})<{ hoverEffect?: string }>`
+  width: 30px;
+  margin: 10px;
+  transition: all 150ms ease;
+
+  &:hover {
+    cursor: pointer;
+    ${(props) => props.hoverEffect || "filter: invert(1);"}
+  }
+`;
+
+export const AccountBtnsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

@@ -1,8 +1,6 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import ProfileIconBlack from "../../../assets/images/profile-icon-black.png";
 import {
-  NavIconImg,
-  NavIconWrapper,
   ProfileName,
   ProfileProfession,
   ViewProfileButton,
@@ -15,6 +13,7 @@ import {
   AccountTitle,
   UserProfiledropdownWrapper,
 } from "./UserProfileNavBtn.styled";
+import { NavIconWrapper, NavIconImg } from "../../NavBar/NavBar.styled";
 import ProfilePicture from "../../ProfilePicture/ProfilePicture";
 import { UserContext } from "../../../context/UserContext";
 import { useAuthUtils } from "../../../utils/useAuthUtils";
@@ -55,6 +54,7 @@ const UserProfileNavBtn: React.FC = () => {
           onClick={handleDropdownToggle}
           alt="Profile Icon"
           title="User Profile"
+          hoverEffect="opacity: 0.8;"
         />
         <Dropdown isVisible={isDropdownVisible} alignRight>
           <ProfilePictureAndInfoWrapper>

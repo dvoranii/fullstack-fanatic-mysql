@@ -1,20 +1,6 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
-export const NavIconWrapper = styled.div`
-  position: relative;
-  display: flex;
-`;
-
-export const NavIconImg = styled.img`
-  width: 30px;
-  margin: 10px;
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
 export const ProfilePictureAndInfoWrapper = styled.div`
   padding: 10px;
   display: flex;

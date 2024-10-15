@@ -2,6 +2,7 @@ import { User } from "./User";
 import { CommentType } from "../Comment/Comment";
 import { Tutorial } from "../Tutorial/Tutorial";
 import { Blog } from "../Blog/Blog";
+import { CartItem } from "../CartItem";
 
 export interface UserContextType {
   profile: User | null;
@@ -13,6 +14,10 @@ export interface UserContextType {
   toggleFavourite: (itemId: number, contentType: "tutorial" | "blog") => void;
   comments: CommentType[];
   setComments: (comments: CommentType[]) => void;
+  cartItems: CartItem[];
+  addItemToCart: (item: CartItem) => void;
+  removeItemFromCart: (id: number) => void;
+  clearCart: () => void;
   loading: boolean;
   error: string | null;
 }
