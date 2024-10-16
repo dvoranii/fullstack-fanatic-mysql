@@ -35,6 +35,7 @@ export const authenticate = (
       bio: decoded.bio,
       socialLinks: decoded.socialLinks,
       bannerImage: decoded.bannerImage,
+      isPremium: decoded.isPremium,
     };
 
     next();

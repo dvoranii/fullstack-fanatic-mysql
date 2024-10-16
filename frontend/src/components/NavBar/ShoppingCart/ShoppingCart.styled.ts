@@ -60,6 +60,12 @@ export const CartDetails = styled.div`
 
 export const ClearCartBtnWrapper = styled.div`
   width: 100%;
+  margin-top: 1.8rem;
+
+  button {
+    border: none;
+    padding: 4px 8px;
+  }
 `;
 
 export const ShoppingCartContentWrapper = styled.div`
@@ -83,4 +89,24 @@ export const CheckoutLink = styled(Link)`
     background-color: ${colors.primary};
     color: ${colors.white};
   }
+`;
+
+export const ViewCartLink = styled(Link)`
+  background-color: ${colors.primary};
+  color: ${colors.white};
+  font-weight: bold;
+  padding: 8px;
+  border-radius: 4px;
+  transition: all 150ms ease;
+
+  &:hover {
+    background-color: ${colors.secondary};
+    color: ${colors.primary};
+  }
+`;
+
+export const CartBtnWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.2rem;
 `;

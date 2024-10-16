@@ -27,6 +27,8 @@ import FollowersList from "../pages/UserProfileLayout/FollowList/FollowersList/F
 import FollowingList from "../pages/UserProfileLayout/FollowList/FollowingList/FollowingList";
 import CommentHistory from "../pages/UserProfileLayout/CommentHistory/CommentHistory";
 import ViewCartPage from "../pages/ViewCart/ViewCart";
+import CheckoutSuccess from "../pages/Checkout/Success/Success";
+import CheckoutCancel from "../pages/Checkout/Cancel/Cancel";
 
 const Navigation: React.FC = () => {
   const { profile } = useContext(UserContext) || {};
@@ -72,6 +74,8 @@ const Navigation: React.FC = () => {
           element={<CommentHistory />}
         />
         <Route path="/my-cart" element={<ViewCartPage />} />
+        <Route path="/checkout/success" element={<CheckoutSuccess />} />
+        <Route path="/checkout/cancel" element={<CheckoutCancel />} />
       </Routes>
     </Suspense>
   );

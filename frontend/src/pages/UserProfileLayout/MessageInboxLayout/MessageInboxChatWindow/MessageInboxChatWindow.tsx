@@ -18,7 +18,6 @@ import {
   getMessagesForConversation,
   sendMessage,
 } from "../../../../services/messageService";
-import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
 
 interface MessageInboxChatWindowProps {
   conversationId: number | null;
@@ -144,7 +143,7 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
             next={loadMoreMessages}
             hasMore={hasMore}
             scrollableTarget="scrollableDiv"
-            loader={<LoadingSpinner />}
+            loader="none"
           >
             <SentMessages messages={messages} />
           </InfiniteScroll>

@@ -11,6 +11,7 @@ export const ChatWindowContainerOuter = styled.div`
   background-color: #eee;
   border: 2px solid black;
   border-radius: 8px;
+  overflow: hidden;
 `;
 
 export const ChatWindowContainerInner = styled.div`

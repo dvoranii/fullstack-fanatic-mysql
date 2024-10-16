@@ -8,6 +8,8 @@ import {
   ShoppingCartContentWrapper,
   CartItemTitleWrapper,
   CheckoutLink,
+  ViewCartLink,
+  CartBtnWrapper,
 } from "./ShoppingCart.styled";
 import Dropdown from "../Dropdown/Dropdown";
 import { UserContext } from "../../../context/UserContext";
@@ -74,7 +76,10 @@ const ShoppingCart: React.FC = () => {
                   .toFixed(2)}
               </p>
               {cartItems.length > 0 && (
-                <CheckoutLink to="/my-cart">Proceed to Checkout</CheckoutLink>
+                <CartBtnWrapper>
+                  <ViewCartLink to="/my-cart">View Cart</ViewCartLink>
+                  <CheckoutLink to="/my-cart">Proceed to Checkout</CheckoutLink>
+                </CartBtnWrapper>
               )}
             </CartDetails>
             <ClearCartBtnWrapper>
