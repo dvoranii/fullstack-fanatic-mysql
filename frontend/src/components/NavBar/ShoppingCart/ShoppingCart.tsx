@@ -7,6 +7,7 @@ import {
   ClearCartBtnWrapper,
   ShoppingCartContentWrapper,
   CartItemTitleWrapper,
+  CheckoutLink,
 } from "./ShoppingCart.styled";
 import Dropdown from "../Dropdown/Dropdown";
 import { UserContext } from "../../../context/UserContext";
@@ -72,7 +73,9 @@ const ShoppingCart: React.FC = () => {
                   .reduce((total, item) => total + item.price, 0)
                   .toFixed(2)}
               </p>
-              <button>Proceed to Checkout</button>
+              {cartItems.length > 0 && (
+                <CheckoutLink to="/my-cart">Proceed to Checkout</CheckoutLink>
+              )}
             </CartDetails>
             <ClearCartBtnWrapper>
               <button onClick={clearCart}>Clear Cart</button>

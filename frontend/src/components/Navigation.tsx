@@ -26,6 +26,7 @@ const MessageInboxPage = lazy(
 import FollowersList from "../pages/UserProfileLayout/FollowList/FollowersList/FollowersList";
 import FollowingList from "../pages/UserProfileLayout/FollowList/FollowingList/FollowingList";
 import CommentHistory from "../pages/UserProfileLayout/CommentHistory/CommentHistory";
+import ViewCartPage from "../pages/ViewCart/ViewCart";
 
 const Navigation: React.FC = () => {
   const { profile } = useContext(UserContext) || {};
@@ -70,6 +71,7 @@ const Navigation: React.FC = () => {
           path="/my-account/comment-history"
           element={<CommentHistory />}
         />
+        <Route path="/my-cart" element={<ViewCartPage />} />
       </Routes>
     </Suspense>
   );

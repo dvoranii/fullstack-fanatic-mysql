@@ -1,4 +1,6 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { colors } from "../../../GlobalStyles";
 
 export const ShoppingCartItem = styled.div`
   display: flex;
@@ -38,6 +40,7 @@ export const CartDetails = styled.div`
     font-weight: bold;
     font-size: 1rem;
     margin: 10px 0;
+    padding-bottom: 1.2rem;
   }
 
   button {
@@ -66,4 +69,18 @@ export const ShoppingCartContentWrapper = styled.div`
 export const CartItemTitleWrapper = styled.div`
   max-width: 200px;
   min-width: 200px;
+`;
+
+export const CheckoutLink = styled(Link)`
+  background-color: ${colors.secondary};
+  color: ${colors.primary};
+  font-weight: bold;
+  padding: 8px;
+  border-radius: 4px;
+  transition: all 150ms ease;
+
+  &:hover {
+    background-color: ${colors.primary};
+    color: ${colors.white};
+  }
 `;
