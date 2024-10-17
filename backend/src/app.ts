@@ -35,7 +35,15 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.json());
+app.use((req, res, next) => {
+  // Skip JSON body parsing for Stripe Webhook
+  if (req.originalUrl === "/api/stripe/webhook") {
+    next(); // Skip to next middleware
+  } else {
+    express.json()(req, res, next); // Apply JSON body parsing for other routes
+  }
+});
+
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/assets", express.static(path.join(__dirname, "../public/assets")));

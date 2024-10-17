@@ -28,8 +28,6 @@ const NavBar: React.FC = () => {
     setOpen(!open);
   };
 
-  console.log(profile);
-
   return (
     <Nav>
       <NavLinkStyled to="/" underlinewidth="0%">

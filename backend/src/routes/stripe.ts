@@ -1,7 +1,9 @@
 import dotenv from "dotenv";
 import express, { Request, Response } from "express";
+// import bodyParser from "body-parser";
 import { authenticate } from "../middleware/authenticate";
 import { CartItem } from "../types/CartItem";
+import Stripe from "stripe";
 
 dotenv.config();
 
@@ -11,6 +13,7 @@ const router = express.Router();
 (function () {
   const Stripe = require("stripe");
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+  const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
   if (!stripeSecretKey) {
     throw new Error(
@@ -32,6 +35,7 @@ const router = express.Router();
     }
   };
 
+  // Create checkout session
   router.post(
     "/create-checkout-session",
     authenticate,
@@ -72,6 +76,43 @@ const router = express.Router();
         console.error("Error creating Stripe checkout session: ", error);
         res.status(500).json({ error: "Failed to create checkout session" });
       }
+    }
+  );
+
+  // Stripe webhook to listen for events
+  router.post(
+    "/webhook",
+    express.raw({ type: "application/json" }),
+    async (req: Request, res: Response) => {
+      const sig = req.headers["stripe-signature"];
+
+      let event;
+
+      try {
+        if (!stripeWebhookSecret) {
+          throw new Error(
+            "Webhook secret is not defined in environment variables"
+          );
+        }
+
+        event = stripe.webhooks.constructEvent(
+          req.body,
+          sig as string,
+          stripeWebhookSecret
+        );
+      } catch (error) {
+        console.error("Webhook signature verification failed.", error);
+        return res
+          .status(400)
+          .send(`Webhook Error: ${(error as Error).message}`);
+      }
+
+      if (event.type === "checkout.session.completed") {
+        const session = event.data.object as Stripe.Checkout.Session;
+        console.log("Payment was successful for session: ", session);
+      }
+
+      res.json({ received: true });
     }
   );
 })();
