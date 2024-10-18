@@ -122,13 +122,26 @@ export const toggleLike = async (id: number): Promise<number> => {
 };
 
 export const fetchUserComments = async (
+  userId?: number,
   page?: number,
   limit?: number
 ): Promise<{ comments: CommentType[]; hasMore?: boolean }> => {
   let endpoint = `/api/comments/user`;
 
-  if (page !== undefined && limit !== undefined) {
-    endpoint += `?page=${page}&limit=${limit}`;
+  const params = new URLSearchParams();
+
+  if (userId) {
+    params.append("userId", userId.toString());
+  }
+  if (page !== undefined) {
+    params.append("page", page.toString());
+  }
+  if (limit !== undefined) {
+    params.append("limit", limit.toString());
+  }
+
+  if (params.toString()) {
+    endpoint += `?${params.toString()}`;
   }
 
   const { data } = await apiCall<{
@@ -158,8 +171,6 @@ export const fetchReplyAndParent = async (
     }>(endpoint, {
       method: "GET",
     });
-
-    console.log(data.initialComment, data.topLevelComment);
 
     return [data.initialComment, data.topLevelComment];
   } catch (error) {

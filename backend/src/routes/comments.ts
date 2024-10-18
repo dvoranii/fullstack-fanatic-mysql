@@ -294,9 +294,10 @@ router.delete("/:id", authenticate, async (req: Request, res: Response) => {
 });
 
 router.get("/user", authenticate, async (req: Request, res: Response) => {
-  const userId = req.user?.userId;
+  const userId = req.query.userId
+    ? parseInt(req.query.userId as string, 10)
+    : req.user?.userId;
 
-  // Optional pagination parameters
   const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 5;
   const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
   const offset = (page - 1) * limit;

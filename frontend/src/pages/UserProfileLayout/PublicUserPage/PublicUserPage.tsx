@@ -4,6 +4,7 @@ import UserProfilePage from "../UserProfile";
 import { PublicProfile } from "../../../types/PublicProfileType";
 import { getUserPublicProfile } from "../../../services/userService";
 import { UserContext } from "../../../context/UserContext";
+import { fetchUserComments } from "../../../services/commentService";
 
 const PublicUserPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -11,6 +12,11 @@ const PublicUserPage: React.FC = () => {
   const userContext = useContext(UserContext);
 
   const loggedInUser = userContext?.profile;
+
+  const effectiveUserId =
+    loggedInUser && Number(id) === Number(loggedInUser.id)
+      ? loggedInUser.id
+      : Number(id);
 
   const [profile, setProfile] = useState<PublicProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -24,8 +30,11 @@ const PublicUserPage: React.FC = () => {
 
     const fetchProfile = async () => {
       try {
-        const data = await getUserPublicProfile(id || "");
-        setProfile(data);
+        const data = await getUserPublicProfile(
+          effectiveUserId.toString() || ""
+        );
+        const commentsData = await fetchUserComments(effectiveUserId);
+        setProfile({ ...data, comments: commentsData.comments });
       } catch (error) {
         setError("Failed to load user profile");
         console.error(error);
@@ -41,6 +50,7 @@ const PublicUserPage: React.FC = () => {
   if (error) return <p>{error}</p>;
   if (!profile) return <p>User profile not found</p>;
 
+  console.log(profile);
   return (
     <UserProfilePage
       profile={profile.user}
