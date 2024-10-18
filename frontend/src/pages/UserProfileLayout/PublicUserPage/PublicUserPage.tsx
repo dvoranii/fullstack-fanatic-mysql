@@ -50,7 +50,6 @@ const PublicUserPage: React.FC = () => {
   if (error) return <p>{error}</p>;
   if (!profile) return <p>User profile not found</p>;
 
-  console.log(profile);
   return (
     <UserProfilePage
       profile={profile.user}

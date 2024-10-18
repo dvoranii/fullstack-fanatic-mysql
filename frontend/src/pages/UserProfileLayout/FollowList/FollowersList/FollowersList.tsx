@@ -5,16 +5,12 @@ import {
   FollowButtonsWrapper,
 } from "../FollowList.styled";
 import { useState, useEffect } from "react";
-import { apiCall } from "../../../../utils/apiUtils";
 import { Link, useParams } from "react-router-dom";
 import { User } from "../../../../types/User/User";
 import ProfilePicture from "../../../../components/ProfilePicture/ProfilePicture";
 import { PageWrapper } from "../../../../PageWrapper.styled";
 import MessageUserModal from "../../MessageUserModal/MessageUserModal";
-
-interface FollowersResponse {
-  followers: User[];
-}
+import { fetchFollowers } from "../../../../services/followService";
 
 interface FollowersListProps {
   userId?: number;
@@ -31,19 +27,16 @@ const FollowersList: React.FC<FollowersListProps> = ({ userId }) => {
 
   useEffect(() => {
     if (!effectiveUserId) return;
-    const fetchFollowers = async () => {
+    const fetchFollowersList = async () => {
       try {
-        const { data } = await apiCall<FollowersResponse>(
-          `/api/users/${effectiveUserId}/followers-list`
-        );
-        console.log(data);
-        setFollowers(data.followers);
+        const followersData = await fetchFollowers(effectiveUserId);
+        setFollowers(followersData);
       } catch (error) {
         console.error("Error fetching followers:", error);
       }
     };
 
-    fetchFollowers();
+    fetchFollowersList();
   }, [effectiveUserId]);
 
   const handleOpenMessageModal = (userId: string) => {

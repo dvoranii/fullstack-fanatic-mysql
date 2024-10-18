@@ -6,17 +6,15 @@ import {
   FollowButtonsWrapper,
 } from "../FollowList.styled";
 import { PageWrapper } from "../../../../PageWrapper.styled";
-import { apiCall } from "../../../../utils/apiUtils";
 import { Link, useParams } from "react-router-dom";
 import ProfilePicture from "../../../../components/ProfilePicture/ProfilePicture";
 import { User } from "../../../../types/User/User";
-import { unfollowUser } from "../../../../services/followService";
+import {
+  fetchFollowing,
+  unfollowUser,
+} from "../../../../services/followService";
 import { UserContext } from "../../../../context/UserContext";
 import MessageUserModal from "../../MessageUserModal/MessageUserModal";
-
-interface FollowingResponse {
-  following: User[];
-}
 
 interface FollowingListProps {
   userId?: number;
@@ -33,19 +31,16 @@ const FollowingList: React.FC<FollowingListProps> = ({ userId }) => {
 
   useEffect(() => {
     if (!effectiveUserId) return;
-    const fetchFollowing = async () => {
+    const fetchFollowingList = async () => {
       try {
-        const { data } = await apiCall<FollowingResponse>(
-          `/api/users/${effectiveUserId}/following-list`
-        );
-        console.log(data);
-        setFollowing(data.following);
+        const followingData = await fetchFollowing(effectiveUserId);
+        setFollowing(followingData);
       } catch (error) {
         console.error("Error fetching following:", error);
       }
     };
 
-    fetchFollowing();
+    fetchFollowingList();
   }, [effectiveUserId]);
 
   const handleUnfollow = async (followingId: number) => {

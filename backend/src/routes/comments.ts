@@ -337,53 +337,6 @@ router.get("/user", authenticate, async (req: Request, res: Response) => {
   }
 });
 
-router.get("/public-user/:userId", async (req: Request, res: Response) => {
-  const userId = parseInt(req.params.userId, 10);
-
-  if (!userId || isNaN(userId)) {
-    return res.status(400).json({ error: "Invalid user ID" });
-  }
-
-  const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 5;
-  const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
-  const offset = (page - 1) * limit;
-
-  try {
-    const connection = await connectionPromise;
-
-    let query = `
-      SELECT c.*, u.name as user_name, u.profile_picture
-      FROM comments c
-      JOIN users u ON c.user_id = u.id
-      WHERE c.user_id = ?
-      ORDER BY c.created_at DESC
-    `;
-
-    const queryParams: any[] = [userId];
-
-    if (limit !== undefined && page !== undefined) {
-      query += ` LIMIT ? OFFSET ?`;
-      queryParams.push(limit, offset);
-    }
-
-    const [rows] = await connection.query<RowDataPacket[]>(query, queryParams);
-
-    let hasMore: boolean | undefined = undefined;
-    if (limit !== undefined && page !== undefined) {
-      const [totalCountResult] = await connection.query<RowDataPacket[]>(
-        "SELECT COUNT(*) as total FROM comments WHERE user_id = ?",
-        [userId]
-      );
-      const totalCount = totalCountResult[0]?.total || 0;
-      hasMore = page * limit < totalCount;
-    }
-
-    res.status(200).json({ comments: rows as Comment[], hasMore });
-  } catch (err) {
-    res.status(500).json({ error: (err as Error).message });
-  }
-});
-
 router.get(
   "/reply-and-parent",
   authenticate,
