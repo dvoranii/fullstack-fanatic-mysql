@@ -73,6 +73,8 @@ const Navigation: React.FC = () => {
           path="/my-account/comment-history"
           element={<CommentHistory />}
         />
+        <Route path="/user/:id/comment-history" element={<CommentHistory />} />
+
         <Route path="/my-cart" element={<ViewCartPage />} />
         <Route path="/checkout/success" element={<CheckoutSuccess />} />
         <Route path="/checkout/cancel" element={<CheckoutCancel />} />

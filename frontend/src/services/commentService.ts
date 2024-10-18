@@ -122,10 +122,13 @@ export const toggleLike = async (id: number): Promise<number> => {
 };
 
 export const fetchUserComments = async (
+  userId?: number,
   page?: number,
   limit?: number
 ): Promise<{ comments: CommentType[]; hasMore?: boolean }> => {
-  let endpoint = `/api/comments/user`;
+  let endpoint = userId
+    ? `/api/comments/users/${userId}/comment-history`
+    : `/api/comments/users`;
 
   if (page !== undefined && limit !== undefined) {
     endpoint += `?page=${page}&limit=${limit}`;

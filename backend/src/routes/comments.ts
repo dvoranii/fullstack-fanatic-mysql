@@ -293,49 +293,56 @@ router.delete("/:id", authenticate, async (req: Request, res: Response) => {
   }
 });
 
-router.get("/user", authenticate, async (req: Request, res: Response) => {
-  const userId = req.user?.userId;
+router.get(
+  "/users/:id/comment-history",
+  authenticate,
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    console.log(id);
 
-  const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 5;
-  const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
-  const offset = (page - 1) * limit;
+    const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 5;
+    const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+    const offset = (page - 1) * limit;
 
-  try {
-    const connection = await connectionPromise;
+    try {
+      const connection = await connectionPromise;
 
-    let query = `
-      SELECT c.*, u.name as user_name, u.profile_picture
-      FROM comments c
-      JOIN users u ON c.user_id = u.id
-      WHERE c.user_id = ?
-      ORDER BY c.created_at DESC
-    `;
+      let query = `
+        SELECT c.*, u.name as user_name, u.profile_picture
+        FROM comments c
+        JOIN users u ON c.user_id = u.id
+        WHERE c.user_id = ?
+        ORDER BY c.created_at DESC
+      `;
 
-    const queryParams: any[] = [userId, limit, offset];
+      const queryParams: any[] = [id, limit, offset];
 
-    if (limit !== undefined && page !== undefined) {
-      const offset = (page - 1) * limit;
-      query += ` LIMIT ? OFFSET ?`;
-      queryParams.push(limit, offset);
-    }
+      if (limit !== undefined && page !== undefined) {
+        query += ` LIMIT ? OFFSET ?`;
+        queryParams.push(limit, offset);
+      }
 
-    const [rows] = await connection.query<RowDataPacket[]>(query, queryParams);
-
-    let hasMore: boolean | undefined = undefined;
-    if (limit !== undefined && page !== undefined) {
-      const [totalCountResult] = await connection.query<RowDataPacket[]>(
-        "SELECT COUNT(*) as total FROM comments WHERE user_id = ?",
-        [userId]
+      const [rows] = await connection.query<RowDataPacket[]>(
+        query,
+        queryParams
       );
-      const totalCount = totalCountResult[0]?.total || 0;
-      hasMore = page * limit < totalCount;
-    }
 
-    res.status(200).json({ comments: rows as Comment[], hasMore });
-  } catch (err) {
-    res.status(500).json({ error: (err as Error).message });
+      let hasMore: boolean | undefined = undefined;
+      if (limit !== undefined && page !== undefined) {
+        const [totalCountResult] = await connection.query<RowDataPacket[]>(
+          "SELECT COUNT(*) as total FROM comments WHERE user_id = ?",
+          [id]
+        );
+        const totalCount = totalCountResult[0]?.total || 0;
+        hasMore = page * limit < totalCount;
+      }
+
+      res.status(200).json({ comments: rows as Comment[], hasMore });
+    } catch (err) {
+      res.status(500).json({ error: (err as Error).message });
+    }
   }
-});
+);
 
 router.get(
   "/reply-and-parent",

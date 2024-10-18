@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-
+import { useState, useEffect, useContext } from "react";
+import { useParams } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { fetchUserComments } from "../../../services/commentService";
 import {
@@ -16,25 +16,34 @@ import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import { CommentType } from "../../../types/Comment/Comment";
 import { PageWrapper } from "../../../PageWrapper.styled";
 import { formatTimeAgo } from "../../../utils/timeUtils";
+import { UserContext } from "../../../context/UserContext";
 
 const BATCH_SIZE = 5;
 
 export const CommentHistory: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const { profile } = useContext(UserContext) || {};
   const [comments, setComments] = useState<CommentType[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Effect for initial load of comments
-  useEffect(() => {
-    setPage(0);
-    loadMoreComments();
-  }, []);
+  const effectiveUserId = id ? Number(id) : profile?.id;
 
-  const loadMoreComments = async () => {
+  useEffect(() => {
+    if (effectiveUserId) {
+      setPage(1);
+      setComments([]);
+      loadMoreComments(1);
+    }
+  }, [effectiveUserId]);
+
+  const loadMoreComments = async (currentPage = page) => {
     try {
+      if (!effectiveUserId) return;
+
       const { comments: userComments, hasMore: newHasMore } =
-        await fetchUserComments(page, BATCH_SIZE);
+        await fetchUserComments(effectiveUserId, currentPage, BATCH_SIZE);
 
       setComments((prevComments) => [
         ...prevComments,
@@ -44,12 +53,16 @@ export const CommentHistory: React.FC = () => {
       ]);
 
       setHasMore(newHasMore ?? false);
-      setPage((prevPage) => prevPage + 1);
+      setPage(currentPage + 1);
     } catch (error) {
       setError("Failed to load comments.");
       console.error(error);
     }
   };
+
+  if (!effectiveUserId) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>
