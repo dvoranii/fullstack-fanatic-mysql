@@ -1,6 +1,5 @@
 import dotenv from "dotenv";
 import express, { Request, Response } from "express";
-// import bodyParser from "body-parser";
 import { authenticate } from "../middleware/authenticate";
 import { CartItem } from "../types/CartItem";
 import Stripe from "stripe";
@@ -9,7 +8,6 @@ dotenv.config();
 
 const router = express.Router();
 
-// Wrap CommonJS part in IIFE
 (function () {
   const Stripe = require("stripe");
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
@@ -79,7 +77,6 @@ const router = express.Router();
     }
   );
 
-  // Stripe webhook to listen for events
   router.post(
     "/webhook",
     express.raw({ type: "application/json" }),

@@ -29,18 +29,16 @@ app.use(
   })
 );
 
-// potential security issues...
 app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
   next();
 });
 
 app.use((req, res, next) => {
-  // Skip JSON body parsing for Stripe Webhook
   if (req.originalUrl === "/api/stripe/webhook") {
-    next(); // Skip to next middleware
+    next();
   } else {
-    express.json()(req, res, next); // Apply JSON body parsing for other routes
+    express.json()(req, res, next);
   }
 });
 

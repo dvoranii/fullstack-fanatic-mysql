@@ -1,5 +1,4 @@
-import { PageWrapper } from "../../PageWrapper.styled";
-import { loadStripe } from "@stripe/stripe-js";
+import { PageWrapper } from "../../../PageWrapper.styled";
 import {
   ViewCartTitleBanner,
   CartItemsWrapper,
@@ -10,11 +9,9 @@ import {
   ProceedToCheckoutButton,
   CartPageWrapperInner,
 } from "./ViewCart.styled";
-import { UserContext } from "../../context/UserContext";
+import { UserContext } from "../../../context/UserContext";
 import { useContext } from "react";
-import { createCheckoutSession } from "../../services/checkoutService";
-
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+import { handleCheckout } from "../../../utils/checkoutUtils";
 
 const ViewCart: React.FC = () => {
   const { cartItems = [], removeItemFromCart = () => {} } =
@@ -24,35 +21,6 @@ const ViewCart: React.FC = () => {
   const taxRate = 0.13;
   const taxes = subtotal * taxRate;
   const total = subtotal + taxes;
-
-  const handleCheckout = async () => {
-    try {
-      // Create the checkout session on the server
-      const { data } = await createCheckoutSession(cartItems);
-
-      // Get the Stripe instance
-      const stripe = await stripePromise;
-
-      if (!stripe || !data?.id) {
-        throw new Error("Stripe or session ID not found");
-      }
-
-      // Use Stripe's redirectToCheckout method
-      const { error } = await stripe.redirectToCheckout({
-        sessionId: data.id, // Use the session ID returned from your backend
-      });
-
-      if (error) {
-        console.error("Error redirecting to checkout", error);
-        alert("There was an error redirecting to checkout. Please try again.");
-      }
-    } catch (error) {
-      console.error("Failed to create checkout session", error);
-      alert(
-        "There was an error creating the checkout session. Please try again."
-      );
-    }
-  };
 
   return (
     <>
@@ -82,7 +50,7 @@ const ViewCart: React.FC = () => {
             <p>Subtotal: ${subtotal.toFixed(2)}</p>
             <p>Taxes (HST): ${taxes.toFixed(2)}</p>
             <p>Total: ${total.toFixed(2)}</p>
-            <ProceedToCheckoutButton onClick={handleCheckout}>
+            <ProceedToCheckoutButton onClick={() => handleCheckout(cartItems)}>
               PROCEED TO CHECKOUT
             </ProceedToCheckoutButton>
           </OrderSummary>

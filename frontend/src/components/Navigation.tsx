@@ -26,7 +26,7 @@ const MessageInboxPage = lazy(
 import FollowersList from "../pages/UserProfileLayout/FollowList/FollowersList/FollowersList";
 import FollowingList from "../pages/UserProfileLayout/FollowList/FollowingList/FollowingList";
 import CommentHistory from "../pages/UserProfileLayout/CommentHistory/CommentHistory";
-import ViewCartPage from "../pages/ViewCart/ViewCart";
+import ViewCartPage from "../pages/Checkout/ViewCart/ViewCart";
 import CheckoutSuccess from "../pages/Checkout/Success/Success";
 import CheckoutCancel from "../pages/Checkout/Cancel/Cancel";
 

@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { colors } from "../../GlobalStyles";
+import { colors } from "../../../GlobalStyles";
 
 export const ViewCartTitleBanner = styled.div`
   padding: 20px;

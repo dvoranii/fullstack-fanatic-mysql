@@ -1,11 +1,14 @@
-import React from "react";
+import { CheckoutResultPageWrapper } from "../Checkout.styles";
+import { PageWrapper } from "../../../PageWrapper.styled";
 
 const CheckoutSuccess: React.FC = () => {
   return (
-    <div>
-      <h1>Payment Successful!</h1>
-      <p>Thank you for your purchase. Your transaction has been completed.</p>
-    </div>
+    <PageWrapper>
+      <CheckoutResultPageWrapper>
+        <h1>Payment Successful!</h1>
+        <p>Thank you for your purchase. Your transaction has been completed.</p>
+      </CheckoutResultPageWrapper>
+    </PageWrapper>
   );
 };
 
