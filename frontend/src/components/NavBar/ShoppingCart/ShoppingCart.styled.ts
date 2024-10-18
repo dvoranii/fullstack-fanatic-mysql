@@ -43,7 +43,7 @@ export const CartDetails = styled.div`
     padding-bottom: 1.2rem;
   }
 
-  button {
+  /* button {
     background-color: #ffa723;
     color: white;
     padding: 10px;
@@ -51,11 +51,7 @@ export const CartDetails = styled.div`
     border-radius: 5px;
     cursor: pointer;
     font-size: 0.9rem;
-
-    &:hover {
-      background-color: #ff8c00;
-    }
-  }
+  } */
 `;
 
 export const ClearCartBtnWrapper = styled.div`
@@ -77,13 +73,16 @@ export const CartItemTitleWrapper = styled.div`
   min-width: 200px;
 `;
 
-export const CheckoutLink = styled(Link)`
+export const CheckoutBtn = styled.button`
   background-color: ${colors.secondary};
+  border: none;
   color: ${colors.primary};
   font-weight: bold;
   padding: 8px;
   border-radius: 4px;
   transition: all 150ms ease;
+  font-size: 1rem;
+  height: fit-content;
 
   &:hover {
     background-color: ${colors.primary};
@@ -98,6 +97,7 @@ export const ViewCartLink = styled(Link)`
   padding: 8px;
   border-radius: 4px;
   transition: all 150ms ease;
+  height: fit-content;
 
   &:hover {
     background-color: ${colors.secondary};

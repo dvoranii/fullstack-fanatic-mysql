@@ -8,10 +8,12 @@ import {
   ShoppingCartContentWrapper,
   CartItemTitleWrapper,
   CartBtnWrapper,
+  ViewCartLink,
+  CheckoutBtn,
 } from "./ShoppingCart.styled";
 import Dropdown from "../Dropdown/Dropdown";
 import { UserContext } from "../../../context/UserContext";
-import { handleCheckout } from "../../../utils/checkoutUtils"; // Import the shared function
+import { handleCheckout } from "../../../utils/checkoutUtils";
 
 const ShoppingCart: React.FC = () => {
   const [isCartVisible, setIsCartVisible] = useState(false);
@@ -76,15 +78,18 @@ const ShoppingCart: React.FC = () => {
               </p>
               {cartItems.length > 0 && (
                 <CartBtnWrapper>
-                  <button onClick={() => handleCheckout(cartItems)}>
+                  <ViewCartLink to="/my-cart">View Cart</ViewCartLink>
+                  <CheckoutBtn onClick={() => handleCheckout(cartItems)}>
                     Proceed to Checkout
-                  </button>
+                  </CheckoutBtn>
                 </CartBtnWrapper>
               )}
             </CartDetails>
-            <ClearCartBtnWrapper>
-              <button onClick={clearCart}>Clear Cart</button>
-            </ClearCartBtnWrapper>
+            {cartItems.length !== 0 && (
+              <ClearCartBtnWrapper>
+                <button onClick={clearCart}>Clear Cart</button>
+              </ClearCartBtnWrapper>
+            )}
           </ShoppingCartContentWrapper>
         </Dropdown>
       </NavIconWrapper>

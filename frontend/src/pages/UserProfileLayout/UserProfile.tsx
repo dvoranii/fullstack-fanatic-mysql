@@ -235,7 +235,13 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                 </CommentItem>
               ))}
 
-              <ViewMoreCommentsLink to="/my-account/comment-history">
+              <ViewMoreCommentsLink
+                to={
+                  isOwnProfile
+                    ? "/my-account/comment-history"
+                    : `/user/${profile.id}/comment-history`
+                }
+              >
                 See All Comments
               </ViewMoreCommentsLink>
             </CommentHistory>
