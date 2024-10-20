@@ -1,12 +1,8 @@
 import styled from "styled-components";
-import { SearchBarWrapper } from "../../../../components/SearchBar/SearchBar.styled";
+// import { SearchBarWrapperOuter } from "../../../../components/SearchBar/SearchBar.styled";
 
 export const ConvoHistoryContainer = styled.div`
   width: 30%;
-
-  ${SearchBarWrapper} {
-    margin-top: 20px;
-  }
 `;
 
 export const ConversationWrapper = styled.div`

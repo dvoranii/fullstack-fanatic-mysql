@@ -113,7 +113,7 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
 
   return (
     <ConvoHistoryContainer>
-      <SearchBar />
+      <SearchBar width="95%" paddingLeft="0" />
       <ReadFilterWrapper>
         <p>
           <span
