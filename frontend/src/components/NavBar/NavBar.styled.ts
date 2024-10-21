@@ -136,6 +136,7 @@ export const NavLinkStyled = styled(NavLink)<NavLinkStyledProps>`
 `;
 
 export const LogoWrapper = styled.div`
+  user-select: none;
   @media screen and (max-width: 913px) {
     display: flex;
     justify-content: flex-start;

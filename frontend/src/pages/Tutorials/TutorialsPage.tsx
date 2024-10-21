@@ -66,10 +66,6 @@ const TutorialsPage: React.FC = () => {
     setFlipped((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  // const handleLoadMore = () => {
-  //   setLoadedTutorials((prev) => prev + tutorialsPerPage);
-  // };
-
   const renderStars = (difficulty: string) => {
     let starImg: string;
     let starCount: number;

@@ -3,4 +3,5 @@ export interface Blog {
   title: string;
   created_at: string;
   isFavourited: boolean;
+  isPremium: boolean;
 }

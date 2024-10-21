@@ -5,4 +5,5 @@ export interface BlogContentItem {
   created_at: string;
   steps: Step[];
   image: string;
+  isPremium: boolean;
 }
