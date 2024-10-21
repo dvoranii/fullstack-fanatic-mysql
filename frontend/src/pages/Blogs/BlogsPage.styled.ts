@@ -47,9 +47,9 @@ export const BlogActions = styled.div`
 export const FreeBadge = styled.div`
   background: linear-gradient(
     315deg,
-    rgba(37, 210, 55, 1) 23%,
-    rgba(207, 255, 212, 1) 50%,
-    rgba(37, 210, 55, 1) 77%
+    rgba(34, 185, 50, 1) 23%,
+    rgba(157, 233, 165, 1) 50%,
+    rgba(34, 185, 50, 1) 77%
   );
   border: 1px;
   border-radius: 5px;
@@ -106,8 +106,11 @@ export const PremiumBadge = styled.div`
 export const BlogImgWrapper = styled.div`
   display: flex;
   align-items: center;
+  background-color: #efefef;
+  user-select: none;
   img {
     max-width: 100px;
+    padding: 10px;
   }
 `;
 

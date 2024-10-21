@@ -23,7 +23,7 @@ import IntermediateStarImg from "../../assets/images/tutorials/2-intermediate-st
 import AdvancedStarImg from "../../assets/images/tutorials/3-advanced-stars.png";
 import { UserContext } from "../../context/UserContext";
 import { tutorialContent } from "../../assets/tutorialContent";
-import PremiumLockImg from "../../assets/images/tutorials/lock.png";
+import PremiumLockImg from "../../assets/images/lock.png";
 import FlipIconFront from "../../assets/images/tutorials/flip-icon.png";
 import FlipIconBack from "../../assets/images/tutorials/flip-icon-backside.png";
 import AddToCardImg from "../../assets/images/add-to-cart-icon.png";
