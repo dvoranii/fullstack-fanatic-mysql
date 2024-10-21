@@ -10,8 +10,13 @@ import SearchIcon from "../../assets/images/search-icon.png";
 interface SearchBarProps {
   width?: string;
   paddingLeft?: string;
+  onSearchChange?: (value: string) => void;
 }
-const SearchBar: React.FC<SearchBarProps> = ({ width, paddingLeft }) => {
+const SearchBar: React.FC<SearchBarProps> = ({
+  width,
+  paddingLeft,
+  onSearchChange,
+}) => {
   return (
     <SearchBarWrapperOuter style={{ paddingLeft }}>
       <SearchBarWrapperInner style={{ width }}>
@@ -20,7 +25,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ width, paddingLeft }) => {
         </SearchIconWrapper>
 
         <SearchInputWrapper>
-          <input type="text" placeholder="Search..." />
+          <input
+            type="text"
+            placeholder="Search..."
+            onChange={(e) => onSearchChange?.(e.target.value)}
+          />
         </SearchInputWrapper>
       </SearchBarWrapperInner>
     </SearchBarWrapperOuter>

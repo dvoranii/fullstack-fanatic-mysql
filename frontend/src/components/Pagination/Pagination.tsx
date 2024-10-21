@@ -4,23 +4,17 @@ interface PaginationProps {
   totalPages: number;
   currentPage: number;
   onPageChange: (page: number) => void;
-  onLoadMore: () => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
   totalPages,
   currentPage,
   onPageChange,
-  onLoadMore,
 }) => {
   const handlePageClick = (page: number) => {
     onPageChange(page);
-    if (page > currentPage) {
-      onLoadMore();
-    }
   };
 
-  // Helper function to determine pagination structure
   const getPageNumbers = () => {
     const pages = [];
     if (totalPages <= 5) {

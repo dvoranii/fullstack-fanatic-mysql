@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import Title from "../../components/Title/Title";
 import Pagination from "../../components/Pagination/Pagination";
 
@@ -41,24 +41,34 @@ const TutorialsPage: React.FC = () => {
     loading,
   } = useContext(UserContext) || {};
 
+  const [searchText, setSearchText] = useState("");
   const [flipped, setFlipped] = useState<{ [key: string]: boolean }>({});
   const [currentPage, setCurrentPage] = useState(1);
-  const [loadedTutorials, setLoadedTutorials] = useState<number>(8);
   const tutorialsPerPage = 8;
 
-  const totalTutorials = tutorialContent.length;
+  const filteredTutorials = tutorialContent.filter((tutorial) =>
+    tutorial.title.toLowerCase().includes(searchText.toLowerCase())
+  );
+
+  const totalTutorials = filteredTutorials.length;
   const totalPages = Math.ceil(totalTutorials / tutorialsPerPage);
 
-  const handleLoadMore = () => {
-    setLoadedTutorials((prev) => prev + tutorialsPerPage);
-  };
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(1);
+    }
+  }, [searchText, totalPages]);
 
   const startIdx = (currentPage - 1) * tutorialsPerPage;
-  const endIdx = Math.min(startIdx + tutorialsPerPage, loadedTutorials);
+  const endIdx = startIdx + tutorialsPerPage;
 
   const handleFlip = (id: string) => {
     setFlipped((prev) => ({ ...prev, [id]: !prev[id] }));
   };
+
+  // const handleLoadMore = () => {
+  //   setLoadedTutorials((prev) => prev + tutorialsPerPage);
+  // };
 
   const renderStars = (difficulty: string) => {
     let starImg: string;
@@ -126,9 +136,13 @@ const TutorialsPage: React.FC = () => {
       <Title textContent="Tutorials" pseudoRight="-3px" pseudoWidth="120px" />
 
       <PageWrapper>
-        <SearchBar width="25%" paddingLeft="120px" />
+        <SearchBar
+          width="25%"
+          paddingLeft="120px"
+          onSearchChange={(value) => setSearchText(value)}
+        />
         <TutorialList>
-          {tutorialContent.slice(startIdx, endIdx).map((tutorial) => {
+          {filteredTutorials.slice(startIdx, endIdx).map((tutorial) => {
             const alreadyInCart = isItemInCart(tutorial.id);
 
             return (
@@ -244,7 +258,6 @@ const TutorialsPage: React.FC = () => {
         totalPages={totalPages}
         currentPage={currentPage}
         onPageChange={(page) => setCurrentPage(page)}
-        onLoadMore={handleLoadMore}
       />
     </>
   );
