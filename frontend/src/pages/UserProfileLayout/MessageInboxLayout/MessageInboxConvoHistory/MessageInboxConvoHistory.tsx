@@ -6,6 +6,7 @@ import {
   ProfilePictureWrapper,
   ConversationDetailsWrapper,
   SubjectPreview,
+  SearchBarReadFilterWrapper,
 } from "./MessageInboxConvoHistory.styled";
 import SearchBar from "../../../../components/SearchBar/SearchBar";
 import { Conversation } from "../../../../types/Conversations";
@@ -113,24 +114,26 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
 
   return (
     <ConvoHistoryContainer>
-      <SearchBar width="95%" paddingLeft="0" />
-      <ReadFilterWrapper>
-        <p>
-          <span
-            onClick={() => toggleBold("read")}
-            className={boldSpan === "read" ? "bold" : "normal"}
-          >
-            READ
-          </span>
-          &nbsp;|&nbsp;
-          <span
-            onClick={() => toggleBold("unread")}
-            className={boldSpan === "unread" ? "bold" : "normal"}
-          >
-            UNREAD {unreadCount > 0 && <span>({unreadCount})</span>}
-          </span>
-        </p>
-      </ReadFilterWrapper>
+      <SearchBarReadFilterWrapper>
+        <SearchBar width="100%" paddingLeft="0" />
+        <ReadFilterWrapper>
+          <p>
+            <span
+              onClick={() => toggleBold("read")}
+              className={boldSpan === "read" ? "bold" : "normal"}
+            >
+              READ
+            </span>
+            &nbsp;|&nbsp;
+            <span
+              onClick={() => toggleBold("unread")}
+              className={boldSpan === "unread" ? "bold" : "normal"}
+            >
+              UNREAD {unreadCount > 0 && <span>({unreadCount})</span>}
+            </span>
+          </p>
+        </ReadFilterWrapper>
+      </SearchBarReadFilterWrapper>
 
       {filteredConversations().map((conversation: Conversation) => (
         <ConversationWrapper

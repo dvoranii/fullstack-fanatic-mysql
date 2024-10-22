@@ -2,15 +2,20 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { colors } from "../../GlobalStyles";
 
+export const TutorialListOuter = styled.div`
+  max-width: 1400px;
+  margin: 0 auto;
+`;
+
 export const TutorialList = styled.div`
-  max-width: 80vw;
+  max-width: 1400px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   place-items: center;
   height: fit-content;
   overflow-y: visible;
-  padding: 3.2rem;
+  padding: 1.2rem 3.2rem;
   flex-wrap: wrap;
   column-gap: 1.2rem;
   row-gap: 2.2rem;

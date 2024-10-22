@@ -30,6 +30,7 @@ export const StyledTitle = styled.h1.withConfig({
   letter-spacing: 0.5px;
   font-weight: 500;
   width: fit-content;
+  user-select: none;
 
   &::after {
     content: "";

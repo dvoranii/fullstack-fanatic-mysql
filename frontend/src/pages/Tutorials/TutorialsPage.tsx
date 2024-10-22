@@ -16,6 +16,7 @@ import {
   DifficultyStarsWrapper,
   BottomIconsWrapper,
   AddToCartWrapper,
+  TutorialListOuter,
 } from "./TutorialsPage.styled";
 import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
 import BeginnerStarImg from "../../assets/images/tutorials/1-beginner-star.png";
@@ -29,7 +30,6 @@ import FlipIconBack from "../../assets/images/tutorials/flip-icon-backside.png";
 import AddToCardImg from "../../assets/images/add-to-cart-icon.png";
 import { TutorialContentItem } from "../../types/Tutorial/Tutorial";
 import SearchBar from "../../components/SearchBar/SearchBar";
-import { PageWrapper } from "../../PageWrapper.styled";
 
 const TutorialsPage: React.FC = () => {
   const {
@@ -131,10 +131,10 @@ const TutorialsPage: React.FC = () => {
     <>
       <Title textContent="Tutorials" pseudoRight="-3px" pseudoWidth="120px" />
 
-      <PageWrapper>
+      <TutorialListOuter>
         <SearchBar
-          width="25%"
-          paddingLeft="120px"
+          width="46%"
+          paddingLeft="60px"
           onSearchChange={(value) => setSearchText(value)}
         />
         <TutorialList>
@@ -248,7 +248,8 @@ const TutorialsPage: React.FC = () => {
             );
           })}
         </TutorialList>
-      </PageWrapper>
+      </TutorialListOuter>
+      {/* </PageWrapper> */}
 
       <Pagination
         totalPages={totalPages}

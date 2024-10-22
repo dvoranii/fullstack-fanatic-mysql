@@ -1,14 +1,19 @@
 import styled from "styled-components";
-// import { SearchBarWrapperOuter } from "../../../../components/SearchBar/SearchBar.styled";
 
 export const ConvoHistoryContainer = styled.div`
-  width: 30%;
+  width: 100%;
+  padding: 15px;
+
+  @media screen and (max-width: 375px) {
+    padding-top: 0;
+  }
 `;
 
 export const ConversationWrapper = styled.div`
   border: 1px solid grey;
   border-radius: 4px;
-  margin: 10px;
+  /* margin: 10px; */
+  margin-top: 10px;
   padding: 10px;
   transition: all 150ms ease;
 
@@ -16,12 +21,18 @@ export const ConversationWrapper = styled.div`
     cursor: pointer;
     background-color: #eee;
   }
+
+  @media screen and (max-width: 375px) {
+    height: 80px;
+    display: flex;
+  }
 `;
 
 export const ReadFilterWrapper = styled.div`
   width: 100%;
-  text-align: right;
-  padding-right: 1.4rem;
+  text-align: left;
+  padding-left: 15px;
+  /* padding-right: 1.4rem; */
   caret-color: transparent;
 
   p {
@@ -57,4 +68,8 @@ export const ConversationDetailsWrapper = styled.div`
 export const SubjectPreview = styled.p`
   font-size: 0.9rem;
   color: gray;
+`;
+
+export const SearchBarReadFilterWrapper = styled.div`
+  display: flex;
 `;

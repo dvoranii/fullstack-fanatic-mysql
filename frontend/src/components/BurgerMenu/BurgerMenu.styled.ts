@@ -13,7 +13,7 @@ export const Burger = styled.div.withConfig({
   z-index: 1001;
   margin-top: 1.2rem;
   margin-right: 1.2rem;
-  position: ${({ isopen }) => (isopen ? "fixed" : "absolute")};
+  /* position: ${({ isopen }) => (isopen ? "fixed" : "absolute")}; */
   right: 20px;
   top: 20px;
 

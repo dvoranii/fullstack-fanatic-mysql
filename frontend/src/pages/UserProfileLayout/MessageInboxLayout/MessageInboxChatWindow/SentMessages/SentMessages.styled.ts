@@ -19,6 +19,17 @@ export const SentMessageWrapper = styled.div.withConfig({
   gap: 16px;
   margin-left: ${({ issender }) => (issender ? "auto" : "20px")};
   margin-right: ${({ issender }) => (issender ? "20px" : "auto")};
+
+  @media screen and (max-width: 645px) {
+    max-width: 100%;
+    width: 75%;
+  }
+
+  @media screen and (max-width: 451px) {
+    img {
+      display: none;
+    }
+  }
 `;
 
 export const SenderName = styled.strong`

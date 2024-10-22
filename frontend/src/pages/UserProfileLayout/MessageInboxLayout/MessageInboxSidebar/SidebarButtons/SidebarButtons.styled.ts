@@ -7,6 +7,19 @@ export const IconBGWrapper = styled.div`
   align-items: center;
   gap: 1.2rem;
   margin-top: 2.2rem;
+
+  @media screen and (max-width: 981px) {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin-top: 0;
+    padding: 20px;
+  }
+
+  @media screen and (max-width: 375px) {
+    padding: 4px;
+  }
 `;
 
 export const IconBG = styled.div`
@@ -14,6 +27,8 @@ export const IconBG = styled.div`
   border-radius: 50%;
   width: 50px;
   height: 50px;
+  min-width: 50px;
+  min-height: 50px;
   transition: 150ms ease;
 
   &:first-child {

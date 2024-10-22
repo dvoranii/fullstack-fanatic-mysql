@@ -1,6 +1,10 @@
 import { useContext, useState } from "react";
-import { LayoutContainer, RightContainer } from "./MessageInboxLayout.styled";
-import { PageWrapper } from "../../../PageWrapper.styled";
+import {
+  LayoutContainer,
+  RightContainer,
+  MessageInboxPageWrapper,
+} from "./MessageInboxLayout.styled";
+// import { PageWrapper } from "../../../PageWrapper.styled";
 import MessageInboxSidebar from "./MessageInboxSidebar/MessageInboxSidebar";
 import MessageInboxConvoHistory from "./MessageInboxConvoHistory/MessageInboxConvoHistory";
 import MessageInboxChatWindow from "./MessageInboxChatWindow/MessageInboxChatWindow";
@@ -17,7 +21,7 @@ const MessageInboxLayout: React.FC = () => {
 
   return (
     <div style={{ background: "#eee" }}>
-      <PageWrapper>
+      <MessageInboxPageWrapper>
         <LayoutContainer>
           <MessageInboxSidebar />
           <RightContainer>
@@ -31,7 +35,7 @@ const MessageInboxLayout: React.FC = () => {
             />
           </RightContainer>
         </LayoutContainer>
-      </PageWrapper>
+      </MessageInboxPageWrapper>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const SidebarContainer = styled.div`
-  width: 5%;
+  width: 100%;
   background-color: #ffc107;
   margin-right: 20px;
   box-sizing: border-box;
@@ -10,5 +10,10 @@ export const SidebarContainer = styled.div`
 
   p {
     padding: 5px;
+  }
+
+  @media screen and (max-width: 981px) {
+    margin-bottom: 20px;
+    height: 70px;
   }
 `;

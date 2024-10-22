@@ -4,14 +4,21 @@ export const ChatWindowContainerOuter = styled.div`
   padding: 10px 30px;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width: 70%;
+  height: 75vh;
+  width: 100%;
   gap: 20px;
   justify-content: space-between;
   background-color: #eee;
   border: 2px solid black;
   border-radius: 8px;
   overflow: hidden;
+
+  @media screen and (max-width: 981px) {
+    padding: 0px;
+    width: 94%;
+    margin: 0 auto;
+    height: 45vh;
+  }
 `;
 
 export const ChatWindowContainerInner = styled.div`
