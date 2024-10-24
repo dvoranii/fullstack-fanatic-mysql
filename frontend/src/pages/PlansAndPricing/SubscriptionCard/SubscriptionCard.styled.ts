@@ -8,26 +8,100 @@ interface CardWrapperProps {
 interface PriceTagProps {
   highlighted?: boolean;
 }
+interface CardTitleProps {
+  highlighted?: boolean;
+}
+interface CardTitleWrapperProps {
+  highlighted?: boolean;
+}
 
 interface SubmitButtonprops {
   highlighted?: boolean;
 }
 
 export const CardWrapper = styled.div<CardWrapperProps>`
+  position: relative;
   background: ${({ highlighted }) => (highlighted ? "#14213D" : "white")};
   color: ${({ highlighted }) => (highlighted ? "white" : "inherit")};
   border-bottom-left-radius: 25px;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: ${({ highlighted }) =>
+    highlighted
+      ? "0px 8px 35px rgba(255, 175, 43, 0.3)"
+      : "0px 4px 15px rgba(0, 0, 0, 0.2)"};
   width: 300px;
   margin: 20px;
+
+  ${({ highlighted }) =>
+    highlighted &&
+    `
+    width: 350px;
+    height: 500px;
+  `}
+  ${({ highlighted }) =>
+    !highlighted &&
+    `
+    transform: translateY(30px); 
+  `}
+
+@media screen and (max-width: 739px) {
+    ${({ highlighted }) =>
+      highlighted &&
+      `
+    width: 300px;
+    height: auto;
+  `}
+    ${({ highlighted }) =>
+      !highlighted &&
+      `
+    transform: translateY(0px); 
+  `}
+  }
 `;
 
-export const CardTitle = styled.h3`
+export const MedalWrapper = styled.div`
+  position: absolute;
+  top: -50px;
+  right: -270px;
+  width: 100%;
+  height: 80px;
+
+  img {
+    width: 120px;
+    height: auto;
+    z-index: 1;
+  }
+
+  @media screen and (max-width: 739px) {
+    right: -230px;
+  }
+`;
+
+export const CardTitleWrapper = styled.div<CardTitleWrapperProps>`
+  width: 100%;
+
+  margin-top: 1.2rem;
+  display: flex;
+  justify-content: center;
+
+  ${({ highlighted }) =>
+    highlighted &&
+    `
+      border-top: 8px solid white;
+  `}
+`;
+
+export const CardTitle = styled.h3<CardTitleProps>`
   font-size: 1.5rem;
   margin-bottom: 10px;
   font-weight: bold;
-  padding-top: 20px;
+  padding-top: 0.8rem;
   text-align: center;
+  font-family: "Anybody";
+  ${({ highlighted }) =>
+    highlighted &&
+    `
+    border-bottom: 2px solid white;
+  `}
 `;
 
 export const CardFeatures = styled.ul`
@@ -46,6 +120,8 @@ export const PriceTag = styled.div<PriceTagProps>`
   font-size: 2rem;
   font-weight: bold;
   text-align: center;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
   color: ${({ highlighted }) =>
     highlighted ? `${colors.white}` : `${colors.primary}`};
   background: ${({ highlighted }) =>
@@ -63,6 +139,9 @@ export const PriceTag = styled.div<PriceTagProps>`
     highlighted &&
     `
       text-shadow: 1px 1px 0 black, -1px 1px 0 black, 1px -1px 0 black, -1px -1px 0 black;
+      letter-spacing: 2px;
+      border-top: 2px solid white;
+      border-bottom: 2px solid white;
     `}
 
   span {
@@ -75,6 +154,9 @@ export const SubscribeButtonWrapper = styled.div`
   padding: 20px;
   display: flex;
   justify-content: center;
+  @media screen and (max-width: 739px) {
+    padding-top: 0;
+  }
 `;
 
 export const SubscribeButton = styled.button<SubmitButtonprops>`
@@ -88,15 +170,27 @@ export const SubscribeButton = styled.button<SubmitButtonprops>`
   cursor: pointer;
   transition: background-color 0.3s;
   font-weight: bold;
+  transition: all 150ms ease;
   &:hover {
     ${({ highlighted }) =>
       highlighted
         ? `
           background-color: white;
           color: ${colors.primary};
+          transform: translateY(-4px) scale(1.01)
         `
         : `
-          background-color: #0047be;
+          background-color: ${colors.primary};
+          color: ${colors.white}
         `}
   }
+`;
+
+export const MedalImage = styled.img`
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 80px !important;
+  height: auto;
+  z-index: 1;
 `;

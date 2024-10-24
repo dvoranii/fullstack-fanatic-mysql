@@ -5,7 +5,10 @@ import {
   PriceTag,
   SubscribeButton,
   SubscribeButtonWrapper,
+  CardTitleWrapper,
+  MedalWrapper,
 } from "./SubscriptionCard.styled";
+import GoldenMedalImg from "../../../assets/images/plansAndPricing/golden-medal.svg";
 
 interface SubscriptionCardProps {
   title: string;
@@ -14,6 +17,7 @@ interface SubscriptionCardProps {
   buttonLabel: string;
   highlighted?: boolean;
   children: React.ReactNode;
+  className?: string;
 }
 
 const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
@@ -23,10 +27,19 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
   buttonLabel,
   highlighted,
   children,
+  className,
 }) => {
   return (
-    <CardWrapper highlighted={highlighted}>
-      <CardTitle>{title}</CardTitle>
+    <CardWrapper highlighted={highlighted} className={className}>
+      {highlighted && (
+        <MedalWrapper>
+          <img src={GoldenMedalImg} alt="Golden Medal" />
+        </MedalWrapper>
+      )}
+      <CardTitleWrapper>
+        <CardTitle highlighted={highlighted}>{title}</CardTitle>
+      </CardTitleWrapper>
+
       {children}
       <PriceTag highlighted={highlighted}>
         {price}
