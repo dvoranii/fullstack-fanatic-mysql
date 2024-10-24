@@ -8,6 +8,7 @@ import Title from "../../components/Title/Title";
 import BGSwoosh from "../../assets/images/plansAndPricing/Ellipse7.svg";
 import SquaresAndTriangles from "../../assets/images/plansAndPricing/SquaresAndTriangles.svg";
 import SubscriptionCard from "./SubscriptionCard/SubscriptionCard";
+import SwirlyLineImg from "../../assets/images/swirly-line-bg.svg";
 
 const PlansAndPricing: React.FC = () => {
   return (
@@ -23,7 +24,7 @@ const PlansAndPricing: React.FC = () => {
         <CardsContainer>
           <SubscriptionCard
             title="STARTER"
-            price="$5"
+            price="$7"
             frequency="Month"
             buttonLabel="SUBSCRIBE"
             className="first-card"
@@ -64,7 +65,7 @@ const PlansAndPricing: React.FC = () => {
           </SubscriptionCard>
           <SubscriptionCard
             title="CASUAL PRO"
-            price="$15"
+            price="$20"
             frequency="Month"
             buttonLabel="SUBSCRIBE"
             className="third-card"
@@ -82,6 +83,7 @@ const PlansAndPricing: React.FC = () => {
             </li>
           </SubscriptionCard>
         </CardsContainer>
+        <img src={SwirlyLineImg} className="swirly" alt="" />
       </PageBGWrapper>
 
       <PayPerPostWrapper>
@@ -97,18 +99,19 @@ const PlansAndPricing: React.FC = () => {
           <ul>
             <li>
               <b>Tutorials:</b> Dive deep into our high-quality tutorials
-              starting from $3 up to $5, providing you with in-depth guides and
-              expert knowledge.
+              starting from <b>$3</b> up to <b>$5</b>, providing you with
+              in-depth guides and expert knowledge.
             </li>
             <li>
-              <b>Blogs:</b> Access premium articles for as little as $2,
+              <b>Blogs:</b> Access premium articles for <b>as little as $2</b>,
               featuring exclusive insights, tips, and industry updates.
             </li>
           </ul>
           <p>
             Pay Per Post is perfect if you prefer a customized learning path or
-            only need specific content without a long-term commitment. Get the
-            information you need when you need it, without breaking the bank!
+            only need specific content without a long-term commitment.<br></br>{" "}
+            Get the information you need when you need it, without breaking the
+            bank!
           </p>
         </PayPerPostTextWrapper>
       </PayPerPostWrapper>

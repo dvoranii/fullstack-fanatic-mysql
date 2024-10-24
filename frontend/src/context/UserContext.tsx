@@ -19,10 +19,18 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [comments, setComments] = useState<CommentType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
   const [cartItems, setCartItems] = useState(() => {
     const storedCartItems = sessionStorage.getItem("cartItems");
     return storedCartItems ? JSON.parse(storedCartItems) : [];
   });
+
+  const [subscriptionItem, setSubscriptionItem] = useState<CartItem | null>(
+    () => {
+      const storedSubscriptionItem = sessionStorage.getItem("subscriptionItem");
+      return storedSubscriptionItem ? JSON.parse(storedSubscriptionItem) : null;
+    }
+  );
 
   useEffect(() => {
     fetchUserProfileFavouritesAndComments(
@@ -39,6 +47,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
 
+  useEffect(() => {
+    sessionStorage.setItem(
+      "subscriptionItem",
+      JSON.stringify(subscriptionItem)
+    );
+  }, [subscriptionItem]);
+
   const addItemToCart = (item: CartItem) => {
     setCartItems((prevItems: CartItem[]) => [...prevItems, item]);
   };
@@ -51,6 +66,14 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const clearCart = () => {
     setCartItems([]);
+  };
+
+  const addSubscriptionToCart = (item: CartItem) => {
+    setSubscriptionItem(item);
+  };
+
+  const removeSubscriptionFromCart = () => {
+    setSubscriptionItem(null);
   };
 
   const updateFavourites = <T extends { id: number }>(
@@ -102,7 +125,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         (tutorial) => tutorial.id === itemId
       );
 
-      // Optimistic UI update
       updateFavourites(isCurrentlyFavourited, itemId, setFavouriteTutorials);
 
       await handleApiToggle(
@@ -116,10 +138,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         (blog) => blog.id === itemId
       );
 
-      // Optimistic UI update
       updateFavourites(isCurrentlyFavourited, itemId, setFavouriteBlogs);
 
-      // Handle API call
       await handleApiToggle(
         isCurrentlyFavourited,
         itemId,
@@ -145,6 +165,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         addItemToCart,
         removeItemFromCart,
         clearCart,
+        subscriptionItem,
+        addSubscriptionToCart,
+        removeSubscriptionFromCart,
         loading,
         error,
       }}

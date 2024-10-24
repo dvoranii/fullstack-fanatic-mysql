@@ -30,6 +30,7 @@ import ViewCartPage from "../pages/Checkout/ViewCart/ViewCart";
 import CheckoutSuccess from "../pages/Checkout/Success/Success";
 import CheckoutCancel from "../pages/Checkout/Cancel/Cancel";
 import PlansAndPricing from "../pages/PlansAndPricing/PlansAndPricing";
+import SubscriptionCart from "../pages/Checkout/SubscriptionCart/SubscriptionCart";
 
 const Navigation: React.FC = () => {
   const { profile } = useContext(UserContext) || {};
@@ -77,6 +78,7 @@ const Navigation: React.FC = () => {
         <Route path="/user/:id/comment-history" element={<CommentHistory />} />
 
         <Route path="/my-cart" element={<ViewCartPage />} />
+        <Route path="/my-subscription-cart" element={<SubscriptionCart />} />
         <Route path="/checkout/success" element={<CheckoutSuccess />} />
         <Route path="/checkout/cancel" element={<CheckoutCancel />} />
         <Route path="/plans-and-pricing" element={<PlansAndPricing />} />

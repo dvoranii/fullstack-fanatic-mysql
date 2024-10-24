@@ -18,6 +18,9 @@ export interface UserContextType {
   addItemToCart: (item: CartItem) => void;
   removeItemFromCart: (id: number) => void;
   clearCart: () => void;
+  addSubscriptionToCart: (item: CartItem) => void;
+  removeSubscriptionFromCart: () => void;
+  subscriptionItem: CartItem | null;
   loading: boolean;
   error: string | null;
 }

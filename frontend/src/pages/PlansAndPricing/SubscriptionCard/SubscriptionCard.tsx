@@ -1,4 +1,4 @@
-import React from "react";
+import { useContext } from "react";
 import {
   CardWrapper,
   CardTitle,
@@ -10,6 +10,10 @@ import {
   CardFeatures,
 } from "./SubscriptionCard.styled";
 import GoldenMedalImg from "../../../assets/images/plansAndPricing/golden-medal.svg";
+import { UserContext } from "../../../context/UserContext";
+import { useNavigate } from "react-router-dom";
+import { CartItem } from "../../../types/CartItem";
+import SubscriptionIcon from "../../../assets/images/plansAndPricing/subscription-icon.png";
 
 interface SubscriptionCardProps {
   title: string;
@@ -30,6 +34,25 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
   children,
   className,
 }) => {
+  const { addSubscriptionToCart = () => {} } = useContext(UserContext) || {};
+  const navigate = useNavigate();
+
+  const handleSubscribeClick = () => {
+    if (addSubscriptionToCart) {
+      const subscriptionItem: CartItem = {
+        id: Math.floor(Math.random() * 10000),
+        title,
+        price: parseFloat(price.replace("$", "")),
+        image: SubscriptionIcon,
+        description: `${title} - ${frequency}`,
+        type: "subscription",
+      };
+
+      addSubscriptionToCart(subscriptionItem);
+      navigate("/my-subscription-cart");
+    }
+  };
+
   return (
     <CardWrapper highlighted={highlighted} className={className}>
       {highlighted && (
@@ -47,7 +70,10 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
         <span>/{frequency}</span>
       </PriceTag>
       <SubscribeButtonWrapper>
-        <SubscribeButton highlighted={highlighted}>
+        <SubscribeButton
+          highlighted={highlighted}
+          onClick={handleSubscribeClick}
+        >
           {buttonLabel}
         </SubscribeButton>
       </SubscribeButtonWrapper>

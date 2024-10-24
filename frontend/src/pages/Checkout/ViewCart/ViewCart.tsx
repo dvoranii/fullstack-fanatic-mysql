@@ -25,7 +25,7 @@ const ViewCart: React.FC = () => {
   return (
     <>
       <ViewCartTitleBanner>
-        <h1>My Cart</h1>
+        <h1>My Cart &mdash; Tutorials & Blogs</h1>
       </ViewCartTitleBanner>
       <PageWrapper>
         <CartPageWrapperInner>
@@ -35,7 +35,6 @@ const ViewCart: React.FC = () => {
                 <img src={item.image} alt={item.title} />
                 <CartItemDetails>
                   <h3>{item.title}</h3>
-                  <p>Product</p>
                   <p>{item.description || "Description of the product"}</p>
                   <p>PRICE: ${item.price.toFixed(2)}</p>
                 </CartItemDetails>

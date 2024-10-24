@@ -15,11 +15,13 @@ interface CardTitleWrapperProps {
   highlighted?: boolean;
 }
 
-interface SubmitButtonprops {
+interface SubscribeButtonProps {
   highlighted?: boolean;
 }
 
-export const CardWrapper = styled.div<CardWrapperProps>`
+export const CardWrapper = styled("div").withConfig({
+  shouldForwardProp: (prop) => prop !== "highlighted",
+})<CardWrapperProps>`
   position: relative;
   background: ${({ highlighted }) => (highlighted ? "#14213D" : "white")};
   color: ${({ highlighted }) => (highlighted ? "white" : "inherit")};
@@ -76,7 +78,9 @@ export const MedalWrapper = styled.div`
   }
 `;
 
-export const CardTitleWrapper = styled.div<CardTitleWrapperProps>`
+export const CardTitleWrapper = styled("div").withConfig({
+  shouldForwardProp: (prop) => prop !== "highlighted",
+})<CardTitleWrapperProps>`
   width: 100%;
 
   margin-top: 1.2rem;
@@ -90,7 +94,9 @@ export const CardTitleWrapper = styled.div<CardTitleWrapperProps>`
   `}
 `;
 
-export const CardTitle = styled.h3<CardTitleProps>`
+export const CardTitle = styled("h3").withConfig({
+  shouldForwardProp: (prop) => prop !== "highlighted",
+})<CardTitleProps>`
   font-size: 1.5rem;
   margin-bottom: 10px;
   font-weight: bold;
@@ -116,7 +122,9 @@ export const CardFeatures = styled.ul`
   }
 `;
 
-export const PriceTag = styled.div<PriceTagProps>`
+export const PriceTag = styled("div").withConfig({
+  shouldForwardProp: (prop) => prop !== "highlighted",
+})<PriceTagProps>`
   font-size: 2rem;
   font-weight: bold;
   text-align: center;
@@ -159,7 +167,9 @@ export const SubscribeButtonWrapper = styled.div`
   }
 `;
 
-export const SubscribeButton = styled.button<SubmitButtonprops>`
+export const SubscribeButton = styled("button").withConfig({
+  shouldForwardProp: (prop) => prop !== "highlighted",
+})<SubscribeButtonProps>`
   background-color: lightgrey;
   color: ${({ highlighted }) =>
     highlighted ? `${colors.primary}` : `${colors.primary}`};

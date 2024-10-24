@@ -4,5 +4,5 @@ export interface CartItem {
   price: number;
   description?: string;
   image?: string;
-  type: "tutorial" | "blog";
+  type: "tutorial" | "blog" | "subscription";
 }

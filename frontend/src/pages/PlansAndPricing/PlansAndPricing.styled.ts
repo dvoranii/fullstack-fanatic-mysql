@@ -11,6 +11,13 @@ export const PageBGWrapper = styled.div`
     position: absolute;
   }
 
+  .swirly {
+    width: 200px;
+    bottom: 0px;
+    left: -30px;
+    z-index: -1;
+  }
+
   .bg-swoosh {
     position: absolute;
     width: 170vh;

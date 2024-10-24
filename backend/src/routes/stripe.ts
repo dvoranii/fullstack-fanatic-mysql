@@ -24,18 +24,35 @@ const router = express.Router();
   });
 
   const getStripePriceId = (item: CartItem): string | null => {
-    if (item.price === 5.0) {
-      return "price_1QAdG0Lg43ij91cKrppnUtez";
-    } else if (item.price === 3.5) {
-      return "price_1Q9VnYLg43ij91cKsu8U9CE0";
-    } else {
-      return null;
+    // Handle tutorial and blog items based on their price
+    if (item.type === "tutorial" || item.type === "blog") {
+      if (item.price === 5.0) {
+        return "price_1QAdG0Lg43ij91cKrppnUtez"; // Tutorial price for $5.0
+      } else if (item.price === 3.5) {
+        return "price_1Q9VnYLg43ij91cKsu8U9CE0"; // Tutorial price for $3.5
+      }
     }
+
+    // Handle subscription items based on their title
+    if (item.type === "subscription") {
+      switch (item.title) {
+        case "STARTER":
+          return "price_1QCT2ZLg43ij91cKvrdh8tZJ"; // Price ID for $7 subscription
+        case "PREMIUM":
+          return "price_1QAEHFLg43ij91cKJ9Ofrpt5"; // Price ID for $125 subscription
+        case "CASUAL PRO":
+          return "price_1QAEHFLg43ij91cKjwxB2FCZ"; // Price ID for $20 subscription
+        default:
+          return null; // Invalid title or not handled
+      }
+    }
+
+    return null; // If item does not match any case
   };
 
   // Create checkout session
   router.post(
-    "/create-checkout-session",
+    "/create-checkout-session-payment",
     authenticate,
     async (req: Request, res: Response) => {
       const { cartItems } = req.body;
@@ -60,6 +77,49 @@ const router = express.Router();
         const session = await stripe.checkout.sessions.create({
           payment_method_types: ["card"],
           mode: "payment",
+          line_items: lineItems,
+          success_url: `${process.env.CLIENT_URL}/checkout/success`,
+          cancel_url: `${process.env.CLIENT_URL}/checkout/cancel`,
+          metadata: {
+            userId: req.user?.userId,
+            email: req.user?.email,
+          },
+        });
+
+        res.json({ id: session.id });
+      } catch (error) {
+        console.error("Error creating Stripe checkout session: ", error);
+        res.status(500).json({ error: "Failed to create checkout session" });
+      }
+    }
+  );
+
+  router.post(
+    "/create-checkout-session-subscription",
+    authenticate,
+    async (req: Request, res: Response) => {
+      const { cartItems } = req.body;
+
+      if (!cartItems || cartItems.length === 0) {
+        return res.status(400).json({ error: "No items in cart" });
+      }
+
+      try {
+        const lineItems = cartItems.map((item: CartItem) => {
+          const priceId = getStripePriceId(item);
+          if (!priceId) {
+            throw new Error(`Invalid price for item: ${item.title}`);
+          }
+
+          return {
+            price: priceId,
+            quantity: 1,
+          };
+        });
+
+        const session = await stripe.checkout.sessions.create({
+          payment_method_types: ["card"],
+          mode: "subscription",
           line_items: lineItems,
           success_url: `${process.env.CLIENT_URL}/checkout/success`,
           cancel_url: `${process.env.CLIENT_URL}/checkout/cancel`,
