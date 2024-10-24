@@ -109,7 +109,7 @@ const PlansAndPricing: React.FC = () => {
           </ul>
           <p>
             Pay Per Post is perfect if you prefer a customized learning path or
-            only need specific content without a long-term commitment.<br></br>{" "}
+            only need specific content without a long-term commitment.<br></br>
             Get the information you need when you need it, without breaking the
             bank!
           </p>

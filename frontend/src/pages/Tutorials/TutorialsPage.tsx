@@ -115,6 +115,7 @@ const TutorialsPage: React.FC = () => {
       created_at: tutorial.created_at,
       image: tutorial.image,
       isPremium: tutorial.isPremium,
+      description: tutorial.description,
       availableForPurchase: tutorial.availableForPurchase,
       accessLevel: tutorial.accessLevel,
       price: tutorial.price || 0,
@@ -230,7 +231,7 @@ const TutorialsPage: React.FC = () => {
                   <CardFace back>
                     <div>
                       <h3>{tutorial.title}</h3>
-                      <p>{tutorial.backContent}</p>
+                      <p>{tutorial.description}</p>
 
                       <FlipIconWrapper
                         onClick={() => handleFlip(String(tutorial.id))}
@@ -249,7 +250,6 @@ const TutorialsPage: React.FC = () => {
           })}
         </TutorialList>
       </TutorialListOuter>
-      {/* </PageWrapper> */}
 
       <Pagination
         totalPages={totalPages}

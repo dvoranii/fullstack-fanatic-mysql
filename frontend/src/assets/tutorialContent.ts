@@ -29,7 +29,7 @@ export const tutorialContent: TutorialContentItem[] = [
     availableForPurchase: false,
     accessLevel: "free",
     difficulty: "beginner",
-    backContent: "Learn how to set up and deploy your server step by step.",
+    description: "Learn how to set up and deploy your server step by step.",
   },
   {
     id: 2,
@@ -50,7 +50,7 @@ export const tutorialContent: TutorialContentItem[] = [
     availableForPurchase: false,
     accessLevel: "free",
     difficulty: "beginner",
-    backContent:
+    description:
       "Master CSRF protection techniques to secure your web applications.",
   },
   {
@@ -73,7 +73,7 @@ export const tutorialContent: TutorialContentItem[] = [
     accessLevel: "monthly",
     price: 3.5,
     difficulty: "intermediate",
-    backContent:
+    description:
       "Learn how JavaScript interacts with APIs using GET and POST requests.",
   },
   {
@@ -96,7 +96,7 @@ export const tutorialContent: TutorialContentItem[] = [
     accessLevel: "yearly",
     price: 5.0,
     difficulty: "advanced",
-    backContent:
+    description:
       "Learn the fundamentals of web application security, including OWASP guidelines and building secure apps.",
   },
   {
@@ -119,7 +119,7 @@ export const tutorialContent: TutorialContentItem[] = [
     accessLevel: "yearly",
     price: 5,
     difficulty: "intermediate",
-    backContent:
+    description:
       "Dive deep into form handling in web development, from validation to security best practices.",
   },
   {
@@ -142,7 +142,7 @@ export const tutorialContent: TutorialContentItem[] = [
     accessLevel: "monthly",
     price: 3.5,
     difficulty: "intermediate",
-    backContent:
+    description:
       "Master DNS configuration and deploy your application with ease, ensuring optimal performance.",
   },
   {
@@ -164,7 +164,7 @@ export const tutorialContent: TutorialContentItem[] = [
     availableForPurchase: false,
     accessLevel: "free",
     difficulty: "beginner",
-    backContent:
+    description:
       "Get started with frontend development, building projects using HTML, CSS, and JavaScript.",
   },
   {
@@ -186,7 +186,7 @@ export const tutorialContent: TutorialContentItem[] = [
     availableForPurchase: false,
     accessLevel: "free",
     difficulty: "beginner",
-    backContent:
+    description:
       "Improve your website’s performance by optimizing images, reducing load times, and enhancing user experience.",
   },
   {
@@ -208,7 +208,7 @@ export const tutorialContent: TutorialContentItem[] = [
     availableForPurchase: false,
     accessLevel: "free",
     difficulty: "intermediate",
-    backContent:
+    description:
       "Make your web applications fully responsive with CSS techniques and media queries.",
   },
 ];

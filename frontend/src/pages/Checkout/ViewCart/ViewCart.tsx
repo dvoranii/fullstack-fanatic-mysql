@@ -36,7 +36,9 @@ const ViewCart: React.FC = () => {
                 <CartItemDetails>
                   <h3>{item.title}</h3>
                   <p>{item.description || "Description of the product"}</p>
-                  <p>PRICE: ${item.price.toFixed(2)}</p>
+                  <p>
+                    <b>PRICE:</b> ${item.price.toFixed(2)}
+                  </p>
                 </CartItemDetails>
                 <RemoveButton onClick={() => removeItemFromCart(item.id)}>
                   ✕

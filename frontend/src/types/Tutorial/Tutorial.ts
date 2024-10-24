@@ -10,7 +10,7 @@ export interface Tutorial {
   accessLevel: "free" | "monthly" | "yearly";
   price?: number;
   difficulty: "beginner" | "intermediate" | "advanced";
-  backContent: string;
+  description: string;
 }
 
 export interface TutorialContentItem extends Tutorial {
