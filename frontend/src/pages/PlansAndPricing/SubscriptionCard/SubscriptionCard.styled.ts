@@ -194,3 +194,15 @@ export const MedalImage = styled.img`
   height: auto;
   z-index: 1;
 `;
+
+export const CardFeature = styled.ul`
+  list-style: none;
+  margin: 15px 0;
+  text-align: left;
+  padding: 0 20px 20px 20px;
+
+  li {
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+  }
+`;

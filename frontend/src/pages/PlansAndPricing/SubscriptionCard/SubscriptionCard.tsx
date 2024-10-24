@@ -7,6 +7,7 @@ import {
   SubscribeButtonWrapper,
   CardTitleWrapper,
   MedalWrapper,
+  CardFeatures,
 } from "./SubscriptionCard.styled";
 import GoldenMedalImg from "../../../assets/images/plansAndPricing/golden-medal.svg";
 
@@ -40,7 +41,7 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
         <CardTitle highlighted={highlighted}>{title}</CardTitle>
       </CardTitleWrapper>
 
-      {children}
+      <CardFeatures>{children}</CardFeatures>
       <PriceTag highlighted={highlighted}>
         {price}
         <span>/{frequency}</span>

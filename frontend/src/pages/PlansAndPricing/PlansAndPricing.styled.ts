@@ -83,3 +83,23 @@ export const CardsContainer = styled.div`
     }
   }
 `;
+
+export const PayPerPostWrapper = styled.div`
+  width: 100%;
+`;
+
+export const PayPerPostTextWrapper = styled.div`
+  width: 70%;
+  margin: 0 auto;
+  font-family: "Roboto";
+  padding-bottom: 4.2rem;
+
+  p {
+    margin-top: 10px;
+  }
+
+  ul {
+    margin-inline-start: 36px;
+    margin-top: 10px;
+  }
+`;
