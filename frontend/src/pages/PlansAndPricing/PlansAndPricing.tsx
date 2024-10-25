@@ -1,18 +1,34 @@
+import React, { useRef } from "react";
 import {
+  PlansAndPricingContainerOuter,
   PageBGWrapper,
   CardsContainer,
   PayPerPostWrapper,
   PayPerPostTextWrapper,
+  ConsultationSectionWrapperInner,
+  ConsultationSectionWrapperOuter,
+  ScrollButton,
+  SwirlyImgBgWrapper,
+  ConsultationContentWrapper,
+  ConsultationTextWrapper,
+  ConsultationImgWrapper,
 } from "./PlansAndPricing.styled";
 import Title from "../../components/Title/Title";
 import BGSwoosh from "../../assets/images/plansAndPricing/Ellipse7.svg";
 import SquaresAndTriangles from "../../assets/images/plansAndPricing/SquaresAndTriangles.svg";
 import SubscriptionCard from "./SubscriptionCard/SubscriptionCard";
 import SwirlyLineImg from "../../assets/images/swirly-line-bg.svg";
+import ConsultationImg from "../../assets/images/plansAndPricing/consultation-image.jpg";
+import ConsultationForm from "./ConsultationForm/ConsultationForm";
 
 const PlansAndPricing: React.FC = () => {
+  const formRef = useRef<HTMLDivElement>(null);
+
+  const scrollToForm = () => {
+    formRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
   return (
-    <>
+    <PlansAndPricingContainerOuter>
       <PageBGWrapper>
         <img src={BGSwoosh} alt="" className="bg-swoosh" />
         <img
@@ -83,7 +99,7 @@ const PlansAndPricing: React.FC = () => {
             </li>
           </SubscriptionCard>
         </CardsContainer>
-        <img src={SwirlyLineImg} className="swirly" alt="" />
+        <img src={SwirlyLineImg} className="swirly-1" alt="" />
       </PageBGWrapper>
 
       <PayPerPostWrapper>
@@ -115,7 +131,55 @@ const PlansAndPricing: React.FC = () => {
           </p>
         </PayPerPostTextWrapper>
       </PayPerPostWrapper>
-    </>
+
+      <SwirlyImgBgWrapper>
+        <img src={SwirlyLineImg} className="swirly-2" alt="" />
+      </SwirlyImgBgWrapper>
+
+      <ConsultationSectionWrapperOuter>
+        <img
+          src={SquaresAndTriangles}
+          alt=""
+          className="bg-squares-and-triangles"
+        />
+        <ConsultationSectionWrapperInner>
+          <Title textContent={"Consultations"} />
+          <ConsultationContentWrapper>
+            <ConsultationTextWrapper>
+              {" "}
+              <p>
+                Need personalized guidance or expert advice? Our 1-on-1
+                consultations are the perfect opportunity to get tailored
+                assistance directly from our team. Whether you're looking to
+                enhance your skills, dive deeper into complex topics, or need
+                answers to questions about any of our tutorials, we’re here to
+                help!
+              </p>
+              <ul>
+                <li>
+                  <b>Exclusive for Yearly Members:</b> As a yearly subscriber,
+                  you’ll receive 5 complimentary 15-minute consultations
+                  throughout the year—a value-added perk to get the most out of
+                  your subscription.
+                </li>
+              </ul>
+              <p>
+                To request a consultation, simply{" "}
+                <ScrollButton onClick={scrollToForm}>
+                  fill out the request form
+                </ScrollButton>
+                , and we’ll get back to you to schedule a time that works best
+                for you. Let’s work together to help you achieve your goals!
+              </p>
+            </ConsultationTextWrapper>
+            <ConsultationImgWrapper>
+              <img src={ConsultationImg} alt="" />
+            </ConsultationImgWrapper>
+          </ConsultationContentWrapper>
+        </ConsultationSectionWrapperInner>
+        <ConsultationForm formRef={formRef} />
+      </ConsultationSectionWrapperOuter>
+    </PlansAndPricingContainerOuter>
   );
 };
 

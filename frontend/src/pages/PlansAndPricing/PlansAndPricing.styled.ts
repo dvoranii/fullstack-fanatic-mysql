@@ -1,5 +1,8 @@
 import styled from "styled-components";
 
+export const PlansAndPricingContainerOuter = styled.div`
+  width: 100%;
+`;
 export const PageBGWrapper = styled.div`
   width: 100vw;
   height: fit-content;
@@ -7,12 +10,9 @@ export const PageBGWrapper = styled.div`
   position: relative;
   padding-bottom: 4.2rem;
 
-  img {
+  .swirly-1 {
+    width: 15%;
     position: absolute;
-  }
-
-  .swirly {
-    width: 200px;
     bottom: 0px;
     left: -30px;
     z-index: -1;
@@ -30,7 +30,7 @@ export const PageBGWrapper = styled.div`
   .bg-squares-and-triangles {
     position: absolute;
     right: -4%;
-    top: 20%;
+    top: 10%;
     width: 20%;
     z-index: -1;
   }
@@ -96,17 +96,98 @@ export const PayPerPostWrapper = styled.div`
 `;
 
 export const PayPerPostTextWrapper = styled.div`
-  width: 70%;
+  width: 75%;
   margin: 0 auto;
   font-family: "Roboto";
-  padding-bottom: 4.2rem;
+  padding: 0 1.2rem 4.2rem 1.2rem;
 
   p {
     margin-top: 10px;
+    line-height: 1.5;
   }
 
   ul {
     margin-inline-start: 36px;
     margin-top: 10px;
+  }
+
+  @media screen and (max-width: 987px) {
+    width: 95%;
+  }
+`;
+
+export const ConsultationSectionWrapperInner = styled.div`
+  font-family: "Roboto";
+  width: 75%;
+  margin: 0 auto;
+  padding: 0 1.2rem 4.2rem 1.2rem;
+  p {
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  ul {
+    margin-inline-start: 40px;
+    margin-top: 10px;
+  }
+
+  @media screen and (max-width: 987px) {
+    width: 95%;
+  }
+`;
+
+export const ConsultationSectionWrapperOuter = styled.div`
+  position: relative;
+  .bg-squares-and-triangles {
+    width: 20%;
+    position: absolute;
+    top: 90px;
+    left: -70px;
+    transform: scaleX(-1);
+    z-index: -1;
+  }
+`;
+
+export const ScrollButton = styled.button`
+  background: transparent;
+  border: none;
+  color: #3498db;
+  text-decoration: none;
+  font-size: 18px;
+  border-bottom: 2px solid #3498db;
+
+  &:hover {
+    color: #2980b9;
+  }
+`;
+
+export const SwirlyImgBgWrapper = styled.div`
+  width: 100%;
+  position: relative;
+  .swirly-2 {
+    position: absolute;
+    right: -20px;
+    top: -100px;
+    width: 12%;
+  }
+`;
+
+export const ConsultationContentWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 2.2rem;
+
+  @media screen and (max-width: 779px) {
+    flex-direction: column;
+  }
+`;
+export const ConsultationTextWrapper = styled.div``;
+export const ConsultationImgWrapper = styled.div`
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    min-width: 370px;
   }
 `;

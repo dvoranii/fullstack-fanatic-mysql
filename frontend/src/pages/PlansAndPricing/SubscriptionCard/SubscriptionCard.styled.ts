@@ -66,6 +66,7 @@ export const MedalWrapper = styled.div`
   right: -270px;
   width: 100%;
   height: 80px;
+  user-select: none;
 
   img {
     width: 120px;
@@ -213,6 +214,5 @@ export const CardFeature = styled.ul`
 
   li {
     margin-bottom: 15px;
-    font-size: 0.9rem;
   }
 `;

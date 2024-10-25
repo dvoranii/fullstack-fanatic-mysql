@@ -98,6 +98,12 @@ export const GlobalStyles = createGlobalStyle`
     color: inherit;
   }
 
+  p, ul, li {
+  font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+  line-height: 1.6;
+}
+
+
   button {
     font-family: inherit;
     cursor: pointer;

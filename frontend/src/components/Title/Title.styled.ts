@@ -31,6 +31,7 @@ export const StyledTitle = styled.h1.withConfig({
   font-weight: 500;
   width: fit-content;
   user-select: none;
+  z-index: 1;
 
   &::after {
     content: "";
