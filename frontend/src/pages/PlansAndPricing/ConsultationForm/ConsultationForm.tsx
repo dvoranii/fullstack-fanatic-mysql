@@ -6,13 +6,16 @@ import {
   UserInfoWrapper,
   ConsultationFormWrapperOuter,
   SubmitBtnWrapper,
+  FormComponentContainer,
 } from "./ConsultationForm.styled";
+import SwooshBG from "../../../assets/images/plansAndPricing/pink-swoosh.png";
 
 const ConsultationForm: React.FC<{
   formRef: React.RefObject<HTMLDivElement>;
 }> = ({ formRef }) => {
   return (
-    <div ref={formRef}>
+    <FormComponentContainer ref={formRef}>
+      <img src={SwooshBG} className="swoosh-bg" alt="" />
       <ConsultationFormWrapperOuter id="consultForm">
         <ConsultationFormWrapper>
           <form action="">
@@ -37,7 +40,7 @@ const ConsultationForm: React.FC<{
           </form>
         </ConsultationFormWrapper>
       </ConsultationFormWrapperOuter>
-    </div>
+    </FormComponentContainer>
   );
 };
 

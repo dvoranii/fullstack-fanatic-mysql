@@ -93,6 +93,7 @@ export const CardsContainer = styled.div`
 
 export const PayPerPostWrapper = styled.div`
   width: 100%;
+  padding-top: 4.2rem;
 `;
 
 export const PayPerPostTextWrapper = styled.div`
@@ -120,7 +121,7 @@ export const ConsultationSectionWrapperInner = styled.div`
   font-family: "Roboto";
   width: 75%;
   margin: 0 auto;
-  padding: 0 1.2rem 4.2rem 1.2rem;
+  padding: 4.2rem 1.2rem 4.2rem 1.2rem;
   p {
     margin-top: 10px;
     line-height: 1.5;
@@ -184,10 +185,18 @@ export const ConsultationContentWrapper = styled.div`
 `;
 export const ConsultationTextWrapper = styled.div``;
 export const ConsultationImgWrapper = styled.div`
+  user-select: none;
   img {
     width: 100%;
     height: auto;
     object-fit: contain;
     min-width: 370px;
   }
+`;
+
+export const ConsultFormTitleWrapper = styled.div`
+  width: 60%;
+  margin: 0 auto;
+  display: flex;
+  /* justify-content: center; */
 `;

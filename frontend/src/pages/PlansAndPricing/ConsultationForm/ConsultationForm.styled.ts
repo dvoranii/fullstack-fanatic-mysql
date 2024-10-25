@@ -1,7 +1,8 @@
 import { styled } from "styled-components";
 import { colors } from "../../../GlobalStyles";
 
-export const ConsultationFormWrapperOuter = styled.div`
+export const FormComponentContainer = styled.div`
+  position: relative;
   width: 100%;
   background: linear-gradient(
     180deg,
@@ -9,15 +10,28 @@ export const ConsultationFormWrapperOuter = styled.div`
     rgba(240, 240, 240, 1) 62%,
     rgba(204, 204, 204, 1) 100%
   );
+
+  .swoosh-bg {
+    position: absolute;
+    top: -100px;
+    width: 100%;
+    height: 400px;
+  }
+`;
+
+export const ConsultationFormWrapperOuter = styled.div`
+  width: 100%;
   padding-bottom: 2.4rem;
   position: relative;
-  padding-top: 4.2rem;
+  padding-top: 1.2rem;
 `;
 
 export const ConsultationFormWrapper = styled.div`
   max-width: 60%;
   margin: 0 auto;
   caret-color: ${colors.secondary};
+  user-select: none;
+  z-index: 999;
 
   label {
     font-family: "ZenKakuGothicNewRegular", sans-serif;

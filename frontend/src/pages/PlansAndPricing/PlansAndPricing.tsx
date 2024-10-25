@@ -12,6 +12,7 @@ import {
   ConsultationContentWrapper,
   ConsultationTextWrapper,
   ConsultationImgWrapper,
+  ConsultFormTitleWrapper,
 } from "./PlansAndPricing.styled";
 import Title from "../../components/Title/Title";
 import BGSwoosh from "../../assets/images/plansAndPricing/Ellipse7.svg";
@@ -30,10 +31,14 @@ const PlansAndPricing: React.FC = () => {
   return (
     <PlansAndPricingContainerOuter>
       <PageBGWrapper>
-        <img src={BGSwoosh} alt="" className="bg-swoosh" />
+        <img
+          src={BGSwoosh}
+          alt="decorative background swoosh"
+          className="bg-swoosh"
+        />
         <img
           src={SquaresAndTriangles}
-          alt=""
+          alt="decorative background squares and triangles"
           className="bg-squares-and-triangles"
         />
         <Title textContent={"Plans And Pricing"} />
@@ -173,10 +178,18 @@ const PlansAndPricing: React.FC = () => {
               </p>
             </ConsultationTextWrapper>
             <ConsultationImgWrapper>
-              <img src={ConsultationImg} alt="" />
+              <img
+                src={ConsultationImg}
+                alt="Consultation Graphic"
+                title="Consultation"
+              />
             </ConsultationImgWrapper>
           </ConsultationContentWrapper>
         </ConsultationSectionWrapperInner>
+        <ConsultFormTitleWrapper>
+          <h2>Book Now</h2>
+        </ConsultFormTitleWrapper>
+
         <ConsultationForm formRef={formRef} />
       </ConsultationSectionWrapperOuter>
     </PlansAndPricingContainerOuter>

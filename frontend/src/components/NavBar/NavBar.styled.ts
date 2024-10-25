@@ -79,6 +79,7 @@ export const NavItem = styled.li`
   margin: 0 1rem;
   position: relative;
   display: flex;
+  user-select: none;
 `;
 
 export const NavPipe = styled.span`
