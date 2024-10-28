@@ -24,33 +24,30 @@ const router = express.Router();
   });
 
   const getStripePriceId = (item: CartItem): string | null => {
-    // Handle tutorial and blog items based on their price
     if (item.type === "tutorial" || item.type === "blog") {
       if (item.price === 5.0) {
-        return "price_1QAdG0Lg43ij91cKrppnUtez"; // Tutorial price for $5.0
+        return "price_1QAdG0Lg43ij91cKrppnUtez";
       } else if (item.price === 3.5) {
-        return "price_1Q9VnYLg43ij91cKsu8U9CE0"; // Tutorial price for $3.5
+        return "price_1Q9VnYLg43ij91cKsu8U9CE0";
       }
     }
 
-    // Handle subscription items based on their title
     if (item.type === "subscription") {
       switch (item.title) {
         case "STARTER":
-          return "price_1QCT2ZLg43ij91cKvrdh8tZJ"; // Price ID for $7 subscription
+          return "price_1QCT2ZLg43ij91cKvrdh8tZJ";
         case "PREMIUM":
-          return "price_1QAEHFLg43ij91cKJ9Ofrpt5"; // Price ID for $125 subscription
+          return "price_1QAEHFLg43ij91cKJ9Ofrpt5";
         case "CASUAL PRO":
-          return "price_1QAEHFLg43ij91cKjwxB2FCZ"; // Price ID for $20 subscription
+          return "price_1QAEHFLg43ij91cKjwxB2FCZ";
         default:
-          return null; // Invalid title or not handled
+          return null;
       }
     }
 
-    return null; // If item does not match any case
+    return null;
   };
 
-  // Create checkout session
   router.post(
     "/create-checkout-session-payment",
     authenticate,
