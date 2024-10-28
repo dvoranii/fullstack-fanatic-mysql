@@ -11,6 +11,7 @@ import favouriteRoutes from "./routes/favourites";
 import conversationsRoutes from "./routes/conversations";
 import messagesRoutes from "./routes/messages";
 import notificationsRoutes from "./routes/notifications";
+import formsRoutes from "./routes/forms";
 import stripeRoutes from "./routes/stripe";
 import { Server } from "socket.io";
 import http from "http";
@@ -56,6 +57,7 @@ app.use("/api/favourites", favouriteRoutes);
 app.use("/api/conversations", conversationsRoutes);
 app.use("/api/messages", messagesRoutes);
 app.use("/api/notifications", notificationsRoutes);
+app.use("/api/forms", formsRoutes);
 app.use("/api/stripe", stripeRoutes);
 
 const server = http.createServer(app);

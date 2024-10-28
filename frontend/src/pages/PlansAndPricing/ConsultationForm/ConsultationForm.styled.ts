@@ -43,7 +43,7 @@ export const ConsultationFormWrapper = styled.div`
   }
 
   input {
-    padding: 4px;
+    padding: 4px 4px 4px 8px;
     font-family: "ZenKakuGothicNewRegular", sans-serif;
     border-radius: 8px;
     border: 1px solid grey;

@@ -111,10 +111,13 @@ const PlansAndPricing: React.FC = () => {
         <Title textContent={"Pay per post"} />
         <PayPerPostTextWrapper>
           <p>
-            Looking for flexibility? Choose the <b>Pay Per Post </b>option and
-            get premium content without the commitment of a subscription! This
-            allows you to access individual posts—both tutorials and blogs—based
-            on your interests and needs:
+            Looking for flexibility? Only need the info from a specific tutorial
+            or blog post? Then the the <b>Pay Per Post</b> option is your best
+            bet, granting you access to premium content without the commitment
+            of a full subscription.This allows you to curate your premium
+            content collection in a more personalized way, choosing only what’s
+            most relevant to your needs and interests, while keeping costs under
+            control:
           </p>
 
           <ul>
@@ -131,8 +134,8 @@ const PlansAndPricing: React.FC = () => {
           <p>
             Pay Per Post is perfect if you prefer a customized learning path or
             only need specific content without a long-term commitment.<br></br>
-            Get the information you need when you need it, without breaking the
-            bank!
+            Get the knowledge you’re looking for, exactly when you need it,
+            exactly the way you want it.
           </p>
         </PayPerPostTextWrapper>
       </PayPerPostWrapper>

@@ -198,5 +198,9 @@ export const ConsultFormTitleWrapper = styled.div`
   width: 60%;
   margin: 0 auto;
   display: flex;
-  /* justify-content: center; */
+
+  h2 {
+    font-family: "Anybody";
+    text-transform: uppercase;
+  }
 `;
