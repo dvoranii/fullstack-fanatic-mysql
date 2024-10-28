@@ -22,4 +22,5 @@ export const Spinner = styled.div<SpinnerProps>`
   height: ${({ width }) => width};
   animation: ${spin} 1s linear infinite;
   position: absolute;
+  top: 10px;
 `;

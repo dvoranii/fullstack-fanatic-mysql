@@ -89,6 +89,7 @@ export const UserInfoWrapper = styled.div`
 
 export const SubmitBtnWrapper = styled.div`
   width: 100%;
+  position: relative;
 
   button {
     padding: 8px 16px;

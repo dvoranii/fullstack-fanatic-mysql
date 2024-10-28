@@ -10,7 +10,8 @@ import {
   FormComponentContainer,
 } from "./ConsultationForm.styled";
 import SwooshBG from "../../../assets/images/plansAndPricing/pink-swoosh.png";
-import ErrorMessage from "../../../components/Form/ErrorMessage";
+import FormMessage from "../../../components/Form/Message";
+import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import { submitConsultationForm } from "../../../services/consultFormService";
 
 const ConsultationForm: React.FC<{
@@ -23,6 +24,9 @@ const ConsultationForm: React.FC<{
   const [nameError, setNameError] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [messageError, setMessageError] = useState<string | null>(null);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -52,13 +56,25 @@ const ConsultationForm: React.FC<{
 
     if (hasError) return;
 
+    setIsLoading(true);
+
     try {
-      const response = await submitConsultationForm(name, email, message);
-      console.log("Form submitted:", response.data.message);
-      alert("Thank you for submitting the form. We will contact you soon.");
+      await submitConsultationForm(name, email, message);
+      setSuccessMessage("Form submission successful!");
+
+      setTimeout(() => {
+        setSuccessMessage(null);
+        setName("");
+        setEmail("");
+        setMessage("");
+      }, 5000);
     } catch (error) {
       console.error("Error submitting the consultation form:", error);
-      alert("There was an issue submitting the form. Please try again.");
+      setMessageError(
+        "There was an issue submitting the form. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -101,8 +117,9 @@ const ConsultationForm: React.FC<{
                   value={name}
                   onChange={handleOnChangeInputText}
                 />
-                <ErrorMessage
-                  error={nameError}
+                <FormMessage
+                  message={nameError}
+                  type="error"
                   textAlign="left"
                   fontSize="0.8rem"
                   marginTop="4px"
@@ -116,8 +133,9 @@ const ConsultationForm: React.FC<{
                   value={email}
                   onChange={handleOnChangeInputText}
                 />
-                <ErrorMessage
-                  error={emailError}
+                <FormMessage
+                  message={emailError}
+                  type="error"
                   textAlign="left"
                   fontSize="0.8rem"
                   marginTop="4px"
@@ -132,19 +150,33 @@ const ConsultationForm: React.FC<{
                 value={message}
                 onChange={handleOnChangeInputText}
               ></textarea>
-              <ErrorMessage
-                error={messageError}
+              <FormMessage
+                message={messageError}
+                type="error"
                 textAlign="left"
                 fontSize="0.8rem"
                 marginTop="4px"
               />
             </TextAreaWrapper>
             <SubmitBtnWrapper>
-              <button type="submit">Submit</button>
+              {isLoading ? (
+                <LoadingSpinner />
+              ) : (
+                <button type="submit">Submit</button>
+              )}
             </SubmitBtnWrapper>
+
+            <FormMessage
+              message={successMessage}
+              type="success"
+              textAlign="center"
+              fontSize="1rem"
+              marginTop="10px"
+            />
           </form>
         </ConsultationFormWrapper>
       </ConsultationFormWrapperOuter>
+      <div>&nbsp;</div>
     </FormComponentContainer>
   );
 };

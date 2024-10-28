@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
-import ErrorMessage from "../Form/ErrorMessage";
+import ErrorMessage from "../Form/Message";
 import {
   CommentSectionWrapperOuter,
   CommentSectionWrapperInner,

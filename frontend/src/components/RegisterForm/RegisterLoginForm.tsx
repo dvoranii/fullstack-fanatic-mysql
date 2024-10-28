@@ -3,7 +3,7 @@ import { useAuthForm } from "../../hooks/useAuthForm";
 import InputField from "../Form/InputField";
 import GoogleAuthButton from "../Form/GoogleAuthButton";
 import SubmitButton from "../Form/SubmitButton";
-import ErrorMessage from "../Form/ErrorMessage";
+import ErrorMessage from "../Form/Message";
 import TermsCheckbox from "../Form/TermsCheckbox";
 import {
   RegisterLoginFormWrapperInner,
