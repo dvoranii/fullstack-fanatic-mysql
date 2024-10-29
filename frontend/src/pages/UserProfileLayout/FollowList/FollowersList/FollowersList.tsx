@@ -5,6 +5,8 @@ import {
   FollowTitleBanner,
   EmptyMessage,
   FollowButtonsWrapper,
+  FollowerInfoWrapper,
+  FollowerLinkWrapperInner,
 } from "../FollowList.styled";
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -66,15 +68,21 @@ const FollowersList: React.FC<FollowersListProps> = ({ userId }) => {
               followers.map((user) => (
                 <li key={user.id}>
                   <Link to={`/user/${user.id}`}>
-                    <ProfilePicture
-                      src={user.profile_picture || ""}
-                      alt={user.name}
-                      width={"60px"}
-                      border={"1px solid black"}
-                    />
-                    <span>{user.name}</span>
-                    <span>{user.profession}</span>
+                    <FollowerLinkWrapperInner>
+                      <ProfilePicture
+                        src={user.profile_picture || ""}
+                        alt={user.name}
+                        width={"60px"}
+                        border={"1px solid black"}
+                      />
+
+                      <FollowerInfoWrapper>
+                        <h4>{user.name}</h4>
+                        <h5>{user.profession}</h5>
+                      </FollowerInfoWrapper>
+                    </FollowerLinkWrapperInner>
                   </Link>
+
                   {loggedInUser && (
                     <FollowButtonsWrapper>
                       <button

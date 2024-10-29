@@ -10,6 +10,7 @@ export const getUserProfile = async (): Promise<User> => {
     credentials: "include",
   });
 
+  console.log(data);
   return data;
 };
 

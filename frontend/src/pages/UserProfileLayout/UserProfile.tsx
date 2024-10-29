@@ -29,6 +29,9 @@ import {
   UserAccountContainer,
   AccountActivitySubBanner,
   FollowsWrapper,
+  TutorialsFavWrapper,
+  BlogsFavWrapper,
+  PremiumBadge,
 } from "./UserProfile.styled";
 import TutorialIcon from "../../assets/images/tutorial-icon.png";
 import BlogIcon from "../../assets/images/blog-icon.png";
@@ -84,6 +87,8 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
     fetchFollowData();
   }, [profile.id]);
 
+  console.log(profile.isPremium);
+
   return (
     <>
       <BannerWrapperOuter>
@@ -128,6 +133,12 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                   <a href="#" onClick={onEditProfileClick}>
                     <u>Edit Profile</u>
                   </a>
+                )}
+
+                {profile.isPremium && profile.premiumLevel && (
+                  <PremiumBadge>
+                    <p> {profile.premiumLevel.toUpperCase()}</p>
+                  </PremiumBadge>
                 )}
               </ProfileInfo>
 
@@ -196,7 +207,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
         <AccountActivity>
           <Section>
             <SectionContent>
-              <div>
+              <TutorialsFavWrapper>
                 <FavouriteIcon>
                   <img src={TutorialIcon} alt="Tutorials" />
                 </FavouriteIcon>
@@ -204,9 +215,9 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                 <ViewAllButton onClick={() => console.log(favouriteTutorials)}>
                   View All
                 </ViewAllButton>
-              </div>
+              </TutorialsFavWrapper>
 
-              <div>
+              <BlogsFavWrapper>
                 <FavouriteIcon>
                   <img src={BlogIcon} alt="Blogs" />
                 </FavouriteIcon>
@@ -214,7 +225,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                 <ViewAllButton onClick={() => console.log(favouriteBlogs)}>
                   View All
                 </ViewAllButton>
-              </div>
+              </BlogsFavWrapper>
             </SectionContent>
           </Section>
 

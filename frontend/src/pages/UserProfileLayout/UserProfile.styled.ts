@@ -205,6 +205,7 @@ export const SectionContent = styled.div`
   align-items: center;
   justify-content: center;
   gap: 1.2rem;
+  height: 100%;
 
   div {
     display: flex;
@@ -217,11 +218,11 @@ export const ViewAllButton = styled.button`
   background-color: #ffa500;
   border: none;
   color: white;
-  padding: 10px 20px;
+  padding: 4px 16px;
   margin-top: 20px;
   font-size: 16px;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 2px;
 
   &:hover {
     background-color: #e69500;
@@ -327,5 +328,37 @@ export const SocialSectionWrapperOuter = styled.div`
 export const FollowsWrapper = styled.div`
   p {
     margin-bottom: 0;
+  }
+`;
+
+export const TutorialsFavWrapper = styled.div`
+  border: 2px solid #aaa;
+  padding: 20px 40px;
+`;
+
+export const BlogsFavWrapper = styled.div`
+  border: 2px solid #aaa;
+  padding: 20px 40px;
+`;
+
+export const PremiumBadge = styled.div`
+  margin: 0.8rem auto;
+  width: 80%;
+  padding: 4px 16px;
+  background: linear-gradient(
+    315deg,
+    rgba(34, 185, 50, 1) 23%,
+    rgba(157, 233, 165, 1) 50%,
+    rgba(34, 185, 50, 1) 77%
+  );
+  clip-path: polygon(0 0, 100% 0, 85% 48%, 100% 100%, 0 100%, 15% 50%);
+  font-size: 1rem;
+  font-weight: bold;
+
+  p {
+    color: white;
+    text-shadow: 1px 1px 0 black, -1px 1px 0 black, 1px -1px 0 black,
+      -1px -1px 0 black;
+    letter-spacing: 1px;
   }
 `;

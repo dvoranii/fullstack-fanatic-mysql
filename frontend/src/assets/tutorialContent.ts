@@ -69,8 +69,9 @@ export const tutorialContent: TutorialContentItem[] = [
     ],
     image: tutorial_3_thumbnail,
     isPremium: true,
+    premiumLevel: "starter",
     availableForPurchase: true,
-    accessLevel: "monthly",
+    accessLevel: "premium",
     price: 3.5,
     difficulty: "intermediate",
     description:
@@ -92,8 +93,9 @@ export const tutorialContent: TutorialContentItem[] = [
     ],
     image: tutorial_4_thumbnail,
     isPremium: true,
+    premiumLevel: "premium",
     availableForPurchase: true,
-    accessLevel: "yearly",
+    accessLevel: "premium",
     price: 5.0,
     difficulty: "advanced",
     description:
@@ -115,8 +117,10 @@ export const tutorialContent: TutorialContentItem[] = [
     ],
     image: tutorial_5_thumbnail,
     isPremium: true,
+
+    premiumLevel: "casual pro",
     availableForPurchase: true,
-    accessLevel: "yearly",
+    accessLevel: "premium",
     price: 5,
     difficulty: "intermediate",
     description:
@@ -138,8 +142,9 @@ export const tutorialContent: TutorialContentItem[] = [
     ],
     image: tutorial_6_thumbnail,
     isPremium: true,
+    premiumLevel: "starter",
     availableForPurchase: true,
-    accessLevel: "monthly",
+    accessLevel: "premium",
     price: 3.5,
     difficulty: "intermediate",
     description:

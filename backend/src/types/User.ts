@@ -9,4 +9,5 @@ export interface UserPayload {
   socialLinks?: { [key: string]: string };
   bannerImage?: string;
   isPremium: boolean;
+  premiumLevel?: "starter" | "casual pro" | "premium";
 }

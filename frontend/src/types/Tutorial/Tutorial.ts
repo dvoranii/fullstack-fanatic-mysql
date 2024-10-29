@@ -6,13 +6,14 @@ export interface Tutorial {
   created_at: string;
   image: string;
   isPremium: boolean;
+  premiumLevel?: "starter" | "casual pro" | "premium";
   availableForPurchase: boolean;
-  accessLevel: "free" | "monthly" | "yearly";
+  accessLevel: "free" | "premium";
   price?: number;
   difficulty: "beginner" | "intermediate" | "advanced";
   description: string;
 }
 
 export interface TutorialContentItem extends Tutorial {
-  steps: Step[]; // Add only additional properties specific to TutorialContentItem
+  steps: Step[];
 }

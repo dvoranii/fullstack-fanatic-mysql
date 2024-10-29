@@ -25,6 +25,7 @@ export const blogContent: BlogContentItem[] = [
     ],
     image: blog_thumbnail_1,
     isPremium: false,
+    accessLevel: "free",
   },
   {
     id: 2,
@@ -42,6 +43,7 @@ export const blogContent: BlogContentItem[] = [
     ],
     image: blog_thumbnail_2,
     isPremium: false,
+    accessLevel: "free",
   },
   {
     id: 3,
@@ -59,6 +61,7 @@ export const blogContent: BlogContentItem[] = [
     ],
     image: blog_thumbnail_3,
     isPremium: false,
+    accessLevel: "free",
   },
   {
     id: 4,
@@ -76,6 +79,7 @@ export const blogContent: BlogContentItem[] = [
     ],
     image: blog_thumbnail_4,
     isPremium: false,
+    accessLevel: "free",
   },
   {
     id: 5,
@@ -87,6 +91,7 @@ export const blogContent: BlogContentItem[] = [
     ],
     image: blog_thumbnail_5,
     isPremium: true,
+    accessLevel: "premium",
   },
   {
     id: 6,
@@ -98,6 +103,7 @@ export const blogContent: BlogContentItem[] = [
     ],
     image: blog_thumbnail_6,
     isPremium: true,
+    accessLevel: "premium",
   },
   {
     id: 7,
@@ -109,6 +115,7 @@ export const blogContent: BlogContentItem[] = [
     ],
     image: blog_thumbnail_7,
     isPremium: true,
+    accessLevel: "premium",
   },
   {
     id: 8,
@@ -120,5 +127,6 @@ export const blogContent: BlogContentItem[] = [
     ],
     image: blog_thumbnail_8,
     isPremium: true,
+    accessLevel: "premium",
   },
 ];

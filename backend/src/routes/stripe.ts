@@ -3,6 +3,7 @@ import express, { Request, Response } from "express";
 import { authenticate } from "../middleware/authenticate";
 import { CartItem } from "../types/CartItem";
 import Stripe from "stripe";
+import connectionPromise from "../db";
 
 dotenv.config();
 
@@ -114,6 +115,12 @@ const router = express.Router();
           };
         });
 
+        const subscriptionItem = cartItems.find(
+          (item: CartItem) => item.type === "subscription"
+        );
+
+        const subscriptionType = subscriptionItem?.title || "";
+
         const session = await stripe.checkout.sessions.create({
           payment_method_types: ["card"],
           mode: "subscription",
@@ -123,6 +130,7 @@ const router = express.Router();
           metadata: {
             userId: req.user?.userId,
             email: req.user?.email,
+            subscriptionType,
           },
         });
 
@@ -163,7 +171,52 @@ const router = express.Router();
 
       if (event.type === "checkout.session.completed") {
         const session = event.data.object as Stripe.Checkout.Session;
-        console.log("Payment was successful for session: ", session);
+
+        if (session.mode === "subscription") {
+          try {
+            const userId = session.metadata?.userId;
+
+            if (!userId) {
+              throw new Error("User ID not found in session metadata");
+            }
+
+            const subscriptionType = session.metadata?.subscriptionType;
+
+            let premiumLevel: string | null = null;
+
+            switch (subscriptionType) {
+              case "STARTER":
+                premiumLevel = "starter";
+                break;
+              case "CASUAL PRO":
+                premiumLevel = "casual pro";
+                break;
+              case "PREMIUM":
+                premiumLevel = "premium";
+                break;
+              default:
+                throw new Error("Invalid subscription type.");
+            }
+
+            if (premiumLevel) {
+              const connection = await connectionPromise;
+
+              await connection.execute(
+                "UPDATE users SET isPremium = 1, premiumLevel = ? WHERE id = ?",
+                [premiumLevel, userId]
+              );
+
+              console.log(
+                `User ${userId} updated to premium level: ${premiumLevel}`
+              );
+            }
+          } catch (error) {
+            console.error("Error updating user's premium level:", error);
+            return res
+              .status(500)
+              .json({ error: "Failed to update user's premium level" });
+          }
+        }
       }
 
       res.json({ received: true });

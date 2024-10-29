@@ -6,4 +6,5 @@ export interface BlogContentItem {
   steps: Step[];
   image: string;
   isPremium: boolean;
+  accessLevel: "free" | "premium";
 }
