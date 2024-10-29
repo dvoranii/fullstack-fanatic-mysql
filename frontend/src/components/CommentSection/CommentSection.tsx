@@ -335,7 +335,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     <>
       <CommentSectionWrapperOuter>
         <CommentSectionTitle>Comments</CommentSectionTitle>
-        {error && <ErrorMessage error={error} />}
+        {error && <ErrorMessage message={error} />}
         <CommentSectionWrapperInner id="scrollableDiv">
           <InfiniteScroll
             dataLength={comments.length}

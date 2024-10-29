@@ -42,16 +42,6 @@ export const CartDetails = styled.div`
     margin: 10px 0;
     padding-bottom: 1.2rem;
   }
-
-  /* button {
-    background-color: #ffa723;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9rem;
-  } */
 `;
 
 export const ClearCartBtnWrapper = styled.div`
@@ -98,6 +88,7 @@ export const ViewCartLink = styled(Link)`
   border-radius: 4px;
   transition: all 150ms ease;
   height: fit-content;
+  font-size: 1rem;
 
   &:hover {
     background-color: ${colors.secondary};

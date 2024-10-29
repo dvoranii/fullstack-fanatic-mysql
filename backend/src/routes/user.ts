@@ -400,110 +400,100 @@ router.delete(
   }
 );
 
-router.get(
-  "/:id/followers",
-  authenticate,
-  async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const followerId = req.user?.userId;
+router.get("/:id/followers", async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const followerId = req.user?.userId;
 
-    try {
-      const connection = await connectionPromise;
+  try {
+    const connection = await connectionPromise;
 
-      const [followersCountResult] = await connection.execute<RowDataPacket[]>(
-        "SELECT COUNT(*) AS followersCount FROM followers WHERE followed_id = ?",
-        [id]
-      );
-      const followersCount = followersCountResult[0].followersCount || 0;
+    const [countRows] = await connection.query<RowDataPacket[]>(
+      `SELECT COUNT(*) as followersCount FROM followers WHERE followed_id = ?`,
+      [id]
+    );
 
+    const followersCount = countRows[0]?.followersCount || 0;
+
+    let isFollowing = false;
+
+    // If there is a logged-in user, check if they are following the given user
+    if (followerId) {
       const [isFollowingResult] = await connection.execute<RowDataPacket[]>(
         "SELECT COUNT(*) AS isFollowing FROM followers WHERE follower_id = ? AND followed_id = ?",
         [followerId, id]
       );
-      const isFollowing = isFollowingResult[0].isFollowing > 0;
-
-      res.status(200).json({ followersCount, isFollowing });
-    } catch (error) {
-      console.error("Error fetching follow state: ", error);
-      res.status(500).json({ message: "Failed to fetch followers" });
+      isFollowing = isFollowingResult[0]?.isFollowing > 0;
     }
+
+    return res.status(200).json({ followersCount, isFollowing });
+  } catch (err) {
+    console.error("Error fetching follow state:", err);
+    return res.status(500).json({ error: "Failed to fetch follow state" });
   }
-);
+});
 
-router.get(
-  "/:id/following",
-  authenticate,
-  async (req: Request, res: Response) => {
-    const { id } = req.params;
+router.get("/:id/following", async (req: Request, res: Response) => {
+  const { id } = req.params;
 
-    try {
-      const connection = await connectionPromise;
+  try {
+    const connection = await connectionPromise;
 
-      const [followingCountResult] = await connection.execute<RowDataPacket[]>(
-        "SELECT COUNT(*) AS followingCount FROM followers WHERE follower_id = ?",
-        [id]
-      );
+    const [followingCountResult] = await connection.execute<RowDataPacket[]>(
+      "SELECT COUNT(*) AS followingCount FROM followers WHERE follower_id = ?",
+      [id]
+    );
 
-      const followingCount = followingCountResult[0].followingCount || 0;
+    const followingCount = followingCountResult[0].followingCount || 0;
 
-      res.status(200).json({ followingCount });
-    } catch (error) {
-      console.error("Error fetching following count: ", error);
-      res.status(500).json({ message: "Failed to fetch following count" });
-    }
+    res.status(200).json({ followingCount });
+  } catch (error) {
+    console.error("Error fetching following count: ", error);
+    res.status(500).json({ message: "Failed to fetch following count" });
   }
-);
+});
 
-router.get(
-  "/:id/followers-list",
-  authenticate,
-  async (req: Request, res: Response) => {
-    const { id } = req.params;
+router.get("/:id/followers-list", async (req: Request, res: Response) => {
+  const { id } = req.params;
 
-    try {
-      const connection = await connectionPromise;
+  try {
+    const connection = await connectionPromise;
 
-      const [followers] = await connection.execute<RowDataPacket[]>(
-        `SELECT u.id, u.name, u.profile_picture, u.profession
+    const [followers] = await connection.execute<RowDataPacket[]>(
+      `SELECT u.id, u.name, u.profile_picture, u.profession
          FROM followers f
          JOIN users u ON f.follower_id = u.id
          WHERE f.followed_id = ?`,
-        [id]
-      );
+      [id]
+    );
 
-      res.status(200).json({ followers });
-    } catch (error) {
-      console.error("Error fetching followers list: ", error);
-      res.status(500).json({ message: "Failed to fetch followers list" });
-    }
+    res.status(200).json({ followers });
+  } catch (error) {
+    console.error("Error fetching followers list: ", error);
+    res.status(500).json({ message: "Failed to fetch followers list" });
   }
-);
+});
 
-router.get(
-  "/:id/following-list",
-  authenticate,
-  async (req: Request, res: Response) => {
-    const { id } = req.params;
+router.get("/:id/following-list", async (req: Request, res: Response) => {
+  const { id } = req.params;
 
-    console.log(id);
+  console.log(id);
 
-    try {
-      const connection = await connectionPromise;
+  try {
+    const connection = await connectionPromise;
 
-      const [following] = await connection.execute<RowDataPacket[]>(
-        `SELECT u.id, u.name, u.profile_picture, u.profession
+    const [following] = await connection.execute<RowDataPacket[]>(
+      `SELECT u.id, u.name, u.profile_picture, u.profession
        FROM followers f
        JOIN users u ON f.followed_id = u.id
        WHERE f.follower_id = ?`,
-        [id]
-      );
+      [id]
+    );
 
-      res.status(200).json({ following });
-    } catch (error) {
-      console.error("Error fetching following list: ", error);
-      res.status(500).json({ message: "Failed to fetch following list" });
-    }
+    res.status(200).json({ following });
+  } catch (error) {
+    console.error("Error fetching following list: ", error);
+    res.status(500).json({ message: "Failed to fetch following list" });
   }
-);
+});
 
 export default router;

@@ -141,7 +141,7 @@ const Comment: React.FC<CommentProps> = ({
             </>
           )}
 
-          {!isEditing && !isCommentOwner && !showReplyForm && (
+          {!isEditing && !isCommentOwner && !showReplyForm && profile && (
             <FormButton onClick={() => setShowReplyForm(true)}>
               <img src={ReplyIcon} alt="Reply" title="Reply" />
             </FormButton>
