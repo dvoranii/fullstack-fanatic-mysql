@@ -11,6 +11,7 @@ import {
 } from "../utils/jwtUtils";
 import bcrypt from "bcrypt";
 import { authenticate } from "../middleware/authenticate";
+import { getUserIdFromToken } from "../utils/getUserIdFromToken";
 
 dotenv.config();
 
@@ -402,7 +403,7 @@ router.delete(
 
 router.get("/:id/followers", async (req: Request, res: Response) => {
   const { id } = req.params;
-  const followerId = req.user?.userId;
+  const followerId = getUserIdFromToken(req.headers.authorization);
 
   try {
     const connection = await connectionPromise;
@@ -432,25 +433,29 @@ router.get("/:id/followers", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/:id/following", async (req: Request, res: Response) => {
-  const { id } = req.params;
+router.get(
+  "/:id/following",
 
-  try {
-    const connection = await connectionPromise;
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
 
-    const [followingCountResult] = await connection.execute<RowDataPacket[]>(
-      "SELECT COUNT(*) AS followingCount FROM followers WHERE follower_id = ?",
-      [id]
-    );
+    try {
+      const connection = await connectionPromise;
 
-    const followingCount = followingCountResult[0].followingCount || 0;
+      const [followingCountResult] = await connection.execute<RowDataPacket[]>(
+        "SELECT COUNT(*) AS followingCount FROM followers WHERE follower_id = ?",
+        [id]
+      );
 
-    res.status(200).json({ followingCount });
-  } catch (error) {
-    console.error("Error fetching following count: ", error);
-    res.status(500).json({ message: "Failed to fetch following count" });
+      const followingCount = followingCountResult[0].followingCount || 0;
+
+      res.status(200).json({ followingCount });
+    } catch (error) {
+      console.error("Error fetching following count: ", error);
+      res.status(500).json({ message: "Failed to fetch following count" });
+    }
   }
-});
+);
 
 router.get("/:id/followers-list", async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -475,8 +480,6 @@ router.get("/:id/followers-list", async (req: Request, res: Response) => {
 
 router.get("/:id/following-list", async (req: Request, res: Response) => {
   const { id } = req.params;
-
-  console.log(id);
 
   try {
     const connection = await connectionPromise;

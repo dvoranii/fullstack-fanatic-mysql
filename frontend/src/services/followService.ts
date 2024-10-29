@@ -23,6 +23,7 @@ export const fetchFollowersState = async (
       method: "GET",
     });
 
+    console.log(followersData.isFollowing);
     return {
       isFollowing: followersData.isFollowing || false,
       followersCount: followersData.followersCount || 0,
@@ -59,6 +60,7 @@ export const followUser = async (userId: number) => {
   const { status } = await apiCall(`/api/users/${userId}/follow`, {
     method: "POST",
   });
+
   return status;
 };
 

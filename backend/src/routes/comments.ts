@@ -15,12 +15,13 @@ import {
   fetchTotalComments,
   findTopLevelComment,
 } from "../services/commentService";
+import { getUserIdFromToken } from "../utils/getUserIdFromToken";
 
 const router = express.Router();
 
 router.get("/:contentType/:contentId", async (req: Request, res: Response) => {
   const { contentType, contentId } = req.params;
-  const userId = req.user?.userId;
+  const userId = getUserIdFromToken(req.headers.authorization);
   const includeLikedStatus = req.query.includeLikedStatus === "true";
 
   const page = parseInt(req.query.page as string) || 1;
