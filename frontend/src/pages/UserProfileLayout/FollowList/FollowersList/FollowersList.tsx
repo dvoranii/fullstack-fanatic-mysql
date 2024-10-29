@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { UserContext } from "../../../../context/UserContext";
 import {
   FollowListWrapper,
   FollowTitleBanner,
@@ -17,6 +19,9 @@ interface FollowersListProps {
 }
 
 const FollowersList: React.FC<FollowersListProps> = ({ userId }) => {
+  const userContext = useContext(UserContext);
+  const loggedInUser = userContext?.profile;
+
   const { id } = useParams<{ id: string }>();
   const effectiveUserId = userId || Number(id);
 
@@ -70,13 +75,17 @@ const FollowersList: React.FC<FollowersListProps> = ({ userId }) => {
                     <span>{user.name}</span>
                     <span>{user.profession}</span>
                   </Link>
-                  <FollowButtonsWrapper>
-                    <button
-                      onClick={() => handleOpenMessageModal(user.id.toString())}
-                    >
-                      Message
-                    </button>
-                  </FollowButtonsWrapper>
+                  {loggedInUser && (
+                    <FollowButtonsWrapper>
+                      <button
+                        onClick={() =>
+                          handleOpenMessageModal(user.id.toString())
+                        }
+                      >
+                        Message
+                      </button>
+                    </FollowButtonsWrapper>
+                  )}
                 </li>
               ))
             ) : (

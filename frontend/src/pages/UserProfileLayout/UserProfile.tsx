@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import {
   ProfileBanner,
@@ -42,6 +42,7 @@ import {
   fetchFollowersState,
   fetchFollowingState,
 } from "../../services/followService";
+import { UserContext } from "../../context/UserContext";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -57,6 +58,9 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
   onBannerUpload,
   children,
 }) => {
+  const userContext = useContext(UserContext);
+  const loggedInUser = userContext?.profile;
+
   const socialLinks = profile.social_links || {};
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [followersCount, setFollowersCount] = useState(0);
@@ -104,14 +108,14 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                 <UserName>{profile.display_name || profile.name}</UserName>
                 <UserProfession>{profile.profession}</UserProfession>
 
-                {!isEditable && (
+                {!isEditable && loggedInUser && (
                   <ConnectButton
                     text={"Message"}
                     onClick={() => setIsModalOpen(true)}
                   />
                 )}
 
-                {!isEditable && (
+                {!isEditable && loggedInUser && (
                   <FollowButton
                     userId={profile.id}
                     isFollowing={isFollowing}

@@ -21,7 +21,7 @@ interface FollowingListProps {
 }
 
 const FollowingList: React.FC<FollowingListProps> = ({ userId }) => {
-  const { profile } = useContext(UserContext) || {};
+  const { profile: loggedInUser } = useContext(UserContext) || {};
   const { id } = useParams<{ id: string }>();
   const effectiveUserId = userId || Number(id);
   const [following, setFollowing] = useState<User[]>([]);
@@ -98,16 +98,20 @@ const FollowingList: React.FC<FollowingListProps> = ({ userId }) => {
                   </Link>
 
                   <FollowButtonsWrapper>
-                    {profile?.id === effectiveUserId && (
+                    {loggedInUser?.id === effectiveUserId && (
                       <button onClick={() => handleUnfollow(user.id)}>
                         Unfollow
                       </button>
                     )}
-                    <button
-                      onClick={() => handleOpenMessageModal(user.id.toString())}
-                    >
-                      Message
-                    </button>
+                    {loggedInUser && (
+                      <button
+                        onClick={() =>
+                          handleOpenMessageModal(user.id.toString())
+                        }
+                      >
+                        Message
+                      </button>
+                    )}
                   </FollowButtonsWrapper>
                 </li>
               ))
