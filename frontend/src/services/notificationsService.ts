@@ -20,5 +20,6 @@ export const markNotificationAsRead = async (notificationId: number) => {
   const { data } = await apiCall(endpoint, {
     method: "PATCH",
   });
+
   return data;
 };
