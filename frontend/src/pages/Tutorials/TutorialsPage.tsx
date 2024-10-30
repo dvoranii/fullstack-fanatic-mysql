@@ -1,7 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import Title from "../../components/Title/Title";
 import Pagination from "../../components/Pagination/Pagination";
-
 import {
   TutorialList,
   TutorialItemWrapper,
@@ -40,7 +39,6 @@ const TutorialsPage: React.FC = () => {
     addItemToCart = () => {},
     loading,
   } = useContext(UserContext) || {};
-
   const [searchText, setSearchText] = useState("");
   const [flipped, setFlipped] = useState<{ [key: string]: boolean }>({});
   const [currentPage, setCurrentPage] = useState(1);
@@ -128,11 +126,20 @@ const TutorialsPage: React.FC = () => {
     return <p>Loading...</p>;
   }
 
-  console.log(filteredTutorials);
-  console.log(profile);
-  filteredTutorials.forEach((tutorial) => {
-    console.log(tutorial.premiumLevel === profile?.premiumLevel);
-  });
+  const canAccessTutorial = (
+    userLevel: string | undefined,
+    tutorialLevel: string | undefined
+  ) => {
+    const levels = ["starter", "casual pro", "premium"];
+    const userIndex = levels.indexOf(userLevel || "");
+    const tutorialIndex = levels.indexOf(tutorialLevel || "");
+
+    return userIndex >= tutorialIndex;
+  };
+
+  const handleRestrictedAccessClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+  };
 
   return (
     <>
@@ -147,12 +154,16 @@ const TutorialsPage: React.FC = () => {
         <TutorialList>
           {filteredTutorials.slice(startIdx, endIdx).map((tutorial) => {
             const alreadyInCart = isItemInCart(tutorial.id);
+            const hasAccess = canAccessTutorial(
+              profile?.premiumLevel,
+              tutorial.premiumLevel
+            );
 
             return (
               <TutorialItemWrapper key={tutorial.id}>
                 <CardInner className={flipped[tutorial.id] ? "is-flipped" : ""}>
                   <CardFace>
-                    {tutorial.isPremium ? (
+                    {tutorial.isPremium && !hasAccess ? (
                       <PremiumThumbnailWrapperOuter>
                         <ThumbnailBannerWrapper>
                           <DifficultyStarsWrapper>
@@ -172,7 +183,14 @@ const TutorialsPage: React.FC = () => {
                             />
                           )}
                         </ThumbnailBannerWrapper>
-                        <TutorialThumbnail to={`/tutorial/${tutorial.id}`}>
+                        <TutorialThumbnail
+                          to={`/tutorial/${tutorial.id}`}
+                          onClick={(e) => {
+                            if (!hasAccess) {
+                              handleRestrictedAccessClick(e);
+                            }
+                          }}
+                        >
                           <h2 title={tutorial.title}>{tutorial.title}</h2>
                           <img src={tutorial.image} alt={tutorial.title} />
                           <PremiumBanner>

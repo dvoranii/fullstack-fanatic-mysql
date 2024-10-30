@@ -341,16 +341,16 @@ export const BlogsFavWrapper = styled.div`
   padding: 20px 40px;
 `;
 
-export const PremiumBadge = styled.div`
+export const PremiumBadge = styled.div<{ level: string }>`
   margin: 0.8rem auto;
-  width: 80%;
+  width: 90%;
   padding: 4px 16px;
-  background: linear-gradient(
-    315deg,
-    rgba(34, 185, 50, 1) 23%,
-    rgba(157, 233, 165, 1) 50%,
-    rgba(34, 185, 50, 1) 77%
-  );
+  background: ${({ level }) =>
+    level === "starter"
+      ? "linear-gradient(315deg, rgba(34, 185, 50, 1) 23%, rgba(157, 233, 165, 1) 50%, rgba(34, 185, 50, 1) 77%)"
+      : level === "casual pro"
+      ? "linear-gradient(315deg, rgba(34, 50, 185, 1) 23%, rgba(165, 185, 233, 1) 50%, rgba(34, 50, 185, 1) 77%)"
+      : "linear-gradient(315deg, rgba(255, 215, 0, 1) 23%, rgba(255, 233, 165, 1) 50%, rgba(255, 215, 0, 1) 77%)"};
   clip-path: polygon(0 0, 100% 0, 85% 48%, 100% 100%, 0 100%, 15% 50%);
   font-size: 1rem;
   font-weight: bold;

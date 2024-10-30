@@ -13,7 +13,6 @@ export const authenticate = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("Reached");
   const authHeader = req.headers["authorization"] as string | undefined;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {

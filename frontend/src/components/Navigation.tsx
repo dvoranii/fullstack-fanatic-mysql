@@ -31,6 +31,7 @@ import CheckoutSuccess from "../pages/Checkout/Success/Success";
 import CheckoutCancel from "../pages/Checkout/Cancel/Cancel";
 import PlansAndPricing from "../pages/PlansAndPricing/PlansAndPricing";
 import SubscriptionCart from "../pages/Checkout/SubscriptionCart/SubscriptionCart";
+import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
 
 const Navigation: React.FC = () => {
   const { profile } = useContext(UserContext) || {};
@@ -41,7 +42,11 @@ const Navigation: React.FC = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/tutorials" element={<TutorialsPage />} />
-        <Route path="/tutorial/:id" element={<TutorialPage />} />
+        <Route
+          path="/tutorial/:id"
+          element={<ProtectedRoute element={<TutorialPage />} />}
+        />
+
         <Route
           path="/tutorial/:id/comments/:commentId"
           element={<TutorialPage />}
