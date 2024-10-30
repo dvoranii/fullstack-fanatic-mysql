@@ -1,7 +1,8 @@
 import { useContext } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useLocation, useParams } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import { tutorialContent } from "../../assets/tutorialContent";
+import { blogContent } from "../../assets/blogContent";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const getTutorialPremiumLevel = (id: string | undefined) => {
@@ -11,6 +12,11 @@ const getTutorialPremiumLevel = (id: string | undefined) => {
   return tutorial?.premiumLevel || null;
 };
 
+const isBlogPremium = (id: string | undefined) => {
+  const blog = blogContent.find((blog) => blog.id === Number(id));
+  return blog?.isPremium || false;
+};
+
 interface ProtectedRouteProps {
   element: JSX.Element;
 }
@@ -18,21 +24,37 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element }) => {
   const { profile, loading } = useContext(UserContext) || {};
   const { id } = useParams();
+  const location = useLocation();
 
   if (loading) {
     return <LoadingSpinner />;
   }
 
-  const requiredLevel = getTutorialPremiumLevel(id);
+  const isTutorialRoute = location.pathname.includes("/tutorial/");
+  const isBlogRoute = location.pathname.includes("/blog/");
 
-  if (!requiredLevel) return element;
+  if (isTutorialRoute) {
+    const requiredLevel = getTutorialPremiumLevel(id);
 
-  const levels = ["starter", "casual pro", "premium"];
-  const userIndex = levels.indexOf(profile?.premiumLevel || "");
-  const requiredIndex = levels.indexOf(requiredLevel);
+    if (!requiredLevel) return element;
 
-  if (userIndex === -1 || userIndex < requiredIndex) {
-    return <Navigate to="/plans-and-pricing" replace />;
+    const levels = ["starter", "casual pro", "premium"];
+    const userIndex = levels.indexOf(profile?.premiumLevel || "");
+    const requiredIndex = levels.indexOf(requiredLevel);
+
+    if (userIndex === -1 || userIndex < requiredIndex) {
+      return <Navigate to="/plans-and-pricing" replace />;
+    }
+
+    return element;
+  } else if (isBlogRoute) {
+    const isPremium = isBlogPremium(id);
+
+    if (isPremium && !profile) {
+      return <Navigate to="/plans-and-pricing" replace />;
+    }
+
+    return element;
   }
 
   return element;

@@ -47,43 +47,53 @@ const BlogsPage: React.FC = () => {
           paddingLeft="0"
           onSearchChange={(value) => setSearchText(value)}
         />
-        {filteredBlogs.slice(0, visibleBlogs).map((blog) => (
-          <BlogItem key={blog.id}>
-            <BlogImgWrapper>
-              <img src={blog.image} alt={blog.title} title={blog.title} />
-            </BlogImgWrapper>
-            <BlogContent to={`/blog/${blog.id}`}>
-              <h2>{blog.title}</h2>
-              <p>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Aliquam ab, voluptatibus quia ea cum adipisci fuga
-                exercitationem, voluptatum eos nobis esse odio molestias
-                distinctio quibusdam! Optio veniam quae repellat itaque.
-              </p>
-            </BlogContent>
-            <BlogActions>
-              {blog.isPremium === false ? (
-                <FreeBadge>
-                  <p>FREE</p>
-                </FreeBadge>
-              ) : (
-                <PremiumBadge>
-                  <p>Premium</p>
-                  <img src={PremiumLockImg} alt="Lock" />
-                </PremiumBadge>
-              )}
-              {profile && (
-                <FavouriteButton
-                  isFavourited={favouriteBlogs.some(
-                    (favBlog) => favBlog.id === blog.id
-                  )}
-                  onClick={() => toggleFavourite(blog.id, "blog")}
-                  altText="Blog Favourite Button"
-                />
-              )}
-            </BlogActions>
-          </BlogItem>
-        ))}
+        {filteredBlogs.slice(0, visibleBlogs).map((blog) => {
+          const isPremiumLocked = blog.isPremium && !profile;
+
+          return (
+            <BlogItem key={blog.id}>
+              <BlogImgWrapper>
+                <img src={blog.image} alt={blog.title} title={blog.title} />
+              </BlogImgWrapper>
+              <BlogContent
+                to={isPremiumLocked ? "#" : `/blog/${blog.id}`}
+                style={{ cursor: isPremiumLocked ? "not-allowed" : "pointer" }}
+                onClick={(e) => {
+                  if (isPremiumLocked) e.preventDefault();
+                }}
+              >
+                <h2>{blog.title}</h2>
+                <p>
+                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                  Aliquam ab, voluptatibus quia ea cum adipisci fuga
+                  exercitationem, voluptatum eos nobis esse odio molestias
+                  distinctio quibusdam! Optio veniam quae repellat itaque.
+                </p>
+              </BlogContent>
+              <BlogActions>
+                {blog.isPremium === false ? (
+                  <FreeBadge>
+                    <p>FREE</p>
+                  </FreeBadge>
+                ) : (
+                  <PremiumBadge>
+                    <p>Premium</p>
+                    <img src={PremiumLockImg} alt="Lock" />
+                  </PremiumBadge>
+                )}
+                {profile && (
+                  <FavouriteButton
+                    isFavourited={favouriteBlogs.some(
+                      (favBlog) => favBlog.id === blog.id
+                    )}
+                    onClick={() => toggleFavourite(blog.id, "blog")}
+                    altText="Blog Favourite Button"
+                  />
+                )}
+              </BlogActions>
+            </BlogItem>
+          );
+        })}
       </BlogList>
       {visibleBlogs < filteredBlogs.length && (
         <SeeMoreButtonWrapper>

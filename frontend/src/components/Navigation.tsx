@@ -52,7 +52,10 @@ const Navigation: React.FC = () => {
           element={<TutorialPage />}
         />
         <Route path="/blogs" element={<BlogsPage />} />
-        <Route path="/blog/:id" element={<BlogDetail />} />
+        <Route
+          path="/blog/:id"
+          element={<ProtectedRoute element={<BlogDetail />} />}
+        />
         <Route path="/blog/:id/comments/:commentId" element={<BlogDetail />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route
