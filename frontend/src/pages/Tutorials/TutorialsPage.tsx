@@ -128,6 +128,12 @@ const TutorialsPage: React.FC = () => {
     return <p>Loading...</p>;
   }
 
+  console.log(filteredTutorials);
+  console.log(profile);
+  filteredTutorials.forEach((tutorial) => {
+    console.log(tutorial.premiumLevel === profile?.premiumLevel);
+  });
+
   return (
     <>
       <Title textContent="Tutorials" pseudoRight="-3px" pseudoWidth="120px" />

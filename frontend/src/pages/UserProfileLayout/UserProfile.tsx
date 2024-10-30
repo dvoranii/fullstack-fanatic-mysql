@@ -133,9 +133,9 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                   </a>
                 )}
 
-                {profile.isPremium && profile.premiumLevel && (
+                {profile.isPremium === true && profile.premiumLevel && (
                   <PremiumBadge>
-                    <p> {profile.premiumLevel.toUpperCase()}</p>
+                    <p>{profile.premiumLevel.toUpperCase()}</p>
                   </PremiumBadge>
                 )}
               </ProfileInfo>

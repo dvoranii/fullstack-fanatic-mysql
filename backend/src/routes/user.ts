@@ -414,7 +414,6 @@ router.get("/:id/followers", async (req: Request, res: Response) => {
     );
 
     const followersCount = countRows[0]?.followersCount || 0;
-
     let isFollowing = false;
 
     // If there is a logged-in user, check if they are following the given user
