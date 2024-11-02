@@ -167,3 +167,12 @@ export const AccountBtnsWrapper = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
+export const NetworkPageLink = styled(NavLink)`
+  display: flex;
+  align-items: center;
+  img {
+    width: 30px;
+    margin: 10px;
+  }
+`;

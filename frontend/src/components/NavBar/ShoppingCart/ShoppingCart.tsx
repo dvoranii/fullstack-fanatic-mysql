@@ -49,7 +49,12 @@ const ShoppingCart: React.FC = () => {
   return (
     <div ref={containerRef}>
       <NavIconWrapper>
-        <NavIconImg src={cartIcon} alt="Cart" onClick={toggleCartVisibility} />
+        <NavIconImg
+          src={cartIcon}
+          alt="Cart"
+          title="Shopping Cart"
+          onClick={toggleCartVisibility}
+        />
 
         <Dropdown isVisible={isCartVisible} alignRight width="400px">
           <ShoppingCartContentWrapper>

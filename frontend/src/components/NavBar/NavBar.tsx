@@ -11,6 +11,7 @@ import {
   MobileNavList,
   LogoWrapper,
   AccountBtnsWrapper,
+  NetworkPageLink,
   // NotificationUserProfileWrapper,
 } from "./NavBar.styled";
 import FSFLogo from "../../assets/images/fsf-logo-notext.png";
@@ -19,6 +20,7 @@ import BurgerMenu from "../BurgerMenu/BurgerMenu";
 import LoginButton from "./LoginButton/LoginButton";
 import NotificationButton from "./Notifications/Notifications";
 import ShoppingCart from "./ShoppingCart/ShoppingCart";
+import NetworkIcon from "../../assets/images/networking-icon.png";
 
 const NavBar: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -69,6 +71,9 @@ const NavBar: React.FC = () => {
         <NavItem>
           {profile ? (
             <AccountBtnsWrapper>
+              <NetworkPageLink to="/network">
+                <img src={NetworkIcon} alt="network page" title="Network" />
+              </NetworkPageLink>
               <ShoppingCart />
               <NotificationButton />
               <UserProfileNavBtn />

@@ -23,6 +23,7 @@ const MessageInboxPage = lazy(
   () =>
     import("../pages/UserProfileLayout/MessageInboxLayout/MessageInboxLayout")
 );
+import NetworkPage from "../pages/Network/Network";
 import FollowersList from "../pages/UserProfileLayout/FollowList/FollowersList/FollowersList";
 import FollowingList from "../pages/UserProfileLayout/FollowList/FollowingList/FollowingList";
 import CommentHistory from "../pages/UserProfileLayout/CommentHistory/CommentHistory";
@@ -90,6 +91,7 @@ const Navigation: React.FC = () => {
         <Route path="/checkout/success" element={<CheckoutSuccess />} />
         <Route path="/checkout/cancel" element={<CheckoutCancel />} />
         <Route path="/plans-and-pricing" element={<PlansAndPricing />} />
+        <Route path="network" element={<NetworkPage />} />
       </Routes>
     </Suspense>
   );
