@@ -29,6 +29,8 @@ import FlipIconBack from "../../assets/images/tutorials/flip-icon-backside.png";
 import AddToCardImg from "../../assets/images/add-to-cart-icon.png";
 import { TutorialContentItem } from "../../types/Tutorial/Tutorial";
 import SearchBar from "../../components/SearchBar/SearchBar";
+import SquaresAndTriangles from "../../assets/images/SquaresAndTriangles.svg";
+import SwirlyLineImg from "../../assets/images/swirly-line-bg.svg";
 
 const TutorialsPage: React.FC = () => {
   const {
@@ -151,6 +153,15 @@ const TutorialsPage: React.FC = () => {
           paddingLeft="60px"
           onSearchChange={(value) => setSearchText(value)}
         />
+        <img
+          src={SquaresAndTriangles}
+          alt="Squares and Triangles"
+          className="bg-squares-and-triangles"
+        />
+
+        <div className="block-1" />
+        <div className="block-2" />
+        <img src={SwirlyLineImg} className="swirly-1" alt="" />
         <TutorialList>
           {filteredTutorials.slice(startIdx, endIdx).map((tutorial) => {
             const alreadyInCart = isItemInCart(tutorial.id);
@@ -225,7 +236,7 @@ const TutorialsPage: React.FC = () => {
                       </div>
                     )}
                     <BottomIconsWrapper>
-                      {tutorial.availableForPurchase && (
+                      {tutorial.availableForPurchase && profile && (
                         <AddToCartWrapper>
                           <button
                             onClick={() => handleAddToCart(tutorial)}

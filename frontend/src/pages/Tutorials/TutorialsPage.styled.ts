@@ -5,6 +5,42 @@ import { colors } from "../../GlobalStyles";
 export const TutorialListOuter = styled.div`
   max-width: 1400px;
   margin: 0 auto;
+  position: relative;
+  user-select: none;
+
+  .bg-squares-and-triangles {
+    position: absolute;
+    right: -25%;
+    width: 20vw;
+  }
+
+  .swirly-1 {
+    position: absolute;
+    bottom: -10%;
+    left: -20%;
+    width: 12vw;
+  }
+
+  .block-1,
+  .block-2 {
+    height: 80px;
+    width: 20vw;
+    position: absolute;
+    border-radius: 10px;
+    opacity: 0.8;
+  }
+
+  .block-1 {
+    background-color: ${colors.secondary};
+    left: -18vw;
+    bottom: -10%;
+  }
+
+  .block-2 {
+    right: -20vw;
+    background-color: ${colors.primary};
+    bottom: -15%;
+  }
 `;
 
 export const TutorialList = styled.div`

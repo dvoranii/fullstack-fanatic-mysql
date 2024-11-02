@@ -2,9 +2,42 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { colors } from "../../GlobalStyles";
 
+interface PremiumBadgeProps {
+  hasAccess: boolean;
+}
+
 export const BlogList = styled.div`
   display: grid;
   row-gap: 1.2rem;
+  position: relative;
+
+  .squares-and-triangles {
+    position: absolute;
+    z-index: -1;
+    width: 15vw;
+    right: -22%;
+  }
+
+  .block-1,
+  .block-2 {
+    height: 80px;
+    width: 20vw;
+    position: absolute;
+    border-radius: 10px;
+    opacity: 0.8;
+    z-index: -1;
+  }
+
+  .block-1 {
+    background-color: ${colors.secondary};
+    left: -18vw;
+    bottom: -8%;
+  }
+`;
+
+export const BlogPageWrapper = styled.div`
+  max-width: 1400px;
+  margin: 0 auto;
 `;
 
 export const BlogItem = styled.div`
@@ -71,13 +104,13 @@ export const FreeBadge = styled.div`
   }
 `;
 
-export const PremiumBadge = styled.div`
-  background: linear-gradient(
-    180deg,
-    rgba(255, 175, 43, 1) 10%,
-    rgba(255, 222, 166, 1) 50%,
-    rgba(255, 175, 43, 1) 83%
-  );
+export const PremiumBadge = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "hasAccess",
+})<PremiumBadgeProps>`
+  background: ${(props) =>
+    props.hasAccess
+      ? "linear-gradient(315deg, rgba(34, 185, 50, 1) 23%, rgba(157, 233, 165, 1) 50%, rgba(34, 185, 50, 1) 77%)"
+      : "linear-gradient(180deg, rgba(255, 175, 43, 1) 10%, rgba(255, 222, 166, 1) 50%, rgba(255, 175, 43, 1) 83%)"};
   color: white;
   padding: 5px 10px;
   border-radius: 5px;

@@ -56,7 +56,7 @@ export const ProfileContentWrapper = styled.div`
   grid-template-columns: 1fr 2fr 1fr;
   min-height: 200px;
   min-width: 55%;
-  user-select: none;
+  /* user-select: none; */
 
   @media (max-width: 959px) {
     grid-template-columns: 1fr 1fr;
@@ -68,6 +68,7 @@ export const ProfilePictureWrapper = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
+  user-select: none;
 `;
 
 export const ProfileInfo = styled.div`
@@ -288,6 +289,7 @@ export const ViewMoreCommentsLink = styled(Link)`
 `;
 
 export const SocialSectionWrapperOuter = styled.div`
+  user-select: none;
   padding-left: 20px;
   a {
     text-decoration: underline;
@@ -354,6 +356,7 @@ export const PremiumBadge = styled.div<{ level: string }>`
   clip-path: polygon(0 0, 100% 0, 85% 48%, 100% 100%, 0 100%, 15% 50%);
   font-size: 1rem;
   font-weight: bold;
+  user-select: none;
 
   p {
     color: white;

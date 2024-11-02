@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from "react";
 import Title from "../../components/Title/Title";
-import { PageWrapper } from "../../PageWrapper.styled";
 import {
   BlogList,
   BlogItem,
@@ -10,12 +9,16 @@ import {
   FreeBadge,
   PremiumBadge,
   SeeMoreButtonWrapper,
+  BlogPageWrapper,
 } from "./BlogsPage.styled";
 import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
 import { UserContext } from "../../context/UserContext";
 import { blogContent } from "../../assets/blogContent";
 import PremiumLockImg from "../../assets/images/lock.png";
+import PremiumUnlockImg from "../../assets/images/unlocked.png";
 import SearchBar from "../../components/SearchBar/SearchBar";
+import SquaresAndTriangles from "../../assets/images/SquaresAndTriangles.svg";
+import { BlogContentItem } from "../../types/Blog/BlogContentItem";
 
 const BlogsPage: React.FC = () => {
   const {
@@ -39,16 +42,31 @@ const BlogsPage: React.FC = () => {
     blog.title.toLowerCase().includes(searchText.toLowerCase())
   );
 
+  const canAccessBlog = (blog: BlogContentItem) => {
+    if (!blog.isPremium) {
+      return true;
+    }
+
+    return Boolean(profile?.isPremium);
+  };
+
   return (
-    <PageWrapper>
+    <BlogPageWrapper>
       <Title textContent="Blogs" />
       <BlogList>
         <SearchBar
           paddingLeft="0"
           onSearchChange={(value) => setSearchText(value)}
         />
+        <img
+          src={SquaresAndTriangles}
+          className="squares-and-triangles"
+          alt=""
+        />
+        <div className="block-1"></div>
         {filteredBlogs.slice(0, visibleBlogs).map((blog) => {
           const isPremiumLocked = blog.isPremium && !profile;
+          const hasAccess = canAccessBlog(blog);
 
           return (
             <BlogItem key={blog.id}>
@@ -76,9 +94,13 @@ const BlogsPage: React.FC = () => {
                     <p>FREE</p>
                   </FreeBadge>
                 ) : (
-                  <PremiumBadge>
+                  <PremiumBadge hasAccess={hasAccess}>
                     <p>Premium</p>
-                    <img src={PremiumLockImg} alt="Lock" />
+                    {canAccessBlog(blog) ? (
+                      <img src={PremiumUnlockImg} alt="Unlocked" />
+                    ) : (
+                      <img src={PremiumLockImg} alt="Locked" />
+                    )}
                   </PremiumBadge>
                 )}
                 {profile && (
@@ -100,7 +122,7 @@ const BlogsPage: React.FC = () => {
           <button onClick={handleSeeMore}>See More Blogs</button>
         </SeeMoreButtonWrapper>
       )}
-    </PageWrapper>
+    </BlogPageWrapper>
   );
 };
 

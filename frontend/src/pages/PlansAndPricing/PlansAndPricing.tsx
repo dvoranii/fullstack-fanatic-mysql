@@ -16,7 +16,7 @@ import {
 } from "./PlansAndPricing.styled";
 import Title from "../../components/Title/Title";
 import BGSwoosh from "../../assets/images/plansAndPricing/Ellipse7.svg";
-import SquaresAndTriangles from "../../assets/images/plansAndPricing/SquaresAndTriangles.svg";
+import SquaresAndTriangles from "../../assets/images/SquaresAndTriangles.svg";
 import SubscriptionCard from "./SubscriptionCard/SubscriptionCard";
 import SwirlyLineImg from "../../assets/images/swirly-line-bg.svg";
 import ConsultationImg from "../../assets/images/plansAndPricing/consultation-image.jpg";
