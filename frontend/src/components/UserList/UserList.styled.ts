@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { colors } from "../../../GlobalStyles";
+import { colors } from "../../GlobalStyles";
 
-export const FollowListWrapper = styled.div`
+export const UserListWrapper = styled.div`
   ul {
     list-style: none;
     padding: 0;
@@ -51,9 +51,8 @@ export const FollowButtonsWrapper = styled.div`
   }
 `;
 
-export const FollowerInfoWrapper = styled.div`
+export const UserInfoWrapper = styled.div`
   margin-left: 20px;
-
   height: 4px;
 
   h5,
@@ -74,7 +73,8 @@ export const FollowerInfoWrapper = styled.div`
     text-shadow: 2px 2px 2px rgba(255, 175, 43, 0.5);
   }
 `;
-export const FollowerLinkWrapperInner = styled.div`
+
+export const UserLinkWrapperInner = styled.div`
   display: flex;
 
   img {

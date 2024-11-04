@@ -38,7 +38,6 @@ import BlogIcon from "../../assets/images/blog-icon.png";
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import SocialLinksDisplay from "./SocialLinksDisplay/SocialLinksDisplay";
 import { UserProfilePageProps } from "../../types/User/UserProfilePageProps";
-import ConnectButton from "./ConnectButton/ConnectButton";
 import MessageUserModal from "./MessageUserModal/MessageUserModal";
 import FollowButton from "./FollowButton/FollowButton";
 import {
@@ -46,6 +45,7 @@ import {
   fetchFollowingState,
 } from "../../services/followService";
 import { UserContext } from "../../context/UserContext";
+import MessageModalButton from "../../components/MessageModalButton/MessageModalButton";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -112,9 +112,9 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                 <UserProfession>{profile.profession}</UserProfession>
 
                 {!isEditable && loggedInUser && (
-                  <ConnectButton
-                    text={"Message"}
-                    onClick={() => setIsModalOpen(true)}
+                  <MessageModalButton
+                    userId={profile.id.toString()}
+                    variant="publicUser"
                   />
                 )}
 

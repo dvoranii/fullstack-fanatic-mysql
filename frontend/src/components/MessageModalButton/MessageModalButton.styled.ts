@@ -1,4 +1,31 @@
+// MessageModalButton.styled.ts
 import styled from "styled-components";
+
+// Simple button styling
+export const SimpleButton = styled.button`
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+// Button text styling
+export const ButtonText = styled.span`
+  position: relative;
+  z-index: 1;
+  font-family: "Alata";
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+  color: #ffa000;
+`;
 
 // Icon container with sliding animation
 export const ButtonIcon = styled.div`
@@ -7,7 +34,7 @@ export const ButtonIcon = styled.div`
   height: 100%;
   position: absolute;
   right: -10px;
-  top: 0px;
+  top: 0;
   border-radius: 30px 30px 30px 0;
   transition: all 0.3s ease;
   color: #fff;
@@ -19,8 +46,8 @@ export const ButtonIcon = styled.div`
     border-top: 45px solid #fcfcfc;
     border-right: 40px solid transparent;
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
   }
 
   &:hover {
@@ -33,16 +60,15 @@ export const ButtonIcon = styled.div`
   }
 `;
 
-export const ButtonText = styled.span`
-  position: relative;
-  z-index: 9999;
-  font-family: "Alata";
-  text-transform: uppercase;
-  transition: color 0.3s ease;
-  color: #ffa000;
-  z-index: 1;
+// Custom icon styling
+export const CustomIcon = styled.i`
+  position: absolute;
+  right: 25px;
+  top: 15px;
+  color: #fff;
 `;
 
+// Complex button styling for "publicUser" variant
 export const StyledButton = styled.a`
   width: 100%;
   height: 45px;
@@ -72,11 +98,4 @@ export const StyledButton = styled.a`
   &:hover ${ButtonText} {
     color: #fff;
   }
-`;
-
-export const CustomIcon = styled.i`
-  position: absolute;
-  right: 25px;
-  top: 15px;
-  color: #fff;
 `;

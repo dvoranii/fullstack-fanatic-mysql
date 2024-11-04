@@ -1,36 +1,30 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { UserContext } from "../../../../context/UserContext";
-import {
-  FollowListWrapper,
-  EmptyMessage,
-  FollowButtonsWrapper,
-  FollowerInfoWrapper,
-  FollowerLinkWrapperInner,
-} from "../FollowList.styled";
-import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import { User } from "../../../../types/User/User";
-import ProfilePicture from "../../../../components/ProfilePicture/ProfilePicture";
 import { PageWrapper } from "../../../../PageWrapper.styled";
-import MessageUserModal from "../../MessageUserModal/MessageUserModal";
-import { fetchFollowers } from "../../../../services/followService";
+import {
+  fetchFollowers,
+  fetchFollowing,
+  followUser,
+  unfollowUser,
+} from "../../../../services/followService";
 import TitleBanner from "../../../../components/TitleBanner/TitleBanner";
+import UserList from "../../../../components/UserList/UserList";
+import { User } from "../../../../types/User/User";
 
 interface FollowersListProps {
   userId?: number;
 }
 
 const FollowersList: React.FC<FollowersListProps> = ({ userId }) => {
-  const userContext = useContext(UserContext);
-  const loggedInUser = userContext?.profile;
-
   const { id } = useParams<{ id: string }>();
   const effectiveUserId = userId || Number(id);
 
-  const [followers, setFollowers] = useState<User[]>([]);
+  const userContext = useContext(UserContext);
+  const loggedInUser = userContext?.profile;
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [followers, setFollowers] = useState<User[]>([]);
+  const [following, setFollowing] = useState<number[]>([]);
 
   useEffect(() => {
     if (!effectiveUserId) return;
@@ -43,78 +37,62 @@ const FollowersList: React.FC<FollowersListProps> = ({ userId }) => {
       }
     };
 
+    const fetchFollowingList = async () => {
+      try {
+        if (loggedInUser) {
+          const followingData = await fetchFollowing(loggedInUser.id);
+          const followingIds = followingData.map((user: User) => user.id);
+          setFollowing(followingIds);
+        }
+      } catch (error) {
+        console.error("Error fetching following list:", error);
+      }
+    };
+
     fetchFollowersList();
-  }, [effectiveUserId]);
+    fetchFollowingList();
+  }, [effectiveUserId, loggedInUser]);
 
-  const handleOpenMessageModal = (userId: string) => {
-    setSelectedUserId(userId);
-    setIsModalOpen(true);
+  const handleFollow = async (userId: number) => {
+    try {
+      const status = await followUser(userId);
+      if (status === 200) {
+        setFollowing((prev) => [...prev, userId]);
+      }
+    } catch (error) {
+      console.error("Error following user:", error);
+    }
   };
 
-  const handleCloseMessageModal = () => {
-    setSelectedUserId(null);
-    setIsModalOpen(false);
+  const handleUnfollow = async (userId: number) => {
+    setFollowing((prev) => prev.filter((id) => id !== userId));
+    try {
+      const status = await unfollowUser(userId);
+      if (status !== 200) {
+        setFollowing((prev) => [...prev, userId]);
+      }
+    } catch (error) {
+      setFollowing((prev) => [...prev, userId]);
+      console.error("Error unfollowing user:", error);
+    }
   };
+
+  const isFollowing = (userId: number) => following.includes(userId);
 
   return (
     <>
       <TitleBanner textContent="Followers" />
       <PageWrapper>
-        <FollowListWrapper>
-          <ul>
-            {followers.length > 0 ? (
-              followers.map((user) => (
-                <li key={user.id}>
-                  <Link to={`/user/${user.id}`}>
-                    <FollowerLinkWrapperInner>
-                      <ProfilePicture
-                        src={user.profile_picture || ""}
-                        alt={user.name}
-                        width={"60px"}
-                        border={"1px solid black"}
-                      />
-
-                      <FollowerInfoWrapper>
-                        <h4>{user.name}</h4>
-                        <h5>{user.profession}</h5>
-                      </FollowerInfoWrapper>
-                    </FollowerLinkWrapperInner>
-                  </Link>
-
-                  {loggedInUser && (
-                    <FollowButtonsWrapper>
-                      <button
-                        onClick={() =>
-                          handleOpenMessageModal(user.id.toString())
-                        }
-                      >
-                        Message
-                      </button>
-                    </FollowButtonsWrapper>
-                  )}
-                </li>
-              ))
-            ) : (
-              <>
-                <EmptyMessage>No followers yet</EmptyMessage>
-              </>
-            )}
-          </ul>
-        </FollowListWrapper>
-      </PageWrapper>
-
-      {selectedUserId && (
-        <MessageUserModal
-          isOpen={isModalOpen}
-          onClose={handleCloseMessageModal}
-          userId={selectedUserId}
-          onSendMessage={(subject, message) =>
-            console.log(
-              `Message sent to user ${selectedUserId}: ${subject}, ${message}`
-            )
-          }
+        <UserList
+          users={followers}
+          loggedInUserId={loggedInUser?.id}
+          isFollowing={isFollowing}
+          handleFollow={handleFollow}
+          handleUnfollow={handleUnfollow}
+          removeUserAfterUnfollow={false}
+          hideButtons={!loggedInUser || loggedInUser.id !== userId}
         />
-      )}
+      </PageWrapper>
     </>
   );
 };

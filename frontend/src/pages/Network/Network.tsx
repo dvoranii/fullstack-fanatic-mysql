@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   SearchBarWrapper,
   UserListWrapper,
@@ -7,20 +7,47 @@ import {
   FilterOption,
   FilterOptionWrapper,
 } from "./Network.styled";
-import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import NetworkIcon from "../../assets/images/networking-icon.png";
 import TitleBanner from "../../components/TitleBanner/TitleBanner";
 import { searchUsers } from "../../services/networkService";
 import { User } from "../../types/User/User";
+import UserList from "../../components/UserList/UserList";
+import { UserContext } from "../../context/UserContext";
+import {
+  followUser,
+  unfollowUser,
+  fetchFollowing,
+} from "../../services/followService";
+import { PageWrapper } from "../../PageWrapper.styled";
 
 export const NetworkPage: React.FC = () => {
+  const userContext = useContext(UserContext);
+  const loggedInUser = userContext?.profile;
+
   const [users, setUsers] = useState<User[]>([]);
+  const [following, setFollowing] = useState<number[]>([]);
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [activeFilter, setActiveFilter] = useState<"name" | "profession">(
     "name"
   );
+
+  useEffect(() => {
+    const fetchFollowingList = async () => {
+      try {
+        if (loggedInUser) {
+          const followingData = await fetchFollowing(loggedInUser.id);
+          const followingIds = followingData.map((user: User) => user.id);
+          setFollowing(followingIds);
+        }
+      } catch (error) {
+        console.error("Error fetching following list:", error);
+      }
+    };
+
+    fetchFollowingList();
+  }, [loggedInUser]);
 
   const handleSearch = async (query: string) => {
     if (!query.trim()) {
@@ -48,6 +75,33 @@ export const NetworkPage: React.FC = () => {
   const handleFilterChange = (filter: "name" | "profession") => {
     setActiveFilter(filter);
   };
+
+  const handleFollow = async (userId: number) => {
+    try {
+      const status = await followUser(userId);
+      if (status === 200) {
+        setFollowing((prev) => [...prev, userId]);
+      }
+    } catch (error) {
+      console.error("Error following user:", error);
+    }
+  };
+
+  const handleUnfollow = async (userId: number) => {
+    setFollowing((prev) => prev.filter((id) => id !== userId));
+    try {
+      const status = await unfollowUser(userId);
+      if (status !== 200) {
+        setFollowing((prev) => [...prev, userId]);
+      }
+    } catch (error) {
+      setFollowing((prev) => [...prev, userId]);
+      console.error("Error unfollowing user:", error);
+    }
+  };
+
+  const isFollowing = (userId: number) => following.includes(userId);
+
   return (
     <>
       <TitleBanner textContent="Network" />
@@ -71,40 +125,35 @@ export const NetworkPage: React.FC = () => {
         </FilterOptionWrapper>
       </SearchBarWrapper>
 
-      <UserListWrapper>
-        {isSearching ? (
-          <p>Loading...</p>
-        ) : users.length > 0 ? (
-          <ul>
-            {users.map((user) => (
-              <li key={user.id}>
-                <div>
-                  <ProfilePicture
-                    src={user.profile_picture || ""}
-                    alt={user.name}
-                    width={"50"}
-                    border={"1px solid black"}
-                  />
-                  <p>{user.name}</p>
-                  <p>{user.profession || "No profession listed"}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        ) : message ? (
-          <p>{message}</p>
-        ) : (
-          <NetworkDefaultContent>
-            <h3>
-              Utilize our database of users to connect with real-world
-              professionals
-            </h3>
-            <NetworkIconWrapper>
-              <img src={NetworkIcon} alt="Network Image" />
-            </NetworkIconWrapper>
-          </NetworkDefaultContent>
-        )}
-      </UserListWrapper>
+      <PageWrapper>
+        <UserListWrapper>
+          {isSearching ? (
+            <p>Loading...</p>
+          ) : users.length > 0 ? (
+            <UserList
+              users={users}
+              loggedInUserId={loggedInUser?.id}
+              isFollowing={isFollowing}
+              handleFollow={handleFollow}
+              handleUnfollow={handleUnfollow}
+              removeUserAfterUnfollow={false}
+              hideButtons={!loggedInUser}
+            />
+          ) : message ? (
+            <p>{message}</p>
+          ) : (
+            <NetworkDefaultContent>
+              <h3>
+                Utilize our database of users to connect with real-world
+                professionals
+              </h3>
+              <NetworkIconWrapper>
+                <img src={NetworkIcon} alt="Network Image" />
+              </NetworkIconWrapper>
+            </NetworkDefaultContent>
+          )}
+        </UserListWrapper>
+      </PageWrapper>
     </>
   );
 };
