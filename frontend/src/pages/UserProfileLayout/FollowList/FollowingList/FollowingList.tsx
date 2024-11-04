@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import {
   FollowListWrapper,
-  FollowTitleBanner,
   EmptyMessage,
   FollowButtonsWrapper,
   FollowerLinkWrapperInner,
@@ -17,6 +16,7 @@ import {
 } from "../../../../services/followService";
 import { UserContext } from "../../../../context/UserContext";
 import MessageUserModal from "../../MessageUserModal/MessageUserModal";
+import TitleBanner from "../../../../components/TitleBanner/TitleBanner";
 
 interface FollowingListProps {
   userId?: number;
@@ -79,9 +79,7 @@ const FollowingList: React.FC<FollowingListProps> = ({ userId }) => {
 
   return (
     <>
-      <FollowTitleBanner>
-        <h2>Following</h2>
-      </FollowTitleBanner>
+      <TitleBanner textContent="Following" />
       <PageWrapper>
         <FollowListWrapper>
           <ul>

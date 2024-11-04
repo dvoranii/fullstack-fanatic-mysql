@@ -56,13 +56,3 @@ export const CommentHistoryWrapper = styled.div`
   height: 600px;
   overflow-y: auto;
 `;
-
-export const CommentHistoryTitleBanner = styled.div`
-  padding: 20px;
-  background-color: ${colors.secondary};
-
-  h2 {
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-`;

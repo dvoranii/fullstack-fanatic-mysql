@@ -6,6 +6,7 @@ import {
   SearchInputWrapper,
 } from "./SearchBar.styled";
 import SearchIcon from "../../assets/images/search-icon.png";
+import { useState } from "react";
 
 interface SearchBarProps {
   width?: string;
@@ -17,10 +18,24 @@ const SearchBar: React.FC<SearchBarProps> = ({
   paddingLeft,
   onSearchChange,
 }) => {
+  const [inputValue, setInputValue] = useState("");
+
+  const handleSearch = () => {
+    if (inputValue.trim() && onSearchChange) {
+      onSearchChange(inputValue.trim());
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   return (
     <SearchBarWrapperOuter style={{ paddingLeft }}>
       <SearchBarWrapperInner style={{ width }}>
-        <SearchIconWrapper>
+        <SearchIconWrapper onClick={handleSearch}>
           <SearchIconImg src={SearchIcon} />
         </SearchIconWrapper>
 
@@ -28,7 +43,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
           <input
             type="text"
             placeholder="Search..."
-            onChange={(e) => onSearchChange?.(e.target.value)}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyPress={handleKeyPress}
           />
         </SearchInputWrapper>
       </SearchBarWrapperInner>

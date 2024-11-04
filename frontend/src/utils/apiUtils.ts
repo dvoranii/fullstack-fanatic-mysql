@@ -18,6 +18,9 @@ export async function apiCall<T>(
 
   const fullUrl = `${BASE_URL}${endpoint}`;
 
+  console.log("Making API call to:", fullUrl); // Debugging log
+  console.log("Options:", options); // Debugging log
+
   const response = await fetch(fullUrl, {
     ...options,
     headers,

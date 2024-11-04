@@ -4,7 +4,7 @@ import { authenticate } from "../middleware/authenticate";
 import { CartItem } from "../types/CartItem";
 import Stripe from "stripe";
 import connectionPromise from "../db";
-import { updateUserSubscription } from "../services/subscriptionService";
+// import { updateUserSubscription } from "../services/subscriptionService";
 
 dotenv.config();
 
@@ -175,8 +175,44 @@ const router = express.Router();
 
         if (session.mode === "subscription") {
           try {
-            await updateUserSubscription(session);
+            const userId = session.metadata?.userId;
+
+            if (!userId) {
+              throw new Error("User ID not found in session metadata");
+            }
+
+            const subscriptionType = session.metadata?.subscriptionType;
+
+            let premiumLevel: string | null = null;
+
+            switch (subscriptionType) {
+              case "STARTER":
+                premiumLevel = "starter";
+                break;
+              case "CASUAL PRO":
+                premiumLevel = "casual pro";
+                break;
+              case "PREMIUM":
+                premiumLevel = "premium";
+                break;
+              default:
+                throw new Error("Invalid subscription type.");
+            }
+
+            if (premiumLevel) {
+              const connection = await connectionPromise;
+
+              await connection.execute(
+                "UPDATE users SET isPremium = 1, premiumLevel = ? WHERE id = ?",
+                [premiumLevel, userId]
+              );
+
+              console.log(
+                `User ${userId} updated to premium level: ${premiumLevel}`
+              );
+            }
           } catch (error) {
+            console.error("Error updating user's premium level:", error);
             return res
               .status(500)
               .json({ error: "Failed to update user's premium level" });
@@ -190,47 +226,3 @@ const router = express.Router();
 })();
 
 export default router;
-
-// try {
-//   const userId = session.metadata?.userId;
-
-//   if (!userId) {
-//     throw new Error("User ID not found in session metadata");
-//   }
-
-//   const subscriptionType = session.metadata?.subscriptionType;
-
-//   let premiumLevel: string | null = null;
-
-//   switch (subscriptionType) {
-//     case "STARTER":
-//       premiumLevel = "starter";
-//       break;
-//     case "CASUAL PRO":
-//       premiumLevel = "casual pro";
-//       break;
-//     case "PREMIUM":
-//       premiumLevel = "premium";
-//       break;
-//     default:
-//       throw new Error("Invalid subscription type.");
-//   }
-
-//   if (premiumLevel) {
-//     const connection = await connectionPromise;
-
-//     await connection.execute(
-//       "UPDATE users SET isPremium = 1, premiumLevel = ? WHERE id = ?",
-//       [premiumLevel, userId]
-//     );
-
-//     console.log(
-//       `User ${userId} updated to premium level: ${premiumLevel}`
-//     );
-//   }
-// } catch (error) {
-//   console.error("Error updating user's premium level:", error);
-//   return res
-//     .status(500)
-//     .json({ error: "Failed to update user's premium level" });
-// }

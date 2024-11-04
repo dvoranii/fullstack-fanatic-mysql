@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { UserContext } from "../../../../context/UserContext";
 import {
   FollowListWrapper,
-  FollowTitleBanner,
   EmptyMessage,
   FollowButtonsWrapper,
   FollowerInfoWrapper,
@@ -15,6 +14,7 @@ import ProfilePicture from "../../../../components/ProfilePicture/ProfilePicture
 import { PageWrapper } from "../../../../PageWrapper.styled";
 import MessageUserModal from "../../MessageUserModal/MessageUserModal";
 import { fetchFollowers } from "../../../../services/followService";
+import TitleBanner from "../../../../components/TitleBanner/TitleBanner";
 
 interface FollowersListProps {
   userId?: number;
@@ -58,9 +58,7 @@ const FollowersList: React.FC<FollowersListProps> = ({ userId }) => {
 
   return (
     <>
-      <FollowTitleBanner>
-        <h2>Followers</h2>
-      </FollowTitleBanner>
+      <TitleBanner textContent="Followers" />
       <PageWrapper>
         <FollowListWrapper>
           <ul>

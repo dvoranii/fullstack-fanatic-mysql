@@ -25,6 +25,7 @@ export const SearchBarWrapperInner = styled.div<SearchBarWrapperInnerProps>`
   input {
     border: none;
     caret-color: ${colors.primary};
+    width: 100%;
 
     &:focus-visible {
       outline: none;

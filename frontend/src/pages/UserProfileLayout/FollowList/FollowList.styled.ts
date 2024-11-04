@@ -24,16 +24,6 @@ export const FollowListWrapper = styled.div`
   }
 `;
 
-export const FollowTitleBanner = styled.div`
-  padding: 20px;
-  background-color: ${colors.secondary};
-
-  h2 {
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-`;
-
 export const EmptyMessage = styled.p`
   text-align: center;
   color: ${colors.secondary};

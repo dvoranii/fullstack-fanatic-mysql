@@ -8,7 +8,6 @@ import {
   CommentLink,
   ErrorMessage,
   CommentHistoryWrapper,
-  CommentHistoryTitleBanner,
   CommentTextWrapper,
   CommentTimeCreation,
 } from "./CommentHistory.styled";
@@ -17,6 +16,7 @@ import { CommentType } from "../../../types/Comment/Comment";
 import { PageWrapper } from "../../../PageWrapper.styled";
 import { formatTimeAgo } from "../../../utils/timeUtils";
 import { UserContext } from "../../../context/UserContext";
+import TitleBanner from "../../../components/TitleBanner/TitleBanner";
 
 const BATCH_SIZE = 5;
 
@@ -66,9 +66,10 @@ export const CommentHistory: React.FC = () => {
 
   return (
     <>
-      <CommentHistoryTitleBanner>
+      {/* <CommentHistoryTitleBanner>
         <h2>Comment History</h2>
-      </CommentHistoryTitleBanner>
+      </CommentHistoryTitleBanner> */}
+      <TitleBanner textContent="Comment History" />
       <PageWrapper>
         {error && <ErrorMessage>{error}</ErrorMessage>}
         <CommentHistoryWrapper id="scrollableDiv">
