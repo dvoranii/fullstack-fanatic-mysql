@@ -73,6 +73,13 @@ const router = express.Router();
           };
         });
 
+        const simplifiedCartItems = cartItems.map((item: CartItem) => ({
+          product_id: item.id,
+          title: item.title,
+          price: item.price,
+          type: item.type,
+        }));
+
         const session = await stripe.checkout.sessions.create({
           payment_method_types: ["card"],
           mode: "payment",
@@ -82,6 +89,7 @@ const router = express.Router();
           metadata: {
             userId: req.user?.userId,
             email: req.user?.email,
+            cartItems: JSON.stringify(simplifiedCartItems),
           },
         });
 
@@ -206,16 +214,41 @@ const router = express.Router();
                 "UPDATE users SET isPremium = 1, premiumLevel = ? WHERE id = ?",
                 [premiumLevel, userId]
               );
-
-              console.log(
-                `User ${userId} updated to premium level: ${premiumLevel}`
-              );
             }
           } catch (error) {
             console.error("Error updating user's premium level:", error);
             return res
               .status(500)
               .json({ error: "Failed to update user's premium level" });
+          }
+        }
+
+        if (session.mode === "payment") {
+          try {
+            const userId = session.metadata?.userId;
+            const cartItems = session.metadata?.cartItems
+              ? JSON.parse(session.metadata.cartItems)
+              : [];
+
+            if (!userId) {
+              throw new Error("User ID not found in session metadata");
+            }
+
+            const connection = await connectionPromise;
+
+            for (const item of cartItems) {
+              if (item.type === "tutorial" && item.product_id) {
+                await connection.execute(
+                  "INSERT INTO purchases (user_id, product_id, product_name, product_type, price, purchase_type, access_expiry) VALUES (?, ?, ?, ?, ?, 'one-off', NULL)",
+                  [userId, item.product_id, item.title, "tutorial", item.price]
+                );
+              }
+            }
+          } catch (error) {
+            console.error("Error recording one-off purchases: ", error);
+            return res
+              .status(500)
+              .json({ error: "Failed to record one-off purchases" });
           }
         }
       }

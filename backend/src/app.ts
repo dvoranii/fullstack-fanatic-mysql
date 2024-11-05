@@ -14,6 +14,7 @@ import notificationsRoutes from "./routes/notifications";
 import formsRoutes from "./routes/forms";
 import stripeRoutes from "./routes/stripe";
 import networkRoutes from "./routes/network";
+import purchasesRoutes from "./routes/purchases";
 import { Server } from "socket.io";
 import http from "http";
 
@@ -61,6 +62,7 @@ app.use("/api/notifications", notificationsRoutes);
 app.use("/api/forms", formsRoutes);
 app.use("/api/stripe", stripeRoutes);
 app.use("/api/network", networkRoutes);
+app.use("/api/purchases", purchasesRoutes);
 
 const server = http.createServer(app);
 

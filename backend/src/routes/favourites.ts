@@ -78,8 +78,6 @@ router.delete("/", authenticate, async (req: Request, res: Response) => {
       [google_id, item_id, user_id, content_type]
     );
 
-    console.log("Existing Favourites:", existing);
-
     if (existing.length > 0) {
       await connection.query(
         `DELETE FROM favourites WHERE (google_id = ? OR google_id IS NULL) AND item_id = ? AND user_id = ? AND content_type = ?`,

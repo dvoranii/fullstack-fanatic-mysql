@@ -59,8 +59,6 @@ router.get("/:conversationId", authenticate, async (req, res) => {
   const limit = parseInt(req.query.limit as string) || 10;
   const offset = (page - 1) * limit;
 
-  console.log({ page, limit, offset, conversationId });
-
   try {
     if (isNaN(limit) || isNaN(offset)) {
       throw new Error("Invalid limit or offset value");

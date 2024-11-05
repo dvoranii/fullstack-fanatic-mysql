@@ -52,7 +52,7 @@ router.post("/register", async (req: Request, res: Response) => {
       "INSERT INTO users (email, name, password, auth_type, profile_picture) VALUES (?, ?, ?, ?, ?)",
       [email, name, hashedPassword, "manual", defaultProfilePicture]
     );
-    console.log("User inserted with ID:", results.insertId);
+
     res
       .status(201)
       .json({ message: "User created successfully", userId: results.insertId });
@@ -65,7 +65,6 @@ router.post("/register", async (req: Request, res: Response) => {
 
 router.post("/login", async (req: Request, res: Response) => {
   const { username, password } = req.body;
-  console.log("Received login request:", { username, password });
 
   try {
     const connection = await connectionPromise;

@@ -151,6 +151,7 @@ export const BlogImgWrapper = styled.div`
 export const SeeMoreButtonWrapper = styled.div`
   text-align: center;
   margin-top: 20px;
+  user-select: none;
 
   button {
     background-color: #007bff;

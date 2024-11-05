@@ -177,8 +177,6 @@ router.delete(
     const userId = req.user?.userId;
     const { platform } = req.params;
 
-    console.log("User ID:", userId, "Platform:", platform);
-
     if (!userId) {
       return res.status(400).json({ error: "User ID is required" });
     }
@@ -197,8 +195,6 @@ router.delete(
       if (!currentUser.length) {
         return res.status(404).json({ message: "User not found" });
       }
-
-      console.log("Raw social_links data:", currentUser[0].social_links);
 
       let socialLinks;
       try {

@@ -255,8 +255,6 @@ router.put(
     const { id } = req.params as { id: string };
     const { userId } = req.user!;
 
-    console.log(id);
-
     try {
       const totalLikes = await toggleLike(Number(id), userId);
 
@@ -295,7 +293,6 @@ router.get(
 
   async (req: Request, res: Response) => {
     const { id } = req.params;
-    console.log(id);
 
     const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 5;
     const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
@@ -343,7 +340,6 @@ router.get(
 
 router.get("/reply-and-parent", async (req: Request, res: Response) => {
   const { id } = req.query;
-  console.log("Query params received:", req.query);
 
   try {
     const connection = await connectionPromise;

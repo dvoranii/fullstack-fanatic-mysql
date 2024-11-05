@@ -27,10 +27,11 @@ import PremiumLockImg from "../../assets/images/lock.png";
 import FlipIconFront from "../../assets/images/tutorials/flip-icon.png";
 import FlipIconBack from "../../assets/images/tutorials/flip-icon-backside.png";
 import AddToCardImg from "../../assets/images/add-to-cart-icon.png";
-import { TutorialContentItem } from "../../types/Tutorial/Tutorial";
+import { Tutorial, TutorialContentItem } from "../../types/Tutorial/Tutorial";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import SquaresAndTriangles from "../../assets/images/SquaresAndTriangles.svg";
 import SwirlyLineImg from "../../assets/images/swirly-line-bg.svg";
+import { fetchPurchases } from "../../services/purchasesService";
 
 const TutorialsPage: React.FC = () => {
   const {
@@ -45,19 +46,50 @@ const TutorialsPage: React.FC = () => {
   const [flipped, setFlipped] = useState<{ [key: string]: boolean }>({});
   const [currentPage, setCurrentPage] = useState(1);
   const tutorialsPerPage = 8;
-
   const filteredTutorials = tutorialContent.filter((tutorial) =>
     tutorial.title.toLowerCase().includes(searchText.toLowerCase())
   );
-
   const totalTutorials = filteredTutorials.length;
   const totalPages = Math.ceil(totalTutorials / tutorialsPerPage);
+  const [purchasedTutorials, setPurchasedTutorials] = useState<Tutorial[]>([]);
+  const [purchasesLoading, setPurchasesLoading] = useState(true);
 
   useEffect(() => {
     if (currentPage > totalPages) {
       setCurrentPage(1);
     }
   }, [searchText, totalPages]);
+
+  useEffect(() => {
+    const getPurchases = async () => {
+      if (profile?.id) {
+        try {
+          const purchases = await fetchPurchases(profile.id);
+          setPurchasedTutorials(purchases);
+        } catch (error) {
+          console.error("Error fetching purchases:", error);
+        } finally {
+          setPurchasesLoading(false); // Set loading to false when done
+        }
+      } else {
+        setPurchasesLoading(false); // If there's no profile, we're done loading
+      }
+    };
+
+    getPurchases();
+  }, [profile?.id]);
+
+  console.log(purchasesLoading, purchasedTutorials);
+
+  // needs to be checking against the tutorial name not id
+  // needs to also wait for purchasesLoading to be false before we start rendering
+
+  // const isTutorialPurchased = (id: number) => {
+  //   console.log(purchasedTutorials);
+  // return (
+  //   purchasedTutorials.find((tutorial) => tutorial.id === id) !== undefined
+  // );
+  // };
 
   const startIdx = (currentPage - 1) * tutorialsPerPage;
   const endIdx = startIdx + tutorialsPerPage;
@@ -165,10 +197,14 @@ const TutorialsPage: React.FC = () => {
         <TutorialList>
           {filteredTutorials.slice(startIdx, endIdx).map((tutorial) => {
             const alreadyInCart = isItemInCart(tutorial.id);
+            // const isPurchased = isTutorialPurchased(tutorial.id);
+
             const hasAccess = canAccessTutorial(
               profile?.premiumLevel,
               tutorial.premiumLevel
             );
+
+            // const hasAccess = isPurchased || canAccess;
 
             return (
               <TutorialItemWrapper key={tutorial.id}>
