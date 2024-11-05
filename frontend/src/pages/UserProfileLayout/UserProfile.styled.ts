@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { PageWrapper } from "../../PageWrapper.styled";
 import { Link } from "react-router-dom";
+import { colors } from "../../GlobalStyles";
 
 export const UserAccountContainer = styled(PageWrapper)`
   display: flex;
@@ -8,6 +9,10 @@ export const UserAccountContainer = styled(PageWrapper)`
   align-items: center;
   width: 100%;
   padding: 20px;
+`;
+
+export const AccountActivityWrapperOuter = styled.div`
+  background-color: #eee;
 `;
 
 export const BannerWrapperOuter = styled.div`
@@ -147,13 +152,16 @@ export const EditProfileLink = styled.a`
 `;
 
 export const AccountActivityTitle = styled.h2`
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   padding: 1.2rem 0 1.2rem 0;
   font-family: "Alata";
   letter-spacing: 0.5px;
   width: 100%;
   text-align: center;
-  padding-top: 7.2rem;
+  margin-top: 7.2rem;
+  background: ${colors.secondary};
+  color: #222;
+  text-transform: uppercase;
 `;
 
 export const AccountActivity = styled.div`
@@ -165,31 +173,11 @@ export const AccountActivity = styled.div`
   margin-top: 40px;
 `;
 
-export const AccountActivitySubBanner = styled.div`
-  width: 100%;
-  height: 40px;
-  background-color: #ffb923;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-
-  div {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  div:nth-child(1) {
-    border-right: 3px solid white;
-  }
-`;
-
 export const Section = styled.div`
   width: 45%;
   background-color: #fff;
   border-radius: 10px;
-  padding: 20px;
+  padding: 20px 40px 60px 40px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
@@ -199,13 +187,14 @@ export const SectionTitle = styled.h3`
   text-align: center;
   color: #031f2a;
   letter-spacing: 1px;
+  padding-bottom: 2.4rem;
 `;
 
 export const SectionContent = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.2rem;
+  gap: 2.4rem;
   height: 100%;
 
   div {
@@ -333,14 +322,12 @@ export const FollowsWrapper = styled.div`
   }
 `;
 
-export const TutorialsFavWrapper = styled.div`
-  border: 2px solid #aaa;
+export const FavWrapper = styled.div`
+  width: 30%;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
   padding: 20px 40px;
-`;
-
-export const BlogsFavWrapper = styled.div`
-  border: 2px solid #aaa;
-  padding: 20px 40px;
+  user-select: none;
 `;
 
 export const PremiumBadge = styled.div<{ level: string }>`
@@ -363,5 +350,25 @@ export const PremiumBadge = styled.div<{ level: string }>`
     text-shadow: 1px 1px 0 black, -1px 1px 0 black, 1px -1px 0 black,
       -1px -1px 0 black;
     letter-spacing: 1px;
+  }
+`;
+
+export const FavoritesDropdownWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  user-select: none;
+
+  select {
+    font-family: "Roboto";
+    transition: all 150ms ease;
+    &:hover {
+      cursor: pointer;
+      background-color: #eeeeee;
+    }
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 2px 4px;
+    width: 20%;
+    min-width: fit-content;
   }
 `;

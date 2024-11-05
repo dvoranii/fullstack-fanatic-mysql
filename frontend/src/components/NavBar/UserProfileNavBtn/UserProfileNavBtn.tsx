@@ -75,6 +75,7 @@ const UserProfileNavBtn: React.FC = () => {
           <DropdownDivider />
           <UserProfiledropdownWrapper>
             <AccountTitle>Account</AccountTitle>
+            <DropdownItem to="/my-account/inbox">Inbox</DropdownItem>
             <DropdownItem to="#">Settings</DropdownItem>
             <DropdownItem to="/plans-and-pricing">
               Plans And Pricing

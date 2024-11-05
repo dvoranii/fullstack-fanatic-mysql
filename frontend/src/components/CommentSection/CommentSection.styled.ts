@@ -16,7 +16,8 @@ export const CommentSectionWrapperInner = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-  height: 600px;
+  height: fit-content;
+  max-height: 600px;
   overflow-y: auto;
   overflow-x: auto;
 `;

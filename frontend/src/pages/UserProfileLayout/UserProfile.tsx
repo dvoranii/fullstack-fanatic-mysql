@@ -27,18 +27,18 @@ import {
   ProfilePlaceholder,
   BannerUploadWrapper,
   UserAccountContainer,
-  AccountActivitySubBanner,
+  // AccountActivitySubBanner,
   FollowsWrapper,
-  TutorialsFavWrapper,
-  BlogsFavWrapper,
+  FavWrapper,
   PremiumBadge,
+  FavoritesDropdownWrapper,
+  AccountActivityWrapperOuter,
 } from "./UserProfile.styled";
 import TutorialIcon from "../../assets/images/tutorial-icon.png";
 import BlogIcon from "../../assets/images/blog-icon.png";
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import SocialLinksDisplay from "./SocialLinksDisplay/SocialLinksDisplay";
 import { UserProfilePageProps } from "../../types/User/UserProfilePageProps";
-import MessageUserModal from "./MessageUserModal/MessageUserModal";
 import FollowButton from "./FollowButton/FollowButton";
 import {
   fetchFollowersState,
@@ -65,7 +65,6 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
   const loggedInUser = userContext?.profile;
 
   const socialLinks = profile.social_links || {};
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [followersCount, setFollowersCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -193,82 +192,86 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
       )}
 
       <AccountActivityTitle>Account Activity</AccountActivityTitle>
-      <AccountActivitySubBanner>
-        <div>
-          <SectionTitle>Favorites</SectionTitle>
-        </div>
-        <div>
-          <SectionTitle>Comment History</SectionTitle>
-        </div>
-      </AccountActivitySubBanner>
-      <UserAccountContainer>
-        <AccountActivity>
-          <Section>
-            <SectionContent>
-              <TutorialsFavWrapper>
-                <FavouriteIcon>
-                  <img src={TutorialIcon} alt="Tutorials" />
-                </FavouriteIcon>
-                <p>Tutorials</p>
-                <ViewAllButton onClick={() => console.log(favouriteTutorials)}>
-                  View All
-                </ViewAllButton>
-              </TutorialsFavWrapper>
 
-              <BlogsFavWrapper>
-                <FavouriteIcon>
-                  <img src={BlogIcon} alt="Blogs" />
-                </FavouriteIcon>
-                <p>Blogs</p>
-                <ViewAllButton onClick={() => console.log(favouriteBlogs)}>
-                  View All
-                </ViewAllButton>
-              </BlogsFavWrapper>
-            </SectionContent>
-          </Section>
+      <AccountActivityWrapperOuter>
+        <UserAccountContainer>
+          <AccountActivity>
+            <Section>
+              <SectionTitle>Favorites</SectionTitle>
+              <FavoritesDropdownWrapper>
+                {loggedInUser && isOwnProfile && (
+                  <select>
+                    <option value="0" selected>
+                      All
+                    </option>
+                    <option value="1">Free</option>
+                    <option value="2">Premium</option>
+                    <option value="3">Purchased</option>
+                  </select>
+                )}
+              </FavoritesDropdownWrapper>
 
-          <Section>
-            <CommentHistory>
-              {comments.slice(0, 5).map((comment) => (
-                <CommentItem key={comment.id}>
-                  <CommentText>{comment.content}</CommentText>
-                  {comment.content_type === "tutorial" ? (
-                    <CommentLink
-                      href={`/tutorial/${comment.content_id}/comments/${comment.id}`}
-                    >
-                      View in Tutorial
-                    </CommentLink>
-                  ) : (
-                    <CommentLink
-                      href={`/blog/${comment.content_id}/comments/${comment.id}`}
-                    >
-                      View in Blog
-                    </CommentLink>
-                  )}
-                </CommentItem>
-              ))}
+              <SectionContent>
+                <FavWrapper>
+                  <FavouriteIcon>
+                    <img src={TutorialIcon} alt="Tutorials" />
+                  </FavouriteIcon>
+                  <p>Tutorials</p>
+                  <ViewAllButton
+                    onClick={() => console.log(favouriteTutorials)}
+                  >
+                    View
+                  </ViewAllButton>
+                </FavWrapper>
 
-              <ViewMoreCommentsLink
-                to={
-                  isOwnProfile
-                    ? "/my-account/comment-history"
-                    : `/user/${profile.id}/comment-history`
-                }
-              >
-                See All Comments
-              </ViewMoreCommentsLink>
-            </CommentHistory>
-          </Section>
-        </AccountActivity>
-      </UserAccountContainer>
-      <MessageUserModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSendMessage={(subject, message) => {
-          console.log("Message sent to user:", { subject, message });
-        }}
-        userId={String(profile.id)}
-      />
+                <FavWrapper>
+                  <FavouriteIcon>
+                    <img src={BlogIcon} alt="Blogs" />
+                  </FavouriteIcon>
+                  <p>Blogs</p>
+                  <ViewAllButton onClick={() => console.log(favouriteBlogs)}>
+                    View
+                  </ViewAllButton>
+                </FavWrapper>
+              </SectionContent>
+            </Section>
+
+            <Section>
+              <SectionTitle>Comment History</SectionTitle>
+              <CommentHistory>
+                {comments.slice(0, 5).map((comment) => (
+                  <CommentItem key={comment.id}>
+                    <CommentText>{comment.content}</CommentText>
+                    {comment.content_type === "tutorial" ? (
+                      <CommentLink
+                        href={`/tutorial/${comment.content_id}/comments/${comment.id}`}
+                      >
+                        View in Tutorial
+                      </CommentLink>
+                    ) : (
+                      <CommentLink
+                        href={`/blog/${comment.content_id}/comments/${comment.id}`}
+                      >
+                        View in Blog
+                      </CommentLink>
+                    )}
+                  </CommentItem>
+                ))}
+
+                <ViewMoreCommentsLink
+                  to={
+                    isOwnProfile
+                      ? "/my-account/comment-history"
+                      : `/user/${profile.id}/comment-history`
+                  }
+                >
+                  See All Comments
+                </ViewMoreCommentsLink>
+              </CommentHistory>
+            </Section>
+          </AccountActivity>
+        </UserAccountContainer>
+      </AccountActivityWrapperOuter>
     </>
   );
 };

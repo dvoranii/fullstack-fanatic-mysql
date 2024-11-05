@@ -10,6 +10,7 @@ export const BlogList = styled.div`
   display: grid;
   row-gap: 1.2rem;
   position: relative;
+  user-select: none;
 
   .squares-and-triangles {
     position: absolute;
