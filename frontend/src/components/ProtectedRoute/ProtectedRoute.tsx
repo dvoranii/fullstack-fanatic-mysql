@@ -19,9 +19,13 @@ const isBlogPremium = (id: string | undefined) => {
 
 interface ProtectedRouteProps {
   element: JSX.Element;
+  purchasedTutorialIds?: number[];
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element }) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  element,
+  purchasedTutorialIds,
+}) => {
   const { profile, loading } = useContext(UserContext) || {};
   const { id } = useParams();
   const location = useLocation();
@@ -34,7 +38,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element }) => {
   const isBlogRoute = location.pathname.includes("/blog/");
 
   if (isTutorialRoute) {
+    const tutorialId = Number(id);
     const requiredLevel = getTutorialPremiumLevel(id);
+
+    if (purchasedTutorialIds?.includes(tutorialId)) {
+      return element;
+    }
 
     if (!requiredLevel) return element;
 

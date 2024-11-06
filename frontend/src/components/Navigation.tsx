@@ -1,4 +1,4 @@
-import { Suspense, lazy, useContext } from "react";
+import { Suspense, lazy, useContext, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import LoadingSpinner from "./LoadingSpinner/LoadingSpinner";
@@ -33,9 +33,29 @@ import CheckoutCancel from "../pages/Checkout/Cancel/Cancel";
 import PlansAndPricing from "../pages/PlansAndPricing/PlansAndPricing";
 import SubscriptionCart from "../pages/Checkout/SubscriptionCart/SubscriptionCart";
 import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
+import { fetchPurchasedTutorials } from "../services/purchasesService";
 
 const Navigation: React.FC = () => {
   const { profile } = useContext(UserContext) || {};
+  const [purchasedTutorialIds, setPurchasedTutorialIds] = useState<number[]>(
+    []
+  );
+  // const [purchasedBlogIds, setPurchasedBlogIds] = useState<number[]>([]);
+
+  useEffect(() => {
+    const loadPurchasedTutorials = async () => {
+      if (profile?.id) {
+        try {
+          const purchases = await fetchPurchasedTutorials(profile.id);
+          setPurchasedTutorialIds(purchases.map((p) => p.product_id));
+        } catch (error) {
+          console.error("Error fetching purchases:", error);
+        }
+      }
+    };
+
+    loadPurchasedTutorials();
+  }, [profile?.id]);
 
   return (
     <Suspense fallback={<LoadingSpinner />}>
@@ -45,7 +65,12 @@ const Navigation: React.FC = () => {
         <Route path="/tutorials" element={<TutorialsPage />} />
         <Route
           path="/tutorial/:id"
-          element={<ProtectedRoute element={<TutorialPage />} />}
+          element={
+            <ProtectedRoute
+              element={<TutorialPage />}
+              purchasedTutorialIds={purchasedTutorialIds}
+            />
+          }
         />
 
         <Route

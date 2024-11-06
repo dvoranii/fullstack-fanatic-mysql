@@ -27,11 +27,12 @@ import PremiumLockImg from "../../assets/images/lock.png";
 import FlipIconFront from "../../assets/images/tutorials/flip-icon.png";
 import FlipIconBack from "../../assets/images/tutorials/flip-icon-backside.png";
 import AddToCardImg from "../../assets/images/add-to-cart-icon.png";
-import { Tutorial, TutorialContentItem } from "../../types/Tutorial/Tutorial";
+import { TutorialContentItem } from "../../types/Tutorial/Tutorial";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import SquaresAndTriangles from "../../assets/images/SquaresAndTriangles.svg";
 import SwirlyLineImg from "../../assets/images/swirly-line-bg.svg";
-import { fetchPurchases } from "../../services/purchasesService";
+import { fetchPurchasedTutorials } from "../../services/purchasesService";
+import { PurchasedTutorial } from "../../types/Tutorial/PurchasedTutorial";
 
 const TutorialsPage: React.FC = () => {
   const {
@@ -51,7 +52,9 @@ const TutorialsPage: React.FC = () => {
   );
   const totalTutorials = filteredTutorials.length;
   const totalPages = Math.ceil(totalTutorials / tutorialsPerPage);
-  const [purchasedTutorials, setPurchasedTutorials] = useState<Tutorial[]>([]);
+  const [purchasedTutorials, setPurchasedTutorials] = useState<
+    PurchasedTutorial[]
+  >([]);
   const [purchasesLoading, setPurchasesLoading] = useState(true);
 
   useEffect(() => {
@@ -64,32 +67,33 @@ const TutorialsPage: React.FC = () => {
     const getPurchases = async () => {
       if (profile?.id) {
         try {
-          const purchases = await fetchPurchases(profile.id);
+          const purchases = await fetchPurchasedTutorials(profile.id);
           setPurchasedTutorials(purchases);
         } catch (error) {
           console.error("Error fetching purchases:", error);
         } finally {
-          setPurchasesLoading(false); // Set loading to false when done
+          setPurchasesLoading(false);
         }
       } else {
-        setPurchasesLoading(false); // If there's no profile, we're done loading
+        setPurchasesLoading(false);
       }
     };
 
     getPurchases();
   }, [profile?.id]);
 
-  console.log(purchasesLoading, purchasedTutorials);
+  const isTutorialPurchased = (title: string) => {
+    // Log to verify the titles being checked
+    console.log("Checking Tutorial Title:", title);
+    purchasedTutorials.forEach((tutorial) => {
+      console.log("Purchased Tutorial Title:", tutorial.product_name);
+    });
 
-  // needs to be checking against the tutorial name not id
-  // needs to also wait for purchasesLoading to be false before we start rendering
-
-  // const isTutorialPurchased = (id: number) => {
-  //   console.log(purchasedTutorials);
-  // return (
-  //   purchasedTutorials.find((tutorial) => tutorial.id === id) !== undefined
-  // );
-  // };
+    // Check if the tutorial title exists in the purchasedTutorials array
+    return purchasedTutorials.some(
+      (tutorial) => tutorial.product_name === title
+    );
+  };
 
   const startIdx = (currentPage - 1) * tutorialsPerPage;
   const endIdx = startIdx + tutorialsPerPage;
@@ -156,10 +160,6 @@ const TutorialsPage: React.FC = () => {
     addItemToCart(cartItem);
   };
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
   const canAccessTutorial = (
     userLevel: string | undefined,
     tutorialLevel: string | undefined
@@ -174,6 +174,10 @@ const TutorialsPage: React.FC = () => {
   const handleRestrictedAccessClick = (e: React.MouseEvent) => {
     e.preventDefault();
   };
+
+  if (loading || purchasesLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>
@@ -197,14 +201,11 @@ const TutorialsPage: React.FC = () => {
         <TutorialList>
           {filteredTutorials.slice(startIdx, endIdx).map((tutorial) => {
             const alreadyInCart = isItemInCart(tutorial.id);
-            // const isPurchased = isTutorialPurchased(tutorial.id);
+            const isPurchased = isTutorialPurchased(tutorial.title);
 
-            const hasAccess = canAccessTutorial(
-              profile?.premiumLevel,
-              tutorial.premiumLevel
-            );
-
-            // const hasAccess = isPurchased || canAccess;
+            const hasAccess =
+              isPurchased ||
+              canAccessTutorial(profile?.premiumLevel, tutorial.premiumLevel);
 
             return (
               <TutorialItemWrapper key={tutorial.id}>
@@ -272,26 +273,32 @@ const TutorialsPage: React.FC = () => {
                       </div>
                     )}
                     <BottomIconsWrapper>
-                      {tutorial.availableForPurchase && profile && (
-                        <AddToCartWrapper>
-                          <button
-                            onClick={() => handleAddToCart(tutorial)}
-                            disabled={alreadyInCart}
-                            style={{
-                              opacity: alreadyInCart ? 0.5 : 1,
-                              cursor: alreadyInCart ? "not-allowed" : "pointer",
-                            }}
-                          >
-                            <img
-                              src={AddToCardImg}
-                              alt="Add to cart"
-                              title={
-                                alreadyInCart ? "Added to Cart" : "Add to Cart"
-                              }
-                            />
-                          </button>
-                        </AddToCartWrapper>
-                      )}
+                      {tutorial.availableForPurchase &&
+                        profile &&
+                        !isPurchased && (
+                          <AddToCartWrapper>
+                            <button
+                              onClick={() => handleAddToCart(tutorial)}
+                              disabled={alreadyInCart}
+                              style={{
+                                opacity: alreadyInCart ? 0.5 : 1,
+                                cursor: alreadyInCart
+                                  ? "not-allowed"
+                                  : "pointer",
+                              }}
+                            >
+                              <img
+                                src={AddToCardImg}
+                                alt="Add to cart"
+                                title={
+                                  alreadyInCart
+                                    ? "Added to Cart"
+                                    : "Add to Cart"
+                                }
+                              />
+                            </button>
+                          </AddToCartWrapper>
+                        )}
                       <FlipIconWrapper
                         onClick={() => handleFlip(String(tutorial.id))}
                       >

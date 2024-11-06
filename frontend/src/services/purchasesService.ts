@@ -1,13 +1,18 @@
 import { apiCall } from "../utils/apiUtils";
-import { Tutorial } from "../types/Tutorial/Tutorial";
+import { PurchasedTutorial } from "../types/Tutorial/PurchasedTutorial";
 
-export const fetchPurchases = async (userId: number): Promise<Tutorial[]> => {
+export const fetchPurchasedTutorials = async (
+  userId: number
+): Promise<PurchasedTutorial[]> => {
   const endpoint = `/api/purchases?userId=${userId}`;
 
   try {
-    const { data } = await apiCall<{ purchases: Tutorial[] }>(endpoint, {
-      method: "GET",
-    });
+    const { data } = await apiCall<{ purchases: PurchasedTutorial[] }>(
+      endpoint,
+      {
+        method: "GET",
+      }
+    );
     return data.purchases;
   } catch (error) {
     console.error("Error fetching purchases:", error);
