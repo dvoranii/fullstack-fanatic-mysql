@@ -54,10 +54,7 @@ const BlogsPage: React.FC = () => {
     <BlogPageWrapper>
       <Title textContent="Blogs" />
       <BlogList>
-        <SearchBar
-          paddingLeft="0"
-          onSearchChange={(value) => setSearchText(value)}
-        />
+        <SearchBar paddingLeft="0" onChange={(value) => setSearchText(value)} />
         <img
           src={SquaresAndTriangles}
           className="squares-and-triangles"
