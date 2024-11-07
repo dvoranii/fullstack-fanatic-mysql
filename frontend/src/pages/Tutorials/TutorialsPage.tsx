@@ -83,13 +83,6 @@ const TutorialsPage: React.FC = () => {
   }, [profile?.id]);
 
   const isTutorialPurchased = (title: string) => {
-    // Log to verify the titles being checked
-    console.log("Checking Tutorial Title:", title);
-    purchasedTutorials.forEach((tutorial) => {
-      console.log("Purchased Tutorial Title:", tutorial.product_name);
-    });
-
-    // Check if the tutorial title exists in the purchasedTutorials array
     return purchasedTutorials.some(
       (tutorial) => tutorial.product_name === title
     );
