@@ -1,9 +1,10 @@
 import express, { Request, Response } from "express";
-import multer from "multer";
 import path from "path";
 import connectionPromise from "../db";
 import { RowDataPacket } from "mysql2";
 import { authenticate } from "../middleware/authenticate";
+import { upload } from "../utils/storageConfig";
+import fs from "fs";
 
 const router = express.Router();
 
@@ -30,34 +31,6 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
   }
 });
 
-const storage = multer.diskStorage({
-  destination: (
-    req: Request,
-    file: Express.Multer.File,
-    cb: (error: Error | null, destination: string) => void
-  ) => {
-    let destinationPath = path.join(__dirname, "../../public/assets/images");
-
-    if (file.fieldname === "bannerimage") {
-      destinationPath = path.join(destinationPath, "banners");
-    } else if (file.fieldname === "profile_picture") {
-      destinationPath = path.join(destinationPath, "profilePictures");
-    }
-
-    cb(null, destinationPath);
-  },
-  filename: (
-    req: Request,
-    file: Express.Multer.File,
-    cb: (error: Error | null, destination: string) => void
-  ) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + "-" + file.originalname);
-  },
-});
-
-const upload = multer({ storage });
-
 router.post(
   "/upload-banner",
   authenticate,
@@ -69,10 +42,26 @@ router.post(
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    const bannerImagePath = `/assets/images/banners/${req.file.filename}`;
+    const bannerImagePath = `/assets/images/user_${userId}/banners/${req.file.filename}`;
+    const connection = await connectionPromise;
 
     try {
-      const connection = await connectionPromise;
+      // Fetch current banner image path
+      const [currentUser] = await connection.query<RowDataPacket[]>(
+        "SELECT banner_image FROM users WHERE id = ?",
+        [userId]
+      );
+
+      const oldBannerPath = currentUser[0]?.banner_image
+        ? path.join(__dirname, `../../public${currentUser[0].banner_image}`)
+        : null;
+
+      // Delete old banner image if it exists
+      if (oldBannerPath && fs.existsSync(oldBannerPath)) {
+        fs.unlinkSync(oldBannerPath);
+      }
+
+      // Update banner image path in the database
       await connection.execute(
         "UPDATE users SET banner_image = ? WHERE id = ?",
         [bannerImagePath, userId]
@@ -100,14 +89,31 @@ router.post(
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    const profilePicturePath = `/assets/images/profilePictures/${req.file.filename}`;
+    const profilePicturePath = `/assets/images/user_${userId}/profilePictures/${req.file.filename}`;
+    const connection = await connectionPromise;
 
     try {
-      const connection = await connectionPromise;
+      // Fetch current profile picture path
+      const [currentUser] = await connection.query<RowDataPacket[]>(
+        "SELECT profile_picture FROM users WHERE id = ?",
+        [userId]
+      );
+
+      const oldProfilePicturePath = currentUser[0]?.profile_picture
+        ? path.join(__dirname, `../../public${currentUser[0].profile_picture}`)
+        : null;
+
+      // Delete old profile picture if it exists
+      if (oldProfilePicturePath && fs.existsSync(oldProfilePicturePath)) {
+        fs.unlinkSync(oldProfilePicturePath);
+      }
+
+      // Update profile picture path in the database
       await connection.execute(
         "UPDATE users SET profile_picture = ? WHERE id = ?",
         [profilePicturePath, userId]
       );
+
       res.status(200).json({
         message: "Profile picture updated successfully",
         imagePath: profilePicturePath,

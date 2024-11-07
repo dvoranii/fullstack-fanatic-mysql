@@ -35,6 +35,9 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const [profilePicturePreview, setProfilePicturePreview] = useState<
     string | null
   >(null);
+  const [newProfilePicturePreview, setNewProfilePicturePreview] = useState<
+    string | null
+  >(null);
 
   const maxDisplayNameCharCount = 30;
   const maxProfessionCharCount = 50;
@@ -80,16 +83,16 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = e?.target.files?.[0];
-    if (file) {
-      setProfilePicture(file);
-      setIsChanged((prev) => ({ ...prev, profilePicture: true }));
+    if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = () => {
-        setProfilePicturePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
+    setProfilePicture(file);
+    setIsChanged((prev) => ({ ...prev, profilePicture: true }));
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setNewProfilePicturePreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
   };
 
   const markSocialLinksChanged = () => {
@@ -101,39 +104,39 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
 
     try {
       const token = await handleTokenExpiration();
-
-      if (!token) {
-        throw new Error("User not authenticated");
-      }
+      if (!token) throw new Error("User not authenticated");
 
       let profilePicturePath = profile.profile_picture;
 
       if (isChanged.profilePicture && profilePicture) {
-        const formData = new FormData();
-        formData.append("profile_picture", profilePicture);
+        const profilePictureData = new FormData(); // Renamed for clarity
+        profilePictureData.append("profile_picture", profilePicture);
 
         const data = await uploadImage(
           "/api/profile/upload-profile-picture",
-          formData
+          profilePictureData
         );
 
-        if (!data.imagePath) {
+        if (!data.imagePath)
           throw new Error("Failed to upload profile picture");
-        }
 
         profilePicturePath = data.imagePath;
+
+        setProfilePicturePreview(profilePicturePath);
+        setNewProfilePicturePreview(null);
       }
 
-      const formData = new FormData();
+      const profileData = new FormData();
 
-      if (isChanged.displayName) formData.append("display_name", displayName);
-      if (isChanged.profession) formData.append("profession", profession);
-      if (isChanged.bio) formData.append("bio", bio);
+      if (isChanged.displayName)
+        profileData.append("display_name", displayName);
+      if (isChanged.profession) profileData.append("profession", profession);
+      if (isChanged.bio) profileData.append("bio", bio);
       if (isChanged.socialLinks) {
-        formData.append("social_links", JSON.stringify(socialLinks));
+        profileData.append("social_links", JSON.stringify(socialLinks));
       }
       if (profilePicturePath) {
-        formData.append("profile_picture", profilePicturePath);
+        profileData.append("profile_picture", profilePicturePath);
       }
 
       const response = await fetch("/api/profile/update-profile", {
@@ -141,15 +144,12 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        body: formData,
+        body: profileData,
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to update profile");
-      }
+      if (!response.ok) throw new Error("Failed to update profile");
 
       const updatedProfile = await response.json();
-
       setProfile(updatedProfile);
       alert("Profile updated successfully!");
       closeModal();
@@ -171,16 +171,24 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
               accept="image/*"
               onChange={handleProfilePictureChange}
             />
-            {profilePicturePreview && (
+            {newProfilePicturePreview ? (
               <img
-                src={
-                  profilePicturePreview.includes("googleusercontent")
-                    ? profilePicturePreview
-                    : `${BASE_URL}${profilePicturePreview}`
-                }
-                alt="Profile Preview"
+                src={newProfilePicturePreview}
+                alt="New Profile Preview"
                 style={{ width: 100, height: 100, objectFit: "cover" }}
               />
+            ) : (
+              profilePicturePreview && (
+                <img
+                  src={
+                    profilePicturePreview.includes("googleusercontent")
+                      ? profilePicturePreview
+                      : `${BASE_URL}${profilePicturePreview}`
+                  }
+                  alt="Profile Preview"
+                  style={{ width: 100, height: 100, objectFit: "cover" }}
+                />
+              )
             )}
           </FormGroup>
           <FormGroup>
