@@ -5,7 +5,7 @@ import { BlogDetailWrapper } from "./BlogDetail.styled";
 import { blogContent } from "../../assets/blogContent";
 import Accordion from "../Accordion/Accordion";
 import CommentSection from "../CommentSection/CommentSection";
-import { BlogContentItem } from "../../types/Blog/BlogContentItem";
+import { BlogContentItem } from "../../types/Blog/Blog";
 
 const BlogDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();

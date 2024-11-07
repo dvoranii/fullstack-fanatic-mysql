@@ -32,7 +32,7 @@ import SearchBar from "../../components/SearchBar/SearchBar";
 import SquaresAndTriangles from "../../assets/images/SquaresAndTriangles.svg";
 import SwirlyLineImg from "../../assets/images/swirly-line-bg.svg";
 import { fetchPurchasedTutorials } from "../../services/purchasesService";
-import { PurchasedTutorial } from "../../types/Tutorial/PurchasedTutorial";
+import { PurchasedTutorial } from "../../types/PurchasedItem";
 
 const TutorialsPage: React.FC = () => {
   const {

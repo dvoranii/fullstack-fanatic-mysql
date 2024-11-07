@@ -1,5 +1,5 @@
 import { apiCall } from "../utils/apiUtils";
-import { PurchasedTutorial } from "../types/Tutorial/PurchasedTutorial";
+import { PurchasedTutorial } from "../types/PurchasedItem";
 
 export const fetchPurchasedTutorials = async (
   userId: number

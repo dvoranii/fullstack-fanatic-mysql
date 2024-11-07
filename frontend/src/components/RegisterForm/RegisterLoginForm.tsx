@@ -3,7 +3,7 @@ import { useAuthForm } from "../../hooks/useAuthForm";
 import InputField from "../Form/InputField";
 import GoogleAuthButton from "../Form/GoogleAuthButton";
 import SubmitButton from "../Form/SubmitButton";
-import ErrorMessage from "../Form/Message";
+import FormMessage from "../Form/Message";
 import TermsCheckbox from "../Form/TermsCheckbox";
 import {
   RegisterLoginFormWrapperInner,
@@ -129,7 +129,7 @@ const RegisterLoginForm: React.FC<RegisterLoginFormProps> = ({
               onChange={setIsTermsAccepted}
             />
             <SubmitButton text="Register" />
-            <ErrorMessage error={error} />
+            <FormMessage message={error} type="error" />
             <Divider>OR</Divider>
             <GoogleAuthButton
               handleClick={handleGoogleRegisterButtonClick}
@@ -157,7 +157,7 @@ const RegisterLoginForm: React.FC<RegisterLoginFormProps> = ({
                 placeholder="*****"
               />
               <SubmitButton text="Login" />
-              <ErrorMessage error={error} />
+              <FormMessage message={error} type="error" />
               <Divider>OR</Divider>
               <GoogleAuthButton
                 handleClick={handleGoogleLoginButtonClick}

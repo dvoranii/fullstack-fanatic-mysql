@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Tutorial } from "../../../types/Tutorial/Tutorial";
 import { Blog } from "../../../types/Blog/Blog";
-import { PurchasedTutorial } from "../../../types/Tutorial/PurchasedTutorial";
+import { PurchasedTutorial } from "../../../types/PurchasedItem";
 import {
   FavoritesSectionContainer,
   FavoritesItemWrapper,

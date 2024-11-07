@@ -12,7 +12,6 @@ export interface Tutorial {
   price?: number;
   difficulty: "beginner" | "intermediate" | "advanced";
   description: string;
-  isPurchased?: boolean;
 }
 
 export interface TutorialContentItem extends Tutorial {
