@@ -180,7 +180,7 @@ const TutorialsPage: React.FC = () => {
         <SearchBar
           width="46%"
           paddingLeft="60px"
-          onSearchChange={(value) => setSearchText(value)}
+          onChange={(value) => setSearchText(value)}
         />
         <img
           src={SquaresAndTriangles}

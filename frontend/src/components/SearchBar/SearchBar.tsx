@@ -12,11 +12,13 @@ interface SearchBarProps {
   width?: string;
   paddingLeft?: string;
   onSearchChange?: (value: string) => void;
+  onChange?: (value: string) => void;
 }
 const SearchBar: React.FC<SearchBarProps> = ({
   width,
   paddingLeft,
   onSearchChange,
+  onChange,
 }) => {
   const [inputValue, setInputValue] = useState("");
 
@@ -32,6 +34,15 @@ const SearchBar: React.FC<SearchBarProps> = ({
     }
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value);
+
+    if (onChange) {
+      onChange(value);
+    }
+  };
+
   return (
     <SearchBarWrapperOuter style={{ paddingLeft }}>
       <SearchBarWrapperInner style={{ width }}>
@@ -43,7 +54,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
           <input
             type="text"
             placeholder="Search..."
-            onChange={(e) => setInputValue(e.target.value)}
+            value={inputValue}
+            onChange={handleInputChange}
             onKeyPress={handleKeyPress}
           />
         </SearchInputWrapper>
