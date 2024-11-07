@@ -20,10 +20,6 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
       userId,
     ]);
 
-    // if (purchases.length === 0) {
-    //   return res.status(404).json({ message: "No purchases found" });
-    // }
-
     res.status(200).json({ purchases: purchases.length ? purchases : [] });
   } catch (error) {
     console.error("Error fetching purchases:", error);

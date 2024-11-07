@@ -18,7 +18,7 @@ import PremiumLockImg from "../../assets/images/lock.png";
 import PremiumUnlockImg from "../../assets/images/unlocked.png";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import SquaresAndTriangles from "../../assets/images/SquaresAndTriangles.svg";
-import { BlogContentItem } from "../../types/Blog/BlogContentItem";
+import { BlogContentItem } from "../../types/Blog/Blog";
 
 const BlogsPage: React.FC = () => {
   const {

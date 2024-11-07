@@ -1,4 +1,4 @@
-import { BlogContentItem } from "../types/Blog/BlogContentItem";
+import { BlogContentItem } from "../types/Blog/Blog";
 import blog_thumbnail_1 from "../assets/images/blogs/React-icon.svg.png";
 import blog_thumbnail_2 from "../assets/images/blogs/node-logo.png";
 import blog_thumbnail_3 from "../assets/images/blogs/css-logo.png";

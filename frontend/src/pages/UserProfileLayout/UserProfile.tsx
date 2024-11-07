@@ -27,7 +27,6 @@ import {
   ProfilePlaceholder,
   BannerUploadWrapper,
   UserAccountContainer,
-  // AccountActivitySubBanner,
   FollowsWrapper,
   FavWrapper,
   PremiumBadge,
