@@ -7,7 +7,7 @@ import { authenticate } from "../middleware/authenticate";
 
 const router = express.Router();
 
-router.get("/profile", authenticate, async (req: Request, res: Response) => {
+router.get("/", authenticate, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.userId;
 
@@ -16,6 +16,8 @@ router.get("/profile", authenticate, async (req: Request, res: Response) => {
       "SELECT id, email, name, display_name, profession, bio, social_links, profile_picture , banner_image, isPremium, premiumLevel FROM users WHERE id = ?",
       [userId]
     );
+
+    console.log(user);
 
     if (!user.length) {
       return res.status(404).json({ message: "User not found" });

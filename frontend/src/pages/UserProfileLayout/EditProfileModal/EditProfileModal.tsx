@@ -174,7 +174,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
             {profilePicturePreview && (
               <img
                 src={
-                  profilePicturePreview.startsWith("data:")
+                  profilePicturePreview.includes("googleusercontent")
                     ? profilePicturePreview
                     : `${BASE_URL}${profilePicturePreview}`
                 }

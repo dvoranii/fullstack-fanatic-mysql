@@ -18,7 +18,10 @@ const ProfilePicture = ({
   border,
   bg,
 }: ProfilePictureProps) => {
-  const imageUrl = src ? `${BASE_URL}${src}` : "";
+  const imageUrl = src.includes("googleusercontent")
+    ? src
+    : `${BASE_URL}${src}`;
+
   return (
     <StyledProfilePicture
       src={imageUrl}

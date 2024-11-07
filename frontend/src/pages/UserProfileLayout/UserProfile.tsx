@@ -199,10 +199,8 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
               <SectionTitle>Favorites</SectionTitle>
               <FavoritesDropdownWrapper>
                 {loggedInUser && isOwnProfile && (
-                  <select>
-                    <option value="0" selected>
-                      All
-                    </option>
+                  <select defaultValue="0">
+                    <option value="0">All</option>
                     <option value="1">Free</option>
                     <option value="2">Premium</option>
                     <option value="3">Purchased</option>

@@ -4,7 +4,7 @@ import { PublicProfile } from "../types/PublicProfileType";
 import { Conversation } from "../types/Conversations";
 
 export const getUserProfile = async (): Promise<User> => {
-  const endpoint = "/api/profile/profile";
+  const endpoint = "/api/profile";
   const { data } = await apiCall<User>(endpoint, {
     method: "GET",
     credentials: "include",

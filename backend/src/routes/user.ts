@@ -171,11 +171,9 @@ router.post("/google-register", async (req: Request, res: Response) => {
     const existingUser = await fetchUserByColumn("google_id", googleId);
 
     if (existingUser.length > 0) {
-      // User already exists, return 409 conflict
       return res.status(409).json({ message: "User already exists" });
     }
 
-    // If the user does not exist, register them
     const userId = await insertUser(
       email ?? null,
       name ?? null,
