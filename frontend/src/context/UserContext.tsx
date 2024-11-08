@@ -1,7 +1,6 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { User } from "../types/User/User";
 import { fetchUserProfileFavouritesAndComments } from "../utils/userUtils";
-import { fetchPurchasedItems } from "../services/purchasesService";
 import { addFavourite, removeFavourite } from "../services/favouritesService";
 import { Tutorial } from "../types/Tutorial/Tutorial";
 import { Blog } from "../types/Blog/Blog";
@@ -42,6 +41,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         setFavouriteTutorials,
         setFavouriteBlogs,
         setComments,
+        setPurchasedItems,
         setError,
         setLoading
       );
@@ -49,24 +49,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     fetchUserData();
   }, []);
-
-  useEffect(() => {
-    const fetchPurchasedData = async () => {
-      if (profile?.id) {
-        try {
-          setLoading(true);
-          const purchases = await fetchPurchasedItems(profile.id);
-          setPurchasedItems(purchases);
-        } catch (error) {
-          console.error("Error fetching purchased items:", error);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchPurchasedData();
-  }, [profile]);
 
   useEffect(() => {
     sessionStorage.setItem("cartItems", JSON.stringify(cartItems));

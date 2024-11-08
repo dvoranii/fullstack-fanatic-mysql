@@ -11,8 +11,6 @@ export const fetchPurchasedItems = async (
       method: "GET",
     });
 
-    console.log(data.purchases);
-
     return data.purchases;
   } catch (error) {
     console.error("Error fetching purchases:", error);

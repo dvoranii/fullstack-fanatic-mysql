@@ -48,10 +48,9 @@ import MessageModalButton from "../../components/MessageModalButton/MessageModal
 
 const BASE_URL = "http://localhost:5000";
 
+// figure out purchasedItem issue
 const UserProfilePage: React.FC<UserProfilePageProps> = ({
   profile,
-  favouriteTutorials,
-  favouriteBlogs,
   comments,
   isEditable = false,
   isOwnProfile,
@@ -61,7 +60,9 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
   children,
 }) => {
   const userContext = useContext(UserContext);
-  const loggedInUser = userContext?.profile;
+  const { favouriteTutorials, favouriteBlogs, purchasedItems } =
+    userContext || {};
+  const loggedInUser = profile;
 
   const socialLinks = profile.social_links || {};
   const [followersCount, setFollowersCount] = useState(0);
@@ -85,7 +86,8 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
     fetchFollowData();
   }, [profile.id]);
 
-  console.log(favouriteTutorials);
+  console.log(purchasedItems);
+  console.log(loggedInUser);
 
   return (
     <>
