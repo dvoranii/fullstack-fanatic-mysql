@@ -10,6 +10,7 @@ import {
   PremiumBadge,
   SeeMoreButtonWrapper,
   BlogPageWrapper,
+  BottomButtonsWrapper,
 } from "./BlogsPage.styled";
 import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
 import { UserContext } from "../../context/UserContext";
@@ -19,12 +20,16 @@ import PremiumUnlockImg from "../../assets/images/unlocked.png";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import SquaresAndTriangles from "../../assets/images/SquaresAndTriangles.svg";
 import { BlogContentItem } from "../../types/Blog/Blog";
+import AddToCartButton from "../../components/AddToCartButton/AddToCartButton";
+import { CartItem } from "../../types/CartItem";
 
 const BlogsPage: React.FC = () => {
   const {
     profile,
     favouriteBlogs = [],
     toggleFavourite = () => {},
+    cartItems = [],
+    addItemToCart = () => {},
   } = useContext(UserContext) || {};
 
   const [visibleBlogs, setVisibleBlogs] = useState<number>(4);
@@ -50,6 +55,10 @@ const BlogsPage: React.FC = () => {
     return Boolean(profile?.isPremium);
   };
 
+  const isItemInCart = (id: number) => {
+    return cartItems.some((item) => item.id === id);
+  };
+
   return (
     <BlogPageWrapper>
       <Title textContent="Blogs" />
@@ -64,6 +73,19 @@ const BlogsPage: React.FC = () => {
         {filteredBlogs.slice(0, visibleBlogs).map((blog) => {
           const isPremiumLocked = blog.isPremium && !profile;
           const hasAccess = canAccessBlog(blog);
+          const alreadyInCart = isItemInCart(blog.id);
+
+          const cartItem: CartItem = {
+            id: blog.id,
+            title: blog.title,
+            created_at: blog.created_at,
+            image: blog.image,
+            isPremium: blog.isPremium,
+            availableForPurchase: blog.availableForPurchase,
+            accessLevel: blog.accessLevel,
+            price: blog.price || 0,
+            type: "blog" as const,
+          };
 
           return (
             <BlogItem key={blog.id}>
@@ -100,15 +122,25 @@ const BlogsPage: React.FC = () => {
                     )}
                   </PremiumBadge>
                 )}
-                {profile && (
-                  <FavouriteButton
-                    isFavourited={favouriteBlogs.some(
-                      (favBlog) => favBlog.id === blog.id
-                    )}
-                    onClick={() => toggleFavourite(blog.id, "blog")}
-                    altText="Blog Favourite Button"
-                  />
-                )}
+
+                <BottomButtonsWrapper>
+                  {blog.availableForPurchase && profile && (
+                    <AddToCartButton
+                      item={cartItem}
+                      alreadyInCart={alreadyInCart}
+                      onAddToCart={addItemToCart}
+                    />
+                  )}
+                  {profile && (
+                    <FavouriteButton
+                      isFavourited={favouriteBlogs.some(
+                        (favBlog) => favBlog.id === blog.id
+                      )}
+                      onClick={() => toggleFavourite(blog.id, "blog")}
+                      altText="Blog Favourite Button"
+                    />
+                  )}
+                </BottomButtonsWrapper>
               </BlogActions>
             </BlogItem>
           );

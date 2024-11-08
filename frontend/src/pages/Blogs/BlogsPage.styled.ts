@@ -167,3 +167,8 @@ export const SeeMoreButtonWrapper = styled.div`
     }
   }
 `;
+
+export const BottomButtonsWrapper = styled.div`
+  display: flex;
+  gap: 1.2rem;
+`;

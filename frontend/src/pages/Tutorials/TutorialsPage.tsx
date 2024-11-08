@@ -14,7 +14,6 @@ import {
   CardInner,
   DifficultyStarsWrapper,
   BottomIconsWrapper,
-  AddToCartWrapper,
   TutorialListOuter,
 } from "./TutorialsPage.styled";
 import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
@@ -26,13 +25,13 @@ import { tutorialContent } from "../../assets/tutorialContent";
 import PremiumLockImg from "../../assets/images/lock.png";
 import FlipIconFront from "../../assets/images/tutorials/flip-icon.png";
 import FlipIconBack from "../../assets/images/tutorials/flip-icon-backside.png";
-import AddToCardImg from "../../assets/images/add-to-cart-icon.png";
-import { TutorialContentItem } from "../../types/Tutorial/Tutorial";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import SquaresAndTriangles from "../../assets/images/SquaresAndTriangles.svg";
 import SwirlyLineImg from "../../assets/images/swirly-line-bg.svg";
 import { fetchPurchasedTutorials } from "../../services/purchasesService";
-import { PurchasedTutorial } from "../../types/PurchasedItem";
+import { PurchasedItem } from "../../types/PurchasedItem";
+import AddToCartButton from "../../components/AddToCartButton/AddToCartButton";
+import { CartItem } from "../../types/CartItem";
 
 const TutorialsPage: React.FC = () => {
   const {
@@ -52,9 +51,9 @@ const TutorialsPage: React.FC = () => {
   );
   const totalTutorials = filteredTutorials.length;
   const totalPages = Math.ceil(totalTutorials / tutorialsPerPage);
-  const [purchasedTutorials, setPurchasedTutorials] = useState<
-    PurchasedTutorial[]
-  >([]);
+  const [purchasedTutorials, setPurchasedTutorials] = useState<PurchasedItem[]>(
+    []
+  );
   const [purchasesLoading, setPurchasesLoading] = useState(true);
 
   useEffect(() => {
@@ -137,22 +136,6 @@ const TutorialsPage: React.FC = () => {
     return cartItems.some((item) => item.id === id);
   };
 
-  const handleAddToCart = (tutorial: TutorialContentItem) => {
-    const cartItem = {
-      id: tutorial.id,
-      title: tutorial.title,
-      created_at: tutorial.created_at,
-      image: tutorial.image,
-      isPremium: tutorial.isPremium,
-      description: tutorial.description,
-      availableForPurchase: tutorial.availableForPurchase,
-      accessLevel: tutorial.accessLevel,
-      price: tutorial.price || 0,
-      type: "tutorial" as const,
-    };
-    addItemToCart(cartItem);
-  };
-
   const canAccessTutorial = (
     userLevel: string | undefined,
     tutorialLevel: string | undefined
@@ -199,6 +182,19 @@ const TutorialsPage: React.FC = () => {
             const hasAccess =
               isPurchased ||
               canAccessTutorial(profile?.premiumLevel, tutorial.premiumLevel);
+
+            const cartItem: CartItem = {
+              id: tutorial.id,
+              title: tutorial.title,
+              created_at: tutorial.created_at,
+              image: tutorial.image,
+              isPremium: tutorial.isPremium,
+              description: tutorial.description,
+              availableForPurchase: tutorial.availableForPurchase,
+              accessLevel: tutorial.accessLevel,
+              price: tutorial.price || 0,
+              type: "tutorial" as const,
+            };
 
             return (
               <TutorialItemWrapper key={tutorial.id}>
@@ -269,29 +265,13 @@ const TutorialsPage: React.FC = () => {
                       {tutorial.availableForPurchase &&
                         profile &&
                         !isPurchased && (
-                          <AddToCartWrapper>
-                            <button
-                              onClick={() => handleAddToCart(tutorial)}
-                              disabled={alreadyInCart}
-                              style={{
-                                opacity: alreadyInCart ? 0.5 : 1,
-                                cursor: alreadyInCart
-                                  ? "not-allowed"
-                                  : "pointer",
-                              }}
-                            >
-                              <img
-                                src={AddToCardImg}
-                                alt="Add to cart"
-                                title={
-                                  alreadyInCart
-                                    ? "Added to Cart"
-                                    : "Add to Cart"
-                                }
-                              />
-                            </button>
-                          </AddToCartWrapper>
+                          <AddToCartButton
+                            item={cartItem}
+                            alreadyInCart={alreadyInCart}
+                            onAddToCart={addItemToCart}
+                          />
                         )}
+
                       <FlipIconWrapper
                         onClick={() => handleFlip(String(tutorial.id))}
                       >
