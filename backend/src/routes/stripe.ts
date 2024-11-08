@@ -26,15 +26,15 @@ const router = express.Router();
 
   const getStripePriceId = (item: CartItem): string | null => {
     if (item.type === "tutorial") {
-      if (item.price === 5.0) {
+      if (Number(item.price) === 5.0) {
         return "price_1QAdG0Lg43ij91cKrppnUtez";
-      } else if (item.price === 3.5) {
+      } else if (Number(item.price) === 3.5) {
         return "price_1Q9VnYLg43ij91cKsu8U9CE0";
       }
     }
 
     if (item.type === "blog") {
-      if (item.price === 2.5) {
+      if (Number(item.price) === 2.5) {
         return "price_1QAdIlLg43ij91cKToTVoLHl";
       }
     }
@@ -248,7 +248,7 @@ const router = express.Router();
               ) {
                 await connection.execute(
                   "INSERT INTO purchases (user_id, product_id, product_name, product_type, price, purchase_type, access_expiry) VALUES (?, ?, ?, ?, ?, 'one-off', NULL)",
-                  [userId, item.product_id, item.title, "tutorial", item.price]
+                  [userId, item.product_id, item.title, item.type, item.price]
                 );
               }
             }

@@ -33,28 +33,25 @@ import CheckoutCancel from "../pages/Checkout/Cancel/Cancel";
 import PlansAndPricing from "../pages/PlansAndPricing/PlansAndPricing";
 import SubscriptionCart from "../pages/Checkout/SubscriptionCart/SubscriptionCart";
 import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
-import { fetchPurchasedTutorials } from "../services/purchasesService";
+import { fetchPurchasedItems } from "../services/purchasesService";
 
 const Navigation: React.FC = () => {
   const { profile } = useContext(UserContext) || {};
-  const [purchasedTutorialIds, setPurchasedTutorialIds] = useState<number[]>(
-    []
-  );
-  // const [purchasedBlogIds, setPurchasedBlogIds] = useState<number[]>([]);
+  const [purchasedItemIds, setPurchasedItemIds] = useState<number[]>([]);
 
   useEffect(() => {
-    const loadPurchasedTutorials = async () => {
+    const loadPurchasedItems = async () => {
       if (profile?.id) {
         try {
-          const purchases = await fetchPurchasedTutorials(profile.id);
-          setPurchasedTutorialIds(purchases.map((p) => p.product_id));
+          const purchases = await fetchPurchasedItems(profile.id);
+          setPurchasedItemIds(purchases.map((p) => p.product_id));
         } catch (error) {
           console.error("Error fetching purchases:", error);
         }
       }
     };
 
-    loadPurchasedTutorials();
+    loadPurchasedItems();
   }, [profile?.id]);
 
   return (
@@ -68,11 +65,10 @@ const Navigation: React.FC = () => {
           element={
             <ProtectedRoute
               element={<TutorialPage />}
-              purchasedTutorialIds={purchasedTutorialIds}
+              purchasedItemIds={purchasedItemIds}
             />
           }
         />
-
         <Route
           path="/tutorial/:id/comments/:commentId"
           element={<TutorialPage />}
@@ -80,7 +76,12 @@ const Navigation: React.FC = () => {
         <Route path="/blogs" element={<BlogsPage />} />
         <Route
           path="/blog/:id"
-          element={<ProtectedRoute element={<BlogDetail />} />}
+          element={
+            <ProtectedRoute
+              element={<BlogDetail />}
+              purchasedItemIds={purchasedItemIds}
+            />
+          }
         />
         <Route path="/blog/:id/comments/:commentId" element={<BlogDetail />} />
         <Route path="/contact" element={<ContactPage />} />
@@ -110,7 +111,6 @@ const Navigation: React.FC = () => {
           element={<CommentHistory />}
         />
         <Route path="/user/:id/comment-history" element={<CommentHistory />} />
-
         <Route path="/my-cart" element={<ViewCartPage />} />
         <Route path="/my-subscription-cart" element={<SubscriptionCart />} />
         <Route path="/checkout/success" element={<CheckoutSuccess />} />

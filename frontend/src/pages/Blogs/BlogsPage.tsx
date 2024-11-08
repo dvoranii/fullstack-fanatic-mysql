@@ -11,6 +11,7 @@ import {
   SeeMoreButtonWrapper,
   BlogPageWrapper,
   BottomButtonsWrapper,
+  PremiumBlogThumbnailWrapperOuter,
 } from "./BlogsPage.styled";
 import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
 import { UserContext } from "../../context/UserContext";
@@ -19,9 +20,10 @@ import PremiumLockImg from "../../assets/images/lock.png";
 import PremiumUnlockImg from "../../assets/images/unlocked.png";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import SquaresAndTriangles from "../../assets/images/SquaresAndTriangles.svg";
-import { BlogContentItem } from "../../types/Blog/Blog";
 import AddToCartButton from "../../components/AddToCartButton/AddToCartButton";
 import { CartItem } from "../../types/CartItem";
+import { PurchasedItem } from "../../types/PurchasedItem";
+import { fetchPurchasedItems } from "../../services/purchasesService";
 
 const BlogsPage: React.FC = () => {
   const {
@@ -34,25 +36,52 @@ const BlogsPage: React.FC = () => {
 
   const [visibleBlogs, setVisibleBlogs] = useState<number>(4);
   const [searchText, setSearchText] = useState<string>("");
+  const [purchasedBlogs, setPurchasedBlogs] = useState<PurchasedItem[]>([]);
+  const [purchasesLoading, setPurchasesLoading] = useState(true);
 
   useEffect(() => {
     setVisibleBlogs(4);
   }, [searchText]);
 
+  useEffect(() => {
+    const getPurchases = async () => {
+      if (profile?.id) {
+        try {
+          setPurchasesLoading(true);
+          const purchases = await fetchPurchasedItems(profile.id);
+
+          const blogPurchases = purchases.filter(
+            (item) => item.product_type === "blog"
+          );
+          setPurchasedBlogs(blogPurchases);
+        } catch (error) {
+          console.error("Error fetching purchases:", error);
+        } finally {
+          setPurchasesLoading(false);
+        }
+      } else {
+        setPurchasesLoading(false);
+      }
+    };
+
+    getPurchases();
+  }, [profile?.id]);
+
   const handleSeeMore = () => {
     setVisibleBlogs((prevVisibleBlogs) => prevVisibleBlogs + 4);
   };
+
+  console.log(purchasesLoading);
 
   const filteredBlogs = blogContent.filter((blog) =>
     blog.title.toLowerCase().includes(searchText.toLowerCase())
   );
 
-  const canAccessBlog = (blog: BlogContentItem) => {
-    if (!blog.isPremium) {
-      return true;
-    }
-
-    return Boolean(profile?.isPremium);
+  const canAccessBlog = (blogId: number) => {
+    return (
+      purchasedBlogs.some((blog) => blog.product_id === blogId) ||
+      !blogContent.find((b) => b.id === blogId)?.isPremium
+    );
   };
 
   const isItemInCart = (id: number) => {
@@ -71,8 +100,8 @@ const BlogsPage: React.FC = () => {
         />
         <div className="block-1"></div>
         {filteredBlogs.slice(0, visibleBlogs).map((blog) => {
-          const isPremiumLocked = blog.isPremium && !profile;
-          const hasAccess = canAccessBlog(blog);
+          const isPremiumLocked = blog.isPremium && !canAccessBlog(blog.id);
+          const hasAccess = canAccessBlog(blog.id);
           const alreadyInCart = isItemInCart(blog.id);
 
           const cartItem: CartItem = {
@@ -89,9 +118,17 @@ const BlogsPage: React.FC = () => {
 
           return (
             <BlogItem key={blog.id}>
-              <BlogImgWrapper>
-                <img src={blog.image} alt={blog.title} title={blog.title} />
-              </BlogImgWrapper>
+              {isPremiumLocked ? (
+                <PremiumBlogThumbnailWrapperOuter>
+                  <BlogImgWrapper>
+                    <img src={blog.image} alt={blog.title} title={blog.title} />
+                  </BlogImgWrapper>
+                </PremiumBlogThumbnailWrapperOuter>
+              ) : (
+                <BlogImgWrapper>
+                  <img src={blog.image} alt={blog.title} title={blog.title} />
+                </BlogImgWrapper>
+              )}
               <BlogContent
                 to={isPremiumLocked ? "#" : `/blog/${blog.id}`}
                 style={{ cursor: isPremiumLocked ? "not-allowed" : "pointer" }}
@@ -115,7 +152,7 @@ const BlogsPage: React.FC = () => {
                 ) : (
                   <PremiumBadge hasAccess={hasAccess}>
                     <p>Premium</p>
-                    {canAccessBlog(blog) ? (
+                    {canAccessBlog(blog.id) ? (
                       <img src={PremiumUnlockImg} alt="Unlocked" />
                     ) : (
                       <img src={PremiumLockImg} alt="Locked" />
@@ -124,7 +161,7 @@ const BlogsPage: React.FC = () => {
                 )}
 
                 <BottomButtonsWrapper>
-                  {blog.availableForPurchase && profile && (
+                  {blog.availableForPurchase && profile && !alreadyInCart && (
                     <AddToCartButton
                       item={cartItem}
                       alreadyInCart={alreadyInCart}

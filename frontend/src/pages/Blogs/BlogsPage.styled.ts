@@ -172,3 +172,15 @@ export const BottomButtonsWrapper = styled.div`
   display: flex;
   gap: 1.2rem;
 `;
+
+export const PremiumBlogThumbnailWrapperOuter = styled.div`
+  cursor: not-allowed;
+
+  &:hover {
+    cursor: not-allowed;
+  }
+
+  ${BlogImgWrapper} {
+    cursor: not-allowed;
+  }
+`;

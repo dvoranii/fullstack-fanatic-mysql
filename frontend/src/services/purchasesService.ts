@@ -1,7 +1,7 @@
 import { apiCall } from "../utils/apiUtils";
 import { PurchasedItem } from "../types/PurchasedItem";
 
-export const fetchPurchasedTutorials = async (
+export const fetchPurchasedItems = async (
   userId: number
 ): Promise<PurchasedItem[]> => {
   const endpoint = `/api/purchases?userId=${userId}`;

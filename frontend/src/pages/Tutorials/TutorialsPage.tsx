@@ -28,7 +28,7 @@ import FlipIconBack from "../../assets/images/tutorials/flip-icon-backside.png";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import SquaresAndTriangles from "../../assets/images/SquaresAndTriangles.svg";
 import SwirlyLineImg from "../../assets/images/swirly-line-bg.svg";
-import { fetchPurchasedTutorials } from "../../services/purchasesService";
+import { fetchPurchasedItems } from "../../services/purchasesService";
 import { PurchasedItem } from "../../types/PurchasedItem";
 import AddToCartButton from "../../components/AddToCartButton/AddToCartButton";
 import { CartItem } from "../../types/CartItem";
@@ -66,7 +66,7 @@ const TutorialsPage: React.FC = () => {
     const getPurchases = async () => {
       if (profile?.id) {
         try {
-          const purchases = await fetchPurchasedTutorials(profile.id);
+          const purchases = await fetchPurchasedItems(profile.id);
           setPurchasedTutorials(purchases);
         } catch (error) {
           console.error("Error fetching purchases:", error);

@@ -19,12 +19,12 @@ const isBlogPremium = (id: string | undefined) => {
 
 interface ProtectedRouteProps {
   element: JSX.Element;
-  purchasedTutorialIds?: number[];
+  purchasedItemIds?: number[];
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   element,
-  purchasedTutorialIds,
+  purchasedItemIds,
 }) => {
   const { profile, loading } = useContext(UserContext) || {};
   const { id } = useParams();
@@ -41,7 +41,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     const tutorialId = Number(id);
     const requiredLevel = getTutorialPremiumLevel(id);
 
-    if (purchasedTutorialIds?.includes(tutorialId)) {
+    if (purchasedItemIds?.includes(tutorialId)) {
       return element;
     }
 
@@ -57,9 +57,14 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
     return element;
   } else if (isBlogRoute) {
+    const blogId = Number(id);
     const isPremium = isBlogPremium(id);
 
-    if (isPremium && !profile) {
+    if (purchasedItemIds?.includes(blogId)) {
+      return element;
+    }
+
+    if (isPremium && !purchasedItemIds?.includes(blogId)) {
       return <Navigate to="/plans-and-pricing" replace />;
     }
 

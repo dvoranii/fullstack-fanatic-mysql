@@ -238,34 +238,40 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
             <Section>
               <SectionTitle>Comment History</SectionTitle>
               <CommentHistory>
-                {comments.slice(0, 5).map((comment) => (
-                  <CommentItem key={comment.id}>
-                    <CommentText>{comment.content}</CommentText>
-                    {comment.content_type === "tutorial" ? (
-                      <CommentLink
-                        href={`/tutorial/${comment.content_id}/comments/${comment.id}`}
-                      >
-                        View in Tutorial
-                      </CommentLink>
-                    ) : (
-                      <CommentLink
-                        href={`/blog/${comment.content_id}/comments/${comment.id}`}
-                      >
-                        View in Blog
-                      </CommentLink>
-                    )}
-                  </CommentItem>
-                ))}
+                {comments.length === 0 ? (
+                  <p className="no-comments">No comments available</p>
+                ) : (
+                  <>
+                    {comments.slice(0, 5).map((comment) => (
+                      <CommentItem key={comment.id}>
+                        <CommentText>{comment.content}</CommentText>
+                        {comment.content_type === "tutorial" ? (
+                          <CommentLink
+                            href={`/tutorial/${comment.content_id}/comments/${comment.id}`}
+                          >
+                            View in Tutorial
+                          </CommentLink>
+                        ) : (
+                          <CommentLink
+                            href={`/blog/${comment.content_id}/comments/${comment.id}`}
+                          >
+                            View in Blog
+                          </CommentLink>
+                        )}
+                      </CommentItem>
+                    ))}
 
-                <ViewMoreCommentsLink
-                  to={
-                    isOwnProfile
-                      ? "/my-account/comment-history"
-                      : `/user/${profile.id}/comment-history`
-                  }
-                >
-                  See All Comments
-                </ViewMoreCommentsLink>
+                    <ViewMoreCommentsLink
+                      to={
+                        isOwnProfile
+                          ? "/my-account/comment-history"
+                          : `/user/${profile.id}/comment-history`
+                      }
+                    >
+                      See All Comments
+                    </ViewMoreCommentsLink>
+                  </>
+                )}
               </CommentHistory>
             </Section>
           </AccountActivity>

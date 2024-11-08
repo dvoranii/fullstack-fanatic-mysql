@@ -177,7 +177,7 @@ export const Section = styled.div`
   width: 45%;
   background-color: #fff;
   border-radius: 10px;
-  padding: 20px 40px 60px 40px;
+  padding: 20px 40px 120px 40px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
@@ -240,6 +240,13 @@ export const CommentHistory = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
+  .no-comments {
+    width: 100%;
+    text-align: center;
+    color: #333;
+    font-style: italic;
+  }
 `;
 
 export const CommentItem = styled.div`
