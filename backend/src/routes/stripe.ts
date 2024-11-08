@@ -4,7 +4,6 @@ import { authenticate } from "../middleware/authenticate";
 import { CartItem } from "../types/CartItem";
 import Stripe from "stripe";
 import connectionPromise from "../db";
-// import { updateUserSubscription } from "../services/subscriptionService";
 
 dotenv.config();
 
@@ -26,11 +25,17 @@ const router = express.Router();
   });
 
   const getStripePriceId = (item: CartItem): string | null => {
-    if (item.type === "tutorial" || item.type === "blog") {
+    if (item.type === "tutorial") {
       if (item.price === 5.0) {
         return "price_1QAdG0Lg43ij91cKrppnUtez";
       } else if (item.price === 3.5) {
         return "price_1Q9VnYLg43ij91cKsu8U9CE0";
+      }
+    }
+
+    if (item.type === "blog") {
+      if (item.price === 2.5) {
+        return "price_1QAdIlLg43ij91cKToTVoLHl";
       }
     }
 
@@ -237,7 +242,10 @@ const router = express.Router();
             const connection = await connectionPromise;
 
             for (const item of cartItems) {
-              if (item.type === "tutorial" && item.product_id) {
+              if (
+                (item.type === "tutorial" || item.type === "blog") &&
+                item.product_id
+              ) {
                 await connection.execute(
                   "INSERT INTO purchases (user_id, product_id, product_name, product_type, price, purchase_type, access_expiry) VALUES (?, ?, ?, ?, ?, 'one-off', NULL)",
                   [userId, item.product_id, item.title, "tutorial", item.price]
