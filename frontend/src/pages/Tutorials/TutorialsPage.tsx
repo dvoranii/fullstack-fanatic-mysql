@@ -28,8 +28,6 @@ import FlipIconBack from "../../assets/images/tutorials/flip-icon-backside.png";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import SquaresAndTriangles from "../../assets/images/SquaresAndTriangles.svg";
 import SwirlyLineImg from "../../assets/images/swirly-line-bg.svg";
-import { fetchPurchasedItems } from "../../services/purchasesService";
-import { PurchasedItem } from "../../types/PurchasedItem";
 import AddToCartButton from "../../components/AddToCartButton/AddToCartButton";
 import { CartItem } from "../../types/CartItem";
 import { mapTutorialToCartItem } from "../../utils/cartUtils";
@@ -41,7 +39,8 @@ const TutorialsPage: React.FC = () => {
     toggleFavourite = () => {},
     cartItems = [],
     addItemToCart = () => {},
-    loading,
+    purchasedItems,
+    // loading,
   } = useContext(UserContext) || {};
   const [searchText, setSearchText] = useState("");
   const [flipped, setFlipped] = useState<{ [key: string]: boolean }>({});
@@ -52,10 +51,6 @@ const TutorialsPage: React.FC = () => {
   );
   const totalTutorials = filteredTutorials.length;
   const totalPages = Math.ceil(totalTutorials / tutorialsPerPage);
-  const [purchasedTutorials, setPurchasedTutorials] = useState<PurchasedItem[]>(
-    []
-  );
-  const [purchasesLoading, setPurchasesLoading] = useState(true);
 
   useEffect(() => {
     if (currentPage > totalPages) {
@@ -63,31 +58,12 @@ const TutorialsPage: React.FC = () => {
     }
   }, [searchText, totalPages]);
 
-  useEffect(() => {
-    const getPurchases = async () => {
-      if (profile?.id) {
-        try {
-          const purchases = await fetchPurchasedItems(profile.id);
-          setPurchasedTutorials(purchases);
-        } catch (error) {
-          console.error("Error fetching purchases:", error);
-        } finally {
-          setPurchasesLoading(false);
-        }
-      } else {
-        setPurchasesLoading(false);
-      }
-    };
-
-    getPurchases();
-  }, [profile?.id]);
-
-  const isTutorialPurchased = (title: string) => {
-    return purchasedTutorials.some(
-      (tutorial) => tutorial.product_name === title
+  const isTutorialPurchased = (tutorialId: number) => {
+    return purchasedItems?.some(
+      (item) =>
+        item.product_id === tutorialId && item.product_type === "tutorial"
     );
   };
-
   const startIdx = (currentPage - 1) * tutorialsPerPage;
   const endIdx = startIdx + tutorialsPerPage;
 
@@ -152,10 +128,6 @@ const TutorialsPage: React.FC = () => {
     e.preventDefault();
   };
 
-  if (loading || purchasesLoading) {
-    return <p>Loading...</p>;
-  }
-
   return (
     <>
       <Title textContent="Tutorials" pseudoRight="-3px" pseudoWidth="120px" />
@@ -178,7 +150,7 @@ const TutorialsPage: React.FC = () => {
         <TutorialList>
           {filteredTutorials.slice(startIdx, endIdx).map((tutorial) => {
             const alreadyInCart = isItemInCart(tutorial.id);
-            const isPurchased = isTutorialPurchased(tutorial.title);
+            const isPurchased = isTutorialPurchased(tutorial.id);
 
             const hasAccess =
               isPurchased ||

@@ -22,9 +22,7 @@ import SearchBar from "../../components/SearchBar/SearchBar";
 import SquaresAndTriangles from "../../assets/images/SquaresAndTriangles.svg";
 import AddToCartButton from "../../components/AddToCartButton/AddToCartButton";
 import { CartItem } from "../../types/CartItem";
-import { PurchasedItem } from "../../types/PurchasedItem";
-import { fetchPurchasedItems } from "../../services/purchasesService";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+// import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { mapBlogToCartItem } from "../../utils/cartUtils";
 
 const BlogsPage: React.FC = () => {
@@ -34,40 +32,17 @@ const BlogsPage: React.FC = () => {
     toggleFavourite = () => {},
     cartItems = [],
     addItemToCart = () => {},
+    purchasedItems = [],
   } = useContext(UserContext) || {};
+
+  console.log(purchasedItems);
 
   const [visibleBlogs, setVisibleBlogs] = useState<number>(4);
   const [searchText, setSearchText] = useState<string>("");
-  const [purchasedBlogs, setPurchasedBlogs] = useState<PurchasedItem[]>([]);
-  const [purchasesLoading, setPurchasesLoading] = useState(true);
 
   useEffect(() => {
     setVisibleBlogs(4);
   }, [searchText]);
-
-  useEffect(() => {
-    const getPurchases = async () => {
-      if (profile?.id) {
-        try {
-          setPurchasesLoading(true);
-          const purchases = await fetchPurchasedItems(profile.id);
-
-          const blogPurchases = purchases.filter(
-            (item) => item.product_type === "blog"
-          );
-          setPurchasedBlogs(blogPurchases);
-        } catch (error) {
-          console.error("Error fetching purchases:", error);
-        } finally {
-          setPurchasesLoading(false);
-        }
-      } else {
-        setPurchasesLoading(false);
-      }
-    };
-
-    getPurchases();
-  }, [profile?.id]);
 
   const handleSeeMore = () => {
     setVisibleBlogs((prevVisibleBlogs) => prevVisibleBlogs + 4);
@@ -79,7 +54,9 @@ const BlogsPage: React.FC = () => {
 
   const canAccessBlog = (blogId: number) => {
     return (
-      purchasedBlogs.some((blog) => blog.product_id === blogId) ||
+      purchasedItems.some(
+        (item) => item.product_id === blogId && item.product_type === "blog"
+      ) ||
       profile?.isPremium ||
       !blogContent.find((b) => b.id === blogId)?.isPremium
     );
@@ -90,12 +67,14 @@ const BlogsPage: React.FC = () => {
   };
 
   const isPurchased = (id: number): boolean => {
-    return purchasedBlogs.some((blog) => blog.product_id === id);
+    return purchasedItems.some(
+      (item) => item.product_id === id && item.product_type === "blog"
+    );
   };
 
-  if (purchasesLoading) {
-    return <LoadingSpinner />;
-  }
+  // if (purchasesLoading) {
+  //   return <LoadingSpinner />;
+  // }
 
   return (
     <BlogPageWrapper>

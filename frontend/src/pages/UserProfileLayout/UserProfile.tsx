@@ -85,6 +85,8 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
     fetchFollowData();
   }, [profile.id]);
 
+  console.log(favouriteTutorials);
+
   return (
     <>
       <BannerWrapperOuter>

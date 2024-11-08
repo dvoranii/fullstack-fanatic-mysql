@@ -1,9 +1,11 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { User } from "../types/User/User";
 import { fetchUserProfileFavouritesAndComments } from "../utils/userUtils";
+import { fetchPurchasedItems } from "../services/purchasesService";
 import { addFavourite, removeFavourite } from "../services/favouritesService";
 import { Tutorial } from "../types/Tutorial/Tutorial";
 import { Blog } from "../types/Blog/Blog";
+import { PurchasedItem } from "../types/PurchasedItem";
 import { CommentType } from "../types/Comment/Comment";
 import { UserContextType } from "../types/User/UserContextType";
 import { CartItem } from "../types/CartItem";
@@ -16,6 +18,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [profile, setProfile] = useState<User | null>(null);
   const [favouriteTutorials, setFavouriteTutorials] = useState<Tutorial[]>([]);
   const [favouriteBlogs, setFavouriteBlogs] = useState<Blog[]>([]);
+  const [purchasedItems, setPurchasedItems] = useState<PurchasedItem[]>([]);
   const [comments, setComments] = useState<CommentType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -33,15 +36,37 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   );
 
   useEffect(() => {
-    fetchUserProfileFavouritesAndComments(
-      setProfile,
-      setFavouriteTutorials,
-      setFavouriteBlogs,
-      setComments,
-      setError,
-      setLoading
-    );
+    const fetchUserData = async () => {
+      await fetchUserProfileFavouritesAndComments(
+        setProfile,
+        setFavouriteTutorials,
+        setFavouriteBlogs,
+        setComments,
+        setError,
+        setLoading
+      );
+    };
+
+    fetchUserData();
   }, []);
+
+  useEffect(() => {
+    const fetchPurchasedData = async () => {
+      if (profile?.id) {
+        try {
+          setLoading(true);
+          const purchases = await fetchPurchasedItems(profile.id);
+          setPurchasedItems(purchases);
+        } catch (error) {
+          console.error("Error fetching purchased items:", error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchPurchasedData();
+  }, [profile]);
 
   useEffect(() => {
     sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
@@ -111,7 +136,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       }
     } catch (error) {
       console.error("Error toggling favourite:", error);
-
       updateFavourites(!isCurrentlyFavourited, itemId, setFavourites);
     }
   };
@@ -158,6 +182,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         setFavouriteTutorials,
         favouriteBlogs,
         setFavouriteBlogs,
+        purchasedItems,
+        setPurchasedItems,
         toggleFavourite,
         comments,
         setComments,

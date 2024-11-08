@@ -4,6 +4,7 @@ import { Tutorial } from "../Tutorial/Tutorial";
 import { Blog } from "../Blog/Blog";
 import { CartItem } from "../CartItem";
 import { Dispatch, SetStateAction } from "react";
+import { PurchasedItem } from "../PurchasedItem";
 
 export interface UserContextType {
   profile: User | null;
@@ -24,6 +25,8 @@ export interface UserContextType {
   removeSubscriptionFromCart: () => void;
   subscriptionItem: CartItem | null;
   setSubscriptionItem: Dispatch<SetStateAction<CartItem | null>>;
+  purchasedItems: PurchasedItem[];
+  setPurchasedItems: Dispatch<SetStateAction<PurchasedItem[]>>;
   loading: boolean;
   error: string | null;
 }

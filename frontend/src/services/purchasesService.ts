@@ -10,6 +10,9 @@ export const fetchPurchasedItems = async (
     const { data } = await apiCall<{ purchases: PurchasedItem[] }>(endpoint, {
       method: "GET",
     });
+
+    console.log(data.purchases);
+
     return data.purchases;
   } catch (error) {
     console.error("Error fetching purchases:", error);
