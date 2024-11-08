@@ -32,6 +32,7 @@ import { fetchPurchasedItems } from "../../services/purchasesService";
 import { PurchasedItem } from "../../types/PurchasedItem";
 import AddToCartButton from "../../components/AddToCartButton/AddToCartButton";
 import { CartItem } from "../../types/CartItem";
+import { mapTutorialToCartItem } from "../../utils/cartUtils";
 
 const TutorialsPage: React.FC = () => {
   const {
@@ -183,18 +184,7 @@ const TutorialsPage: React.FC = () => {
               isPurchased ||
               canAccessTutorial(profile?.premiumLevel, tutorial.premiumLevel);
 
-            const cartItem: CartItem = {
-              id: tutorial.id,
-              title: tutorial.title,
-              created_at: tutorial.created_at,
-              image: tutorial.image,
-              isPremium: tutorial.isPremium,
-              description: tutorial.description,
-              availableForPurchase: tutorial.availableForPurchase,
-              accessLevel: tutorial.accessLevel,
-              price: tutorial.price || 0,
-              type: "tutorial" as const,
-            };
+            const cartItem: CartItem = mapTutorialToCartItem(tutorial);
 
             return (
               <TutorialItemWrapper key={tutorial.id}>
@@ -268,6 +258,7 @@ const TutorialsPage: React.FC = () => {
                           <AddToCartButton
                             item={cartItem}
                             alreadyInCart={alreadyInCart}
+                            isAccessible={hasAccess && tutorial.isPremium}
                             onAddToCart={addItemToCart}
                           />
                         )}

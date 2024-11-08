@@ -24,6 +24,8 @@ import AddToCartButton from "../../components/AddToCartButton/AddToCartButton";
 import { CartItem } from "../../types/CartItem";
 import { PurchasedItem } from "../../types/PurchasedItem";
 import { fetchPurchasedItems } from "../../services/purchasesService";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import { mapBlogToCartItem } from "../../utils/cartUtils";
 
 const BlogsPage: React.FC = () => {
   const {
@@ -71,8 +73,6 @@ const BlogsPage: React.FC = () => {
     setVisibleBlogs((prevVisibleBlogs) => prevVisibleBlogs + 4);
   };
 
-  console.log(purchasesLoading);
-
   const filteredBlogs = blogContent.filter((blog) =>
     blog.title.toLowerCase().includes(searchText.toLowerCase())
   );
@@ -80,6 +80,7 @@ const BlogsPage: React.FC = () => {
   const canAccessBlog = (blogId: number) => {
     return (
       purchasedBlogs.some((blog) => blog.product_id === blogId) ||
+      profile?.isPremium ||
       !blogContent.find((b) => b.id === blogId)?.isPremium
     );
   };
@@ -87,6 +88,14 @@ const BlogsPage: React.FC = () => {
   const isItemInCart = (id: number) => {
     return cartItems.some((item) => item.id === id);
   };
+
+  const isPurchased = (id: number): boolean => {
+    return purchasedBlogs.some((blog) => blog.product_id === id);
+  };
+
+  if (purchasesLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <BlogPageWrapper>
@@ -103,18 +112,10 @@ const BlogsPage: React.FC = () => {
           const isPremiumLocked = blog.isPremium && !canAccessBlog(blog.id);
           const hasAccess = canAccessBlog(blog.id);
           const alreadyInCart = isItemInCart(blog.id);
+          const isPurchasedItem = isPurchased(blog.id);
 
-          const cartItem: CartItem = {
-            id: blog.id,
-            title: blog.title,
-            created_at: blog.created_at,
-            image: blog.image,
-            isPremium: blog.isPremium,
-            availableForPurchase: blog.availableForPurchase,
-            accessLevel: blog.accessLevel,
-            price: blog.price || 0,
-            type: "blog" as const,
-          };
+          const cartItem: CartItem = mapBlogToCartItem(blog);
+          cartItem.isPurchased = isPurchasedItem;
 
           return (
             <BlogItem key={blog.id}>
@@ -161,13 +162,16 @@ const BlogsPage: React.FC = () => {
                 )}
 
                 <BottomButtonsWrapper>
-                  {blog.availableForPurchase && profile && (
-                    <AddToCartButton
-                      item={cartItem}
-                      alreadyInCart={alreadyInCart}
-                      onAddToCart={addItemToCart}
-                    />
-                  )}
+                  {blog.availableForPurchase &&
+                    profile &&
+                    !isPurchased(blog.id) && (
+                      <AddToCartButton
+                        item={cartItem}
+                        alreadyInCart={alreadyInCart}
+                        isAccessible={hasAccess && blog.isPremium}
+                        onAddToCart={addItemToCart}
+                      />
+                    )}
                   {profile && (
                     <FavouriteButton
                       isFavourited={favouriteBlogs.some(
@@ -175,6 +179,7 @@ const BlogsPage: React.FC = () => {
                       )}
                       onClick={() => toggleFavourite(blog.id, "blog")}
                       altText="Blog Favourite Button"
+                      isDisabled={isPremiumLocked}
                     />
                   )}
                 </BottomButtonsWrapper>

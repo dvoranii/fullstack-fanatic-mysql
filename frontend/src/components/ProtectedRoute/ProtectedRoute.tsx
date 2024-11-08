@@ -64,7 +64,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       return element;
     }
 
-    if (isPremium && !purchasedItemIds?.includes(blogId)) {
+    if (
+      isPremium &&
+      !purchasedItemIds?.includes(blogId) &&
+      !profile?.isPremium
+    ) {
       return <Navigate to="/plans-and-pricing" replace />;
     }
 

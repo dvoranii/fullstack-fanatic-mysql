@@ -10,4 +10,5 @@ export interface CartItem {
   availableForPurchase: boolean;
   accessLevel: "free" | "premium";
   type: "tutorial" | "blog" | "subscription";
+  isPurchased?: boolean;
 }

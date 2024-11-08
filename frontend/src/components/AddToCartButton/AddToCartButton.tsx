@@ -6,29 +6,35 @@ import { AddToCartWrapper } from "./AddToCartButton.styled";
 interface AddToCartButtonProps {
   item: CartItem;
   alreadyInCart: boolean;
+  isAccessible: boolean;
   onAddToCart: (item: CartItem) => void;
 }
 
 const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   item,
   alreadyInCart,
+  isAccessible,
   onAddToCart,
 }) => {
+  const isDisabled = alreadyInCart || isAccessible;
+
+  const buttonTitle = alreadyInCart
+    ? "This item is already in your cart"
+    : isAccessible
+    ? "You already have access to this intem through your subscription"
+    : "Add to Cart";
+
   return (
     <AddToCartWrapper>
       <button
         onClick={() => onAddToCart(item)}
-        disabled={alreadyInCart}
+        disabled={isDisabled}
         style={{
-          opacity: alreadyInCart ? 0.5 : 1,
-          cursor: alreadyInCart ? "not-allowed" : "pointer",
+          opacity: isDisabled ? 0.5 : 1,
+          cursor: isDisabled ? "not-allowed" : "pointer",
         }}
       >
-        <img
-          src={AddToCartIcon}
-          alt="Add to cart"
-          title={alreadyInCart ? "Added to Cart" : "Add to Cart"}
-        />
+        <img src={AddToCartIcon} alt="Add to cart" title={buttonTitle} />
       </button>
     </AddToCartWrapper>
   );
