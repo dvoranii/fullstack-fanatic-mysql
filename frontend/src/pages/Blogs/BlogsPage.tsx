@@ -161,7 +161,7 @@ const BlogsPage: React.FC = () => {
                 )}
 
                 <BottomButtonsWrapper>
-                  {blog.availableForPurchase && profile && !alreadyInCart && (
+                  {blog.availableForPurchase && profile && (
                     <AddToCartButton
                       item={cartItem}
                       alreadyInCart={alreadyInCart}
