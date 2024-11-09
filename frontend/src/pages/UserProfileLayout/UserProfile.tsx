@@ -15,26 +15,19 @@ import {
   Section,
   SectionTitle,
   UserInfoSubtitle,
-  SectionContent,
-  FavouriteIcon,
   CommentHistory,
   CommentItem,
   CommentText,
   CommentLink,
   ViewMoreCommentsLink,
-  ViewAllButton,
   SocialSectionWrapperOuter,
   ProfilePlaceholder,
   BannerUploadWrapper,
   UserAccountContainer,
   FollowsWrapper,
-  FavWrapper,
   PremiumBadge,
-  FavoritesDropdownWrapper,
   AccountActivityWrapperOuter,
 } from "./UserProfile.styled";
-import TutorialIcon from "../../assets/images/tutorial-icon.png";
-import BlogIcon from "../../assets/images/blog-icon.png";
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import SocialLinksDisplay from "./SocialLinksDisplay/SocialLinksDisplay";
 import { UserProfilePageProps } from "../../types/User/UserProfilePageProps";
@@ -45,10 +38,10 @@ import {
 } from "../../services/followService";
 import { UserContext } from "../../context/UserContext";
 import MessageModalButton from "../../components/MessageModalButton/MessageModalButton";
+import FavoritesSection from "./FavoritesSection/FavoritesSection";
 
 const BASE_URL = "http://localhost:5000";
 
-// figure out purchasedItem issue
 const UserProfilePage: React.FC<UserProfilePageProps> = ({
   profile,
   comments,
@@ -85,9 +78,6 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
 
     fetchFollowData();
   }, [profile.id]);
-
-  console.log(purchasedItems);
-  console.log(loggedInUser);
 
   return (
     <>
@@ -201,40 +191,12 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
           <AccountActivity>
             <Section>
               <SectionTitle>Favorites</SectionTitle>
-              <FavoritesDropdownWrapper>
-                {loggedInUser && isOwnProfile && (
-                  <select defaultValue="0">
-                    <option value="0">All</option>
-                    <option value="1">Free</option>
-                    <option value="2">Premium</option>
-                    <option value="3">Purchased</option>
-                  </select>
-                )}
-              </FavoritesDropdownWrapper>
-
-              <SectionContent>
-                <FavWrapper>
-                  <FavouriteIcon>
-                    <img src={TutorialIcon} alt="Tutorials" />
-                  </FavouriteIcon>
-                  <p>Tutorials</p>
-                  <ViewAllButton
-                    onClick={() => console.log(favouriteTutorials)}
-                  >
-                    View
-                  </ViewAllButton>
-                </FavWrapper>
-
-                <FavWrapper>
-                  <FavouriteIcon>
-                    <img src={BlogIcon} alt="Blogs" />
-                  </FavouriteIcon>
-                  <p>Blogs</p>
-                  <ViewAllButton onClick={() => console.log(favouriteBlogs)}>
-                    View
-                  </ViewAllButton>
-                </FavWrapper>
-              </SectionContent>
+              <FavoritesSection
+                favouriteTutorials={favouriteTutorials || []}
+                favouriteBlogs={favouriteBlogs || []}
+                purchasedItems={purchasedItems || []}
+                isOwnProfile={isOwnProfile}
+              />
             </Section>
 
             <Section>
