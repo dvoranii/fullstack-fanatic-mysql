@@ -80,6 +80,7 @@ export const DeleteConvoButtonWrapper = styled.div`
   width: 100%;
   display: block;
   text-align: right;
+  user-select: none;
   button {
     background: transparent;
     border: none;

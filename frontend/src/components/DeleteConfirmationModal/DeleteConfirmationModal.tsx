@@ -8,18 +8,18 @@ import {
 interface DeleteConfirmationModalProps {
   onConfirm: () => void;
   onCancel: () => void;
+  message: string;
 }
 
 const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
   onConfirm,
   onCancel,
+  message,
 }) => {
   return (
     <ModalWrapper>
       <ModalContent>
-        <ModalContentText>
-          Are you sure you want to delete your comment?
-        </ModalContentText>
+        <ModalContentText>{message}</ModalContentText>
         <Button onClick={onConfirm}>Yes</Button>
         <Button onClick={onCancel}>No</Button>
       </ModalContent>

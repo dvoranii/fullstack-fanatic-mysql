@@ -53,7 +53,6 @@ export const FollowButtonsWrapper = styled.div`
 
 export const UserInfoWrapper = styled.div`
   margin-left: 20px;
-  height: 4px;
 
   h5,
   h4 {
@@ -76,6 +75,7 @@ export const UserInfoWrapper = styled.div`
 
 export const UserLinkWrapperInner = styled.div`
   display: flex;
+  align-items: center;
 
   img {
     transition: all 150ms ease;

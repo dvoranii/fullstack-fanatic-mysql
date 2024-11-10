@@ -352,6 +352,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
           <DeleteConfirmationModal
             onConfirm={confirmDelete}
             onCancel={cancelDelete}
+            message={"Are you sure you want to delete this comment?"}
           />
         )}
       </CommentSectionWrapperOuter>
