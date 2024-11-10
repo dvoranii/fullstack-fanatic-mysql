@@ -12,7 +12,6 @@ export const ConvoHistoryContainer = styled.div`
 export const ConversationWrapper = styled.div`
   border: 1px solid grey;
   border-radius: 4px;
-  /* margin: 10px; */
   margin-top: 10px;
   padding: 10px;
   transition: all 150ms ease;
@@ -20,6 +19,10 @@ export const ConversationWrapper = styled.div`
   &:hover {
     cursor: pointer;
     background-color: #eee;
+  }
+
+  &:has(.delete-button:hover) {
+    background-color: transparent;
   }
 
   @media screen and (max-width: 375px) {
@@ -32,7 +35,6 @@ export const ReadFilterWrapper = styled.div`
   width: 100%;
   text-align: left;
   padding-left: 15px;
-  /* padding-right: 1.4rem; */
   caret-color: transparent;
 
   p {
@@ -72,4 +74,22 @@ export const SubjectPreview = styled.p`
 
 export const SearchBarReadFilterWrapper = styled.div`
   display: flex;
+`;
+
+export const DeleteConvoButtonWrapper = styled.div`
+  width: 100%;
+  display: block;
+  text-align: right;
+  button {
+    background: transparent;
+    border: none;
+
+    img {
+      width: 20px;
+
+      &:hover {
+        filter: brightness(0.9);
+      }
+    }
+  }
 `;

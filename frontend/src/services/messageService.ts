@@ -2,6 +2,18 @@ import { Conversation } from "../types/Conversations";
 import { Message } from "../types/Message";
 import { apiCall } from "../utils/apiUtils";
 
+export const checkExistingConversation = async (
+  user1Id: number,
+  user2Id: number
+): Promise<{ exists: boolean; id?: number }> => {
+  const endpoint = `/api/conversations/existing?user1_id=${user1Id}&user2_id=${user2Id}`;
+  const { data } = await apiCall<{ exists: boolean; id?: number }>(endpoint, {
+    method: "GET",
+  });
+
+  return data;
+};
+
 export const createOrGetConversation = async (
   loggedInUserId: number,
   userId: number,
@@ -17,6 +29,7 @@ export const createOrGetConversation = async (
     }),
   });
 
+  console.log(data);
   return data;
 };
 
@@ -76,4 +89,11 @@ export const updateConversationReadStatus = async (conversationId: number) => {
 
   console.log(data);
   return data;
+};
+
+export const deleteConversation = async (conversationId: number) => {
+  const endpoint = `/api/conversations/${conversationId}`;
+  await apiCall(endpoint, {
+    method: "DELETE",
+  });
 };

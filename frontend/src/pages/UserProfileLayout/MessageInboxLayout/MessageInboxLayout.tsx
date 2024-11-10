@@ -4,12 +4,10 @@ import {
   RightContainer,
   MessageInboxPageWrapper,
 } from "./MessageInboxLayout.styled";
-// import { PageWrapper } from "../../../PageWrapper.styled";
 import MessageInboxSidebar from "./MessageInboxSidebar/MessageInboxSidebar";
 import MessageInboxConvoHistory from "./MessageInboxConvoHistory/MessageInboxConvoHistory";
 import MessageInboxChatWindow from "./MessageInboxChatWindow/MessageInboxChatWindow";
 import { UserContext } from "../../../context/UserContext";
-// import { getUserPublicProfile } from "../../../services/userService";
 
 const MessageInboxLayout: React.FC = () => {
   const [selectedConversationId, setSelectedConversationId] = useState<

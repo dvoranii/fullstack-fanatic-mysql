@@ -7,6 +7,7 @@ import {
   ConversationDetailsWrapper,
   SubjectPreview,
   SearchBarReadFilterWrapper,
+  DeleteConvoButtonWrapper,
 } from "./MessageInboxConvoHistory.styled";
 import SearchBar from "../../../../components/SearchBar/SearchBar";
 import { Conversation } from "../../../../types/Conversations";
@@ -14,9 +15,11 @@ import { UserContext } from "../../../../context/UserContext";
 import {
   fetchConversations,
   updateConversationReadStatus,
+  deleteConversation,
 } from "../../../../services/messageService";
 import { fetchUserNamesAndPictures } from "../../../../services/userService";
 import ProfilePicture from "../../../../components/ProfilePicture/ProfilePicture";
+import DiscardIcon from "../../../../assets/images/discard-icon.png";
 
 interface MessageInboxConvoHistoryProps {
   onConversationSelect: (conversationId: number) => void;
@@ -112,6 +115,25 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
     onConversationSelect(conversationId);
   };
 
+  const handleDeleteConversation = async (conversationId: number) => {
+    // Optimistically update UI
+    setConversations((prevConversations) =>
+      prevConversations.filter((conv) => conv.id !== conversationId)
+    );
+
+    try {
+      await deleteConversation(conversationId);
+      console.log("Conversation deleted for current user");
+    } catch (error) {
+      console.error("Failed to delete conversation:", error);
+      // Revert UI change if the deletion fails
+      setConversations((prevConversations) => [
+        ...prevConversations,
+        conversations.find((conv) => conv.id === conversationId)!,
+      ]);
+    }
+  };
+
   return (
     <ConvoHistoryContainer>
       <SearchBarReadFilterWrapper>
@@ -158,6 +180,18 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
               {conversation.subject || "No subject"}
             </SubjectPreview>
           </ConversationDetailsWrapper>
+
+          <DeleteConvoButtonWrapper>
+            <button
+              className="delete-button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteConversation(conversation.id);
+              }}
+            >
+              <img src={DiscardIcon} alt="" />
+            </button>
+          </DeleteConvoButtonWrapper>
         </ConversationWrapper>
       ))}
     </ConvoHistoryContainer>

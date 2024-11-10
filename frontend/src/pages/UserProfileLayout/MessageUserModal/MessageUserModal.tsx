@@ -13,13 +13,15 @@ import {
 } from "./MessageUserModal.styled";
 import { getUserPublicProfile } from "../../../services/userService";
 import {
+  checkExistingConversation,
   createOrGetConversation,
   sendMessage,
 } from "../../../services/messageService";
 import CloseIcon from "../../../assets/images/close-icon.png";
 import { UserContext } from "../../../context/UserContext";
+import { getAvatarUrl } from "../../../utils/imageUtils";
 
-const BASE_URL = "http://localhost:5000";
+// const BASE_URL = "http://localhost:5000";
 
 interface MessageUserModalProps {
   isOpen: boolean;
@@ -50,14 +52,15 @@ const MessageUserModal: React.FC<MessageUserModalProps> = ({
           const profileData = await getUserPublicProfile(userId);
           setUserAvatarUrl(profileData.user.profile_picture || "");
 
-          const conversation = await createOrGetConversation(
+          const existingConversation = await checkExistingConversation(
             Number(loggedInUserId),
-            Number(userId),
-            ""
+            Number(userId)
           );
 
-          if (conversation.id) {
+          if (existingConversation.exists) {
             setConversationExists(true);
+          } else {
+            setConversationExists(false);
           }
         } catch (error) {
           setError("Failed to load user profile.");
@@ -69,7 +72,7 @@ const MessageUserModal: React.FC<MessageUserModalProps> = ({
 
       fetchUserProfileAndConversation();
     }
-  }, [isOpen, userId, loggedInUserId, subject]);
+  }, [isOpen, userId, loggedInUserId]);
 
   const handleSendMessage = async () => {
     if (!loggedInUserId) {
@@ -109,10 +112,7 @@ const MessageUserModal: React.FC<MessageUserModalProps> = ({
       <ModalOverlay onClick={onClose} />
       <ModalContent>
         <AvatarContainer>
-          <UserAvatar
-            src={`${BASE_URL}${userAvatarUrl}` || ""}
-            alt="User Avatar"
-          />
+          <UserAvatar src={getAvatarUrl(userAvatarUrl)} alt="User Avatar" />
         </AvatarContainer>
         <CloseBtn src={CloseIcon} onClick={onClose} />
         <MessageForm>

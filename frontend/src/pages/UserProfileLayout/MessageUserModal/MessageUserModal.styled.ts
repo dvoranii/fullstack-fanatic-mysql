@@ -32,6 +32,7 @@ export const AvatarContainer = styled.div`
   height: 70px;
   background-color: white;
   border-radius: 50%;
+  overflow: hidden;
 `;
 
 export const UserAvatar = styled.img`
