@@ -38,13 +38,14 @@ export const NetworkIconWrapper = styled.div`
   }
 `;
 
-export const FilterOption = styled.span<{ isActive: boolean }>`
+export const FilterOption = styled.span.withConfig({
+  shouldForwardProp: (prop) => prop !== "isActive",
+})<{ isActive: boolean }>`
   font-weight: ${(props) => (props.isActive ? "bold" : "normal")};
   cursor: pointer;
   margin-left: 10px;
   color: ${colors.primary};
 `;
-
 export const FilterOptionWrapper = styled.div`
   padding-left: 120px;
   padding-top: 0.4rem;

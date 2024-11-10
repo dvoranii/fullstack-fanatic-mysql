@@ -66,9 +66,6 @@ export const CommentHistory: React.FC = () => {
 
   return (
     <>
-      {/* <CommentHistoryTitleBanner>
-        <h2>Comment History</h2>
-      </CommentHistoryTitleBanner> */}
       <TitleBanner textContent="Comment History" />
       <PageWrapper>
         {error && <ErrorMessage>{error}</ErrorMessage>}

@@ -187,7 +187,9 @@ export const SectionTitle = styled.h3`
   text-align: center;
   color: #031f2a;
   letter-spacing: 1px;
-  padding-bottom: 2.4rem;
+  padding-bottom: 1.2rem;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid #ccc;
 `;
 
 export const CommentHistory = styled.div`
