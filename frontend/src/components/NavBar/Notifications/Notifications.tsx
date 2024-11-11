@@ -22,6 +22,7 @@ const Notifications: React.FC = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   const handleDropdownToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -49,10 +50,18 @@ const Notifications: React.FC = () => {
       const { notifications: fetchedNotifications, hasMore } =
         await fetchNotifications(page);
 
-      setNotifications((prev) => [...prev, ...fetchedNotifications]);
+      // setNotifications((prev) => [...prev, ...fetchedNotifications]);
+      setNotifications((prevNotifications) => [
+        ...prevNotifications,
+        ...fetchedNotifications.filter(
+          (newNotification) =>
+            !prevNotifications.some(
+              (notification) => notification.id === newNotification.id
+            )
+        ),
+      ]);
 
       setHasMore(hasMore);
-
       setPage((prevPage) => prevPage + 1);
     } catch (error) {
       console.error("Failed to fetch notifications:", error);
@@ -76,6 +85,8 @@ const Notifications: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    if (mounted) return;
+
     const fetchUserNotifications = async () => {
       try {
         const { notifications: fetchedNotifications } =
@@ -86,12 +97,16 @@ const Notifications: React.FC = () => {
           (notification: Notification) => !notification.is_read
         );
         setUnreadCount(unreadNotifications.length);
+
+        setHasMore(fetchedNotifications.length > 0);
       } catch (error) {
         console.error("Failed to fetch notifications:", error);
+        setHasMore(false);
       }
     };
 
     fetchUserNotifications();
+    setMounted(true);
   }, []);
 
   return (
