@@ -44,7 +44,7 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
     }
 
     const [result] = await connection.execute<ResultSetHeader>(
-      "INSERT INTO conversations (user1_id, user2_id, subject, created_at) VALUES (?, ?, ?, NOW())",
+      "INSERT INTO conversations (user1_id, user2_id, subject, created_at, is_read_user1, is_read_user2) VALUES (?, ?, ?, NOW(), TRUE, FALSE)",
       [user1_id, user2_id, subject]
     );
 
@@ -75,8 +75,8 @@ router.get(
       }
 
       await connection.execute<ResultSetHeader>(
-        "UPDATE conversations SET is_read = true WHERE id = ? AND (user1_id = ? OR user2_id = ?)",
-        [conversationId, userId, userId]
+        "UPDATE conversations SET is_read_user1 = CASE WHEN user1_id = ? THEN TRUE ELSE is_read_user1 END, is_read_user2 = CASE WHEN user2_id = ? THEN TRUE ELSE is_read_user2 END WHERE id = ?",
+        [userId, userId, conversationId]
       );
 
       res.status(200).json(conversation[0]);
@@ -97,11 +97,34 @@ router.patch(
     try {
       const connection = await connectionPromise;
 
-      // Update the conversation's is_read status to true (1)
-      await connection.execute<ResultSetHeader>(
-        "UPDATE conversations SET is_read = 1 WHERE id = ? AND (user1_id = ? OR user2_id = ?)",
-        [conversationId, userId, userId]
+      // Fetch conversation details to determine which user is making the request
+      const [conversation] = await connection.execute<RowDataPacket[]>(
+        "SELECT user1_id, user2_id FROM conversations WHERE id = ?",
+        [conversationId]
       );
+
+      if (conversation.length === 0) {
+        return res.status(404).json({ error: "Conversation not found" });
+      }
+
+      const { user1_id, user2_id } = conversation[0];
+
+      // Update the appropriate is_read flag based on which user is marking it as read
+      if (userId === user1_id) {
+        await connection.execute<ResultSetHeader>(
+          "UPDATE conversations SET is_read_user1 = 1 WHERE id = ?",
+          [conversationId]
+        );
+      } else if (userId === user2_id) {
+        await connection.execute<ResultSetHeader>(
+          "UPDATE conversations SET is_read_user2 = 1 WHERE id = ?",
+          [conversationId]
+        );
+      } else {
+        return res
+          .status(403)
+          .json({ error: "You are not part of this conversation" });
+      }
 
       res.status(200).json({ message: "Conversation marked as read" });
     } catch (err) {
@@ -122,9 +145,14 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
     const connection = await connectionPromise;
 
     const [conversations] = await connection.execute<RowDataPacket[]>(
-      `SELECT * FROM conversations 
-         WHERE (user1_id = ? AND is_deleted_user1 = 0) 
-            OR (user2_id = ? AND is_deleted_user2 = 0)`,
+      `
+      SELECT conversations.*, 
+             (SELECT MAX(sent_at) FROM messages WHERE messages.conversation_id = conversations.id) AS last_message_at 
+      FROM conversations 
+      WHERE (user1_id = ? AND is_deleted_user1 = 0) 
+         OR (user2_id = ? AND is_deleted_user2 = 0)
+      ORDER BY last_message_at DESC
+      `,
       [userId, userId]
     );
 

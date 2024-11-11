@@ -50,6 +50,7 @@ export const sendMessage = async (
     }),
   });
 
+  console.log(data);
   return data;
 };
 

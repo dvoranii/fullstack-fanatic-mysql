@@ -7,5 +7,8 @@ export interface Conversation {
   created_at: string;
   messages: Message[];
   subject: string;
-  is_read: number;
+  is_read_user1: boolean;
+  is_read_user2: boolean;
+  is_deleted_user1: boolean;
+  is_deleted_user2: boolean;
 }

@@ -45,7 +45,6 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
   const [boldSpan, setBoldSpan] = useState("read");
   const [unreadCount, setUnreadCount] = useState<number>(0);
 
-  // Use useCallback to memoize the function and prevent unnecessary re-renders
   const fetchUserDetails = useCallback(
     async (conversations: Conversation[]) => {
       try {
@@ -70,7 +69,14 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
         fetchUserDetails(data);
 
         const unreadConversations = data.filter(
-          (conversation: Conversation) => conversation.is_read === 0
+          (conversation: Conversation) => {
+            return (
+              (loggedInUserId === conversation.user1_id &&
+                !conversation.is_read_user1) ||
+              (loggedInUserId === conversation.user2_id &&
+                !conversation.is_read_user2)
+            );
+          }
         );
 
         setUnreadCount(unreadConversations.length);
@@ -81,7 +87,7 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
     };
 
     getConversations();
-  }, [fetchUserDetails]);
+  }, [fetchUserDetails, loggedInUserId]);
 
   const toggleBold = (selectedSpan: string) => {
     setBoldSpan(selectedSpan);
@@ -89,18 +95,39 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
 
   const filteredConversations = (): Conversation[] => {
     return conversations.filter((conversation: Conversation) => {
-      return boldSpan === "read"
-        ? conversation.is_read === 1
-        : conversation.is_read === 0;
+      if (boldSpan === "read") {
+        return (
+          (loggedInUserId === conversation.user1_id &&
+            conversation.is_read_user1) ||
+          (loggedInUserId === conversation.user2_id &&
+            conversation.is_read_user2)
+        );
+      } else {
+        return (
+          (loggedInUserId === conversation.user1_id &&
+            !conversation.is_read_user1) ||
+          (loggedInUserId === conversation.user2_id &&
+            !conversation.is_read_user2)
+        );
+      }
     });
   };
 
   const handleConversationSelect = async (conversationId: number) => {
-    // Update in frontend state immediately for better UX
     setConversations((prevConversations) =>
       prevConversations.map((conversation) =>
         conversation.id === conversationId
-          ? { ...conversation, is_read: 1 }
+          ? {
+              ...conversation,
+              is_read_user1:
+                loggedInUserId === conversation.user1_id
+                  ? true
+                  : conversation.is_read_user1,
+              is_read_user2:
+                loggedInUserId === conversation.user2_id
+                  ? true
+                  : conversation.is_read_user2,
+            }
           : conversation
       )
     );
@@ -108,7 +135,13 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
     const selectedConversation = conversations.find(
       (conversation) => conversation.id === conversationId
     );
-    if (selectedConversation && selectedConversation.is_read === 0) {
+    if (
+      selectedConversation &&
+      ((loggedInUserId === selectedConversation.user1_id &&
+        !selectedConversation.is_read_user1) ||
+        (loggedInUserId === selectedConversation.user2_id &&
+          !selectedConversation.is_read_user2))
+    ) {
       setUnreadCount((prevCount) => prevCount - 1);
     }
 

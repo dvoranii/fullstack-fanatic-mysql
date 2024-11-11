@@ -60,11 +60,13 @@ export const ReadFilterWrapper = styled.div`
 
 export const ProfilePictureWrapper = styled.div`
   margin-right: 10px;
+  user-select: none;
 `;
 
 export const ConversationDetailsWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  user-select: none;
 `;
 
 export const SubjectPreview = styled.p`

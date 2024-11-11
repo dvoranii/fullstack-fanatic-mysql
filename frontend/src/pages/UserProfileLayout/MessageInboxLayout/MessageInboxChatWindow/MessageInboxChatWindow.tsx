@@ -18,6 +18,7 @@ import {
   getMessagesForConversation,
   sendMessage,
 } from "../../../../services/messageService";
+import { fetchConversationById } from "../../../../services/conversationService";
 
 interface MessageInboxChatWindowProps {
   conversationId: number | null;
@@ -29,10 +30,11 @@ const socket = io(BASE_URL);
 
 const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   conversationId,
-  userId,
+  // userId,
 }) => {
   const { profile } = useContext(UserContext) || {};
   const loggedInUserId = profile?.id;
+  const [receiverId, setReceiverId] = useState<number | null>(null);
 
   const [newMessage, setNewMessage] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
@@ -50,7 +52,6 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
         10
       );
 
-      // Prepend new messages at the beginning of the list to maintain order
       setMessages((prevMessages) => [...prevMessages, ...newMessages]);
 
       if (newMessages.length === 0) {
@@ -82,6 +83,24 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
     fetchInitialMessages();
   }, [conversationId]);
 
+  // determine receiver
+  useEffect(() => {
+    const determineReceiver = async () => {
+      if (conversationId && loggedInUserId) {
+        const conversation = await fetchConversationById(conversationId);
+        if (conversation) {
+          const determinedReceiverId =
+            conversation.user1_id === loggedInUserId
+              ? conversation.user2_id
+              : conversation.user1_id;
+          setReceiverId(determinedReceiverId);
+        }
+      }
+    };
+
+    determineReceiver();
+  }, [conversationId, loggedInUserId]);
+
   useEffect(() => {
     if (conversationId) {
       socket.on("newMessage", (message) => {
@@ -98,14 +117,13 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   }, [conversationId]);
 
   const handleSendMessage = async () => {
-    if (!conversationId || newMessage.trim() === "") return;
+    if (!conversationId || !receiverId || newMessage.trim() === "") return;
 
-    // Optimistically update the UI with the new message
     const tempMessage: Message = {
       id: Date.now(),
       conversation_id: conversationId,
       sender_id: Number(loggedInUserId),
-      receiver_id: Number(userId),
+      receiver_id: receiverId,
       subject: "",
       content: newMessage,
       sent_at: String(new Date()),
@@ -117,7 +135,7 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
       await sendMessage(
         conversationId,
         Number(loggedInUserId),
-        Number(userId),
+        receiverId,
         newMessage
       );
       setNewMessage("");

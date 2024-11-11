@@ -14,12 +14,7 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
 
     const [result] = await connection.execute<ResultSetHeader>(
       "INSERT INTO messages (conversation_id, sender_id, receiver_id, content, sent_at) VALUES (?, ?, ?, ?, NOW())",
-      [
-        conversation_id || null,
-        sender_id || null,
-        receiver_id || null,
-        content || null,
-      ]
+      [conversation_id, sender_id, receiver_id, content]
     );
 
     const newMessage = {
@@ -31,13 +26,14 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
       sent_at: new Date(),
     };
 
+    // Mark conversation as unread for the receiver
     await connection.execute<ResultSetHeader>(
-      "UPDATE conversations SET is_read = false WHERE id = ? AND user2_id = ?",
-      [conversation_id, receiver_id]
+      "UPDATE conversations SET is_read_user1 = CASE WHEN user2_id = ? THEN FALSE ELSE is_read_user1 END, is_read_user2 = CASE WHEN user1_id = ? THEN FALSE ELSE is_read_user2 END WHERE id = ?",
+      [receiver_id, sender_id, conversation_id]
     );
 
     if (sender_id !== receiver_id) {
-      await connection.execute(
+      const [notificationResult] = await connection.execute<ResultSetHeader>(
         "INSERT INTO notifications (user_id, type, sender_id, is_read, created_at) VALUES (?, 'message', ?, 0, NOW())",
         [receiver_id, sender_id]
       );
@@ -59,21 +55,29 @@ router.get("/:conversationId", authenticate, async (req, res) => {
   const limit = parseInt(req.query.limit as string) || 10;
   const offset = (page - 1) * limit;
 
+  console.log(page);
+
   try {
     if (isNaN(limit) || isNaN(offset)) {
       throw new Error("Invalid limit or offset value");
     }
     const connection = await connectionPromise;
+
+    // Fetch messages for the specified conversation with pagination
     const [messages] = await connection.execute<RowDataPacket[]>(
       `SELECT * FROM messages WHERE conversation_id = ? ORDER BY sent_at ASC LIMIT ${limit} OFFSET ${offset}`,
       [Number(conversationId)]
     );
 
     await connection.execute<ResultSetHeader>(
-      "UPDATE conversations SET is_read = true WHERE id = ? AND (user1_id = ? OR user2_id = ?)",
-      [Number(conversationId), userId, userId]
+      `UPDATE conversations
+       SET is_read_user1 = CASE WHEN user1_id = ? THEN TRUE ELSE is_read_user1 END,
+           is_read_user2 = CASE WHEN user2_id = ? THEN TRUE ELSE is_read_user2 END
+       WHERE id = ?`,
+      [userId, userId, conversationId]
     );
 
+    // Get total count of messages for pagination
     const [totalCountResult] = await connection.execute<RowDataPacket[]>(
       "SELECT COUNT(*) as total FROM messages WHERE conversation_id = ?",
       [Number(conversationId)]

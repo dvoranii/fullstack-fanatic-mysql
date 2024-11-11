@@ -26,6 +26,7 @@ export const ChatWindowContainerInner = styled.div`
   background-color: #ffffff;
   margin: 0 auto;
   width: 95%;
+  max-width: 750px;
   height: calc(100vh - 200px);
   overflow-y: auto;
   margin-top: 1.8rem;
@@ -61,6 +62,9 @@ export const ChatInput = styled.textarea`
   resize: none;
   font-family: "ZenKakuGothicNewMedium", sans-serif;
   font-size: 14px;
+  max-width: 750px;
+  margin: 0 auto;
+  width: 95%;
 `;
 
 export const ChatSubmitButton = styled.button`
