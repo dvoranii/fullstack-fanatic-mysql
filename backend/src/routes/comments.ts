@@ -365,23 +365,17 @@ router.get("/reply-and-parent", async (req: Request, res: Response) => {
     const initialComment = comments[0];
 
     if (initialComment.parent_comment_id === null) {
-      console.log(`Comment with id ${id} is a top-level comment`);
       return res.status(200).json({
         initialComment,
-        topLevelComment: initialComment, // Since it's already a top-level comment
+        topLevelComment: initialComment,
       });
     }
 
-    // Call the helper function to traverse upwards and find the top-level comment
     const topLevelComment = await findTopLevelComment(Number(id), connection);
 
-    if (topLevelComment) {
-      console.log(`The top-level parent comment is:`, topLevelComment);
-    }
-
     res.status(200).json({
-      initialComment, // The comment requested by id
-      topLevelComment, // The top-level parent comment found
+      initialComment,
+      topLevelComment,
     });
   } catch (err) {
     console.error("Error fetching all comments:", err);

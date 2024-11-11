@@ -9,7 +9,6 @@ const router = express.Router();
 router.get("/", authenticate, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.userId;
-    console.log(userId);
 
     if (!userId) {
       return res.status(401).json({ error: "User not authenticated" });
@@ -21,11 +20,9 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
       userId,
     ]);
 
-    res
-      .status(200)
-      .json({
-        purchases: purchases.length ? (purchases as PurchasedItem[]) : [],
-      });
+    res.status(200).json({
+      purchases: purchases.length ? (purchases as PurchasedItem[]) : [],
+    });
   } catch (error) {
     console.error("Error fetching purchases:", error);
     res.status(500).json({ error: "Internal server error" });

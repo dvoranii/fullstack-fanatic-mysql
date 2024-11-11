@@ -16,7 +16,7 @@ import {
   fetchConversations,
   updateConversationReadStatus,
   deleteConversation,
-} from "../../../../services/messageService";
+} from "../../../../services/conversationService";
 import { fetchUserNamesAndPictures } from "../../../../services/userService";
 import ProfilePicture from "../../../../components/ProfilePicture/ProfilePicture";
 import DiscardIcon from "../../../../assets/images/discard-icon.png";

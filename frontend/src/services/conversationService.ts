@@ -17,3 +17,29 @@ export const fetchConversationById = async (
     return null;
   }
 };
+
+export const fetchConversations = async (): Promise<Conversation[]> => {
+  const endpoint = `/api/conversations`;
+  const { data } = await apiCall<Conversation[]>(endpoint, {
+    method: "GET",
+  });
+
+  return data;
+};
+
+export const updateConversationReadStatus = async (conversationId: number) => {
+  const endpoint = `/api/conversations/${conversationId}/read`;
+  const { data } = await apiCall(endpoint, {
+    method: "PATCH",
+  });
+
+  console.log(data);
+  return data;
+};
+
+export const deleteConversation = async (conversationId: number) => {
+  const endpoint = `/api/conversations/${conversationId}`;
+  await apiCall(endpoint, {
+    method: "DELETE",
+  });
+};

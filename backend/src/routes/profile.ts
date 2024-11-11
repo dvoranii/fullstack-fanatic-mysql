@@ -18,8 +18,6 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
       [userId]
     );
 
-    console.log(user);
-
     if (!user.length) {
       return res.status(404).json({ message: "User not found" });
     }
