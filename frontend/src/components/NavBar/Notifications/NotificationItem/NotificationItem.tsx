@@ -36,6 +36,8 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
     }
   };
 
+  console.log(notification);
+
   const renderNotificationLink = () => {
     const { content_id, content_type, comment_id } = notification;
 

@@ -229,7 +229,7 @@ router.post("/reply", authenticate, async (req: Request, res: Response) => {
           [
             parentCommentOwner[0].user_id,
             userId,
-            parent_comment_id,
+            results.insertId,
             content_id,
             content_type,
           ]
