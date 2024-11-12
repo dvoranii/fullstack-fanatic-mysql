@@ -23,6 +23,18 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
 
     const { user1_id, user2_id } = conversation[0];
 
+    if (receiver_id === user1_id) {
+      await connection.execute<ResultSetHeader>(
+        "UPDATE conversations SET is_deleted_user1 = FALSE WHERE id = ?",
+        [conversation_id]
+      );
+    } else if (receiver_id === user2_id) {
+      await connection.execute<ResultSetHeader>(
+        "UPDATE conversations SET is_deleted_user2 = FALSE WHERE id = ?",
+        [conversation_id]
+      );
+    }
+
     const [result] = await connection.execute<ResultSetHeader>(
       "INSERT INTO messages (conversation_id, sender_id, receiver_id, content, sent_at) VALUES (?, ?, ?, ?, NOW())",
       [conversation_id, sender_id, receiver_id, content]
