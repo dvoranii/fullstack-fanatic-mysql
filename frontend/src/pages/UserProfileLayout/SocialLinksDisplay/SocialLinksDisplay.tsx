@@ -1,11 +1,11 @@
 import { SocialSectionWrapperInner } from "./SocialLinksDisplay.styled";
-import GithubIcon from "../../../assets/images/account/github-icon.png";
-import IgIcon from "../../../assets/images/account/ig-icon.png";
-import LinkedinIcon from "../../../assets/images/account/linkedin-icon.png";
-import TiktokIcon from "../../../assets/images/account/tiktok-icon.png";
-import XIcon from "../../../assets/images/account/x-icon.png";
-import MetaIcon from "../../../assets/images/account/meta-icon.png";
-import YouTubeIcon from "../../../assets/images/account/youtube-icon.png";
+import GithubIcon from "../../../assets/images/socials/github-icon.png";
+import IgIcon from "../../../assets/images/socials/ig-icon.png";
+import LinkedinIcon from "../../../assets/images/socials/linkedin-icon.png";
+import TiktokIcon from "../../../assets/images/socials/tiktok-icon.png";
+import XIcon from "../../../assets/images/socials/x-icon.png";
+import MetaIcon from "../../../assets/images/socials/meta-icon.png";
+import YouTubeIcon from "../../../assets/images/socials/youtube-icon.png";
 
 interface SocialLinksDisplayProps {
   socialLinks: { [key: string]: string };

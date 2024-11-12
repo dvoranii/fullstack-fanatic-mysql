@@ -72,10 +72,6 @@ const BlogsPage: React.FC = () => {
     );
   };
 
-  // if (purchasesLoading) {
-  //   return <LoadingSpinner />;
-  // }
-
   return (
     <BlogPageWrapper>
       <Title textContent="Blogs" />

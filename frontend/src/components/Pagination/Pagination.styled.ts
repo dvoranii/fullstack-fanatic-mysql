@@ -4,6 +4,7 @@ export const PaginationWrapper = styled.div`
   display: flex;
   justify-content: center;
   margin: 2rem 0;
+  padding-bottom: 4.8rem;
 `;
 
 export const PageButton = styled.button.withConfig({

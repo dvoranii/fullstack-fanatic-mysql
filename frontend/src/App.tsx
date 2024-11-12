@@ -5,6 +5,7 @@ import NavBar from "./components/NavBar/NavBar";
 import { GlobalStyles } from "./GlobalStyles";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { UserProvider } from "./context/UserContext";
+import Footer from "./components/Footer/Footer";
 
 const clientId = import.meta.env.VITE_CLIENT_ID;
 
@@ -17,6 +18,7 @@ const App: React.FC = () => {
           <Router>
             <NavBar />
             <Navigation />
+            <Footer />
           </Router>
         </UserProvider>
       </GoogleOAuthProvider>

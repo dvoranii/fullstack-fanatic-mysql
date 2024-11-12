@@ -39,7 +39,7 @@ export const TutorialListOuter = styled.div`
   .block-2 {
     right: -20vw;
     background-color: ${colors.primary};
-    bottom: -15%;
+    bottom: 0;
   }
 `;
 

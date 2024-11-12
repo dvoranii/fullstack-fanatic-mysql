@@ -39,6 +39,7 @@ export const BlogList = styled.div`
 export const BlogPageWrapper = styled.div`
   max-width: 1400px;
   margin: 0 auto;
+  padding-bottom: 4.8rem;
 `;
 
 export const BlogItem = styled.div`
