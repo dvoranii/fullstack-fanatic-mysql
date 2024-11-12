@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { colors } from "../../GlobalStyles";
+import waveEffectBg from "../../assets/images/wave-effect-bg.jpg";
 
 export const FooterWrapperOuter = styled.footer`
   background-color: ${colors.secondary};
@@ -8,6 +9,14 @@ export const FooterWrapperOuter = styled.footer`
   width: 100%;
   padding: 20px 0;
   user-select: none;
+  background-image: linear-gradient(
+      rgba(255, 175, 43, 1),
+      rgba(255, 175, 43, 0.65)
+    ),
+    url(${waveEffectBg});
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 `;
 
 export const FooterWrapperInner = styled.div`
@@ -22,7 +31,7 @@ export const FooterWrapperInner = styled.div`
   height: 250px;
 
   .seperator {
-    width: 240px;
+    width: 220px;
     grid-column: 2;
     grid-row: 2;
     margin-bottom: 2.4rem;
@@ -88,14 +97,13 @@ export const FooterNavLink = styled(Link)`
 export const CenteredSlogan = styled.div`
   grid-column: 2;
   grid-row: 1 / 3;
-  font-size: 3.2rem;
+  font-size: 2.8rem;
   text-align: center;
   margin-top: -40px;
   color: #14213d;
   font-family: "Anybody";
   font-weight: bold;
   text-transform: uppercase;
-
   align-self: center;
 `;
 
