@@ -17,6 +17,7 @@ export const FooterWrapperOuter = styled.footer`
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+  padding-bottom: 3.2rem;
 `;
 
 export const FooterWrapperInner = styled.div`
@@ -111,7 +112,7 @@ export const FooterSocialLinks = styled.div`
   grid-column: 2;
   grid-row: 2;
   display: flex;
-  gap: 10px;
+  gap: 1.2rem;
   height: 100%;
   align-items: flex-end;
 
@@ -121,12 +122,45 @@ export const FooterSocialLinks = styled.div`
   }
 `;
 
-export const SocialLinkIcon = styled.img`
-  width: 24px;
-  height: 24px;
+export const IconWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 5px;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 50%;
+    transition: all 300ms ease;
+  }
+
   &:hover {
-    opacity: 0.8;
+    &::after {
+      width: 95%;
+      height: 8px;
+      background-color: rgba(0, 0, 0, 0.1);
+      filter: blur(1px);
+      bottom: -12px;
+    }
+  }
+`;
+
+export const SocialLinkIcon = styled.img`
+  width: 30px;
+  height: 30px;
+  transition: all 300ms ease;
+
+  ${IconWrapper}:hover & {
+    transform: translateY(-4px) scale(1.05);
+    filter: brightness(1.5);
   }
 `;
 

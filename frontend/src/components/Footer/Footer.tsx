@@ -9,6 +9,7 @@ import {
   CenteredSlogan,
   FooterLogo,
   FooterLogoLink,
+  IconWrapper,
 } from "./Footer.styled";
 
 import logo from "../../assets/images/fsf-logo-darkblue.png";
@@ -38,34 +39,44 @@ const Footer = () => {
         <img className="seperator" src={Seperator} alt="" />
 
         <FooterSocialLinks>
-          <a
-            href="https://github.com/yourprofile"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <SocialLinkIcon src={githubIcon} alt="GitHub" />
-          </a>
-          <a
-            href="https://facebook.com/yourprofile"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <SocialLinkIcon src={facebookIcon} alt="Facebook" />
-          </a>
-          <a
-            href="https://codepen.io/yourprofile"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <SocialLinkIcon src={codepenIcon} alt="CodePen" />
-          </a>
-          <a
-            href="https://tiktok.com/@yourprofile"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <SocialLinkIcon src={tiktokIcon} alt="TikTok" />
-          </a>
+          <IconWrapper>
+            {" "}
+            <a
+              href="https://github.com/yourprofile"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <SocialLinkIcon src={githubIcon} alt="GitHub" />
+            </a>
+          </IconWrapper>
+
+          <IconWrapper>
+            <a
+              href="https://facebook.com/yourprofile"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <SocialLinkIcon src={facebookIcon} alt="Facebook" />
+            </a>
+          </IconWrapper>
+          <IconWrapper>
+            <a
+              href="https://codepen.io/yourprofile"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <SocialLinkIcon src={codepenIcon} alt="CodePen" />
+            </a>
+          </IconWrapper>
+          <IconWrapper>
+            <a
+              href="https://tiktok.com/@yourprofile"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <SocialLinkIcon src={tiktokIcon} alt="TikTok" />
+            </a>
+          </IconWrapper>
         </FooterSocialLinks>
 
         <FooterLogoLink to="/">

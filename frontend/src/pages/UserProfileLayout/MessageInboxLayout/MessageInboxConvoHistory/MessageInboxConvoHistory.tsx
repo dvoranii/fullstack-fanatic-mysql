@@ -242,7 +242,11 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
                   handleDeleteConversationClick(conversation.id);
                 }}
               >
-                <img src={DiscardIcon} alt="" />
+                <img
+                  src={DiscardIcon}
+                  alt="Delete Conversation"
+                  title="Delete"
+                />
               </button>
             </DeleteConvoButtonWrapper>
           </ConversationWrapper>
