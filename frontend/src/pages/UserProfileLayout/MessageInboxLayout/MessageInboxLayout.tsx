@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import {
   LayoutContainer,
   RightContainer,
@@ -7,15 +7,11 @@ import {
 import MessageInboxSidebar from "./MessageInboxSidebar/MessageInboxSidebar";
 import MessageInboxConvoHistory from "./MessageInboxConvoHistory/MessageInboxConvoHistory";
 import MessageInboxChatWindow from "./MessageInboxChatWindow/MessageInboxChatWindow";
-import { UserContext } from "../../../context/UserContext";
 
 const MessageInboxLayout: React.FC = () => {
   const [selectedConversationId, setSelectedConversationId] = useState<
     number | null
   >(null);
-
-  const profile = useContext(UserContext);
-  const userId = profile?.profile?.id.toString();
 
   return (
     <div style={{ background: "#eee" }}>
@@ -27,10 +23,7 @@ const MessageInboxLayout: React.FC = () => {
               onConversationSelect={setSelectedConversationId}
             />
 
-            <MessageInboxChatWindow
-              conversationId={selectedConversationId}
-              userId={userId || ""}
-            />
+            <MessageInboxChatWindow conversationId={selectedConversationId} />
           </RightContainer>
         </LayoutContainer>
       </MessageInboxPageWrapper>
