@@ -46,6 +46,7 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
   );
   const [boldSpan, setBoldSpan] = useState("read");
   const [unreadCount, setUnreadCount] = useState<number>(0);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchUserDetails = useCallback(
     async (conversations: Conversation[]) => {
@@ -97,21 +98,24 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
 
   const filteredConversations = (): Conversation[] => {
     return conversations.filter((conversation: Conversation) => {
-      if (boldSpan === "read") {
-        return (
-          (loggedInUserId === conversation.user1_id &&
-            conversation.is_read_user1) ||
-          (loggedInUserId === conversation.user2_id &&
-            conversation.is_read_user2)
-        );
-      } else {
-        return (
-          (loggedInUserId === conversation.user1_id &&
-            !conversation.is_read_user1) ||
-          (loggedInUserId === conversation.user2_id &&
-            !conversation.is_read_user2)
-        );
-      }
+      const matchesReadFilter =
+        boldSpan === "read"
+          ? (loggedInUserId === conversation.user1_id &&
+              conversation.is_read_user1) ||
+            (loggedInUserId === conversation.user2_id &&
+              conversation.is_read_user2)
+          : (loggedInUserId === conversation.user1_id &&
+              !conversation.is_read_user1) ||
+            (loggedInUserId === conversation.user2_id &&
+              !conversation.is_read_user2);
+
+      const matchesSearchTerm =
+        conversation.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (userNames[conversation.id] || "")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
+
+      return matchesReadFilter && matchesSearchTerm;
     });
   };
 
@@ -193,7 +197,11 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
     <>
       <ConvoHistoryContainer>
         <SearchBarReadFilterWrapper>
-          <SearchBar width="100%" paddingLeft="0" />
+          <SearchBar
+            width="100%"
+            paddingLeft="0"
+            onChange={(value) => setSearchTerm(value)}
+          />
           <ReadFilterWrapper>
             <p>
               <span
