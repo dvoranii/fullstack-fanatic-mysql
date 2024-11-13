@@ -95,7 +95,7 @@ router.get("/:conversationId", authenticate, async (req, res) => {
     const connection = await connectionPromise;
 
     const [messages] = await connection.execute<RowDataPacket[]>(
-      `SELECT * FROM messages WHERE conversation_id = ? ORDER BY sent_at ASC LIMIT ${limit} OFFSET ${offset}`,
+      `SELECT * FROM messages WHERE conversation_id = ? ORDER BY sent_at DESC LIMIT ${limit} OFFSET ${offset}`,
       [Number(conversationId)]
     );
 
