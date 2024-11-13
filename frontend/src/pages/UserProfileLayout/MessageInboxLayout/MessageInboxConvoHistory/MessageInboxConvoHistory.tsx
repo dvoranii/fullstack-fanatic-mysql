@@ -24,10 +24,12 @@ import DeleteConfirmationModal from "../../../../components/DeleteConfirmationMo
 
 interface MessageInboxConvoHistoryProps {
   onConversationSelect: (conversationId: number) => void;
+  onConversationDelete: () => void;
 }
 
 const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
   onConversationSelect,
+  onConversationDelete,
 }) => {
   const { profile } = useContext(UserContext) || {};
   const loggedInUserId = profile?.id;
@@ -169,6 +171,7 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
     try {
       await deleteConversation(selectedConversationId);
       console.log("Conversation deleted for current user");
+      onConversationDelete();
     } catch (error) {
       console.error("Failed to delete conversation:", error);
       setConversations((prevConversations) => [

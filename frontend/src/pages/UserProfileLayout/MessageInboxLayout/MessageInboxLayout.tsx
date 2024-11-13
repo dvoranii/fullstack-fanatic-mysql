@@ -13,6 +13,10 @@ const MessageInboxLayout: React.FC = () => {
     number | null
   >(null);
 
+  const clearSelectedConversation = () => {
+    setSelectedConversationId(null);
+  };
+
   return (
     <div style={{ background: "#eee" }}>
       <MessageInboxPageWrapper>
@@ -21,6 +25,7 @@ const MessageInboxLayout: React.FC = () => {
           <RightContainer>
             <MessageInboxConvoHistory
               onConversationSelect={setSelectedConversationId}
+              onConversationDelete={clearSelectedConversation}
             />
 
             <MessageInboxChatWindow conversationId={selectedConversationId} />
