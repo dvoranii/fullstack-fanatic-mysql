@@ -17,6 +17,7 @@ import {
   getMessagesForConversation,
   sendMessage,
 } from "../../../../services/messageService";
+import { fetchConversationById } from "../../../../services/conversationService";
 
 interface MessageInboxChatWindowProps {
   conversationId: number | null;
@@ -35,8 +36,8 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const [receiverId, setReceiverId] = useState<number | null>(null);
 
-  // Function to fetch initial set of messages (most recent 10)
   const fetchInitialMessages = async () => {
     if (!conversationId) return;
     try {
@@ -45,7 +46,7 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
         1,
         10
       );
-      setMessages(initialMessages.reverse()); // Reverse to display oldest-to-newest
+      setMessages(initialMessages.reverse());
       setPage(2);
       scrollToBottom();
     } catch (error) {
@@ -53,7 +54,6 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
     }
   };
 
-  // Function to fetch older messages on scroll
   const fetchOlderMessages = async () => {
     if (!conversationId) return;
     try {
@@ -76,7 +76,6 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
     }
   };
 
-  // Function to scroll to the bottom of the chat
   const scrollToBottom = () => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTo(
@@ -86,18 +85,19 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
     }
   };
 
-  // Load initial messages when component mounts or conversationId changes
   useEffect(() => {
+    setMessages([]);
+    setPage(1);
+    setHasMore(true);
     fetchInitialMessages();
   }, [conversationId]);
 
-  // Socket listener for new messages
   useEffect(() => {
     if (conversationId) {
       socket.on("newMessage", (message) => {
         if (message.conversation_id === conversationId) {
           setMessages((prevMessages) => [...prevMessages, message]);
-          scrollToBottom(); // Scroll to the latest message
+          scrollToBottom();
         }
       });
 
@@ -107,27 +107,51 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
     }
   }, [conversationId]);
 
-  // Handle sending a new message
+  useEffect(() => {
+    const determineReceiver = async () => {
+      if (conversationId && loggedInUserId) {
+        const conversation = await fetchConversationById(conversationId);
+        if (conversation) {
+          const determinedReceiverId =
+            conversation.user1_id === loggedInUserId
+              ? conversation.user2_id
+              : conversation.user1_id;
+          setReceiverId(determinedReceiverId);
+        }
+      }
+    };
+
+    determineReceiver();
+  }, [conversationId, loggedInUserId]);
+
   const handleSendMessage = async () => {
     if (!conversationId || !newMessage.trim()) return;
+
+    if (!receiverId) {
+      console.error("Receiver ID is not set");
+      return;
+    }
+
     const tempMessage: Message = {
       id: Date.now(),
       conversation_id: conversationId,
       sender_id: Number(loggedInUserId),
-      receiver_id: conversationId,
+      receiver_id: receiverId,
       subject: "",
       content: newMessage,
       sent_at: String(new Date()),
     };
+
     setMessages((prevMessages) => [...prevMessages, tempMessage]);
     scrollToBottom();
+
     try {
       await sendMessage(
         conversationId,
         Number(loggedInUserId),
-        conversationId,
+        receiverId,
         newMessage
-      ); // Adjust params as needed
+      );
       setNewMessage("");
     } catch (error) {
       console.error("Failed to send message:", error);
@@ -150,9 +174,9 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
         >
           <InfiniteScroll
             dataLength={messages.length}
-            next={fetchOlderMessages} // Load older messages on scroll
+            next={fetchOlderMessages}
             hasMore={hasMore}
-            inverse={true} // Enable reverse scroll
+            inverse={true}
             loader={""}
             scrollableTarget="scrollableDiv"
           >

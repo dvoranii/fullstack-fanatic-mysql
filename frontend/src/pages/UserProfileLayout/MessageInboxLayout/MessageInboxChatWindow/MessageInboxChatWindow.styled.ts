@@ -35,19 +35,9 @@ export const ChatWindowContainerInner = styled.div`
 export const TextInputWrapper = styled.div`
   display: flex;
   flex-direction: column;
-
-  button {
-    align-self: flex-end;
-    text-transform: uppercase;
-    font-weight: bold;
-    letter-spacing: 0.75px;
-    margin-right: 20px;
-    transition: all 150ms ease;
-
-    &:hover {
-      background-color: #14213d;
-    }
-  }
+  max-width: 750px;
+  margin: 0 auto;
+  width: 95%;
 `;
 
 export const ChatInput = styled.textarea`
@@ -55,27 +45,33 @@ export const ChatInput = styled.textarea`
   height: 100px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  margin: 0 20px 10px 20px;
   padding: 10px;
   overflow-wrap: break-word;
   word-wrap: break-word;
   resize: none;
   font-family: "ZenKakuGothicNewMedium", sans-serif;
   font-size: 14px;
-  max-width: 750px;
-  margin: 0 auto;
-  width: 95%;
+  width: 100%;
 `;
 
 export const ChatSubmitButton = styled.button`
   width: 80px;
   padding: 10px;
-  margin-bottom: 10px;
+  margin: 10px 0px 10px 0px;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 0.75px;
+  transition: all 150ms ease;
+  align-self: flex-end;
+
+  &:hover {
+    background-color: #14213d;
+  }
 `;
 
 export const NewChatBarWrapper = styled.div`
