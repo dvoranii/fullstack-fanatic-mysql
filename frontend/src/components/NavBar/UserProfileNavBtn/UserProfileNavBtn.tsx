@@ -17,7 +17,7 @@ import { NavIconWrapper, NavIconImg } from "../../NavBar/NavBar.styled";
 import ProfilePicture from "../../ProfilePicture/ProfilePicture";
 import { UserContext } from "../../../context/UserContext";
 import { useAuthUtils } from "../../../utils/useAuthUtils";
-import Dropdown from "../Dropdown/Dropdown";
+import Dropdown from "../../Dropdown/Dropdown";
 
 const UserProfileNavBtn: React.FC = () => {
   const { profile } = useContext(UserContext) || {};

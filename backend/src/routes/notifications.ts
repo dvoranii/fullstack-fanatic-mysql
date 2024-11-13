@@ -11,6 +11,7 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
   const limit = 5;
   const offset = (page - 1) * limit;
 
+  console.log(page);
   if (!userId) {
     return res.status(400).json({ error: "Invalid user ID" });
   }

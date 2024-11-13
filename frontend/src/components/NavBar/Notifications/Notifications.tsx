@@ -6,7 +6,7 @@ import {
   NotificationContentWrapper,
 } from "./Notifications.styled";
 import { NavIconWrapper, NavIconImg } from "../../NavBar/NavBar.styled";
-import Dropdown from "../Dropdown/Dropdown";
+import Dropdown from "../../Dropdown/Dropdown";
 import {
   fetchNotifications,
   markNotificationAsRead,
@@ -14,6 +14,7 @@ import {
 import { Notification } from "../../../types/Notifications";
 import NotificationItem from "./NotificationItem/NotificationItem";
 import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
+import useClickOutside from "../../../hooks/useClickOutside";
 
 const Notifications: React.FC = () => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
@@ -24,10 +25,21 @@ const Notifications: React.FC = () => {
   const [hasMore, setHasMore] = useState(true);
   const [mounted, setMounted] = useState(false);
 
-  const handleDropdownToggle = (e: React.MouseEvent) => {
+  const handleDropdownToggle = async (e: React.MouseEvent) => {
     e.stopPropagation();
+
+    if (!isDropdownVisible) {
+      setNotifications([]);
+      setPage(1);
+      setHasMore(true);
+
+      await loadMoreNotifications();
+    }
+
     setDropdownVisible(!isDropdownVisible);
   };
+
+  useClickOutside(containerRef, () => setDropdownVisible(false));
 
   const markAsRead = async (notificationId: number) => {
     try {
@@ -50,7 +62,6 @@ const Notifications: React.FC = () => {
       const { notifications: fetchedNotifications, hasMore } =
         await fetchNotifications(page);
 
-      // setNotifications((prev) => [...prev, ...fetchedNotifications]);
       setNotifications((prevNotifications) => [
         ...prevNotifications,
         ...fetchedNotifications.filter(
@@ -67,22 +78,6 @@ const Notifications: React.FC = () => {
       console.error("Failed to fetch notifications:", error);
     }
   };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-        setDropdownVisible(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   useEffect(() => {
     if (mounted) return;

@@ -18,6 +18,7 @@ import {
   sendMessage,
 } from "../../../../services/messageService";
 import { fetchConversationById } from "../../../../services/conversationService";
+import PlusIcon from "../../../../assets/images/account/plus-icon.png";
 
 interface MessageInboxChatWindowProps {
   conversationId: number | null;
@@ -162,7 +163,9 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
     <ChatWindowContainerOuter>
       {!conversationId && (
         <NewChatBarWrapper>
-          <NewChatBar>New Chat</NewChatBar>
+          <NewChatBar>
+            New Chat <img src={PlusIcon} alt="" />
+          </NewChatBar>
         </NewChatBarWrapper>
       )}
 

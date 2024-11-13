@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, { useState, useRef, useContext } from "react";
 import cartIcon from "../../../assets/images/shopping-cart-icon.png";
 import { NavIconWrapper, NavIconImg } from "../../NavBar/NavBar.styled";
 import {
@@ -11,9 +11,10 @@ import {
   ViewCartLink,
   CheckoutBtn,
 } from "./ShoppingCart.styled";
-import Dropdown from "../Dropdown/Dropdown";
+import Dropdown from "../../Dropdown/Dropdown";
 import { UserContext } from "../../../context/UserContext";
 import { handleCheckout } from "../../../utils/checkoutUtils";
+import useClickOutside from "../../../hooks/useClickOutside";
 
 const ShoppingCart: React.FC = () => {
   const [isCartVisible, setIsCartVisible] = useState(false);
@@ -30,21 +31,7 @@ const ShoppingCart: React.FC = () => {
     setIsCartVisible(!isCartVisible);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-        setIsCartVisible(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  useClickOutside(containerRef, () => setIsCartVisible(false));
 
   return (
     <div ref={containerRef}>

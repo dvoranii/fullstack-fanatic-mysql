@@ -78,6 +78,7 @@ export const NewChatBarWrapper = styled.div`
   padding: 20px;
   display: flex;
   justify-content: flex-end;
+  user-select: none;
 `;
 export const NewChatBar = styled.div`
   display: flex;
@@ -92,5 +93,9 @@ export const NewChatBar = styled.div`
   font-weight: bold;
   img {
     width: 20px;
+  }
+
+  &:hover {
+    cursor: pointer;
   }
 `;
