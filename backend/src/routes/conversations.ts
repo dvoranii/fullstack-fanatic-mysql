@@ -87,6 +87,33 @@ router.get(
   }
 );
 
+router.get(
+  "/unread/count",
+  authenticate,
+  async (req: Request, res: Response) => {
+    const userId = req.user?.userId;
+
+    try {
+      const connection = await connectionPromise;
+      const [result] = await connection.execute<RowDataPacket[]>(
+        `
+      SELECT COUNT(*) AS unreadCount
+      FROM conversations
+      WHERE (user1_id = ? AND is_read_user1 = FALSE)
+         OR (user2_id = ? AND is_read_user2 = FALSE)
+    `,
+        [userId, userId]
+      );
+
+      const unreadCount = result[0]?.unreadCount || 0;
+      res.status(200).json({ unreadCount });
+    } catch (err) {
+      console.error("Failed to fetch unread count:", err);
+      res.status(500).json({ error: "Failed to fetch unread count" });
+    }
+  }
+);
+
 router.patch(
   "/:conversationId/read",
   authenticate,
@@ -97,7 +124,6 @@ router.patch(
     try {
       const connection = await connectionPromise;
 
-      // Fetch conversation details to determine which user is making the request
       const [conversation] = await connection.execute<RowDataPacket[]>(
         "SELECT user1_id, user2_id FROM conversations WHERE id = ?",
         [conversationId]
@@ -109,7 +135,6 @@ router.patch(
 
       const { user1_id, user2_id } = conversation[0];
 
-      // Update the appropriate is_read flag based on which user is marking it as read
       if (userId === user1_id) {
         await connection.execute<ResultSetHeader>(
           "UPDATE conversations SET is_read_user1 = 1 WHERE id = ?",

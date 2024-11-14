@@ -19,7 +19,7 @@ import { UserContext } from "../../../context/UserContext";
 import { useAuthUtils } from "../../../utils/useAuthUtils";
 import Dropdown from "../../Dropdown/Dropdown";
 import NotificationBadge from "../../NotificationBadge/NotificationBadge";
-import { getUnreadConversationsCount } from "../../../services/messageService";
+import { getUnreadConversationsCount } from "../../../services/conversationService";
 
 const UserProfileNavBtn: React.FC = () => {
   const { profile } = useContext(UserContext) || {};

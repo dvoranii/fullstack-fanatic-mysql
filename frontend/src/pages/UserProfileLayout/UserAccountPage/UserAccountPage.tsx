@@ -6,7 +6,7 @@ import EditProfileModal from "../EditProfileModal/EditProfileModal";
 import { uploadImage } from "../../../services/imageUploadService";
 import { ImageUploadResponse } from "../../../types/ImageUploadResponse";
 import InboxIcon from "../../../assets/images/account/inbox.png";
-import { getUnreadConversationsCount } from "../../../services/messageService";
+import { getUnreadConversationsCount } from "../../../services/conversationService";
 import NotificationBadge from "../../../components/NotificationBadge/NotificationBadge";
 
 const UserAccountsPage: React.FC = () => {

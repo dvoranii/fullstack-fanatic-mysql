@@ -69,11 +69,3 @@ export const getMessagesForConversation = async (
 
   return data.messages;
 };
-
-export const getUnreadConversationsCount = async (): Promise<number> => {
-  const endpoint = `/api/messages/unread/count`;
-  const { data } = await apiCall<{ unreadCount: number }>(endpoint, {
-    method: "GET",
-  });
-  return data.unreadCount;
-};
