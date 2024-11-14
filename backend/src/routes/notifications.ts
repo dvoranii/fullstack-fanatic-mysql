@@ -69,4 +69,36 @@ router.patch("/:id/read", authenticate, async (req: Request, res: Response) => {
   }
 });
 
+router.get(
+  "/unread/count",
+  authenticate,
+  async (req: Request, res: Response) => {
+    const userId = req.user?.userId;
+
+    if (!userId) {
+      return res.status(400).json({ error: "Invalid user ID" });
+    }
+
+    try {
+      const connection = await connectionPromise;
+
+      // Query to count unread notifications
+      const [result] = await connection.query<RowDataPacket[]>(
+        `SELECT COUNT(*) AS unreadCount
+       FROM notifications
+       WHERE user_id = ? AND is_read = FALSE`,
+        [userId]
+      );
+
+      const unreadCount = result[0]?.unreadCount || 0;
+      res.status(200).json({ unreadCount });
+    } catch (error) {
+      console.error("Error fetching unread notifications count:", error);
+      res
+        .status(500)
+        .json({ error: "Failed to fetch unread notifications count" });
+    }
+  }
+);
+
 export default router;

@@ -50,7 +50,6 @@ export const sendMessage = async (
     }),
   });
 
-  console.log(data);
   return data;
 };
 
@@ -68,7 +67,13 @@ export const getMessagesForConversation = async (
     }
   );
 
-  console.log(data);
-
   return data.messages;
+};
+
+export const getUnreadConversationsCount = async (): Promise<number> => {
+  const endpoint = `/api/messages/unread/count`;
+  const { data } = await apiCall<{ unreadCount: number }>(endpoint, {
+    method: "GET",
+  });
+  return data.unreadCount;
 };

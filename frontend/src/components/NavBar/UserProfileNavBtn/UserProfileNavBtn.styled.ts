@@ -65,6 +65,12 @@ export const DropdownItem = styled(NavLink)`
   &:hover {
     background-color: #f0f0f0;
   }
+
+  &.inbox-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
 `;
 
 export const DropdownItemLogoutBtn = styled.button`

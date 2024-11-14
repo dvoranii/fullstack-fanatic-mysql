@@ -23,3 +23,11 @@ export const markNotificationAsRead = async (notificationId: number) => {
 
   return data;
 };
+
+export const getUnreadNotificationsCount = async (): Promise<number> => {
+  const endpoint = `/api/notifications/unread/count`;
+  const { data } = await apiCall<{ unreadCount: number }>(endpoint, {
+    method: "GET",
+  });
+  return data.unreadCount;
+};

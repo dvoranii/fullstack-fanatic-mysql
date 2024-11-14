@@ -122,4 +122,31 @@ router.get("/:conversationId", authenticate, async (req, res) => {
   }
 });
 
+router.get(
+  "/unread/count",
+  authenticate,
+  async (req: Request, res: Response) => {
+    const userId = req.user?.userId;
+
+    try {
+      const connection = await connectionPromise;
+      const [result] = await connection.execute<RowDataPacket[]>(
+        `
+      SELECT COUNT(*) AS unreadCount
+      FROM conversations
+      WHERE (user1_id = ? AND is_read_user1 = FALSE)
+         OR (user2_id = ? AND is_read_user2 = FALSE)
+    `,
+        [userId, userId]
+      );
+
+      const unreadCount = result[0]?.unreadCount || 0;
+      res.status(200).json({ unreadCount });
+    } catch (err) {
+      console.error("Failed to fetch unread count:", err);
+      res.status(500).json({ error: "Failed to fetch unread count" });
+    }
+  }
+);
+
 export default router;

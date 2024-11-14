@@ -1,20 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import NotificationBell from "../../../assets/images/notification-bell.png";
-import {
-  NotificationCounter,
-  NotificationContentWrapper,
-} from "./Notifications.styled";
+import { NotificationContentWrapper } from "./Notifications.styled";
 import { NavIconWrapper, NavIconImg } from "../../NavBar/NavBar.styled";
 import Dropdown from "../../Dropdown/Dropdown";
 import {
   fetchNotifications,
   markNotificationAsRead,
+  getUnreadNotificationsCount, // Use the unused API function here
 } from "../../../services/notificationsService";
 import { Notification } from "../../../types/Notifications";
 import NotificationItem from "./NotificationItem/NotificationItem";
 import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
 import useClickOutside from "../../../hooks/useClickOutside";
+import NotificationBadge from "../../NotificationBadge/NotificationBadge";
 
 const Notifications: React.FC = () => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
@@ -23,8 +22,22 @@ const Notifications: React.FC = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [mounted, setMounted] = useState(false);
 
+  // Fetch unread count on component mount
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      try {
+        const count = await getUnreadNotificationsCount();
+        setUnreadCount(count);
+      } catch (error) {
+        console.error("Failed to fetch unread notifications count:", error);
+      }
+    };
+
+    fetchUnreadCount();
+  }, []);
+
+  // Fetch notifications when dropdown is opened
   const handleDropdownToggle = async (e: React.MouseEvent) => {
     e.stopPropagation();
 
@@ -32,7 +45,6 @@ const Notifications: React.FC = () => {
       setNotifications([]);
       setPage(1);
       setHasMore(true);
-
       await loadMoreNotifications();
     }
 
@@ -41,6 +53,7 @@ const Notifications: React.FC = () => {
 
   useClickOutside(containerRef, () => setDropdownVisible(false));
 
+  // Mark notification as read and update the unread count
   const markAsRead = async (notificationId: number) => {
     try {
       await markNotificationAsRead(notificationId);
@@ -51,12 +64,16 @@ const Notifications: React.FC = () => {
             : notification
         )
       );
-      setUnreadCount((prevCount) => prevCount - 1);
+
+      // Refresh unread count from the backend
+      const updatedUnreadCount = await getUnreadNotificationsCount();
+      setUnreadCount(updatedUnreadCount);
     } catch (error) {
       console.error("Failed to mark notification as read:", error);
     }
   };
 
+  // Load additional notifications for infinite scroll
   const loadMoreNotifications = async () => {
     try {
       const { notifications: fetchedNotifications, hasMore } =
@@ -79,31 +96,6 @@ const Notifications: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    if (mounted) return;
-
-    const fetchUserNotifications = async () => {
-      try {
-        const { notifications: fetchedNotifications } =
-          await fetchNotifications(1);
-        setNotifications(fetchedNotifications);
-
-        const unreadNotifications = fetchedNotifications.filter(
-          (notification: Notification) => !notification.is_read
-        );
-        setUnreadCount(unreadNotifications.length);
-
-        setHasMore(fetchedNotifications.length > 0);
-      } catch (error) {
-        console.error("Failed to fetch notifications:", error);
-        setHasMore(false);
-      }
-    };
-
-    fetchUserNotifications();
-    setMounted(true);
-  }, []);
-
   return (
     <div ref={containerRef}>
       <NavIconWrapper>
@@ -113,11 +105,12 @@ const Notifications: React.FC = () => {
           alt="Notifications"
           title="Notifications"
         />
-        {unreadCount > 0 && (
-          <NotificationCounter>
-            {unreadCount > 9 ? "9+" : unreadCount}
-          </NotificationCounter>
-        )}
+        <NotificationBadge
+          count={unreadCount}
+          positionAbsolute={true}
+          topOffset="5px"
+          rightOffset="5px"
+        />
 
         {isDropdownVisible && (
           <Dropdown isVisible={isDropdownVisible} alignRight>

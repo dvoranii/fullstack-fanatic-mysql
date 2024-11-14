@@ -18,15 +18,28 @@ import ProfilePicture from "../../ProfilePicture/ProfilePicture";
 import { UserContext } from "../../../context/UserContext";
 import { useAuthUtils } from "../../../utils/useAuthUtils";
 import Dropdown from "../../Dropdown/Dropdown";
+import NotificationBadge from "../../NotificationBadge/NotificationBadge";
+import { getUnreadConversationsCount } from "../../../services/messageService";
 
 const UserProfileNavBtn: React.FC = () => {
   const { profile } = useContext(UserContext) || {};
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const { logOut } = useAuthUtils();
   const containerRef = useRef<HTMLDivElement>(null);
+  const [unreadInboxCount, setUnreadInboxCount] = useState(0);
 
-  const handleDropdownToggle = (e: React.MouseEvent) => {
+  const handleDropdownToggle = async (e: React.MouseEvent) => {
     e.stopPropagation();
+
+    if (!isDropdownVisible) {
+      try {
+        const count = await getUnreadConversationsCount();
+        setUnreadInboxCount(count);
+      } catch (error) {
+        console.error("Failed to fetch unread conversations count:", error);
+      }
+    }
+
     setDropdownVisible(!isDropdownVisible);
   };
 
@@ -44,6 +57,19 @@ const UserProfileNavBtn: React.FC = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+  }, []);
+
+  useEffect(() => {
+    const fetchUnreadInboxCount = async () => {
+      try {
+        const count = await getUnreadConversationsCount();
+        setUnreadInboxCount(count);
+      } catch (error) {
+        console.error("Failed to fetch unread conversations count:", error);
+      }
+    };
+
+    fetchUnreadInboxCount();
   }, []);
 
   return (
@@ -75,7 +101,9 @@ const UserProfileNavBtn: React.FC = () => {
           <DropdownDivider />
           <UserProfiledropdownWrapper>
             <AccountTitle>Account</AccountTitle>
-            <DropdownItem to="/my-account/inbox">Inbox</DropdownItem>
+            <DropdownItem to="/my-account/inbox" className="inbox-item">
+              Inbox <NotificationBadge count={unreadInboxCount} />
+            </DropdownItem>
             <DropdownItem to="#">Settings</DropdownItem>
             <DropdownItem to="/plans-and-pricing">
               Plans And Pricing

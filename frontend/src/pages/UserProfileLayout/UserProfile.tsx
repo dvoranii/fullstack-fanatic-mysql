@@ -141,7 +141,6 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                 <UserInfoSubtitle>Links</UserInfoSubtitle>
                 <SocialLinksDisplay socialLinks={socialLinks} />
                 {children}
-
                 <FollowsWrapper>
                   <Link
                     to={
