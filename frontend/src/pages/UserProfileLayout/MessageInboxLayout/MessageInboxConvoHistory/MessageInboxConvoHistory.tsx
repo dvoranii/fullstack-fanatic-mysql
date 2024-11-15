@@ -21,6 +21,12 @@ import { fetchUserNamesAndPictures } from "../../../../services/userService";
 import ProfilePicture from "../../../../components/ProfilePicture/ProfilePicture";
 import DiscardIcon from "../../../../assets/images/discard-icon.png";
 import DeleteConfirmationModal from "../../../../components/DeleteConfirmationModal/DeleteConfirmationModal";
+import {
+  markNotificationAsRead,
+  fetchNotifications,
+} from "../../../../services/notificationsService";
+import { Notification } from "../../../../types/Notifications";
+import { UserContextType } from "../../../../types/User/UserContextType";
 
 interface MessageInboxConvoHistoryProps {
   onConversationSelect: (conversationId: number) => void;
@@ -47,6 +53,11 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
   const [boldSpan, setBoldSpan] = useState("read");
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [searchTerm, setSearchTerm] = useState("");
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  const { setUnreadNotificationCount } = useContext(
+    UserContext
+  ) as UserContextType;
 
   const fetchUserDetails = useCallback(
     async (conversations: Conversation[]) => {
@@ -63,6 +74,23 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
     },
     [loggedInUserId]
   );
+
+  useEffect(() => {
+    const fetchMessageNotifications = async () => {
+      try {
+        const { notifications: fetchedNotifications } =
+          await fetchNotifications(1);
+        const messageNotifications = fetchedNotifications.filter(
+          (notification) => notification.type === "message"
+        );
+        setNotifications(messageNotifications);
+      } catch (error) {
+        console.error("Failed to fetch notifications:", error);
+      }
+    };
+
+    fetchMessageNotifications();
+  }, []);
 
   useEffect(() => {
     const getConversations = async () => {
@@ -153,6 +181,26 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
 
     try {
       await updateConversationReadStatus(conversationId);
+
+      const relatedNotifications = notifications.filter(
+        (notification) =>
+          notification.type === "message" &&
+          notification.conversation_id === conversationId &&
+          !notification.is_read
+      );
+
+      for (const notification of relatedNotifications) {
+        await markNotificationAsRead(notification.id);
+        setUnreadNotificationCount((prevCount) => Math.max(prevCount - 1, 0));
+      }
+
+      setNotifications((prevNotifications) =>
+        prevNotifications.map((notification) =>
+          notification.conversation_id === conversationId
+            ? { ...notification, is_read: true }
+            : notification
+        )
+      );
     } catch (error) {
       console.error("Failed to update conversation as read:", error);
     }
@@ -174,7 +222,6 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
 
     try {
       await deleteConversation(selectedConversationId);
-      console.log("Conversation deleted for current user");
       onConversationDelete();
     } catch (error) {
       console.error("Failed to delete conversation:", error);

@@ -10,4 +10,5 @@ export interface Notification {
   comment_id?: number;
   content_id?: number;
   content_type?: "tutorial" | "blog";
+  conversation_id?: number;
 }

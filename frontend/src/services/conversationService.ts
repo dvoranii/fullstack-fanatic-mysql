@@ -33,7 +33,6 @@ export const updateConversationReadStatus = async (conversationId: number) => {
     method: "PATCH",
   });
 
-  console.log(data);
   return data;
 };
 

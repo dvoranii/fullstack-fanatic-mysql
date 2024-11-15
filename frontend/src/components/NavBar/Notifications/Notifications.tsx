@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import NotificationBell from "../../../assets/images/notification-bell.png";
 import { NotificationContentWrapper } from "./Notifications.styled";
@@ -14,21 +14,26 @@ import NotificationItem from "./NotificationItem/NotificationItem";
 import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
 import useClickOutside from "../../../hooks/useClickOutside";
 import NotificationBadge from "../../NotificationBadge/NotificationBadge";
+import { UserContext } from "../../../context/UserContext";
+import { UserContextType } from "../../../types/User/UserContextType";
 
 const Notifications: React.FC = () => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+
+  const { unreadNotificationCount, setUnreadNotificationCount } = useContext(
+    UserContext
+  ) as UserContextType;
 
   // Fetch unread count on component mount
   useEffect(() => {
     const fetchUnreadCount = async () => {
       try {
         const count = await getUnreadNotificationsCount();
-        setUnreadCount(count);
+        setUnreadNotificationCount(count);
       } catch (error) {
         console.error("Failed to fetch unread notifications count:", error);
       }
@@ -42,7 +47,6 @@ const Notifications: React.FC = () => {
     e.stopPropagation();
 
     if (!isDropdownVisible) {
-      setNotifications([]);
       setPage(1);
       setHasMore(true);
       await loadMoreNotifications();
@@ -53,23 +57,30 @@ const Notifications: React.FC = () => {
 
   useClickOutside(containerRef, () => setDropdownVisible(false));
 
-  // Mark notification as read and update the unread count
   const markAsRead = async (notificationId: number) => {
+    setUnreadNotificationCount((prevCount) => Math.max(prevCount - 1, 0));
+
+    setNotifications((prevNotifications) =>
+      prevNotifications.map((notification) =>
+        notification.id === notificationId
+          ? { ...notification, is_read: true }
+          : notification
+      )
+    );
+
     try {
       await markNotificationAsRead(notificationId);
+    } catch (error) {
+      console.error("Failed to mark notification as read:", error);
+
+      setUnreadNotificationCount((prevCount: number) => prevCount + 1);
       setNotifications((prevNotifications) =>
         prevNotifications.map((notification) =>
           notification.id === notificationId
-            ? { ...notification, is_read: true }
+            ? { ...notification, is_read: false }
             : notification
         )
       );
-
-      // Refresh unread count from the backend
-      const updatedUnreadCount = await getUnreadNotificationsCount();
-      setUnreadCount(updatedUnreadCount);
-    } catch (error) {
-      console.error("Failed to mark notification as read:", error);
     }
   };
 
@@ -106,7 +117,7 @@ const Notifications: React.FC = () => {
           title="Notifications"
         />
         <NotificationBadge
-          count={unreadCount}
+          count={unreadNotificationCount}
           positionAbsolute={true}
           topOffset="5px"
           rightOffset="5px"

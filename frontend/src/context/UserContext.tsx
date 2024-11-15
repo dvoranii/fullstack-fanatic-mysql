@@ -21,6 +21,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [comments, setComments] = useState<CommentType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [unreadNotificationCount, setUnreadNotificationCount] =
+    useState<number>(0);
 
   const [cartItems, setCartItems] = useState(() => {
     const storedCartItems = sessionStorage.getItem("cartItems");
@@ -178,6 +180,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         setSubscriptionItem,
         addSubscriptionToCart,
         removeSubscriptionFromCart,
+        unreadNotificationCount,
+        setUnreadNotificationCount,
         loading,
         error,
       }}

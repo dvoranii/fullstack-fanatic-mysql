@@ -67,8 +67,8 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
       }
 
       const [notificationResult] = await connection.execute<ResultSetHeader>(
-        "INSERT INTO notifications (user_id, type, sender_id, is_read, created_at) VALUES (?, 'message', ?, 0, NOW())",
-        [receiver_id, sender_id]
+        "INSERT INTO notifications (user_id, type, sender_id, conversation_id, is_read, created_at) VALUES (?, 'message', ?, ?, 0, NOW())",
+        [receiver_id, sender_id, conversation_id]
       );
     }
 

@@ -27,6 +27,8 @@ export interface UserContextType {
   setSubscriptionItem: Dispatch<SetStateAction<CartItem | null>>;
   purchasedItems: PurchasedItem[];
   setPurchasedItems: Dispatch<SetStateAction<PurchasedItem[]>>;
+  unreadNotificationCount: number;
+  setUnreadNotificationCount: React.Dispatch<React.SetStateAction<number>>;
   loading: boolean;
   error: string | null;
 }

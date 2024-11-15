@@ -20,13 +20,16 @@ import { useAuthUtils } from "../../../utils/useAuthUtils";
 import Dropdown from "../../Dropdown/Dropdown";
 import NotificationBadge from "../../NotificationBadge/NotificationBadge";
 import { getUnreadConversationsCount } from "../../../services/conversationService";
+import { UserContextType } from "../../../types/User/UserContextType";
 
 const UserProfileNavBtn: React.FC = () => {
   const { profile } = useContext(UserContext) || {};
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const { logOut } = useAuthUtils();
   const containerRef = useRef<HTMLDivElement>(null);
-  const [unreadInboxCount, setUnreadInboxCount] = useState(0);
+  const { unreadNotificationCount, setUnreadNotificationCount } = useContext(
+    UserContext
+  ) as UserContextType;
 
   const handleDropdownToggle = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -34,7 +37,7 @@ const UserProfileNavBtn: React.FC = () => {
     if (!isDropdownVisible) {
       try {
         const count = await getUnreadConversationsCount();
-        setUnreadInboxCount(count);
+        setUnreadNotificationCount(count);
       } catch (error) {
         console.error("Failed to fetch unread conversations count:", error);
       }
@@ -63,7 +66,7 @@ const UserProfileNavBtn: React.FC = () => {
     const fetchUnreadInboxCount = async () => {
       try {
         const count = await getUnreadConversationsCount();
-        setUnreadInboxCount(count);
+        setUnreadNotificationCount(count);
       } catch (error) {
         console.error("Failed to fetch unread conversations count:", error);
       }
@@ -102,7 +105,7 @@ const UserProfileNavBtn: React.FC = () => {
           <UserProfiledropdownWrapper>
             <AccountTitle>Account</AccountTitle>
             <DropdownItem to="/my-account/inbox" className="inbox-item">
-              Inbox <NotificationBadge count={unreadInboxCount} />
+              Inbox <NotificationBadge count={unreadNotificationCount} />
             </DropdownItem>
             <DropdownItem to="#">Settings</DropdownItem>
             <DropdownItem to="/plans-and-pricing">
