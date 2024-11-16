@@ -21,12 +21,9 @@ import { fetchUserNamesAndPictures } from "../../../../services/userService";
 import ProfilePicture from "../../../../components/ProfilePicture/ProfilePicture";
 import DiscardIcon from "../../../../assets/images/discard-icon.png";
 import DeleteConfirmationModal from "../../../../components/DeleteConfirmationModal/DeleteConfirmationModal";
-import {
-  markNotificationAsRead,
-  fetchNotifications,
-} from "../../../../services/notificationsService";
-import { Notification } from "../../../../types/Notifications";
+import { markNotificationAsRead } from "../../../../services/notificationsService";
 import { UserContextType } from "../../../../types/User/UserContextType";
+import { useNotifications } from "../../../../hooks/useNotifications";
 
 interface MessageInboxConvoHistoryProps {
   onConversationSelect: (conversationId: number) => void;
@@ -53,8 +50,9 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
   const [boldSpan, setBoldSpan] = useState("read");
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [searchTerm, setSearchTerm] = useState("");
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  // const [notifications, setNotifications] = useState<Notification[]>([]);
 
+  const { notifications, setNotifications } = useNotifications();
   const { setUnreadNotificationCount } = useContext(
     UserContext
   ) as UserContextType;
@@ -74,23 +72,6 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
     },
     [loggedInUserId]
   );
-
-  useEffect(() => {
-    const fetchMessageNotifications = async () => {
-      try {
-        const { notifications: fetchedNotifications } =
-          await fetchNotifications(1);
-        const messageNotifications = fetchedNotifications.filter(
-          (notification) => notification.type === "message"
-        );
-        setNotifications(messageNotifications);
-      } catch (error) {
-        console.error("Failed to fetch notifications:", error);
-      }
-    };
-
-    fetchMessageNotifications();
-  }, []);
 
   useEffect(() => {
     const getConversations = async () => {
