@@ -1,4 +1,4 @@
-import React from "react";
+import { useContext } from "react";
 import ProfilePicture from "../../../ProfilePicture/ProfilePicture";
 import { Notification } from "../../../../types/Notifications";
 import {
@@ -9,6 +9,7 @@ import {
 } from "./NotificationItem.styled";
 import { formatTimeAgo } from "../../../../utils/timeUtils";
 import { Link } from "react-router-dom";
+import { UserContext } from "../../../../context/UserContext";
 
 interface NotificationItemProps {
   notification: Notification;
@@ -21,6 +22,11 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   markAsRead,
   isLast,
 }) => {
+  const { isReadUIUpdate } = useContext(UserContext) || {};
+  const isRead = isReadUIUpdate?.[notification.id] ?? notification.is_read;
+
+  console.log(isRead);
+
   const renderNotificationMessage = () => {
     switch (notification.type) {
       case "like":
@@ -71,7 +77,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   return (
     <>
       <NotificationItemWrapper
-        isUnread={!notification.is_read}
+        isRead={isRead}
         onClick={() => markAsRead(notification.id)}
       >
         <ProfilePicture

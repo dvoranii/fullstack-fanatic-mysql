@@ -2,21 +2,19 @@ import styled from "styled-components";
 import { colors } from "../../../../GlobalStyles";
 
 interface NotificationItemWrapperProps {
-  isUnread: boolean;
+  isRead: boolean;
 }
 
-export const NotificationItemWrapper = styled.div.withConfig({
-  shouldForwardProp: (prop) => prop !== "isUnread",
-})<NotificationItemWrapperProps>`
+export const NotificationItemWrapper = styled.div<NotificationItemWrapperProps>`
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 10px;
-  background-color: ${({ isUnread }) => (isUnread ? "#f0f8ff" : "#fff")};
+  background-color: ${({ isRead }) => (isRead ? "#fff" : "#f0f8ff")};
 
   p {
-    ${({ isUnread }) =>
-      isUnread &&
+    ${({ isRead }) =>
+      !isRead &&
       `
       font-weight: bold;
       color: #000;
@@ -26,8 +24,7 @@ export const NotificationItemWrapper = styled.div.withConfig({
   }
 
   &:hover {
-    ${({ isUnread }) =>
-      isUnread && `background-color: #f5f5f5; cursor:pointer;`}
+    ${({ isRead }) => !isRead && `background-color: #f5f5f5; cursor:pointer;`}
   }
 `;
 

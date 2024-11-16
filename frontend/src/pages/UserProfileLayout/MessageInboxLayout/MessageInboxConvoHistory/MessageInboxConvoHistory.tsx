@@ -50,10 +50,9 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
   const [boldSpan, setBoldSpan] = useState("read");
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [searchTerm, setSearchTerm] = useState("");
-  // const [notifications, setNotifications] = useState<Notification[]>([]);
 
   const { notifications, setNotifications } = useNotifications();
-  const { setUnreadNotificationCount } = useContext(
+  const { setUnreadNotificationCount, setIsReadUIUpdate } = useContext(
     UserContext
   ) as UserContextType;
 
@@ -171,6 +170,11 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
       );
 
       for (const notification of relatedNotifications) {
+        setIsReadUIUpdate((prev) => ({
+          ...prev,
+          [notification.id]: true,
+        }));
+
         await markNotificationAsRead(notification.id);
         setUnreadNotificationCount((prevCount) => Math.max(prevCount - 1, 0));
       }
