@@ -104,3 +104,25 @@ export const NewChatBar = styled.div`
     cursor: pointer;
   }
 `;
+
+export const ChatHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-bottom: 1px solid #ccc;
+`;
+
+export const ClearButtonWrapper = styled.div`
+  user-select: none;
+  button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    &:hover {
+      color: red;
+    }
+  }
+`;

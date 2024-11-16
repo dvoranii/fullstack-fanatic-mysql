@@ -9,6 +9,8 @@ import {
   TextInputWrapper,
   ChatWindowContainerInner,
   NewChatBar,
+  ChatHeader,
+  ClearButtonWrapper,
 } from "./MessageInboxChatWindow.styled";
 import SentMessages from "./SentMessages/SentMessages";
 import { UserContext } from "../../../../context/UserContext";
@@ -30,6 +32,7 @@ import useClickOutside from "../../../../hooks/useClickOutside";
 interface MessageInboxChatWindowProps {
   conversationId: number | null;
   onConversationSelect: (conversationId: number) => void;
+  onClearConversation: () => void;
 }
 
 const BASE_URL = "http://localhost:5000";
@@ -38,6 +41,7 @@ const socket = io(BASE_URL);
 const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   conversationId,
   onConversationSelect,
+  onClearConversation,
 }) => {
   const { profile } = useContext(UserContext) || {};
   const loggedInUserId = profile?.id;
@@ -218,22 +222,30 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
       )}
 
       {conversationId && (
-        <ChatWindowContainerInner
-          ref={chatContainerRef}
-          id="scrollableDiv"
-          style={{ display: "flex", flexDirection: "column-reverse" }}
-        >
-          <InfiniteScroll
-            dataLength={messages.length}
-            next={fetchOlderMessages}
-            hasMore={hasMore}
-            inverse={true}
-            loader={""}
-            scrollableTarget="scrollableDiv"
+        <>
+          <ChatHeader>
+            <h3>Chat</h3>
+            <ClearButtonWrapper>
+              <button onClick={onClearConversation}>X</button>
+            </ClearButtonWrapper>
+          </ChatHeader>
+          <ChatWindowContainerInner
+            ref={chatContainerRef}
+            id="scrollableDiv"
+            style={{ display: "flex", flexDirection: "column-reverse" }}
           >
-            <SentMessages messages={messages} />
-          </InfiniteScroll>
-        </ChatWindowContainerInner>
+            <InfiniteScroll
+              dataLength={messages.length}
+              next={fetchOlderMessages}
+              hasMore={hasMore}
+              inverse={true}
+              loader={""}
+              scrollableTarget="scrollableDiv"
+            >
+              <SentMessages messages={messages} />
+            </InfiniteScroll>
+          </ChatWindowContainerInner>
+        </>
       )}
 
       <TextInputWrapper>

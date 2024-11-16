@@ -93,7 +93,8 @@ const MessageInboxLayout: React.FC = () => {
 
             <MessageInboxChatWindow
               conversationId={selectedConversationId}
-              onConversationSelect={handleConversationSelect} // Pass to chat window
+              onConversationSelect={handleConversationSelect}
+              onClearConversation={clearSelectedConversation}
             />
           </RightContainer>
         </LayoutContainer>
