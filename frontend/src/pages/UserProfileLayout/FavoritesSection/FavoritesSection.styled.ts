@@ -54,6 +54,7 @@ export const FavoritesDropdownWrapper = styled.div`
   width: 100%;
   display: flex;
   user-select: none;
+  margin-bottom: -2.4rem;
 
   select {
     font-family: "Roboto";
@@ -71,11 +72,15 @@ export const FavoritesDropdownWrapper = styled.div`
 `;
 
 export const FavWrapper = styled.div`
-  width: 35%;
+  width: 50%;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
   border-radius: 8px;
   padding: 20px 40px;
   user-select: none;
+
+  /* @media screen and (max-width: 1291px) {
+    margin-top: -100px;
+  } */
 `;
 
 export const FilteredItemWrapper = styled.div`

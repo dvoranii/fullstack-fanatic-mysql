@@ -179,6 +179,13 @@ export const Section = styled.div`
   border-radius: 10px;
   padding: 20px 40px 120px 40px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  @media screen and (max-width: 1291px) {
+    padding: 0 30px 4.2rem 30px;
+  }
+  /* &.favorites-section {
+
+  } */
 `;
 
 export const SectionTitle = styled.h3`
@@ -187,9 +194,14 @@ export const SectionTitle = styled.h3`
   text-align: center;
   color: #031f2a;
   letter-spacing: 1px;
+  padding-top: 1.2rem;
   padding-bottom: 1.2rem;
   margin-bottom: 1.2rem;
   border-bottom: 1px solid #ccc;
+
+  @media screen and (max-width: 1291px) {
+    padding-top: 2.4rem;
+  }
 `;
 
 export const CommentHistory = styled.div`

@@ -4,7 +4,8 @@ import {
   ChatWindowContainerOuter,
   ChatInput,
   ChatSubmitButton,
-  NewChatBarWrapper,
+  NewChatBarWrapperInner,
+  NewChatBarWrapperOuter,
   TextInputWrapper,
   ChatWindowContainerInner,
   NewChatBar,
@@ -17,8 +18,14 @@ import {
   getMessagesForConversation,
   sendMessage,
 } from "../../../../services/messageService";
-import { fetchConversationById } from "../../../../services/conversationService";
+import {
+  checkExistingConversation,
+  createOrGetConversation,
+  fetchConversationById,
+} from "../../../../services/conversationService";
 import PlusIcon from "../../../../assets/images/account/plus-icon.png";
+import NewChatDropdown from "../NewChatDropdown/NewChatDropdown";
+import useClickOutside from "../../../../hooks/useClickOutside";
 
 interface MessageInboxChatWindowProps {
   conversationId: number | null;
@@ -39,6 +46,16 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [receiverId, setReceiverId] = useState<number | null>(null);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isDropdownVisible, setDropdownVisible] = useState(false);
+  const [selectedConversationId, setSelectedConversationId] = useState<
+    number | null
+  >(null);
+
+  useClickOutside(containerRef, () => setDropdownVisible(false));
+
+  const toggleDropdown = () => setDropdownVisible((prev) => !prev);
+
   const fetchInitialMessages = async () => {
     if (!conversationId) return;
     try {
@@ -52,6 +69,40 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
       scrollToBottom();
     } catch (error) {
       console.error("Failed to fetch messages: ", error);
+    }
+  };
+
+  const handleUserSelect = async (userId: number) => {
+    if (!profile?.id) return;
+
+    try {
+      // Step 1: Check if the conversation already exists
+      const { exists, id } = await checkExistingConversation(
+        profile.id,
+        userId
+      );
+
+      if (exists && id) {
+        // Step 2: If the conversation exists, open it
+        console.log(`Conversation exists with ID: ${id}`);
+        setSelectedConversationId(id);
+      } else {
+        // Step 3: If not, create a new conversation
+        console.log("Creating a new conversation...");
+        const newConversation = await createOrGetConversation(
+          profile.id,
+          userId,
+          "" // Set subject to blank
+        );
+
+        console.log(`New conversation created with ID: ${newConversation.id}`);
+        setSelectedConversationId(newConversation.id);
+      }
+
+      // Close the dropdown after selection
+      setDropdownVisible(false);
+    } catch (error) {
+      console.error("Error handling user selection:", error);
     }
   };
 
@@ -162,11 +213,20 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   return (
     <ChatWindowContainerOuter>
       {!conversationId && (
-        <NewChatBarWrapper>
-          <NewChatBar>
-            New Chat <img src={PlusIcon} alt="" />
-          </NewChatBar>
-        </NewChatBarWrapper>
+        <NewChatBarWrapperOuter>
+          <NewChatBarWrapperInner ref={containerRef}>
+            <NewChatBar onClick={toggleDropdown}>
+              New Chat <img src={PlusIcon} alt="" />
+            </NewChatBar>
+            <NewChatDropdown
+              isVisible={isDropdownVisible}
+              onUserSelect={handleUserSelect}
+            />
+            {selectedConversationId && (
+              <p>Conversation ID: {selectedConversationId}</p>
+            )}
+          </NewChatBarWrapperInner>
+        </NewChatBarWrapperOuter>
       )}
 
       {conversationId && (

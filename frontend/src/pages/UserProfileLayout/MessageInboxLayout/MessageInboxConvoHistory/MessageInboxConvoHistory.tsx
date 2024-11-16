@@ -1,29 +1,17 @@
-import { useEffect, useState, useContext, useCallback } from "react";
+import { useEffect, useState, useContext } from "react";
 import {
   ConvoHistoryContainer,
   ReadFilterWrapper,
-  ConversationWrapper,
-  ProfilePictureWrapper,
-  ConversationDetailsWrapper,
-  SubjectPreview,
   SearchBarReadFilterWrapper,
-  DeleteConvoButtonWrapper,
 } from "./MessageInboxConvoHistory.styled";
 import SearchBar from "../../../../components/SearchBar/SearchBar";
-import { Conversation } from "../../../../types/Conversations";
-import { UserContext } from "../../../../context/UserContext";
-import {
-  fetchConversations,
-  updateConversationReadStatus,
-  deleteConversation,
-} from "../../../../services/conversationService";
-import { fetchUserNamesAndPictures } from "../../../../services/userService";
-import ProfilePicture from "../../../../components/ProfilePicture/ProfilePicture";
-import DiscardIcon from "../../../../assets/images/discard-icon.png";
 import DeleteConfirmationModal from "../../../../components/DeleteConfirmationModal/DeleteConfirmationModal";
-import { markNotificationAsRead } from "../../../../services/notificationsService";
-import { UserContextType } from "../../../../types/User/UserContextType";
-import { useNotifications } from "../../../../hooks/useNotifications";
+import { UserContext } from "../../../../context/UserContext";
+import { useConversations } from "../../../../hooks/useConversations";
+import { useNotificationHandler } from "../../../../hooks/useNotificationHandler";
+import { Conversation } from "../../../../types/Conversations";
+import { deleteConversation } from "../../../../services/conversationService";
+import ConversationItem from "./ConversationItem/ConversationItem";
 
 interface MessageInboxConvoHistoryProps {
   onConversationSelect: (conversationId: number) => void;
@@ -37,72 +25,31 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
   const { profile } = useContext(UserContext) || {};
   const loggedInUserId = profile?.id;
 
-  const [conversations, setConversations] = useState<Conversation[]>([]);
+  // Use custom hook to get conversations and user details
+  const { conversations, setConversations, userNames, userPictures } =
+    useConversations(loggedInUserId);
+
+  const { markNotificationsAsRead } = useNotificationHandler();
+
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedConversationId, setSelectedConversationId] = useState<
     number | null
   >(null);
-
-  const [userNames, setUserNames] = useState<{ [key: number]: string }>({});
-  const [userPictures, setUserPictures] = useState<{ [key: number]: string }>(
-    {}
-  );
   const [boldSpan, setBoldSpan] = useState("read");
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { notifications, setNotifications } = useNotifications();
-  const { setUnreadNotificationCount, setIsReadUIUpdate } = useContext(
-    UserContext
-  ) as UserContextType;
-
-  const fetchUserDetails = useCallback(
-    async (conversations: Conversation[]) => {
-      try {
-        const { userNames, userPictures } = await fetchUserNamesAndPictures(
-          conversations,
-          loggedInUserId
-        );
-        setUserNames(userNames);
-        setUserPictures(userPictures);
-      } catch (error) {
-        console.error("Failed to fetch user profiles", error);
-      }
-    },
-    [loggedInUserId]
-  );
-
   useEffect(() => {
-    const getConversations = async () => {
-      try {
-        const data = await fetchConversations();
-        setConversations(data);
-        fetchUserDetails(data);
+    const unreadConversations = conversations.filter(
+      (conversation: Conversation) =>
+        (loggedInUserId === conversation.user1_id &&
+          !conversation.is_read_user1) ||
+        (loggedInUserId === conversation.user2_id &&
+          !conversation.is_read_user2)
+    );
 
-        const unreadConversations = data.filter(
-          (conversation: Conversation) => {
-            return (
-              (loggedInUserId === conversation.user1_id &&
-                !conversation.is_read_user1) ||
-              (loggedInUserId === conversation.user2_id &&
-                !conversation.is_read_user2)
-            );
-          }
-        );
-
-        setUnreadCount(unreadConversations.length);
-      } catch (error) {
-        console.error("Failed to fetch conversations:", error);
-        setConversations([]);
-      }
-    };
-
-    getConversations();
-  }, [fetchUserDetails, loggedInUserId]);
-
-  const toggleBold = (selectedSpan: string) => {
-    setBoldSpan(selectedSpan);
-  };
+    setUnreadCount(unreadConversations.length);
+  }, [conversations, loggedInUserId]);
 
   const filteredConversations = (): Conversation[] => {
     return conversations.filter((conversation: Conversation) => {
@@ -128,6 +75,7 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
   };
 
   const handleConversationSelect = async (conversationId: number) => {
+    // Marking the conversation as read locally
     setConversations((prevConversations) =>
       prevConversations.map((conversation) =>
         conversation.id === conversationId
@@ -146,49 +94,7 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
       )
     );
 
-    const selectedConversation = conversations.find(
-      (conversation) => conversation.id === conversationId
-    );
-    if (
-      selectedConversation &&
-      ((loggedInUserId === selectedConversation.user1_id &&
-        !selectedConversation.is_read_user1) ||
-        (loggedInUserId === selectedConversation.user2_id &&
-          !selectedConversation.is_read_user2))
-    ) {
-      setUnreadCount((prevCount) => prevCount - 1);
-    }
-
-    try {
-      await updateConversationReadStatus(conversationId);
-
-      const relatedNotifications = notifications.filter(
-        (notification) =>
-          notification.type === "message" &&
-          notification.conversation_id === conversationId &&
-          !notification.is_read
-      );
-
-      for (const notification of relatedNotifications) {
-        setIsReadUIUpdate((prev) => ({
-          ...prev,
-          [notification.id]: true,
-        }));
-
-        await markNotificationAsRead(notification.id);
-        setUnreadNotificationCount((prevCount) => Math.max(prevCount - 1, 0));
-      }
-
-      setNotifications((prevNotifications) =>
-        prevNotifications.map((notification) =>
-          notification.conversation_id === conversationId
-            ? { ...notification, is_read: true }
-            : notification
-        )
-      );
-    } catch (error) {
-      console.error("Failed to update conversation as read:", error);
-    }
+    await markNotificationsAsRead(conversationId);
 
     onConversationSelect(conversationId);
   };
@@ -210,10 +116,6 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
       onConversationDelete();
     } catch (error) {
       console.error("Failed to delete conversation:", error);
-      setConversations((prevConversations) => [
-        ...prevConversations,
-        conversations.find((conv) => conv.id === selectedConversationId)!,
-      ]);
     } finally {
       setIsDeleteModalOpen(false);
       setSelectedConversationId(null);
@@ -237,14 +139,14 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
           <ReadFilterWrapper>
             <p>
               <span
-                onClick={() => toggleBold("read")}
+                onClick={() => setBoldSpan("read")}
                 className={boldSpan === "read" ? "bold" : "normal"}
               >
                 READ
               </span>
               &nbsp;|&nbsp;
               <span
-                onClick={() => toggleBold("unread")}
+                onClick={() => setBoldSpan("unread")}
                 className={boldSpan === "unread" ? "bold" : "normal"}
               >
                 UNREAD {unreadCount > 0 && <span>({unreadCount})</span>}
@@ -254,45 +156,16 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
         </SearchBarReadFilterWrapper>
 
         {filteredConversations().map((conversation: Conversation) => (
-          <ConversationWrapper
+          <ConversationItem
             key={conversation.id}
-            onClick={() => handleConversationSelect(conversation.id)}
-          >
-            <ProfilePictureWrapper>
-              <ProfilePicture
-                src={userPictures[conversation.id] || ""}
-                alt="User Profile Picture"
-                width="45px"
-                border="2px solid #ccc"
-                bg="#ffffff"
-              />
-            </ProfilePictureWrapper>
-
-            <ConversationDetailsWrapper>
-              <p>
-                {userNames[conversation.id] || `User ${conversation.user2_id}`}
-              </p>
-              <SubjectPreview>
-                {conversation.subject || "No subject"}
-              </SubjectPreview>
-            </ConversationDetailsWrapper>
-
-            <DeleteConvoButtonWrapper>
-              <button
-                className="delete-button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteConversationClick(conversation.id);
-                }}
-              >
-                <img
-                  src={DiscardIcon}
-                  alt="Delete Conversation"
-                  title="Delete"
-                />
-              </button>
-            </DeleteConvoButtonWrapper>
-          </ConversationWrapper>
+            conversation={conversation}
+            userName={
+              userNames[conversation.id] || `User ${conversation.user2_id}`
+            }
+            userPicture={userPictures[conversation.id] || ""}
+            onSelect={handleConversationSelect}
+            onDelete={handleDeleteConversationClick}
+          />
         ))}
       </ConvoHistoryContainer>
 

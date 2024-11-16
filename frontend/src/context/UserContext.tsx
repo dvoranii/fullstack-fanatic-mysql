@@ -23,9 +23,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState<string | null>(null);
   const [unreadNotificationCount, setUnreadNotificationCount] =
     useState<number>(0);
-  const [isReadUIUpdate, setIsReadUIUpdate] = useState<Record<number, boolean>>(
-    {}
-  );
+  const [isReadNotificationUIUpdate, setIsReadNotificationUIUpdate] = useState<
+    Record<number, boolean>
+  >({});
 
   const [cartItems, setCartItems] = useState(() => {
     const storedCartItems = sessionStorage.getItem("cartItems");
@@ -185,8 +185,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         removeSubscriptionFromCart,
         unreadNotificationCount,
         setUnreadNotificationCount,
-        isReadUIUpdate,
-        setIsReadUIUpdate,
+        isReadNotificationUIUpdate,
+        setIsReadNotificationUIUpdate,
         loading,
         error,
       }}

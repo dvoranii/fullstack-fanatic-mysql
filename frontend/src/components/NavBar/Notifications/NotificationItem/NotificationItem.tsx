@@ -22,8 +22,9 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   markAsRead,
   isLast,
 }) => {
-  const { isReadUIUpdate } = useContext(UserContext) || {};
-  const isRead = isReadUIUpdate?.[notification.id] ?? notification.is_read;
+  const { isReadNotificationUIUpdate } = useContext(UserContext) || {};
+  const isRead =
+    isReadNotificationUIUpdate?.[notification.id] ?? notification.is_read;
 
   console.log(isRead);
 

@@ -15,8 +15,8 @@ import { getUserPublicProfile } from "../../../services/userService";
 import {
   checkExistingConversation,
   createOrGetConversation,
-  sendMessage,
-} from "../../../services/messageService";
+} from "../../../services/conversationService";
+import { sendMessage } from "../../../services/messageService";
 import CloseIcon from "../../../assets/images/close-icon.png";
 import { UserContext } from "../../../context/UserContext";
 import { getAvatarUrl } from "../../../utils/imageUtils";

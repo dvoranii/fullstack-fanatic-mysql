@@ -74,11 +74,16 @@ export const ChatSubmitButton = styled.button`
   }
 `;
 
-export const NewChatBarWrapper = styled.div`
-  padding: 20px;
+export const NewChatBarWrapperOuter = styled.div`
+  width: 100%;
   display: flex;
   justify-content: flex-end;
+`;
+export const NewChatBarWrapperInner = styled.div`
+  padding: 20px;
   user-select: none;
+  position: relative;
+  width: fit-content;
 `;
 export const NewChatBar = styled.div`
   display: flex;

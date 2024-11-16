@@ -188,7 +188,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
       <AccountActivityWrapperOuter>
         <UserAccountContainer>
           <AccountActivity>
-            <Section>
+            <Section className="favorites-section">
               <SectionTitle>Favorites</SectionTitle>
               <FavoritesSection
                 favouriteTutorials={favouriteTutorials || []}

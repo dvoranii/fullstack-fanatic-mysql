@@ -29,8 +29,8 @@ export interface UserContextType {
   setPurchasedItems: Dispatch<SetStateAction<PurchasedItem[]>>;
   unreadNotificationCount: number;
   setUnreadNotificationCount: React.Dispatch<React.SetStateAction<number>>;
-  isReadUIUpdate: Record<number, boolean>;
-  setIsReadUIUpdate: React.Dispatch<
+  isReadNotificationUIUpdate: Record<number, boolean>;
+  setIsReadNotificationUIUpdate: React.Dispatch<
     React.SetStateAction<Record<number, boolean>>
   >;
   loading: boolean;
