@@ -8,28 +8,27 @@ import SearchBar from "../../../../components/SearchBar/SearchBar";
 import DeleteConfirmationModal from "../../../../components/DeleteConfirmationModal/DeleteConfirmationModal";
 import { UserContext } from "../../../../context/UserContext";
 import { useConversations } from "../../../../hooks/useConversations";
-import { useNotificationHandler } from "../../../../hooks/useNotificationHandler";
 import { Conversation } from "../../../../types/Conversations";
 import { deleteConversation } from "../../../../services/conversationService";
 import ConversationItem from "./ConversationItem/ConversationItem";
 
 interface MessageInboxConvoHistoryProps {
+  conversations: Conversation[];
+  setConversations: React.Dispatch<React.SetStateAction<Conversation[]>>;
   onConversationSelect: (conversationId: number) => void;
   onConversationDelete: () => void;
 }
 
 const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
+  conversations,
+  setConversations,
   onConversationSelect,
   onConversationDelete,
 }) => {
   const { profile } = useContext(UserContext) || {};
   const loggedInUserId = profile?.id;
 
-  // Use custom hook to get conversations and user details
-  const { conversations, setConversations, userNames, userPictures } =
-    useConversations(loggedInUserId);
-
-  const { markNotificationsAsRead } = useNotificationHandler();
+  const { userNames, userPictures } = useConversations(loggedInUserId);
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedConversationId, setSelectedConversationId] = useState<
@@ -72,31 +71,6 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
 
       return matchesReadFilter && matchesSearchTerm;
     });
-  };
-
-  const handleConversationSelect = async (conversationId: number) => {
-    // Marking the conversation as read locally
-    setConversations((prevConversations) =>
-      prevConversations.map((conversation) =>
-        conversation.id === conversationId
-          ? {
-              ...conversation,
-              is_read_user1:
-                loggedInUserId === conversation.user1_id
-                  ? true
-                  : conversation.is_read_user1,
-              is_read_user2:
-                loggedInUserId === conversation.user2_id
-                  ? true
-                  : conversation.is_read_user2,
-            }
-          : conversation
-      )
-    );
-
-    await markNotificationsAsRead(conversationId);
-
-    onConversationSelect(conversationId);
   };
 
   const handleDeleteConversationClick = (conversationId: number) => {
@@ -163,7 +137,7 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
               userNames[conversation.id] || `User ${conversation.user2_id}`
             }
             userPicture={userPictures[conversation.id] || ""}
-            onSelect={handleConversationSelect}
+            onSelect={onConversationSelect}
             onDelete={handleDeleteConversationClick}
           />
         ))}

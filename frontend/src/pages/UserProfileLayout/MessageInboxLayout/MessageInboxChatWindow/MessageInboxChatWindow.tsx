@@ -29,6 +29,7 @@ import useClickOutside from "../../../../hooks/useClickOutside";
 
 interface MessageInboxChatWindowProps {
   conversationId: number | null;
+  onConversationSelect: (conversationId: number) => void;
 }
 
 const BASE_URL = "http://localhost:5000";
@@ -36,6 +37,7 @@ const socket = io(BASE_URL);
 
 const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   conversationId,
+  onConversationSelect,
 }) => {
   const { profile } = useContext(UserContext) || {};
   const loggedInUserId = profile?.id;
@@ -48,9 +50,6 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
-  const [selectedConversationId, setSelectedConversationId] = useState<
-    number | null
-  >(null);
 
   useClickOutside(containerRef, () => setDropdownVisible(false));
 
@@ -76,30 +75,22 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
     if (!profile?.id) return;
 
     try {
-      // Step 1: Check if the conversation already exists
       const { exists, id } = await checkExistingConversation(
         profile.id,
         userId
       );
 
       if (exists && id) {
-        // Step 2: If the conversation exists, open it
-        console.log(`Conversation exists with ID: ${id}`);
-        setSelectedConversationId(id);
+        onConversationSelect(id);
       } else {
-        // Step 3: If not, create a new conversation
-        console.log("Creating a new conversation...");
         const newConversation = await createOrGetConversation(
           profile.id,
           userId,
-          "" // Set subject to blank
+          ""
         );
-
-        console.log(`New conversation created with ID: ${newConversation.id}`);
-        setSelectedConversationId(newConversation.id);
+        onConversationSelect(newConversation.id);
       }
 
-      // Close the dropdown after selection
       setDropdownVisible(false);
     } catch (error) {
       console.error("Error handling user selection:", error);
@@ -222,9 +213,6 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
               isVisible={isDropdownVisible}
               onUserSelect={handleUserSelect}
             />
-            {selectedConversationId && (
-              <p>Conversation ID: {selectedConversationId}</p>
-            )}
           </NewChatBarWrapperInner>
         </NewChatBarWrapperOuter>
       )}
