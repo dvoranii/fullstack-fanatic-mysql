@@ -27,9 +27,7 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
 }) => {
   const { profile } = useContext(UserContext) || {};
   const loggedInUserId = profile?.id;
-
   const { userNames, userPictures } = useConversations(loggedInUserId);
-
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedConversationId, setSelectedConversationId] = useState<
     number | null

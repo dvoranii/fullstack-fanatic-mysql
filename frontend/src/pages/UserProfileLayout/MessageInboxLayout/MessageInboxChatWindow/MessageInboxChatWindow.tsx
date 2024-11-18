@@ -28,9 +28,11 @@ import {
 import PlusIcon from "../../../../assets/images/account/plus-icon.png";
 import NewChatDropdown from "../NewChatDropdown/NewChatDropdown";
 import useClickOutside from "../../../../hooks/useClickOutside";
+import { User } from "../../../../types/User/User";
 
 interface MessageInboxChatWindowProps {
   conversationId: number | null;
+  receiverName: string;
   onConversationSelect: (conversationId: number) => void;
   onClearConversation: () => void;
 }
@@ -40,6 +42,7 @@ const socket = io(BASE_URL);
 
 const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   conversationId,
+  receiverName,
   onConversationSelect,
   onClearConversation,
 }) => {
@@ -51,6 +54,7 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   const [hasMore, setHasMore] = useState(true);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [receiverId, setReceiverId] = useState<number | null>(null);
+  // const [receiverName, setReceiverName] = useState<string | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
@@ -75,13 +79,13 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
     }
   };
 
-  const handleUserSelect = async (userId: number) => {
+  const handleUserSelect = async (user: User) => {
     if (!profile?.id) return;
 
     try {
       const { exists, id } = await checkExistingConversation(
         profile.id,
-        userId
+        user.id
       );
 
       if (exists && id) {
@@ -89,7 +93,7 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
       } else {
         const newConversation = await createOrGetConversation(
           profile.id,
-          userId,
+          user.id,
           ""
         );
         onConversationSelect(newConversation.id);
@@ -224,9 +228,9 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
       {conversationId && (
         <>
           <ChatHeader>
-            <h3>Chat</h3>
+            <h3>{receiverName}</h3>
             <ClearButtonWrapper>
-              <button onClick={onClearConversation}>X</button>
+              <button onClick={onClearConversation}>×</button>
             </ClearButtonWrapper>
           </ChatHeader>
           <ChatWindowContainerInner

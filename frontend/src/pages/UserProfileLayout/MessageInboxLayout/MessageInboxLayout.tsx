@@ -11,15 +11,18 @@ import { useNotificationHandler } from "../../../hooks/useNotificationHandler";
 import {
   updateConversationReadStatus,
   fetchConversations,
+  fetchConversationById,
 } from "../../../services/conversationService";
 import { Conversation } from "../../../types/Conversations";
 import { UserContext } from "../../../context/UserContext";
+import { getUserPublicProfile } from "../../../services/userService";
 
 const MessageInboxLayout: React.FC = () => {
   const [selectedConversationId, setSelectedConversationId] = useState<
     number | null
   >(null);
   const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [receiverName, setReceiverName] = useState<string>("");
 
   const { profile } = useContext(UserContext) || {};
   const loggedInUserId = profile?.id;
@@ -70,6 +73,18 @@ const MessageInboxLayout: React.FC = () => {
 
     try {
       await updateConversationReadStatus(conversationId);
+
+      const conversation = await fetchConversationById(conversationId);
+      if (conversation) {
+        const receiverId =
+          loggedInUserId === conversation.user1_id
+            ? conversation.user2_id
+            : conversation.user1_id;
+        const receiverProfile = await getUserPublicProfile(
+          receiverId.toString()
+        );
+        setReceiverName(receiverProfile.user.name);
+      }
     } catch (error) {
       console.error("Failed to update conversation read status:", error);
     }
@@ -77,6 +92,7 @@ const MessageInboxLayout: React.FC = () => {
 
   const clearSelectedConversation = () => {
     setSelectedConversationId(null);
+    setReceiverName("");
   };
   return (
     <div style={{ background: "#eee" }}>
@@ -93,6 +109,7 @@ const MessageInboxLayout: React.FC = () => {
 
             <MessageInboxChatWindow
               conversationId={selectedConversationId}
+              receiverName={receiverName}
               onConversationSelect={handleConversationSelect}
               onClearConversation={clearSelectedConversation}
             />

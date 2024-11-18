@@ -1,5 +1,9 @@
 import { useContext, useEffect, useState } from "react";
-import { NewChatDropdownWrapper } from "./NewChatDropdown.styled";
+import {
+  NewChatDropdownWrapper,
+  UserItemsWrapper,
+  UserItems,
+} from "./NewChatDropdown.styled";
 import Dropdown from "../../../../components/Dropdown/Dropdown";
 import SearchBar from "../../../../components/SearchBar/SearchBar";
 import {
@@ -12,7 +16,7 @@ import { UserContextType } from "../../../../types/User/UserContextType";
 
 interface NewChatDropdownProps {
   isVisible: boolean;
-  onUserSelect: (userId: number) => void;
+  onUserSelect: (user: User) => void;
 }
 
 const NewChatDropdown: React.FC<NewChatDropdownProps> = ({
@@ -73,21 +77,17 @@ const NewChatDropdown: React.FC<NewChatDropdownProps> = ({
           paddingLeft="0px"
           onChange={(value) => setSearchTerm(value)}
         />
-        <div style={{ padding: "10px" }}>
+        <UserItemsWrapper>
           {filteredChatList.length > 0 ? (
             filteredChatList.map((user) => (
-              <div
-                key={user.id}
-                style={{ cursor: "pointer", padding: "8px 0" }}
-                onClick={() => onUserSelect(user.id)}
-              >
+              <UserItems key={user.id} onClick={() => onUserSelect(user)}>
                 {user.name}
-              </div>
+              </UserItems>
             ))
           ) : (
             <p>No users available</p>
           )}
-        </div>
+        </UserItemsWrapper>
       </Dropdown>
     </NewChatDropdownWrapper>
   );

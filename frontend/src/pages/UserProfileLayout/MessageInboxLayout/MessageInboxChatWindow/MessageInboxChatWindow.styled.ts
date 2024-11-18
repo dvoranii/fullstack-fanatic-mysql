@@ -29,7 +29,6 @@ export const ChatWindowContainerInner = styled.div`
   max-width: 750px;
   height: calc(100vh - 200px);
   overflow-y: auto;
-  margin-top: 1.8rem;
 `;
 
 export const TextInputWrapper = styled.div`

@@ -6,3 +6,23 @@ export const NewChatDropdownWrapper = styled.div`
   top: 14%;
   width: fit-content;
 `;
+
+export const UserItemsWrapper = styled.div`
+  padding: 10px;
+`;
+
+export const UserItems = styled.div`
+  transition: all 150ms ease;
+  border-bottom: 1px solid #eee;
+  padding: 8px 0 8px 8px;
+  &:hover {
+    background-color: #eee;
+    cursor: pointer;
+  }
+
+  &:last-child {
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-bottom: none;
+  }
+`;
