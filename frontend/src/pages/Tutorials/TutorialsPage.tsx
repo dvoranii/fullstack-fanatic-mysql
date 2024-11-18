@@ -40,7 +40,6 @@ const TutorialsPage: React.FC = () => {
     cartItems = [],
     addItemToCart = () => {},
     purchasedItems,
-    // loading,
   } = useContext(UserContext) || {};
   const [searchText, setSearchText] = useState("");
   const [flipped, setFlipped] = useState<{ [key: string]: boolean }>({});

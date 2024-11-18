@@ -11,11 +11,12 @@ import {
 } from "./ViewCart.styled";
 import { UserContext } from "../../../context/UserContext";
 import { useContext } from "react";
-import { handleCheckout } from "../../../utils/checkoutUtils";
+import useHandleCheckout from "../../../hooks/useHandleCheckout";
 
 const ViewCart: React.FC = () => {
   const { cartItems = [], removeItemFromCart = () => {} } =
     useContext(UserContext) || {};
+  const { handleCheckout } = useHandleCheckout();
 
   const subtotal = cartItems.reduce((total, item) => total + item.price, 0);
   const taxRate = 0.13;

@@ -15,8 +15,13 @@ export const useAuthForm = (defaultToLogin = false) => {
   const [isLogin, setIsLogin] = useState(defaultToLogin);
   const [error, setError] = useState<string | null>(null);
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
-  const { setProfile, setFavouriteTutorials, setFavouriteBlogs, setComments } =
-    useUser();
+  const {
+    setProfile,
+    setFavouriteTutorials,
+    setFavouriteBlogs,
+    setComments,
+    setPurchasedItems,
+  } = useUser();
   const navigate = useNavigate();
 
   const toggleForm = () => {
@@ -43,6 +48,7 @@ export const useAuthForm = (defaultToLogin = false) => {
         setFavouriteTutorials,
         setFavouriteBlogs,
         setComments,
+        setPurchasedItems,
         setError
       );
 
@@ -62,6 +68,7 @@ export const useAuthForm = (defaultToLogin = false) => {
         setFavouriteTutorials,
         setFavouriteBlogs,
         setComments,
+        setPurchasedItems,
         setError
       );
 
@@ -116,6 +123,7 @@ export const useAuthForm = (defaultToLogin = false) => {
         setFavouriteTutorials,
         setFavouriteBlogs,
         setComments,
+        setPurchasedItems,
         setError
       );
 
@@ -169,6 +177,7 @@ export const useAuthForm = (defaultToLogin = false) => {
         setFavouriteTutorials,
         setFavouriteBlogs,
         setComments,
+        setPurchasedItems,
         setError
       );
 

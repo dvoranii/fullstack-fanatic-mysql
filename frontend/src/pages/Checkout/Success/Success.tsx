@@ -1,14 +1,21 @@
-import { CheckoutResultPageWrapper } from "../Checkout.styles";
-import { PageWrapper } from "../../../PageWrapper.styled";
+import { SuccessWrapper } from "./Sucess.styled";
+import { useContext, useEffect } from "react";
+import { UserContext } from "../../../context/UserContext";
 
-const CheckoutSuccess: React.FC = () => {
+const CheckoutSuccess = () => {
+  const { clearCart } = useContext(UserContext) || {};
+
+  useEffect(() => {
+    if (clearCart) {
+      clearCart(); // Clear cart on successful checkout
+    }
+  }, [clearCart]);
+
   return (
-    <PageWrapper>
-      <CheckoutResultPageWrapper>
-        <h1>Payment Successful!</h1>
-        <p>Thank you for your purchase. Your transaction has been completed.</p>
-      </CheckoutResultPageWrapper>
-    </PageWrapper>
+    <SuccessWrapper>
+      <h1>Thank you for your purchase!</h1>
+      <p>Your order has been successfully completed.</p>
+    </SuccessWrapper>
   );
 };
 

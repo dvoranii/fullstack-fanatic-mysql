@@ -94,10 +94,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     setFavourites: React.Dispatch<React.SetStateAction<T[]>>
   ) => {
     if (isCurrentlyFavourited) {
+      // Create a new array reference when removing an item
       setFavourites((prevFavourites) =>
         prevFavourites.filter((item) => item.id !== itemId)
       );
     } else {
+      // Create a new array reference when adding an item
       setFavourites((prevFavourites) => [
         ...prevFavourites,
         { id: itemId } as T,
@@ -105,7 +107,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // Helper function to handle API calls and revert optimistic updates on error
   const handleApiToggle = async <T extends { id: number }>(
     isCurrentlyFavourited: boolean,
     itemId: number,

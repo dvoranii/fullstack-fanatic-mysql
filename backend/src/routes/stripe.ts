@@ -226,9 +226,7 @@ const router = express.Router();
               .status(500)
               .json({ error: "Failed to update user's premium level" });
           }
-        }
-
-        if (session.mode === "payment") {
+        } else if (session.mode === "payment") {
           try {
             const userId = session.metadata?.userId;
             const cartItems = session.metadata?.cartItems
@@ -261,7 +259,8 @@ const router = express.Router();
         }
       }
 
-      res.json({ received: true });
+      // Send a response only once at the end
+      res.sendStatus(200);
     }
   );
 })();

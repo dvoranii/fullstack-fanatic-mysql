@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   ProfileBanner,
@@ -36,7 +36,7 @@ import {
   fetchFollowersState,
   fetchFollowingState,
 } from "../../services/followService";
-import { UserContext } from "../../context/UserContext";
+
 import MessageModalButton from "../../components/MessageModalButton/MessageModalButton";
 import FavoritesSection from "./FavoritesSection/FavoritesSection";
 
@@ -52,9 +52,6 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
   onBannerUpload,
   children,
 }) => {
-  const userContext = useContext(UserContext);
-  const { favouriteTutorials, favouriteBlogs, purchasedItems } =
-    userContext || {};
   const loggedInUser = profile;
 
   const socialLinks = profile.social_links || {};
@@ -190,12 +187,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
           <AccountActivity>
             <Section className="favorites-section">
               <SectionTitle>Favorites</SectionTitle>
-              <FavoritesSection
-                favouriteTutorials={favouriteTutorials || []}
-                favouriteBlogs={favouriteBlogs || []}
-                purchasedItems={purchasedItems || []}
-                isOwnProfile={isOwnProfile}
-              />
+              <FavoritesSection isOwnProfile={isOwnProfile} />
             </Section>
 
             <Section>

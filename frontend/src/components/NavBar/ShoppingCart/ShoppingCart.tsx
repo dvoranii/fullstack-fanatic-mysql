@@ -13,7 +13,7 @@ import {
 } from "./ShoppingCart.styled";
 import Dropdown from "../../Dropdown/Dropdown";
 import { UserContext } from "../../../context/UserContext";
-import { handleCheckout } from "../../../utils/checkoutUtils";
+import useHandleCheckout from "../../../hooks/useHandleCheckout";
 import useClickOutside from "../../../hooks/useClickOutside";
 
 const ShoppingCart: React.FC = () => {
@@ -25,6 +25,7 @@ const ShoppingCart: React.FC = () => {
     removeItemFromCart = () => {},
     clearCart = () => {},
   } = useContext(UserContext) || {};
+  const { handleCheckout } = useHandleCheckout();
 
   const toggleCartVisibility = (e: React.MouseEvent) => {
     e.stopPropagation();

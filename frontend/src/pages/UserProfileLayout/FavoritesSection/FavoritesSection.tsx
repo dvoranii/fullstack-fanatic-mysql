@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import {
   FavouriteIcon,
@@ -19,20 +19,15 @@ import { Tutorial } from "../../../types/Tutorial/Tutorial";
 import { Blog } from "../../../types/Blog/Blog";
 import { PurchasedItem } from "../../../types/PurchasedItem";
 import BackIcon from "../../../assets/images/back-icon.png";
+import { UserContext } from "../../../context/UserContext";
 
 const BASE_URL = "http://localhost:5173";
 
 interface FavoritesSectionProps {
-  favouriteTutorials: Tutorial[];
-  favouriteBlogs: Blog[];
-  purchasedItems: PurchasedItem[];
   isOwnProfile: boolean;
 }
 
 const FavoritesSection: React.FC<FavoritesSectionProps> = ({
-  favouriteTutorials,
-  favouriteBlogs,
-  purchasedItems,
   isOwnProfile,
 }) => {
   const [selectedFilter, setSelectedFilter] = useState("0");
@@ -40,6 +35,12 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
   const [currentView, setCurrentView] = useState<"tutorials" | "blogs" | null>(
     null
   );
+
+  const {
+    favouriteTutorials = [],
+    favouriteBlogs = [],
+    purchasedItems = [],
+  } = useContext(UserContext) || {};
 
   const premiumBlogs = favouriteBlogs?.filter((blog) => blog.isPremium);
   const freeBlogs = favouriteBlogs?.filter((blog) => !blog.isPremium);

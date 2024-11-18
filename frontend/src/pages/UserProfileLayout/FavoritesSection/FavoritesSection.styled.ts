@@ -54,7 +54,6 @@ export const FavoritesDropdownWrapper = styled.div`
   width: 100%;
   display: flex;
   user-select: none;
-  margin-bottom: -2.4rem;
 
   select {
     font-family: "Roboto";

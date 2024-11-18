@@ -12,11 +12,12 @@ import {
 } from "./SubscriptionCart.styled";
 import { UserContext } from "../../../context/UserContext";
 import { useContext } from "react";
-import { handleSubscriptionCheckout } from "../../../utils/checkoutUtils";
+import useHandleCheckout from "../../../hooks/useHandleCheckout";
 
 const SubscriptionCart: React.FC = () => {
   const { subscriptionItem, removeSubscriptionFromCart = () => {} } =
     useContext(UserContext) || {};
+  const { handleSubscriptionCheckout } = useHandleCheckout();
 
   return (
     <>
