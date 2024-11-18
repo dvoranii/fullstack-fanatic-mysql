@@ -26,6 +26,7 @@ export const ViewProfileButtonWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+  padding-bottom: 0.8rem;
 `;
 
 export const ViewProfileButton = styled(NavLink)`
@@ -52,7 +53,6 @@ export const ViewProfileButton = styled(NavLink)`
 export const DropdownDivider = styled.div`
   height: 1px;
   background-color: #e0e0e0;
-  margin: 8px 0;
 `;
 
 export const AccountTitle = styled.p`

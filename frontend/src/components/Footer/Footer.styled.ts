@@ -29,7 +29,6 @@ export const FooterWrapperInner = styled.div`
   justify-items: center;
   width: 100%;
   margin: 0 auto;
-  height: 250px;
 
   .seperator {
     width: 220px;
@@ -166,7 +165,7 @@ export const SocialLinkIcon = styled.img`
 
 export const FooterLogoLink = styled(Link)`
   grid-column: 3;
-  grid-row: 2;
+  grid-row: 4;
   justify-self: end;
 `;
 
@@ -179,4 +178,37 @@ export const FooterLogo = styled.img`
   @media (max-width: 768px) {
     justify-self: center;
   }
+`;
+
+export const LegalWrapper = styled.div`
+  grid-column: 1 / -1;
+  text-align: center;
+  margin-top: 20px;
+  grid-row: 4;
+
+  @media (max-width: 768px) {
+    margin-top: 15px;
+  }
+`;
+
+export const LegalLinksWrapper = styled.div`
+  margin-bottom: 10px;
+`;
+
+export const LegalLink = styled.a`
+  color: #fff;
+  text-decoration: underline;
+  margin: 0 10px;
+  font-size: 0.9rem;
+  transition: color 150ms ease;
+
+  &:hover {
+    color: ${colors.primary}; /* Accent color for hover effect */
+  }
+`;
+
+export const LegalText = styled.p`
+  color: #fff;
+  font-size: 0.8rem;
+  margin: 0;
 `;

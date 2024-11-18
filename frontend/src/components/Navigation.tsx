@@ -33,6 +33,8 @@ import CheckoutCancel from "../pages/Checkout/Cancel/Cancel";
 import PlansAndPricing from "../pages/PlansAndPricing/PlansAndPricing";
 import SubscriptionCart from "../pages/Checkout/SubscriptionCart/SubscriptionCart";
 import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
+import Settings from "../pages/Settings/Settings";
+
 import { fetchPurchasedItems } from "../services/purchasesService";
 
 const Navigation: React.FC = () => {
@@ -117,6 +119,7 @@ const Navigation: React.FC = () => {
         <Route path="/checkout/cancel" element={<CheckoutCancel />} />
         <Route path="/plans-and-pricing" element={<PlansAndPricing />} />
         <Route path="network" element={<NetworkPage />} />
+        <Route path="my-account/settings" element={<Settings />} />
       </Routes>
     </Suspense>
   );

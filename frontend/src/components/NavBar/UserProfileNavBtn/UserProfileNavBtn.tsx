@@ -107,11 +107,10 @@ const UserProfileNavBtn: React.FC = () => {
             <DropdownItem to="/my-account/inbox" className="inbox-item">
               Inbox <NotificationBadge count={unreadNotificationCount} />
             </DropdownItem>
-            <DropdownItem to="#">Settings</DropdownItem>
+            <DropdownItem to="/my-account/settings">Settings</DropdownItem>
             <DropdownItem to="/plans-and-pricing">
               Plans And Pricing
             </DropdownItem>
-            <DropdownItem to="#">Help</DropdownItem>
           </UserProfiledropdownWrapper>
           <DropdownDivider />
           <DropdownItemLogoutBtn onClick={logOut}>

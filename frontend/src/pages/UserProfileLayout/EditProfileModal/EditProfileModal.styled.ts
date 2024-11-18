@@ -87,3 +87,10 @@ export const MaxCharCountText = styled.p`
   text-align: right;
   margin-top: 4px;
 `;
+
+export const ProfileImage = styled.img`
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-top: 1.2rem;
+`;

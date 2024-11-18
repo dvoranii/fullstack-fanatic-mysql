@@ -9,6 +9,7 @@ import {
   TextArea,
   SaveButton,
   MaxCharCountText,
+  ProfileImage,
 } from "./EditProfileModal.styled";
 import SocialLinksEditor from "./SocialLinksEditor/SocialLinksEditor";
 import { useState, useEffect } from "react";
@@ -16,8 +17,6 @@ import { EditProfileModalProps } from "../../../types/EditProfileProps";
 import { handleTokenExpiration } from "../../../services/tokenService";
 import { uploadImage } from "../../../services/imageUploadService";
 import { getAvatarUrl } from "../../../utils/imageUtils";
-
-// const BASE_URL = "http://localhost:5000";
 
 const EditProfileModal: React.FC<EditProfileModalProps> = ({
   profile,
@@ -173,17 +172,15 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
               onChange={handleProfilePictureChange}
             />
             {newProfilePicturePreview ? (
-              <img
+              <ProfileImage
                 src={newProfilePicturePreview}
                 alt="New Profile Preview"
-                style={{ width: 100, height: 100, objectFit: "cover" }}
               />
             ) : (
               profilePicturePreview && (
-                <img
+                <ProfileImage
                   src={getAvatarUrl(profilePicturePreview)}
                   alt="Profile Preview"
-                  style={{ width: 100, height: 100, objectFit: "cover" }}
                 />
               )
             )}

@@ -10,6 +10,10 @@ import {
   FooterLogo,
   FooterLogoLink,
   IconWrapper,
+  LegalWrapper,
+  LegalText,
+  LegalLinksWrapper,
+  LegalLink,
 } from "./Footer.styled";
 
 import logo from "../../assets/images/fsf-logo-darkblue.png";
@@ -20,6 +24,8 @@ import tiktokIcon from "../../assets/images/socials/tiktok-icon.png";
 import Seperator from "../../assets/images/seperator.png";
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
     <FooterWrapperOuter>
       <FooterWrapperInner>
@@ -82,6 +88,16 @@ const Footer = () => {
         <FooterLogoLink to="/">
           <FooterLogo src={logo} alt="Company Logo" />
         </FooterLogoLink>
+
+        <LegalWrapper>
+          <LegalLinksWrapper>
+            <LegalLink href="#">Privacy Policy</LegalLink>
+            <LegalLink href="#">Terms and Conditions</LegalLink>
+          </LegalLinksWrapper>
+          <LegalText>
+            &copy; {currentYear} Full Stack Fanatic Inc.™. All rights reserved.
+          </LegalText>
+        </LegalWrapper>
       </FooterWrapperInner>
     </FooterWrapperOuter>
   );
