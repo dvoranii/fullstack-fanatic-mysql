@@ -15,6 +15,9 @@ export const UserItems = styled.div`
   transition: all 150ms ease;
   border-bottom: 1px solid #eee;
   padding: 8px 0 8px 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   &:hover {
     background-color: #eee;
     cursor: pointer;

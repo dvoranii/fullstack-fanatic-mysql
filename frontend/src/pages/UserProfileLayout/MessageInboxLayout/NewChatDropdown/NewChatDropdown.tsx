@@ -13,6 +13,7 @@ import {
 import { UserContext } from "../../../../context/UserContext";
 import { User } from "../../../../types/User/User";
 import { UserContextType } from "../../../../types/User/UserContextType";
+import ProfilePicture from "../../../../components/ProfilePicture/ProfilePicture";
 
 interface NewChatDropdownProps {
   isVisible: boolean;
@@ -81,6 +82,12 @@ const NewChatDropdown: React.FC<NewChatDropdownProps> = ({
           {filteredChatList.length > 0 ? (
             filteredChatList.map((user) => (
               <UserItems key={user.id} onClick={() => onUserSelect(user)}>
+                <ProfilePicture
+                  src={user.profile_picture || "/default-profile.png"}
+                  alt={`${user.name}'s Profile Picture`}
+                  width="35px"
+                  border="2px solid #ccc"
+                />
                 {user.name}
               </UserItems>
             ))

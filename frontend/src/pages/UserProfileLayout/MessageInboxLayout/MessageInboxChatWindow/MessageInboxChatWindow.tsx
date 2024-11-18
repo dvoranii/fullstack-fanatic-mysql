@@ -43,6 +43,7 @@ const socket = io(BASE_URL);
 const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   conversationId,
   receiverName,
+
   onConversationSelect,
   onClearConversation,
 }) => {

@@ -83,6 +83,7 @@ const MessageInboxLayout: React.FC = () => {
         const receiverProfile = await getUserPublicProfile(
           receiverId.toString()
         );
+
         setReceiverName(receiverProfile.user.name);
       }
     } catch (error) {
