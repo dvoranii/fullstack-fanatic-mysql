@@ -53,21 +53,17 @@ const PublicUserPage: React.FC = () => {
       }
     };
 
-    // Fetch the user's public profile
     fetchProfile();
 
-    // Fetch the user's favourites and log it
     const fetchFavourites = async () => {
       try {
         const favouritesData = await getPublicUserFavourites(effectiveUserId);
         setFavourites(favouritesData);
-        console.log("Public User Favourites:", favouritesData);
       } catch (error) {
         console.error("Failed to fetch public user favourites:", error);
       }
     };
 
-    // Fetch favourites
     fetchFavourites();
   }, [id]);
 

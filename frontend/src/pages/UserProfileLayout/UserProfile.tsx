@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import {
   ProfileBanner,
@@ -36,6 +36,7 @@ import {
   fetchFollowersState,
   fetchFollowingState,
 } from "../../services/followService";
+import { UserContext } from "../../context/UserContext";
 
 import MessageModalButton from "../../components/MessageModalButton/MessageModalButton";
 import FavoritesSection from "./FavoritesSection/FavoritesSection";
@@ -53,7 +54,8 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
   onBannerUpload,
   children,
 }) => {
-  const loggedInUser = profile;
+  const userContext = useContext(UserContext);
+  const loggedInUser = userContext?.profile;
 
   const socialLinks = profile.social_links || {};
   const [followersCount, setFollowersCount] = useState(0);
