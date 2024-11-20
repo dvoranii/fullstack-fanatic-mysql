@@ -18,6 +18,21 @@ export const getUserFavourites = async (): Promise<{
   return data;
 };
 
+export const getPublicUserFavourites = async (
+  userId: number
+): Promise<{ tutorials: Tutorial[]; blogs: Blog[] }> => {
+  const endpoint = `/api/favourites/${userId}`;
+
+  const { data } = await apiCall<{ tutorials: Tutorial[]; blogs: Blog[] }>(
+    endpoint,
+    {
+      method: "GET",
+    }
+  );
+
+  return data;
+};
+
 export const addFavourite = async (
   itemId: number,
   contentType: "tutorial" | "blog"

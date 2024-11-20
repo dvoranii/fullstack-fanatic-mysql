@@ -36,6 +36,15 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   const isTutorialRoute = location.pathname.includes("/tutorial/");
   const isBlogRoute = location.pathname.includes("/blog/");
+  const isMyAccountRoute = location.pathname.startsWith("/my-account");
+
+  if (isMyAccountRoute && !profile) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (location.pathname === "/my-account" && !profile) {
+    return <Navigate to="/login" replace />;
+  }
 
   if (isTutorialRoute) {
     const tutorialId = Number(id);
@@ -60,7 +69,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     const blogId = Number(id);
     const isPremium = isBlogPremium(id);
 
-    if (purchasedItemIds?.includes(blogId)) {
+    if (purchasedItemIds?.includes(blogId) || !isPremium) {
       return element;
     }
 

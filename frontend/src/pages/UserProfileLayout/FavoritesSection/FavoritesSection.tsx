@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import {
   FavouriteIcon,
@@ -20,21 +20,28 @@ import { Blog } from "../../../types/Blog/Blog";
 import { PurchasedItem } from "../../../types/PurchasedItem";
 import BackIcon from "../../../assets/images/back-icon.png";
 import { UserContext } from "../../../context/UserContext";
+import { getPublicUserFavourites } from "../../../services/favouritesService";
 
 const BASE_URL = "http://localhost:5173";
 
 interface FavoritesSectionProps {
   isOwnProfile: boolean;
+  publicUserId?: number;
 }
 
 const FavoritesSection: React.FC<FavoritesSectionProps> = ({
   isOwnProfile,
+  publicUserId,
 }) => {
   const [selectedFilter, setSelectedFilter] = useState("0");
   const [viewMode, setViewMode] = useState<"default" | "view">("default");
   const [currentView, setCurrentView] = useState<"tutorials" | "blogs" | null>(
     null
   );
+  const [publicFavourites, setPublicFavourites] = useState<{
+    tutorials: Tutorial[];
+    blogs: Blog[];
+  }>({ tutorials: [], blogs: [] });
 
   const {
     favouriteTutorials = [],
@@ -42,14 +49,35 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
     purchasedItems = [],
   } = useContext(UserContext) || {};
 
-  const premiumBlogs = favouriteBlogs?.filter((blog) => blog.isPremium);
-  const freeBlogs = favouriteBlogs?.filter((blog) => !blog.isPremium);
-  const premiumTutorials = favouriteTutorials?.filter(
-    (tutorial) => tutorial.isPremium
-  );
-  const freeTutorials = favouriteTutorials?.filter(
-    (tutorial) => !tutorial.isPremium
-  );
+  useEffect(() => {
+    if (!isOwnProfile && publicUserId) {
+      const fetchPublicFavourites = async () => {
+        try {
+          const favourites = await getPublicUserFavourites(publicUserId);
+          setPublicFavourites(favourites);
+        } catch (error) {
+          console.error("Error fetching public user favourites:", error);
+        }
+      };
+      fetchPublicFavourites();
+    }
+  }, [isOwnProfile, publicUserId]);
+
+  const premiumBlogs = isOwnProfile
+    ? favouriteBlogs.filter((blog) => blog.isPremium)
+    : publicFavourites.blogs.filter((blog) => blog.isPremium);
+
+  const freeBlogs = isOwnProfile
+    ? favouriteBlogs.filter((blog) => !blog.isPremium)
+    : publicFavourites.blogs.filter((blog) => !blog.isPremium);
+
+  const premiumTutorials = isOwnProfile
+    ? favouriteTutorials.filter((tutorial) => tutorial.isPremium)
+    : publicFavourites.tutorials.filter((tutorial) => tutorial.isPremium);
+
+  const freeTutorials = isOwnProfile
+    ? favouriteTutorials.filter((tutorial) => !tutorial.isPremium)
+    : publicFavourites.tutorials.filter((tutorial) => !tutorial.isPremium);
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedFilter(e.target.value);
@@ -62,17 +90,25 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
       case "2":
         return { tutorials: premiumTutorials, blogs: premiumBlogs };
       case "3":
-        return {
-          tutorials: purchasedItems?.filter(
-            (item) => item.product_type === "tutorial"
-          ),
-          blogs: purchasedItems?.filter((item) => item.product_type === "blog"),
-        };
+        return isOwnProfile
+          ? {
+              tutorials: purchasedItems.filter(
+                (item) => item.product_type === "tutorial"
+              ),
+              blogs: purchasedItems.filter(
+                (item) => item.product_type === "blog"
+              ),
+            }
+          : { tutorials: [], blogs: [] };
       default:
-        return { tutorials: favouriteTutorials, blogs: favouriteBlogs };
+        return isOwnProfile
+          ? { tutorials: favouriteTutorials, blogs: favouriteBlogs }
+          : {
+              tutorials: publicFavourites.tutorials,
+              blogs: publicFavourites.blogs,
+            };
     }
   };
-
   const getFilterLabel = () => {
     switch (selectedFilter) {
       case "1":

@@ -47,6 +47,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
   comments,
   isEditable = false,
   isOwnProfile,
+  publicUserId,
   onEditProfileClick,
   onBannerChange,
   onBannerUpload,
@@ -106,7 +107,6 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                     variant="publicUser"
                   />
                 )}
-
                 {!isEditable && loggedInUser && (
                   <FollowButton
                     userId={profile.id}
@@ -187,7 +187,11 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
           <AccountActivity>
             <Section className="favorites-section">
               <SectionTitle>Favorites</SectionTitle>
-              <FavoritesSection isOwnProfile={isOwnProfile} />
+
+              <FavoritesSection
+                isOwnProfile={isOwnProfile}
+                publicUserId={publicUserId}
+              />
             </Section>
 
             <Section>

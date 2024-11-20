@@ -95,23 +95,40 @@ const Navigation: React.FC = () => {
           path="/login"
           element={<SignInRegisterPage defaultToLogin={true} />}
         />
-        <Route path="/my-account" element={<UserAccountPage />} />
-        <Route path="/my-account/inbox" element={<MessageInboxPage />} />
+        <Route
+          path="/my-account"
+          element={<ProtectedRoute element={<UserAccountPage />} />}
+        />
+
+        <Route
+          path="/my-account/inbox"
+          element={<ProtectedRoute element={<MessageInboxPage />} />}
+        />
         <Route path="/user/:id" element={<PublicUserPage />} />
         <Route
           path="/my-account/followers"
-          element={<FollowersList userId={Number(profile?.id)} />}
+          element={
+            <ProtectedRoute
+              element={<FollowersList userId={Number(profile?.id)} />}
+            />
+          }
         />
         <Route
           path="/my-account/following"
-          element={<FollowingList userId={Number(profile?.id)} />}
+          element={
+            <ProtectedRoute
+              element={<FollowingList userId={Number(profile?.id)} />}
+            />
+          }
         />
+
         <Route path="/user/:id/followers" element={<FollowersList />} />
         <Route path="/user/:id/following" element={<FollowingList />} />
         <Route
           path="/my-account/comment-history"
-          element={<CommentHistory />}
+          element={<ProtectedRoute element={<CommentHistory />} />}
         />
+
         <Route path="/user/:id/comment-history" element={<CommentHistory />} />
         <Route path="/my-cart" element={<ViewCartPage />} />
         <Route path="/my-subscription-cart" element={<SubscriptionCart />} />
@@ -119,7 +136,10 @@ const Navigation: React.FC = () => {
         <Route path="/checkout/cancel" element={<CheckoutCancel />} />
         <Route path="/plans-and-pricing" element={<PlansAndPricing />} />
         <Route path="network" element={<NetworkPage />} />
-        <Route path="my-account/settings" element={<Settings />} />
+        <Route
+          path="/my-account/settings"
+          element={<ProtectedRoute element={<Settings />} />}
+        />
       </Routes>
     </Suspense>
   );

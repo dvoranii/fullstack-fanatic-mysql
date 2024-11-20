@@ -34,6 +34,35 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
   }
 });
 
+router.get("/:userId", async (req: Request, res: Response) => {
+  const { userId } = req.params;
+
+  try {
+    const connection = await connectionPromise;
+
+    const [tutorials] = await connection.query<RowDataPacket[]>(
+      `SELECT t.* FROM tutorials t
+       JOIN favourites f ON t.id = f.item_id
+       WHERE f.user_id = ? AND f.content_type = 'tutorial'`,
+      [userId]
+    );
+
+    const [blogs] = await connection.query<RowDataPacket[]>(
+      `
+      SELECT b.* FROM blogs b
+      JOIN favourites f ON b.id = f.item_id
+      WHERE f.user_id = ? AND f.content_type = 'blog'
+      `,
+      [userId]
+    );
+
+    res.json({ tutorials, blogs });
+  } catch (error) {
+    console.error("Database query error:", error);
+    res.status(500).json({ error: "Failed to fetch user favourites" });
+  }
+});
+
 router.post("/", authenticate, async (req: Request, res: Response) => {
   const { item_id, content_type }: { item_id: number; content_type: string } =
     req.body;

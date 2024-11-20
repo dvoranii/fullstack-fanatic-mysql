@@ -30,11 +30,16 @@ export const useAuthUtils = () => {
       setFavouriteTutorials([]);
       setFavouriteBlogs([]);
       setComments([]);
-      setCartItems([]); // Clear the cart items
+      setCartItems([]);
       setSubscriptionItem(null);
 
       localStorage.removeItem("accessToken");
       localStorage.removeItem("userProfile");
+      localStorage.removeItem("favouriteBlogs");
+      localStorage.removeItem("favouriteTutorials");
+      localStorage.removeItem("userBlogFavourites");
+      localStorage.removeItem("userFavourites");
+      localStorage.removeItem("_grecaptcha");
 
       // Optionally clear cart from sessionStorage as well
       sessionStorage.removeItem("cartItems");
@@ -50,3 +55,10 @@ export const useAuthUtils = () => {
     logOut,
   };
 };
+
+// For future use
+// Object.keys(localStorage).forEach((key) => {
+//   if (key.startsWith("app_")) {
+//     localStorage.removeItem(key);
+//   }
+// });

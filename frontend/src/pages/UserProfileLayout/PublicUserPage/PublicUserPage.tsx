@@ -3,8 +3,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import UserProfilePage from "../UserProfile";
 import { PublicProfile } from "../../../types/PublicProfileType";
 import { getUserPublicProfile } from "../../../services/userService";
+import { getPublicUserFavourites } from "../../../services/favouritesService"; // Importing the new function
 import { UserContext } from "../../../context/UserContext";
 import { fetchUserComments } from "../../../services/commentService";
+import { Blog } from "../../../types/Blog/Blog";
+import { Tutorial } from "../../../types/Tutorial/Tutorial";
 
 const PublicUserPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,6 +24,13 @@ const PublicUserPage: React.FC = () => {
   const [profile, setProfile] = useState<PublicProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [favourites, setFavourites] = useState<{
+    tutorials: Tutorial[];
+    blogs: Blog[];
+  }>({
+    tutorials: [],
+    blogs: [],
+  });
 
   useEffect(() => {
     if (loggedInUser && Number(id) && Number(id) === Number(loggedInUser.id)) {
@@ -43,7 +53,22 @@ const PublicUserPage: React.FC = () => {
       }
     };
 
+    // Fetch the user's public profile
     fetchProfile();
+
+    // Fetch the user's favourites and log it
+    const fetchFavourites = async () => {
+      try {
+        const favouritesData = await getPublicUserFavourites(effectiveUserId);
+        setFavourites(favouritesData);
+        console.log("Public User Favourites:", favouritesData);
+      } catch (error) {
+        console.error("Failed to fetch public user favourites:", error);
+      }
+    };
+
+    // Fetch favourites
+    fetchFavourites();
   }, [id]);
 
   if (loading) return <p>Loading...</p>;
@@ -53,8 +78,9 @@ const PublicUserPage: React.FC = () => {
   return (
     <UserProfilePage
       profile={profile.user}
-      favouriteTutorials={profile.favouriteTutorials}
-      favouriteBlogs={profile.favouriteBlogs}
+      publicUserId={effectiveUserId}
+      favouriteTutorials={favourites.tutorials}
+      favouriteBlogs={favourites.blogs}
       comments={profile.comments || []}
       isOwnProfile={false}
     ></UserProfilePage>
