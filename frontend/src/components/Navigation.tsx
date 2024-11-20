@@ -34,6 +34,7 @@ import PlansAndPricing from "../pages/PlansAndPricing/PlansAndPricing";
 import SubscriptionCart from "../pages/Checkout/SubscriptionCart/SubscriptionCart";
 import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
 import Settings from "../pages/Settings/Settings";
+import NotFound from "../pages/NotFound/NotFound";
 
 import { fetchPurchasedItems } from "../services/purchasesService";
 
@@ -130,16 +131,26 @@ const Navigation: React.FC = () => {
         />
 
         <Route path="/user/:id/comment-history" element={<CommentHistory />} />
-        <Route path="/my-cart" element={<ViewCartPage />} />
-        <Route path="/my-subscription-cart" element={<SubscriptionCart />} />
+        <Route
+          path="/my-cart"
+          element={<ProtectedRoute element={<ViewCartPage />} />}
+        />
+        <Route
+          path="/my-subscription-cart"
+          element={<ProtectedRoute element={<SubscriptionCart />} />}
+        />
         <Route path="/checkout/success" element={<CheckoutSuccess />} />
         <Route path="/checkout/cancel" element={<CheckoutCancel />} />
-        <Route path="/plans-and-pricing" element={<PlansAndPricing />} />
+        <Route
+          path="/plans-and-pricing"
+          element={<ProtectedRoute element={<PlansAndPricing />} />}
+        />
         <Route path="network" element={<NetworkPage />} />
         <Route
           path="/my-account/settings"
           element={<ProtectedRoute element={<Settings />} />}
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );
