@@ -38,6 +38,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const isBlogRoute = location.pathname.includes("/blog/");
   const isMyAccountRoute = location.pathname.startsWith("/my-account");
 
+  if (!profile) {
+    return <Navigate to="/register" replace />;
+  }
+
   if (isMyAccountRoute && !profile) {
     return <Navigate to="/login" replace />;
   }
