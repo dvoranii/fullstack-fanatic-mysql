@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { colors } from "../../GlobalStyles";
 import WaveEffectBG from "../../assets/images/wave-effect-bg.jpg";
 
@@ -118,13 +118,50 @@ export const TriangleArrowWrapper = styled.div`
   width: fit-content;
   height: fit-content;
   position: absolute;
-  right: calc((50%) - 30px);
+  right: 50%;
   bottom: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const fadeInDownOut = keyframes`
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(20px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(40px);
+    opacity: 0;
+  }
 `;
 
 export const TriangleArrow = styled.div`
-  height: 40px;
-  width: 60px;
+  height: 20px;
+  width: 40px;
   background-color: black;
   clip-path: polygon(50% 100%, 0 0, 100% 0);
+  position: absolute;
+  animation: ${fadeInDownOut} 1.25s ease-in-out infinite;
+`;
+
+export const TriangleArrowSecond = styled(TriangleArrow)`
+  top: -8px;
+  animation: ${fadeInDownOut} 1.25s ease-in-out infinite;
+  animation-delay: 0.2s;
+  opacity: 0.8;
+`;
+
+export const TriangleArrowThird = styled(TriangleArrow)`
+  top: -16px;
+  animation: ${fadeInDownOut} 1.25s ease-in-out infinite;
+  animation-delay: 0.4s;
+  opacity: 0.6;
 `;

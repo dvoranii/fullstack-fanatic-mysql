@@ -9,6 +9,8 @@ import {
   RightSideWrapperInner,
   TriangleArrowWrapper,
   TriangleArrow,
+  TriangleArrowSecond,
+  TriangleArrowThird,
 } from "./HomePage.styled";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
@@ -50,7 +52,9 @@ const HomePage: React.FC = () => {
         </RightSideWrapperInner>
       </RightSideWrapper>
       <TriangleArrowWrapper>
-        <TriangleArrow>&nbsp;</TriangleArrow>
+        <TriangleArrow />
+        <TriangleArrowSecond />
+        <TriangleArrowThird />
       </TriangleArrowWrapper>
     </HomePageWrapper>
   );
