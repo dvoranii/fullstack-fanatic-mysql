@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
-
+import crypto from "crypto";
+import nodemailer from "nodemailer";
 import connectionPromise from "../db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import dotenv from "dotenv";
@@ -413,7 +414,6 @@ router.get("/:id/followers", async (req: Request, res: Response) => {
     const followersCount = countRows[0]?.followersCount || 0;
     let isFollowing = false;
 
-    // If there is a logged-in user, check if they are following the given user
     if (followerId) {
       const [isFollowingResult] = await connection.execute<RowDataPacket[]>(
         "SELECT COUNT(*) AS isFollowing FROM followers WHERE follower_id = ? AND followed_id = ?",
@@ -492,6 +492,109 @@ router.get("/:id/following-list", async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error fetching following list: ", error);
     res.status(500).json({ message: "Failed to fetch following list" });
+  }
+});
+
+router.get("/auth-type", authenticate, async (req: Request, res: Response) => {
+  const userId = req.user?.userId;
+
+  if (!userId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const connection = await connectionPromise;
+    const [rows] = await connection.query<RowDataPacket[]>(
+      "SELECT auth_type FROM users WHERE id = ?",
+      [userId]
+    );
+
+    if (rows.length > 0) {
+      const { auth_type } = rows[0];
+      res.status(200).json({ auth_type });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    console.error("Error fetching auth type:", error);
+    res.status(500).json({ error: "Failed to fetch auth type" });
+  }
+});
+
+router.post("/forgot-password", async (req: Request, res: Response) => {
+  const { email } = req.body;
+
+  try {
+    const connection = await connectionPromise;
+    const [users] = await connection.execute<RowDataPacket[]>(
+      "SELECT * FROM users WHERE email = ?",
+      [email]
+    );
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const resetTokenExpiry = Date.now() + 3600000;
+
+    await connection.execute(
+      "UPDATE users SET reset_token = ?, reset_token_expiry = ? WHERE email = ?",
+      [resetToken, resetTokenExpiry, email]
+    );
+
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Password Reset Request",
+      text: `You have requested to reset your password. Please click the following link to reset your password: ${process.env.CLIENT_URL}/reset-password/${resetToken}`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: "Password reset link sent successfully" });
+  } catch (err) {
+    console.error("Error sending password reset email:", err);
+    res.status(500).json({ error: "Failed to send password reset email" });
+  }
+});
+
+router.post("/reset-password/:token", async (req: Request, res: Response) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  try {
+    const connection = await connectionPromise;
+    const [users] = await connection.execute<RowDataPacket[]>(
+      "SELECT * FROM users WHERE reset_token = ? AND reset_token_expiry > ?",
+      [token, Date.now()]
+    );
+
+    if (users.length === 0) {
+      return res.status(400).json({ message: "Invalid or expired token" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await connection.execute(
+      "UPDATE users SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE id = ?",
+      [hashedPassword, users[0].id]
+    );
+
+    res.status(200).json({ message: "Password reset successful" });
+  } catch (err) {
+    console.error("Error resetting password:", err);
+    res.status(500).json({ error: "Failed to reset password" });
   }
 });
 
