@@ -12,7 +12,6 @@ import {
   LogoWrapper,
   AccountBtnsWrapper,
   NetworkPageLink,
-  // NotificationUserProfileWrapper,
 } from "./NavBar.styled";
 import FSFLogo from "../../assets/images/fsf-logo-notext.png";
 import UserProfileNavBtn from "./UserProfileNavBtn/UserProfileNavBtn";

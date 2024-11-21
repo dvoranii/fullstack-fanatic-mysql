@@ -42,7 +42,7 @@ const Footer = () => {
         </FooterNavWrapper>
 
         <CenteredSlogan>
-          Full.&nbsp;stack.&nbsp;Full.&nbsp;potential.
+          Full&nbsp;stack.&nbsp;Full&nbsp;potential.
         </CenteredSlogan>
         <img className="seperator" src={Seperator} alt="" />
 
