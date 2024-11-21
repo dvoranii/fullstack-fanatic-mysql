@@ -96,3 +96,12 @@ export const UserProfiledropdownWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
+export const SettingsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  img {
+    width: 25px;
+  }
+`;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { forgotPassword } from "../../../api/api";
+import { forgotPassword } from "../../../services/passwordService";
 import {
   ForgotPasswordWrapper,
   Title,

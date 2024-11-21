@@ -41,7 +41,9 @@ const Footer = () => {
           </FooterNav>
         </FooterNavWrapper>
 
-        <CenteredSlogan>Full stack. Full potential.</CenteredSlogan>
+        <CenteredSlogan>
+          Full.&nbsp;stack.&nbsp;Full.&nbsp;potential.
+        </CenteredSlogan>
         <img className="seperator" src={Seperator} alt="" />
 
         <FooterSocialLinks>
@@ -91,8 +93,10 @@ const Footer = () => {
 
         <LegalWrapper>
           <LegalLinksWrapper>
-            <LegalLink href="#">Privacy Policy</LegalLink>
-            <LegalLink href="#">Terms and Conditions</LegalLink>
+            <LegalLink href="/privacy-policy">Privacy Policy</LegalLink>
+            <LegalLink href="/terms-and-conditions">
+              Terms and Conditions
+            </LegalLink>
           </LegalLinksWrapper>
           <LegalText>
             &copy; {currentYear} Full Stack Fanatic Inc.™. All rights reserved.

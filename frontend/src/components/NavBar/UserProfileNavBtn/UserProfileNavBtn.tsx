@@ -12,6 +12,7 @@ import {
   ViewProfileButtonWrapper,
   AccountTitle,
   UserProfiledropdownWrapper,
+  SettingsWrapper,
 } from "./UserProfileNavBtn.styled";
 import { NavIconWrapper, NavIconImg } from "../../NavBar/NavBar.styled";
 import ProfilePicture from "../../ProfilePicture/ProfilePicture";
@@ -21,6 +22,7 @@ import Dropdown from "../../Dropdown/Dropdown";
 import NotificationBadge from "../../NotificationBadge/NotificationBadge";
 import { getUnreadConversationsCount } from "../../../services/conversationService";
 import { UserContextType } from "../../../types/User/UserContextType";
+import UnderConstructionIcon from "../../../assets/images/under-construction.png";
 
 const UserProfileNavBtn: React.FC = () => {
   const { profile } = useContext(UserContext) || {};
@@ -107,7 +109,16 @@ const UserProfileNavBtn: React.FC = () => {
             <DropdownItem to="/my-account/inbox" className="inbox-item">
               Inbox <NotificationBadge count={unreadNotificationCount} />
             </DropdownItem>
-            <DropdownItem to="/my-account/settings">Settings</DropdownItem>
+            <DropdownItem to="/my-account/settings">
+              <SettingsWrapper>
+                <span>Settings</span>{" "}
+                <img
+                  src={UnderConstructionIcon}
+                  alt=""
+                  title="Section under construction"
+                />
+              </SettingsWrapper>
+            </DropdownItem>
             <DropdownItem to="/plans-and-pricing">
               Plans And Pricing
             </DropdownItem>

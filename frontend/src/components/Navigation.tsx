@@ -36,6 +36,8 @@ import Settings from "../pages/Settings/Settings";
 import NotFound from "../pages/NotFound/NotFound";
 import ForgotPassword from "../pages/SignInRegister/ForgotPassword/ForgotPassword";
 import ResetPassword from "../pages/SignInRegister/ResetPassword/ResetPassword";
+import PrivacyPolicy from "../pages/PrivacyPolicy/PrivacyPolicy";
+import TermsAndConditions from "../pages/TermsAndConditions/TermsAndConditions";
 
 import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
 import PublicOnlyRoute from "./PublicOnlyRoute/PublicOnlyRoute";
@@ -172,6 +174,8 @@ const Navigation: React.FC = () => {
           element={<ProtectedRoute element={<Settings />} />}
         />
         <Route path="*" element={<NotFound />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
       </Routes>
     </Suspense>
   );

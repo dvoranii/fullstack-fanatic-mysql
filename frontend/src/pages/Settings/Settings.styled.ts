@@ -15,6 +15,7 @@ export const Sidebar = styled.aside`
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  user-select: none;
 
   nav ul {
     list-style: none;
@@ -63,7 +64,8 @@ export const SettingItem = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  position: relative; /* Ensures tooltip is positioned relative to this container */
+  position: relative;
+  user-select: none;
 
   b {
     display: inline-block;
@@ -168,4 +170,29 @@ export const LinkButton = styled.a`
   &:hover {
     text-decoration: underline;
   }
+`;
+
+export const ChangePasswordFormWrapper = styled.div`
+  position: relative;
+
+  .cancel-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    background: none;
+    padding: 10px;
+    transition: all 150ms ease;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+`;
+
+export const PasswordContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
 `;

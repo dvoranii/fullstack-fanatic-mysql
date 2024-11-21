@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { PageWrapper } from "../../../PageWrapper.styled";
 import { useParams, useNavigate } from "react-router-dom";
-import { resetPassword } from "../../../api/api";
+import { resetPassword } from "../../../services/passwordService";
 import {
   ResetPasswordWrapper,
   Title,
@@ -41,41 +42,43 @@ const ResetPassword = () => {
   };
 
   return (
-    <ResetPasswordWrapper>
-      <Title>Reset Password</Title>
-      <Form onSubmit={handleSubmit}>
-        <InputWrapper>
-          <Label htmlFor="password">New Password:</Label>
-          <Input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
+    <PageWrapper>
+      <ResetPasswordWrapper>
+        <Title>Reset Password</Title>
+        <Form onSubmit={handleSubmit}>
+          <InputWrapper>
+            <Label htmlFor="password">New Password:</Label>
+            <Input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </InputWrapper>
+          <InputWrapper>
+            <Label htmlFor="confirm-password">Confirm New Password:</Label>
+            <Input
+              type="password"
+              id="confirm-password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </InputWrapper>
+          <SubmitButton type="submit">Reset Password</SubmitButton>
+        </Form>
+        {message && (
+          <FormMessage
+            message={message}
+            type={messageType}
+            textAlign="center"
+            fontSize="1rem"
+            marginTop="20px"
           />
-        </InputWrapper>
-        <InputWrapper>
-          <Label htmlFor="confirm-password">Confirm New Password:</Label>
-          <Input
-            type="password"
-            id="confirm-password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-        </InputWrapper>
-        <SubmitButton type="submit">Reset Password</SubmitButton>
-      </Form>
-      {message && (
-        <FormMessage
-          message={message}
-          type={messageType}
-          textAlign="center"
-          fontSize="1rem"
-          marginTop="20px"
-        />
-      )}
-    </ResetPasswordWrapper>
+        )}
+      </ResetPasswordWrapper>
+    </PageWrapper>
   );
 };
 
