@@ -32,9 +32,13 @@ import CheckoutSuccess from "../pages/Checkout/Success/Success";
 import CheckoutCancel from "../pages/Checkout/Cancel/Cancel";
 import PlansAndPricing from "../pages/PlansAndPricing/PlansAndPricing";
 import SubscriptionCart from "../pages/Checkout/SubscriptionCart/SubscriptionCart";
-import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
 import Settings from "../pages/Settings/Settings";
 import NotFound from "../pages/NotFound/NotFound";
+import ForgotPassword from "../pages/SignInRegister/ForgotPassword/ForgotPassword";
+import ResetPassword from "../pages/SignInRegister/ResetPassword/ResetPassword";
+
+import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
+import PublicOnlyRoute from "./PublicOnlyRoute/PublicOnlyRoute";
 
 import { fetchPurchasedItems } from "../services/purchasesService";
 
@@ -90,12 +94,21 @@ const Navigation: React.FC = () => {
         <Route path="/contact" element={<ContactPage />} />
         <Route
           path="/register"
-          element={<SignInRegisterPage defaultToLogin={false} />}
+          element={
+            <PublicOnlyRoute
+              element={<SignInRegisterPage defaultToLogin={false} />}
+            />
+          }
         />
         <Route
           path="/login"
-          element={<SignInRegisterPage defaultToLogin={true} />}
+          element={
+            <PublicOnlyRoute
+              element={<SignInRegisterPage defaultToLogin={true} />}
+            />
+          }
         />
+
         <Route
           path="/my-account"
           element={<ProtectedRoute element={<UserAccountPage />} />}
@@ -145,7 +158,15 @@ const Navigation: React.FC = () => {
           path="/plans-and-pricing"
           element={<ProtectedRoute element={<PlansAndPricing />} />}
         />
-        <Route path="network" element={<NetworkPage />} />
+        <Route path="/network" element={<NetworkPage />} />
+        <Route
+          path="/forgot-password"
+          element={<PublicOnlyRoute element={<ForgotPassword />} />}
+        />
+        <Route
+          path="/reset-password/:token"
+          element={<PublicOnlyRoute element={<ResetPassword />} />}
+        />
         <Route
           path="/my-account/settings"
           element={<ProtectedRoute element={<Settings />} />}

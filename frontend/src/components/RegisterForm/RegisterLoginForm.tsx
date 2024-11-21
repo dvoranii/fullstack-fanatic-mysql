@@ -16,6 +16,8 @@ import {
   LoginFormTitleWrapper,
   Divider,
   FormTitle,
+  ForgotPasswordLink,
+  ForgotPasswordLinkWrapper,
 } from "./RegisterLoginForm.styled";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
@@ -158,6 +160,11 @@ const RegisterLoginForm: React.FC<RegisterLoginFormProps> = ({
               />
               <SubmitButton text="Login" />
               <FormMessage message={error} type="error" />
+              <ForgotPasswordLinkWrapper>
+                <ForgotPasswordLink to="/forgot-password">
+                  Forgot Password?
+                </ForgotPasswordLink>
+              </ForgotPasswordLinkWrapper>
               <Divider>OR</Divider>
               <GoogleAuthButton
                 handleClick={handleGoogleLoginButtonClick}

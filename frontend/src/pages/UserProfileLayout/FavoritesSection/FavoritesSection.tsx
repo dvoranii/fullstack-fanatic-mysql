@@ -118,7 +118,7 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
       case "3":
         return "Purchased";
       default:
-        return "All";
+        return "";
     }
   };
 

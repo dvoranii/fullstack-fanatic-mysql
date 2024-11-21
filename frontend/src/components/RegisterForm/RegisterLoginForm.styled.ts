@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { colors } from "../../GlobalStyles";
+import { Link } from "react-router-dom";
 
 interface WrapperProps {
   $isLogin: boolean;
@@ -28,7 +29,7 @@ export const RegisterLoginFormWrapperInner = styled.div<WrapperProps>`
   border-radius: 40px;
   margin: 10vh auto;
   overflow: hidden;
-  height: 700px;
+  height: 725px;
   position: relative;
   transition: all 0.25s ease-in-out;
 `;
@@ -123,19 +124,23 @@ export const LoginFormTitleWrapper = styled.div<WrapperProps>`
 
   ${FormTitle} {
     font-size: ${({ $isLogin }) => ($isLogin ? "1.6rem" : "1.2rem")};
-    margin-bottom: 0;
+    color: ${({ $isLogin }) =>
+      $isLogin ? `${colors.primary}` : `${colors.white}`};
+    margin-bottom: 0px;
     transition: all 250ms ease;
-    transition-delay: 250ms;
   }
 
   &:hover {
     background-color: ${colors.secondary};
+    ${FormTitle} {
+      color: ${colors.primary};
+    }
   }
 `;
 
 export const LoginFormWrapperOuter = styled.div<WrapperProps>`
   background: ${({ $isLogin }) =>
-    $isLogin ? colors.background : colors.white};
+    $isLogin ? colors.background : colors.primary};
 
   position: absolute;
   top: ${({ $isLogin }) => ($isLogin ? "10%" : "91%")};
@@ -197,5 +202,20 @@ export const GoogleSignInButton = styled.button`
     background-color: #357ae8;
     color: whitesmoke;
     cursor: pointer;
+  }
+`;
+
+export const ForgotPasswordLinkWrapper = styled.div`
+  text-align: center;
+  margin-top: 10px;
+`;
+export const ForgotPasswordLink = styled(Link)`
+  cursor: pointer;
+  transition: all 250ms ease;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+
+  &:hover {
+    border-bottom: 1px solid ${colors.primary};
   }
 `;

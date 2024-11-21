@@ -8,7 +8,7 @@ import {
   registerUser,
   loginUser,
 } from "../api/api";
-import validateField from "../utils/validationUtils";
+import { validateField, ValidationRule } from "../utils/validationUtils";
 import { fetchUserProfileFavouritesAndComments } from "../utils/userUtils";
 
 export const useAuthForm = (defaultToLogin = false) => {
@@ -93,23 +93,19 @@ export const useAuthForm = (defaultToLogin = false) => {
     const username = (document.getElementById("username") as HTMLInputElement)
       .value;
 
-    const fields = [
-      { fieldName: "username", value: username },
-      { fieldName: "email", value: email },
-      { fieldName: "password", value: password },
+    const fields: ValidationRule[] = [
+      { value: username, type: "username" },
+      { value: email, type: "email" },
+      { value: password, type: "password" },
       {
-        fieldName: "confirmPassword",
         value: confirmPassword,
         compareValue: password,
+        type: "confirmPassword",
       },
     ];
 
     for (const field of fields) {
-      const error = validateField(
-        field.fieldName,
-        field.value,
-        field.compareValue
-      );
+      const error = validateField(field);
       if (error) {
         setError(error);
         return;
@@ -155,15 +151,13 @@ export const useAuthForm = (defaultToLogin = false) => {
       document.getElementById("login-password") as HTMLInputElement
     ).value;
 
-    const usernameError = validateField("username", username);
-    if (usernameError) {
-      setError(usernameError);
+    if (!username) {
+      setError("Please enter your username.");
       return;
     }
 
-    const passwordError = validateField("password", password);
-    if (passwordError) {
-      setError(passwordError);
+    if (!password) {
+      setError("Please enter your password.");
       return;
     }
 
@@ -184,7 +178,7 @@ export const useAuthForm = (defaultToLogin = false) => {
       navigate("/my-account");
     } catch (error) {
       console.error("Error during login:", error);
-      setError("Login failed. Please try again.");
+      setError("User not found or incorrect password.");
     }
   };
 

@@ -7,4 +7,5 @@ export const NotFoundWrapper = styled.div`
   justify-content: center;
   height: 100vh;
   text-align: center;
+  user-select: none;
 `;

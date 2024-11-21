@@ -1,4 +1,3 @@
-import React from "react";
 import TutorialDetail from "../../components/TutorialDetail/TutorialDetail";
 import { PageWrapper } from "../../PageWrapper.styled";
 

@@ -1,12 +1,18 @@
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/;
 
-const validateField = (
-  fieldName: string,
-  value: string,
-  compareValue?: string
-): string | null => {
-  switch (fieldName) {
+export interface ValidationRule {
+  value: string;
+  compareValue?: string;
+  type: "username" | "email" | "password" | "confirmPassword";
+}
+
+export const validateField = ({
+  type,
+  value,
+  compareValue,
+}: ValidationRule): string | null => {
+  switch (type) {
     case "username":
       return value ? null : "Please enter a username.";
 
@@ -28,5 +34,3 @@ const validateField = (
       return null;
   }
 };
-
-export default validateField;

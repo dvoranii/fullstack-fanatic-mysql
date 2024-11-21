@@ -63,6 +63,7 @@ export const SettingItem = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+  position: relative; /* Ensures tooltip is positioned relative to this container */
 
   b {
     display: inline-block;
@@ -83,6 +84,53 @@ export const SettingItem = styled.div`
 
     img {
       width: 16px;
+    }
+  }
+
+  .help-icon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    cursor: default;
+
+    img {
+      width: 16px;
+    }
+
+    .tooltip {
+      position: absolute;
+      bottom: 120%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #333;
+      color: #fff;
+      padding: 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: normal;
+      text-align: center;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      width: 180px;
+      z-index: 1;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 5px;
+        border-style: solid;
+        border-color: #333 transparent transparent transparent;
+      }
+    }
+
+    &:hover .tooltip {
+      opacity: 1;
+      visibility: visible;
     }
   }
 `;
