@@ -5,6 +5,7 @@ import ZenKakuGothicNewBold from "./assets/fonts/ZenKakuGothicNew-Bold.ttf";
 import AlataRegular from "./assets/fonts/Alata-Regular.ttf";
 import AnybodyMedium from "./assets/fonts/Anybody-Medium.ttf";
 import AnybodySemiBold from "./assets/fonts/Anybody-SemiBold.ttf";
+import AnybodyBold from "./assets/fonts/Anybody-Bold.ttf";
 
 export const colors = {
   primary: "#14213D",
@@ -58,6 +59,13 @@ export const GlobalStyles = createGlobalStyle`
     font-family: "Anybody";
     src: url(${AnybodySemiBold}) format("truetype");
     font-weight: 500;
+    font-style:normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Anybody";
+    src: url(${AnybodyBold}) format("truetype");
+    font-weight: 700;
     font-style:normal;
     font-display: swap;
   }

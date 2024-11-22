@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const HomePageWrapper = styled.div`
-  height: 100vh;
+  /* height: 100vh;
   display: flex;
-  position: relative;
+  position: relative; */
 `;

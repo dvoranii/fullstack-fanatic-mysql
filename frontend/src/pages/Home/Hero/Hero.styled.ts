@@ -2,6 +2,12 @@ import styled, { keyframes } from "styled-components";
 import { colors } from "../../../GlobalStyles";
 import WaveEffectBG from "../../../assets/images/wave-effect-bg.jpg";
 
+export const HeroWrapper = styled.div`
+  height: 100vh;
+  display: flex;
+  position: relative;
+`;
+
 export const LeftSideWrapper = styled.div`
   width: 50%;
   height: 100%;
@@ -15,6 +21,16 @@ export const LeftSideWrapper = styled.div`
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(to bottom, black, transparent);
+    pointer-events: none;
+  }
 `;
 
 export const RightSideWrapper = styled.div`
@@ -22,11 +38,13 @@ export const RightSideWrapper = styled.div`
   height: 100%;
   background-color: ${colors.secondary};
   position: relative;
+  user-select: none;
 `;
 
 export const RightSideWrapperInner = styled.div`
   height: 100%;
   align-content: center;
+  position: relative;
 `;
 
 export const LogoWrapper = styled.div`
@@ -36,7 +54,7 @@ export const LogoWrapper = styled.div`
   user-select: none;
 
   .orange-logo {
-    width: 500px;
+    width: 400px;
   }
 
   .white-logo {
@@ -84,6 +102,7 @@ export const HeroTextWrapper = styled.div`
     font-size: 1.6rem;
     text-transform: uppercase;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+    margin-top: -16px;
   }
 `;
 
@@ -93,10 +112,10 @@ export const HeroButtonWrapper = styled.div`
   justify-content: center;
 
   button {
-    margin-top: 1.2rem;
-    padding: 8px 16px;
-    font-size: 1rem;
-    border-radius: 20px;
+    margin-top: 2.4rem;
+    padding: 16px 32px;
+    font-size: 1.2rem;
+    border-radius: 30px;
     border: none;
     text-transform: uppercase;
     font-family: "ZenKakuGothicNewBold";
@@ -164,4 +183,62 @@ export const TriangleArrowThird = styled(TriangleArrow)`
   animation: ${fadeInDownOut} 1.25s ease-in-out infinite;
   animation-delay: 0.4s;
   opacity: 0.6;
+`;
+
+export const SocialButtonsWrapper = styled.div`
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 0%;
+  padding-bottom: 3.6rem;
+  user-select: none;
+`;
+export const SocialIconWrapper = styled.div`
+  background-color: #ddd;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  position: relative;
+
+  transition: all 250ms ease;
+  &:hover {
+    filter: brightness(1.25);
+    cursor: pointer;
+    transform: translateY(-4px);
+  }
+
+  img {
+    width: 40px;
+  }
+
+  a {
+    height: 40px;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 5px;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 50%;
+    transition: all 300ms ease;
+  }
+
+  &:hover {
+    &::after {
+      width: 95%;
+      height: 8px;
+      background-color: rgba(0, 0, 0, 0.1);
+      filter: blur(1px);
+      bottom: -16px;
+    }
+  }
 `;
