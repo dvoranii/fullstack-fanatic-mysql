@@ -1,16 +1,6 @@
 import { styled } from "styled-components";
 import { colors } from "../../GlobalStyles";
 
-export const NetworkTitleBanner = styled.div`
-  padding: 20px;
-  background-color: ${colors.secondary};
-
-  h2 {
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-`;
-
 export const SearchBarWrapper = styled.div`
   margin-top: 40px;
 `;
