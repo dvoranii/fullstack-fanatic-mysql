@@ -6,7 +6,8 @@ import {
   SearchInputWrapper,
 } from "./SearchBar.styled";
 import SearchIcon from "../../assets/images/search-icon.png";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { debounce } from "../../utils/debounce";
 
 interface SearchBarProps {
   width?: string;
@@ -21,6 +22,14 @@ const SearchBar: React.FC<SearchBarProps> = ({
   onChange,
 }) => {
   const [inputValue, setInputValue] = useState("");
+
+  const debouncedOnChange = useMemo(() => {
+    return debounce((value: string) => {
+      if (onChange) {
+        onChange(value);
+      }
+    }, 300);
+  }, [onChange]);
 
   const handleSearch = () => {
     if (inputValue.trim() && onSearchChange) {
@@ -38,9 +47,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     const value = e.target.value;
     setInputValue(value);
 
-    if (onChange) {
-      onChange(value);
-    }
+    debouncedOnChange(value);
   };
 
   return (
