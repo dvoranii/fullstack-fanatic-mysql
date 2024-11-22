@@ -9,7 +9,7 @@ import {
   SwirlyArrow,
   ButtonWrapper,
 } from "./IntroSection.styled";
-import PersonGraphic from "../../../assets/images/Amico-images/master-amico.svg";
+import PersonGraphic from "../../../assets/images/Amico-images/Coding-workshop-amico.svg";
 import CornerEllipseImg from "../../../assets/images/Ellipse-bg-solid.svg";
 import SwirlyArrowImg from "../../../assets/images/swirly-arrow-3.svg";
 

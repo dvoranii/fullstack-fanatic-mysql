@@ -76,7 +76,7 @@ export const LeftGraphic = styled.img`
   position: absolute;
   left: 250px;
   bottom: 0;
-  width: clamp(200px, 20vw, 370px);
+  width: clamp(200px, 22vw, 390px);
   object-fit: contain;
   z-index: 1;
 `;

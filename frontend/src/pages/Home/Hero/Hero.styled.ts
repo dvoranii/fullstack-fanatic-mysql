@@ -165,7 +165,7 @@ const fadeInDownOut = keyframes`
 export const TriangleArrow = styled.div`
   height: 20px;
   width: 40px;
-  background-color: black;
+  background-color: ${colors.primary};
   clip-path: polygon(50% 100%, 0 0, 100% 0);
   position: absolute;
   animation: ${fadeInDownOut} 1.25s ease-in-out infinite;
