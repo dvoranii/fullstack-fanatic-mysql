@@ -5,6 +5,13 @@ import { tutorialContent } from "../../assets/tutorialContent";
 import { blogContent } from "../../assets/blogContent";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
+const getTutorialAccessLevel = (id: string | undefined) => {
+  const tutorial = tutorialContent.find(
+    (tutorial) => tutorial.id === Number(id)
+  );
+  return tutorial?.accessLevel || null;
+};
+
 const getTutorialPremiumLevel = (id: string | undefined) => {
   const tutorial = tutorialContent.find(
     (tutorial) => tutorial.id === Number(id)
@@ -38,25 +45,29 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const isBlogRoute = location.pathname.includes("/blog/");
   const isMyAccountRoute = location.pathname.startsWith("/my-account");
 
-  if (!profile) {
-    return <Navigate to="/register" replace />;
-  }
-
-  if (isMyAccountRoute && !profile) {
-    return <Navigate to="/login" replace />;
-  }
-
-  if (location.pathname === "/my-account" && !profile) {
+  if (!profile && isMyAccountRoute) {
     return <Navigate to="/login" replace />;
   }
 
   if (isTutorialRoute) {
     const tutorialId = Number(id);
-    const requiredLevel = getTutorialPremiumLevel(id);
+    const accessLevel = getTutorialAccessLevel(id);
 
-    if (purchasedItemIds?.includes(tutorialId)) {
+    if (accessLevel === "free") {
       return element;
     }
+
+    if (!profile) {
+      return <Navigate to="/register" replace />;
+    }
+
+    const purchasedTutorial = purchasedItemIds?.includes(tutorialId);
+
+    if (purchasedTutorial) {
+      return element;
+    }
+
+    const requiredLevel = getTutorialPremiumLevel(id);
 
     if (!requiredLevel) return element;
 
@@ -73,8 +84,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     const blogId = Number(id);
     const isPremium = isBlogPremium(id);
 
+    if (!profile && !isPremium) {
+      return element;
+    }
+
     if (purchasedItemIds?.includes(blogId) || !isPremium) {
       return element;
+    }
+
+    if (!profile) {
+      return <Navigate to="/register" replace />;
     }
 
     if (
