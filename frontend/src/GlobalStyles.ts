@@ -81,6 +81,10 @@ export const GlobalStyles = createGlobalStyle`
     box-sizing: inherit;
   }
 
+  ::selection {
+    background-color: ${colors.secondary};
+    color: ${colors.primary};
+  }
   html,
   body {
     overflow-y: auto;
@@ -97,9 +101,6 @@ export const GlobalStyles = createGlobalStyle`
     color: #14213d;
   }
 
-  img {
-    user-select: none;
-  }
 
   a {
     text-decoration: none;

@@ -7,6 +7,8 @@ interface ListSectionTitleWrapperProps {
   width?: string;
 }
 
+export const AboutPageWrapper = styled.div``;
+
 export const AboutIntroWrapperOuter = styled.div`
   position: relative;
 
@@ -26,6 +28,10 @@ export const AboutIntroWrapperOuter = styled.div`
     width: 250px;
     transform: scaleX(-1);
   }
+`;
+
+export const ImgWrapper = styled.div`
+  user-select: none;
 `;
 export const AboutIntroWrapper = styled.div`
   display: flex;
@@ -84,7 +90,16 @@ export const CoreTenetsWrapper = styled.div`
     url(${HexagonalBg});
   background-size: cover;
   background-repeat: no-repeat;
-  padding-bottom: 4.2rem;
+  padding-bottom: 8.4rem;
+  position: relative;
+
+  .elipse-solid {
+    position: absolute;
+    bottom: 0;
+    transform: scaleX(-1);
+    width: 170px;
+    opacity: 0.9;
+  }
   h3 {
     text-align: center;
     font-size: 1.6rem;

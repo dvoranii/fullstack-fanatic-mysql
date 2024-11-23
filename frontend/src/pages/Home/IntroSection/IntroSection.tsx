@@ -8,6 +8,7 @@ import {
   CornerEllipse,
   SwirlyArrow,
   ButtonWrapper,
+  ImageWrapper,
 } from "./IntroSection.styled";
 import PersonGraphic from "../../../assets/images/Amico-images/Coding-workshop-amico.svg";
 import CornerEllipseImg from "../../../assets/images/Ellipse-bg-solid.svg";
@@ -35,7 +36,9 @@ const IntroSection: React.FC = () => {
           <SwirlyArrow src={SwirlyArrowImg} alt="Swirly Arrow" />
         </ButtonWrapper>
       </ContentWrapper>
-      <CornerEllipse src={CornerEllipseImg} alt="Corner Ellipse" />
+      <ImageWrapper>
+        <CornerEllipse src={CornerEllipseImg} alt="Corner Ellipse" />
+      </ImageWrapper>
     </IntroSectionWrapper>
   );
 };

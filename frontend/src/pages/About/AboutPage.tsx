@@ -9,17 +9,20 @@ import {
   TenetLisItemTitle,
   ListSectionTitleWrapper,
   LinkWrapper,
+  ImgWrapper,
+  AboutPageWrapper,
 } from "./AboutPage.styled";
 import Title from "../../components/Title/Title";
 import { PageWrapper } from "../../PageWrapper.styled";
 import AboutImage from "../../assets/images/Amico-images/About-us-page-amico.svg";
 import { Link } from "react-router-dom";
 import ElipseImg from "../../assets/images/Ellipse-bg.svg";
+import ElipseImgSolid from "../../assets/images/Ellipse-bg-solid.svg";
 import BgSquaresAndTriangle from "../../assets/images/SquaresAndTriangles.svg";
 
 const AboutPage: React.FC = () => {
   return (
-    <>
+    <AboutPageWrapper>
       <Title textContent="About" />
       <AboutIntroWrapperOuter>
         <AboutIntroWrapper>
@@ -33,15 +36,19 @@ const AboutPage: React.FC = () => {
               Empowering and educating IT specialists with unique and
               unconventional tactics by leveraging insider knowledge to
               fast-track success while fostering the mastery of core
-              fundamentals through hands-on development.
+              fundamentals through hands-on development and study.
             </p>
             <LinkWrapper>
               <Link to="#">Join Us</Link>
             </LinkWrapper>
           </MissionStatementWrapper>
         </AboutIntroWrapper>
-        <img src={ElipseImg} className="elipse" alt="" />
-        <img src={BgSquaresAndTriangle} className="squares-triangle" alt="" />
+        <ImgWrapper>
+          <img src={ElipseImg} className="elipse" alt="" />
+        </ImgWrapper>
+        <ImgWrapper>
+          <img src={BgSquaresAndTriangle} className="squares-triangle" alt="" />
+        </ImgWrapper>
       </AboutIntroWrapperOuter>
       <CoreTenetsWrapper>
         <PageWrapper>
@@ -159,8 +166,9 @@ const AboutPage: React.FC = () => {
             </TenetListSection>
           </CoreTenetsWrapperInner>
         </PageWrapper>
+        <img src={ElipseImgSolid} className="elipse-solid" alt="" />
       </CoreTenetsWrapper>
-    </>
+    </AboutPageWrapper>
   );
 };
 

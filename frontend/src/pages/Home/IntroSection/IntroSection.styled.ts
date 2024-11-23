@@ -11,7 +11,6 @@ export const IntroSectionWrapper = styled.section`
   overflow: hidden;
   margin: 0 auto;
   height: 100vh;
-  user-select: none;
 `;
 
 export const ContentWrapper = styled.div`
@@ -81,6 +80,10 @@ export const LeftGraphic = styled.img`
   z-index: 1;
 `;
 
+export const ImageWrapper = styled.div`
+  user-select: none;
+`;
+
 export const CornerEllipse = styled.img`
   position: absolute;
   bottom: 0px;
@@ -88,6 +91,7 @@ export const CornerEllipse = styled.img`
   height: 200px;
   object-fit: contain;
   z-index: 0;
+  user-select: none;
 `;
 
 export const SwirlyArrow = styled.img`
