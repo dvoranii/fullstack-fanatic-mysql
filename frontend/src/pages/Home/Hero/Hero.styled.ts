@@ -2,7 +2,7 @@ import styled, { keyframes } from "styled-components";
 import { colors } from "../../../GlobalStyles";
 import WaveEffectBG from "../../../assets/images/wave-effect-bg.jpg";
 
-export const HeroWrapper = styled.div`
+export const HeroWrapper = styled.section`
   height: 100vh;
   display: flex;
   position: relative;

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { colors } from "../../../GlobalStyles";
 
-export const InfoSectionWrapper = styled.div`
+export const InfoSectionWrapper = styled.section`
   position: relative;
   height: 100vh;
   background: linear-gradient(
