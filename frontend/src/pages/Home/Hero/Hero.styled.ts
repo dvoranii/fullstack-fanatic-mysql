@@ -54,7 +54,7 @@ export const LogoWrapper = styled.div`
   user-select: none;
 
   .orange-logo {
-    width: 400px;
+    width: clamp(150px, 30vw, 400px);
   }
 
   .white-logo {
@@ -87,7 +87,7 @@ export const HeroTextWrapper = styled.div`
 
   h1 {
     font-family: "Anybody", sans-serif;
-    font-size: 3.6rem;
+    font-size: clamp(2.2rem, 3vw, 3.6rem);
     text-transform: uppercase;
     color: ${colors.black};
     font-weight: 500;
@@ -99,7 +99,7 @@ export const HeroTextWrapper = styled.div`
     color: #222;
     font-weight: 600;
     opacity: 0.9;
-    font-size: 1.6rem;
+    font-size: clamp(1.2rem, 2vw, 1.6rem);
     text-transform: uppercase;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
     margin-top: -16px;
