@@ -60,13 +60,14 @@ export const Card = styled.div`
     min-height: 270px;
   }
 
-  @media screen and (max-width: 760px) {
+  @media screen and (max-width: 768px) {
     width: 50vw;
     min-height: 400px;
     padding: 40px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   }
 
-  @media screen and (max-width: 525px) {
+  @media screen and (max-width: 615px) {
     width: 70vw;
   }
 `;

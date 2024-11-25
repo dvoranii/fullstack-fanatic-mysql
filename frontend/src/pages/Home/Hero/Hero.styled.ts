@@ -11,6 +11,10 @@ export const HeroWrapper = styled.section`
   &.mobile-hero {
     flex-direction: column;
     height: 85vh;
+
+    @media screen and (max-width: 430px) {
+      height: 90vh;
+    }
   }
 `;
 
@@ -72,7 +76,7 @@ export const LogoWrapper = styled.div`
     margin: 20px;
   }
 
-  @media screen and (max-width: 760px) {
+  @media screen and (max-width: 768px) {
     padding-top: 3.2rem;
   }
 `;
@@ -115,7 +119,7 @@ export const HeroTextWrapper = styled.div`
     margin-top: -16px;
   }
 
-  @media screen and (max-width: 760px) {
+  @media screen and (max-width: 768px) {
     padding-top: 3.2rem;
     h1,
     h2 {
@@ -149,11 +153,16 @@ export const HeroButtonWrapper = styled.div`
       cursor: pointer;
     }
 
-    @media screen and (max-width: 760px) {
+    @media screen and (max-width: 768px) {
       margin-top: 120px;
       padding: 24px 48px;
       border-radius: 50px;
       font-size: 1.8rem;
+    }
+
+    @media screen and (max-width: 430px) {
+      margin-top: 80px;
+      padding: 16px 32px;
     }
   }
 `;
@@ -221,7 +230,7 @@ export const SocialButtonsWrapper = styled.div`
   padding-bottom: 3.6rem;
   user-select: none;
 
-  @media screen and (max-width: 760px) {
+  @media screen and (max-width: 768px) {
     bottom: 10%;
   }
 `;

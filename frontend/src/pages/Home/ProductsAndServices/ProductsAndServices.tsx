@@ -5,15 +5,12 @@ import {
   Card,
   CardList,
   CardImagesWrapper,
-  // StarWrapper,
+  ProductsAndServiceTitleWrapper,
+  ProductsAndServiceTitle,
 } from "./ProductsAndServices.styled";
 import TutorialIcon from "../../../assets/images/tutorial-icon-home.svg";
 import BlogIcon from "../../../assets/images/blog-icon-home.svg";
 import ConsultIcon from "../../../assets/images/consult-icon-home.svg";
-import Title from "../../../components/Title/Title";
-// import BeginnerStar from "../../../assets/images/tutorials/1-beginner-star.png";
-// import IntermediateStar from "../../../assets/images/tutorials/2-intermediate-stars.png";
-// import AdvancedStar from "../../../assets/images/tutorials/3-advanced-stars.png";
 import RatingsCardImage from "../../../assets/images/ratings-card-image.svg";
 import BlogsCardImage from "../../../assets/images/blogs-card-image.svg";
 import ConsultCardImage from "../../../assets/images/consult-card-image.svg";
@@ -21,7 +18,9 @@ import ConsultCardImage from "../../../assets/images/consult-card-image.svg";
 const ProductsAndServices: React.FC = () => {
   return (
     <>
-      <Title textContent="Products & Services" pseudoWidth="170px" />
+      <ProductsAndServiceTitleWrapper>
+        <ProductsAndServiceTitle>Products & Services</ProductsAndServiceTitle>
+      </ProductsAndServiceTitleWrapper>
       <ProductsAndServicesWrapperOuter>
         <ProductsAndServicesWrapperInner>
           <CardWrapper>

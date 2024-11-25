@@ -1,6 +1,54 @@
 import { styled } from "styled-components";
 import { colors } from "../../../GlobalStyles";
 
+export const ProductsAndServiceTitleWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+export const ProductsAndServiceTitle = styled.h2`
+  position: relative;
+  padding: 1rem;
+  margin-top: 2.4rem;
+  text-align: center;
+  color: #222;
+  font-family: "Anybody";
+  font-size: 2.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  width: fit-content;
+  user-select: none;
+  z-index: 1;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 25px;
+    right: 0px;
+    width: 160px;
+    height: 25px;
+    background-color: #ffb923;
+    border-radius: 2px;
+    z-index: -1;
+  }
+
+  @media screen and (max-width: 466px) {
+    &::after {
+      width: 100px;
+      right: 100px;
+    }
+  }
+
+  @media screen and (max-width: 400px) {
+    &::after {
+      width: 100px;
+      right: 80px;
+    }
+  }
+`;
+
 export const ProductsAndServicesWrapperOuter = styled.section`
   position: relative;
   width: 100%;
