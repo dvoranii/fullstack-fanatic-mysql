@@ -4,8 +4,14 @@ import WaveEffectBG from "../../../assets/images/wave-effect-bg.jpg";
 
 export const HeroWrapper = styled.section`
   height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   display: flex;
   position: relative;
+
+  &.mobile-hero {
+    flex-direction: column;
+    height: 85vh;
+  }
 `;
 
 export const LeftSideWrapper = styled.div`
@@ -65,6 +71,10 @@ export const LogoWrapper = styled.div`
     width: 60px;
     margin: 20px;
   }
+
+  @media screen and (max-width: 760px) {
+    padding-top: 3.2rem;
+  }
 `;
 
 export const ElipseWrapper = styled.div`
@@ -104,6 +114,14 @@ export const HeroTextWrapper = styled.div`
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
     margin-top: -16px;
   }
+
+  @media screen and (max-width: 760px) {
+    padding-top: 3.2rem;
+    h1,
+    h2 {
+      color: ${colors.primary};
+    }
+  }
 `;
 
 export const HeroButtonWrapper = styled.div`
@@ -129,6 +147,13 @@ export const HeroButtonWrapper = styled.div`
       box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3);
       transform: scale(1.01) translateY(-2px);
       cursor: pointer;
+    }
+
+    @media screen and (max-width: 760px) {
+      margin-top: 120px;
+      padding: 24px 48px;
+      border-radius: 50px;
+      font-size: 1.8rem;
     }
   }
 `;
@@ -195,6 +220,10 @@ export const SocialButtonsWrapper = styled.div`
   bottom: 0%;
   padding-bottom: 3.6rem;
   user-select: none;
+
+  @media screen and (max-width: 760px) {
+    bottom: 10%;
+  }
 `;
 export const SocialIconWrapper = styled.div`
   background-color: #ddd;

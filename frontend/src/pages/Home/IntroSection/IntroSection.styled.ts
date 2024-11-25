@@ -12,7 +12,6 @@ export const IntroSectionWrapper = styled.section`
   margin: 0 auto;
   padding-top: 12.8rem;
   padding-bottom: 12.8rem;
-  /* height: 100vh; */
 `;
 
 export const ContentWrapper = styled.div`
@@ -28,7 +27,7 @@ export const ContentWrapper = styled.div`
 
 export const Title = styled.h2`
   font-family: "Alata", sans-serif;
-  font-size: 2.4rem;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
   font-weight: 700;
   line-height: 1.3;
   color: ${colors.black};
@@ -48,7 +47,7 @@ export const Title = styled.h2`
 
 export const IntroText = styled.p`
   font-family: "Montserrat";
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 2vw, 1.2rem);
   line-height: 1.5;
   color: #555;
   margin-bottom: 30px;
@@ -61,7 +60,7 @@ export const GetStartedButton = styled.button`
   background-color: ${colors.secondary};
   color: ${colors.primary};
   padding: 16px 32px;
-  font-size: 1.8rem;
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
   border: none;
   border-radius: 30px;
   cursor: pointer;
@@ -72,6 +71,10 @@ export const GetStartedButton = styled.button`
     background-color: ${colors.secondary};
     transform: translateY(-4px);
   }
+
+  @media screen and (max-width: 760px) {
+    padding: 12px 24px;
+  }
 `;
 
 export const LeftGraphic = styled.img`
@@ -81,6 +84,18 @@ export const LeftGraphic = styled.img`
   width: clamp(200px, 22vw, 390px);
   object-fit: contain;
   z-index: 1;
+
+  @media screen and (max-width: 1100px) {
+    width: 30vw;
+    left: 50px;
+    bottom: 2vh;
+  }
+
+  @media screen and (max-width: 665px) {
+    width: 40vw;
+    left: 0px;
+    bottom: 10px;
+  }
 `;
 
 export const ImageWrapper = styled.div`
@@ -91,7 +106,7 @@ export const CornerEllipse = styled.img`
   position: absolute;
   bottom: 0px;
   right: 0px;
-  height: 200px;
+  height: clamp(120px, 20vw, 200px);
   object-fit: contain;
   z-index: 0;
   user-select: none;
@@ -99,12 +114,16 @@ export const CornerEllipse = styled.img`
 
 export const SwirlyArrow = styled.img`
   position: absolute;
-  right: 17%;
-  bottom: -70px;
-  width: 120px;
+  right: 25%;
+  bottom: -80px;
+  width: clamp(100px, 10vw, 120px);
   height: auto;
   object-fit: contain;
   z-index: 1;
+
+  @media screen and (max-width: 760px) {
+    bottom: -65px;
+  }
 `;
 
 export const ButtonWrapper = styled.div`
