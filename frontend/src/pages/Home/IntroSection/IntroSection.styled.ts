@@ -10,13 +10,16 @@ export const IntroSectionWrapper = styled.section`
   background-color: #fefefe;
   overflow: hidden;
   margin: 0 auto;
-  height: 100vh;
+  padding-top: 12.8rem;
+  padding-bottom: 12.8rem;
+  /* height: 100vh; */
 `;
 
 export const ContentWrapper = styled.div`
   text-align: center;
   max-width: 700px;
   z-index: 2;
+  margin-top: -120px;
 
   hr {
     margin-bottom: 1.2rem;
@@ -73,7 +76,7 @@ export const GetStartedButton = styled.button`
 
 export const LeftGraphic = styled.img`
   position: absolute;
-  left: 250px;
+  left: 200px;
   bottom: 0;
   width: clamp(200px, 22vw, 390px);
   object-fit: contain;

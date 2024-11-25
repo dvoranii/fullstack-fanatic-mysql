@@ -3,36 +3,54 @@ import { colors } from "../../../GlobalStyles";
 
 export const InfoSectionWrapper = styled.section`
   position: relative;
-  height: 100vh;
   background: linear-gradient(
     to bottom right,
     ${colors.secondary} 50%,
     #ffffff 50%
   );
-  clip-path: polygon(0 0, 100% 0, 100% 75%, 0 100%);
+  padding-bottom: 12.8rem;
 `;
 export const InfoSectionWrapperInner = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 8.4rem;
-  height: 70%;
+  height: 100%;
+  margin: 0 auto;
+  padding-top: 6.8rem;
+
+  @media screen and (max-width: 1320px) {
+    gap: 4.8rem;
+  }
+
+  @media screen and (max-width: 1020px) {
+    gap: 4.2rem;
+  }
 `;
 
 export const Card = styled.div`
   background-color: #fff;
   border-radius: 10px;
   padding: 40px;
-  width: clamp(250px, 30%, 15vw);
+  width: clamp(200px, 20vw, 300px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
   border-top-left-radius: 100px;
   min-height: 350px;
   position: relative;
+  min-height: 350px;
+
+  @media screen and (max-width: 1320px) {
+    width: 25vw;
+  }
+
+  @media screen and (max-width: 1020px) {
+    padding: 30px 15px;
+  }
 `;
 
 export const CardTitle = styled.h3`
-  font-size: 1.8rem;
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
   color: ${colors.primary};
   margin-bottom: 10px;
   font-family: "ZenGakuGothicMedium", sans-serif;
@@ -90,21 +108,12 @@ export const CardLink = styled.a`
 
 export const CardImgWrapper = styled.div`
   position: absolute;
-  width: 250px;
-  right: -90px;
+  width: clamp(150px, 15vw, 250px);
+  right: -125px;
+  bottom: -140px;
 
-  &.card-3 {
-    bottom: -140px;
-    right: -210px;
-    width: 270px;
+  @media screen and (max-width: 1320px) {
+    right: -40px;
+    bottom: -100px;
   }
 `;
-
-// export const FootstepsWrapper = styled.div`
-//   position: absolute;
-//   bottom: 100px;
-//   right: 260px;
-//   img {
-//     width: 400px;
-//   }
-// `;

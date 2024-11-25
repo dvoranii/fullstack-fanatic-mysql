@@ -4,11 +4,19 @@ import {
   CardWrapper,
   Card,
   CardList,
+  CardImagesWrapper,
+  // StarWrapper,
 } from "./ProductsAndServices.styled";
 import TutorialIcon from "../../../assets/images/tutorial-icon-home.svg";
 import BlogIcon from "../../../assets/images/blog-icon-home.svg";
 import ConsultIcon from "../../../assets/images/consult-icon-home.svg";
 import Title from "../../../components/Title/Title";
+// import BeginnerStar from "../../../assets/images/tutorials/1-beginner-star.png";
+// import IntermediateStar from "../../../assets/images/tutorials/2-intermediate-stars.png";
+// import AdvancedStar from "../../../assets/images/tutorials/3-advanced-stars.png";
+import RatingsCardImage from "../../../assets/images/ratings-card-image.svg";
+import BlogsCardImage from "../../../assets/images/blogs-card-image.svg";
+import ConsultCardImage from "../../../assets/images/consult-card-image.svg";
 
 const ProductsAndServices: React.FC = () => {
   return (
@@ -35,13 +43,16 @@ const ProductsAndServices: React.FC = () => {
                 </li>
                 <li>
                   <span>
-                    <b>Visual Indicators:</b> Easily identify the difficulty
-                    level of each tutorial with visual markers.
+                    <b>Visual Indicators:</b> Identify the difficulty level of
+                    each tutorial with visual markers.
                   </span>
                 </li>
               </CardList>
+              <CardImagesWrapper>
+                <img src={RatingsCardImage} className="ratings-img" alt="" />
+              </CardImagesWrapper>
             </Card>
-            <img src={TutorialIcon} alt="" />
+            <img src={TutorialIcon} className="top-icon" alt="" />
           </CardWrapper>
           <CardWrapper>
             <Card>
@@ -67,8 +78,11 @@ const ProductsAndServices: React.FC = () => {
                   </span>
                 </li>
               </CardList>
+              <CardImagesWrapper>
+                <img src={BlogsCardImage} className="blogs-img" alt="" />
+              </CardImagesWrapper>
             </Card>
-            <img src={BlogIcon} alt="" />
+            <img src={BlogIcon} className="top-icon" alt="" />
           </CardWrapper>
           <CardWrapper>
             <Card>
@@ -84,18 +98,21 @@ const ProductsAndServices: React.FC = () => {
                 <li>
                   <span>
                     <b>Tailored Support:</b> Assistance with code, career
-                    questions, and roadmap development
+                    questions, and roadmaps.
                   </span>
                 </li>
                 <li>
                   <span>
-                    <b>Custom Curriculums:</b> Organize saved blogs and
-                    tutorials into personalized learning paths.
+                    <b>Custom Curriculums:</b> Organize blogs and tutorials into
+                    learning paths.
                   </span>
                 </li>
               </CardList>
+              <CardImagesWrapper>
+                <img src={ConsultCardImage} alt="" />
+              </CardImagesWrapper>
             </Card>
-            <img src={ConsultIcon} className="consult-icon" alt="" />
+            <img src={ConsultIcon} className="top-icon consult-icon" alt="" />
           </CardWrapper>
         </ProductsAndServicesWrapperInner>
       </ProductsAndServicesWrapperOuter>
