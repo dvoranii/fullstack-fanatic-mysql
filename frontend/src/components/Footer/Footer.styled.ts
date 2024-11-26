@@ -97,7 +97,7 @@ export const FooterNavLink = styled(Link)`
 export const CenteredSlogan = styled.div`
   grid-column: 2;
   grid-row: 1 / 3;
-  font-size: 2.8rem;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
   text-align: center;
   margin-top: -40px;
   color: #14213d;
@@ -114,11 +114,6 @@ export const FooterSocialLinks = styled.div`
   gap: 1.2rem;
   height: 100%;
   align-items: flex-end;
-
-  @media (max-width: 768px) {
-    grid-column: 1;
-    justify-content: center;
-  }
 `;
 
 export const IconWrapper = styled.div`
@@ -188,6 +183,7 @@ export const LegalWrapper = styled.div`
 
   @media (max-width: 768px) {
     margin-top: 15px;
+    grid-column: 2;
   }
 `;
 

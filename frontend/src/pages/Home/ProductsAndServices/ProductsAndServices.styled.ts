@@ -10,7 +10,7 @@ export const ProductsAndServiceTitleWrapper = styled.div`
 export const ProductsAndServiceTitle = styled.h2`
   position: relative;
   padding: 1rem;
-  margin-top: 2.4rem;
+  margin-top: 6.4rem;
   text-align: center;
   color: #222;
   font-family: "Anybody";
@@ -53,9 +53,12 @@ export const ProductsAndServicesWrapperOuter = styled.section`
   position: relative;
   width: 100%;
   padding: 80px 20px;
-  display: flex;
-  align-items: center;
   padding-top: 6.4rem;
+
+  @media screen and (max-width: 768px) {
+    display: flex;
+    align-items: center;
+  }
 `;
 export const ProductsAndServicesWrapperInner = styled.div`
   max-width: 1400px;
@@ -95,6 +98,10 @@ export const CardWrapper = styled.div`
 
   @media screen and (max-width: 759px) {
     width: 60vw;
+  }
+
+  @media screen and (max-width: 400px) {
+    width: 80vw;
   }
 `;
 export const Card = styled.div`
@@ -161,5 +168,17 @@ export const CardImagesWrapper = styled.div`
     img {
       margin-top: 30px;
     }
+  }
+`;
+
+export const ProductsAndServicesBottomImgWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  padding-top: 4.2rem;
+  padding-bottom: 2.4rem;
+
+  img {
+    width: 100%;
+    /* margin-right: -20px; */
   }
 `;

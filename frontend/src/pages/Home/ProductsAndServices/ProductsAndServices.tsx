@@ -7,6 +7,7 @@ import {
   CardImagesWrapper,
   ProductsAndServiceTitleWrapper,
   ProductsAndServiceTitle,
+  ProductsAndServicesBottomImgWrapper,
 } from "./ProductsAndServices.styled";
 import TutorialIcon from "../../../assets/images/tutorial-icon-home.svg";
 import BlogIcon from "../../../assets/images/blog-icon-home.svg";
@@ -14,6 +15,7 @@ import ConsultIcon from "../../../assets/images/consult-icon-home.svg";
 import RatingsCardImage from "../../../assets/images/ratings-card-image.svg";
 import BlogsCardImage from "../../../assets/images/blogs-card-image.svg";
 import ConsultCardImage from "../../../assets/images/consult-card-image.svg";
+import ProductsAndServicesBottomImg from "../../../assets/images/products-and-services-bottom-img.svg";
 
 const ProductsAndServices: React.FC = () => {
   return (
@@ -115,6 +117,9 @@ const ProductsAndServices: React.FC = () => {
           </CardWrapper>
         </ProductsAndServicesWrapperInner>
       </ProductsAndServicesWrapperOuter>
+      <ProductsAndServicesBottomImgWrapper>
+        <img src={ProductsAndServicesBottomImg} alt="" />
+      </ProductsAndServicesBottomImgWrapper>
     </>
   );
 };

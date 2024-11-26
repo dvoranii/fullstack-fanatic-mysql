@@ -48,7 +48,6 @@ const Footer = () => {
 
         <FooterSocialLinks>
           <IconWrapper>
-            {" "}
             <a
               href="https://github.com/yourprofile"
               target="_blank"

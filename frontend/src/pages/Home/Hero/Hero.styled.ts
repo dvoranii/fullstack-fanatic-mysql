@@ -13,7 +13,7 @@ export const HeroWrapper = styled.section`
     height: 85vh;
 
     @media screen and (max-width: 430px) {
-      height: 90vh;
+      height: 100vh;
     }
   }
 `;
@@ -79,6 +79,14 @@ export const LogoWrapper = styled.div`
   @media screen and (max-width: 768px) {
     padding-top: 3.2rem;
   }
+
+  @media screen and (max-width: 400px) and (max-height: 700px) {
+    padding-top: 0;
+  }
+
+  @media screen and (max-width: 768px) and (min-height: 1024px) {
+    padding-top: 0;
+  }
 `;
 
 export const ElipseWrapper = styled.div`
@@ -101,7 +109,7 @@ export const HeroTextWrapper = styled.div`
 
   h1 {
     font-family: "Anybody", sans-serif;
-    font-size: clamp(2.2rem, 3vw, 3.6rem);
+    font-size: clamp(2rem, 3vw, 3.6rem);
     text-transform: uppercase;
     color: ${colors.black};
     font-weight: 500;
@@ -164,6 +172,14 @@ export const HeroButtonWrapper = styled.div`
       margin-top: 80px;
       padding: 16px 32px;
     }
+
+    @media screen and (max-width: 390px) and (max-height: 840px) {
+      margin-top: 40px;
+    }
+
+    @media screen and (max-width: 768px) and (min-height: 1024px) {
+      margin-top: 80px;
+    }
   }
 `;
 
@@ -176,6 +192,10 @@ export const TriangleArrowWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media screen and (max-width: 400px) and (max-height: 700px) {
+    bottom: 50px;
+  }
 `;
 
 const fadeInDownOut = keyframes`
@@ -194,6 +214,7 @@ const fadeInDownOut = keyframes`
     transform: translateY(40px);
     opacity: 0;
   }
+
 `;
 
 export const TriangleArrow = styled.div`
@@ -233,15 +254,19 @@ export const SocialButtonsWrapper = styled.div`
   @media screen and (max-width: 768px) {
     bottom: 10%;
   }
+
+  @media screen and (max-width: 400px) and (max-height: 700px) {
+    bottom: 4%;
+  }
 `;
 export const SocialIconWrapper = styled.div`
   background-color: #ddd;
   border-radius: 50%;
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 4px;
   position: relative;
-
   transition: all 250ms ease;
   &:hover {
     filter: brightness(1.25);

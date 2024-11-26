@@ -13,6 +13,12 @@ export const MobileTopWrapper = styled.div`
     url(${WaveEffectBG});
   background-size: cover;
   background-repeat: no-repeat;
+  @media screen and (max-width: 768px) and (min-height: 1024px) {
+    /* height: 60%; */
+  }
+  @media screen and (max-width: 400px) and (max-height: 700px) {
+    /* height: 60%; */
+  }
 `;
 export const MobileBottomWrapper = styled.div`
   height: 50%;
