@@ -1,5 +1,4 @@
 import styled from "styled-components";
-// import { colors } from "../../GlobalStyles";
 
 export const ContactPageWrapper = styled.div`
   background-color: #fca311;
@@ -15,8 +14,16 @@ export const ContactPageWrapper = styled.div`
 
 export const ImgWrapper = styled.div`
   img {
-    width: 250px;
     position: absolute;
+  }
+  .elipse {
+    width: 250px;
     bottom: 0;
+  }
+
+  .triangle {
+    width: 100px;
+    top: 100px;
+    right: 0;
   }
 `;

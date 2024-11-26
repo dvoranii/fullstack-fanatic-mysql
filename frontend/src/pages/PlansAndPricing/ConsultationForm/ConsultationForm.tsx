@@ -13,66 +13,64 @@ import SwooshBG from "../../../assets/images/plansAndPricing/pink-swoosh.png";
 import FormMessage from "../../../components/Form/Message";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import { submitConsultationForm } from "../../../services/consultFormService";
+import { validateField } from "../../../utils/validationUtils";
 
 const ConsultationForm: React.FC<{
   formRef: React.RefObject<HTMLDivElement>;
 }> = ({ formRef }) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
 
-  const [nameError, setNameError] = useState<string | null>(null);
-  const [emailError, setEmailError] = useState<string | null>(null);
-  const [messageError, setMessageError] = useState<string | null>(null);
+  const [errors, setErrors] = useState({
+    name: null as string | null,
+    email: null as string | null,
+    message: null as string | null,
+  });
 
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    setNameError(null);
-    setEmailError(null);
-    setMessageError(null);
+    const newErrors = {
+      name: validateField({ type: "username", value: formData.name }),
+      email: validateField({ type: "email", value: formData.email }),
+      message: formData.message ? null : "Please enter your message",
+    };
 
-    let hasError = false;
+    setErrors(newErrors);
 
-    if (!name) {
-      setNameError("Please enter your name");
-      hasError = true;
-    }
-    if (!email) {
-      setEmailError("Please enter your email");
-      hasError = true;
-    } else if (!emailPattern.test(email)) {
-      setEmailError("Please enter a valid email (i.e., 123@abc.com)");
-      hasError = true;
-    }
-    if (!message) {
-      setMessageError("Please enter your message");
-    }
-
+    const hasError = Object.values(newErrors).some((error) => error !== null);
     if (hasError) return;
 
     setIsLoading(true);
 
     try {
-      await submitConsultationForm(name, email, message);
+      await submitConsultationForm(
+        formData.name,
+        formData.email,
+        formData.message
+      );
       setSuccessMessage("Form submission successful!");
 
       setTimeout(() => {
         setSuccessMessage(null);
-        setName("");
-        setEmail("");
-        setMessage("");
+        setFormData({
+          name: "",
+          email: "",
+          message: "",
+        });
       }, 5000);
     } catch (error) {
       console.error("Error submitting the consultation form:", error);
-      setMessageError(
-        "There was an issue submitting the form. Please try again."
-      );
+      setErrors((prev) => ({
+        ...prev,
+        message: "There was an issue submitting the form. Please try again.",
+      }));
     } finally {
       setIsLoading(false);
     }
@@ -83,22 +81,16 @@ const ConsultationForm: React.FC<{
   ) => {
     const { name, value } = e.target;
 
-    if (name === "name" && nameError !== null) {
-      setNameError(null);
-    }
-    if (name === "email" && emailError !== null) {
-      setEmailError(null);
-    }
-    if (name === "message" && messageError !== null) {
-      setMessageError(null);
-    }
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
 
-    if (name === "name") {
-      setName(value);
-    } else if (name === "email") {
-      setEmail(value);
-    } else if (name === "message") {
-      setMessage(value);
+    if (errors[name as keyof typeof errors]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: null,
+      }));
     }
   };
 
@@ -114,11 +106,11 @@ const ConsultationForm: React.FC<{
                 <input
                   type="text"
                   name="name"
-                  value={name}
+                  value={formData.name}
                   onChange={handleOnChangeInputText}
                 />
                 <FormMessage
-                  message={nameError}
+                  message={errors.name}
                   type="error"
                   textAlign="left"
                   fontSize="0.8rem"
@@ -130,11 +122,11 @@ const ConsultationForm: React.FC<{
                 <input
                   type="text"
                   name="email"
-                  value={email}
+                  value={formData.email}
                   onChange={handleOnChangeInputText}
                 />
                 <FormMessage
-                  message={emailError}
+                  message={errors.email}
                   type="error"
                   textAlign="left"
                   fontSize="0.8rem"
@@ -147,11 +139,11 @@ const ConsultationForm: React.FC<{
               <label htmlFor="message">Message</label>
               <textarea
                 name="message"
-                value={message}
+                value={formData.message}
                 onChange={handleOnChangeInputText}
               ></textarea>
               <FormMessage
-                message={messageError}
+                message={errors.message}
                 type="error"
                 textAlign="left"
                 fontSize="0.8rem"

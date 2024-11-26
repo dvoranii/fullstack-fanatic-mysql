@@ -3,6 +3,7 @@ import Title from "../../components/Title/Title";
 import { PageWrapper } from "../../PageWrapper.styled";
 import ElipseBgWhite from "../../assets/images/Ellipse-bg-white.svg";
 import ContactForm from "./ContactForm/ContactForm";
+import OrangeTriangle from "../../assets/images/orange-triangle.svg";
 
 const ContactPage: React.FC = () => {
   return (
@@ -18,7 +19,20 @@ const ContactPage: React.FC = () => {
         <ContactForm />
       </PageWrapper>
       <ImgWrapper>
-        <img src={ElipseBgWhite} alt="Elipse background image" loading="lazy" />
+        <img
+          src={ElipseBgWhite}
+          alt="Elipse background image"
+          className="elipse"
+          loading="lazy"
+        />
+      </ImgWrapper>
+      <ImgWrapper>
+        <img
+          src={OrangeTriangle}
+          alt="Triangle background image"
+          className="triangle"
+          loading="lazy"
+        />
       </ImgWrapper>
     </ContactPageWrapper>
   );

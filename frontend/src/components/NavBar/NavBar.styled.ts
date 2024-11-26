@@ -15,7 +15,7 @@ export const Nav = styled.nav`
   left: 0;
   width: 100%;
   position: relative;
-  z-index: 1001;
+  z-index: 999;
 
   @media screen and (max-width: 915px) {
     height: 100px;

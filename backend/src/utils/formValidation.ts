@@ -1,4 +1,4 @@
-export const validateConsultationForm = (
+export const validateGenericForm = (
   name: string,
   email: string,
   message: string
