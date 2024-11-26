@@ -4,7 +4,6 @@ import CommentSection from "../CommentSection/CommentSection";
 import { tutorialContent } from "../../assets/tutorialContent";
 import Accordion from "../Accordion/Accordion";
 import { TutorialDetailWrapper } from "./TutorialDetail.styled";
-import Title from "../Title/Title";
 import { TutorialContentItem } from "../../types/Tutorial/Tutorial";
 
 const TutorialDetail: React.FC = () => {
@@ -24,7 +23,7 @@ const TutorialDetail: React.FC = () => {
 
   return (
     <TutorialDetailWrapper>
-      <Title textContent={tutorial.title} />
+      <h1>{tutorial.title}</h1>
       <Accordion steps={tutorial.steps} />
       <CommentSection
         contentId={tutorial.id}

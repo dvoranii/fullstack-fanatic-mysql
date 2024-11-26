@@ -11,6 +11,7 @@ export const BlogList = styled.div`
   row-gap: 1.2rem;
   position: relative;
   user-select: none;
+  padding: 0px 20px;
 
   .squares-and-triangles {
     position: absolute;
@@ -18,22 +19,6 @@ export const BlogList = styled.div`
     width: 15vw;
     right: -22%;
   }
-
-  /* .block-1,
-  .block-2 {
-    height: 80px;
-    width: 20vw;
-    position: absolute;
-    border-radius: 10px;
-    opacity: 0.8;
-    z-index: -1;
-  }
-
-  .block-1 {
-    background-color: ${colors.primary};
-    left: -22vw;
-    bottom: -8%;
-  } */
 `;
 
 export const BlogPageWrapper = styled.div`
@@ -49,6 +34,12 @@ export const BlogItem = styled.div`
   border: 1px solid #ddd;
   border-radius: 5px;
   background: #fff;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    width: 85vw;
+    margin: 0 auto;
+  }
 `;
 
 export const BlogContent = styled(Link)`
@@ -69,6 +60,12 @@ export const BlogContent = styled(Link)`
     color: #666;
     max-width: 80%;
   }
+
+  @media screen and (max-width: 768px) {
+    h2 {
+      padding-top: 1.2rem;
+    }
+  }
 `;
 
 export const BlogActions = styled.div`
@@ -77,6 +74,12 @@ export const BlogActions = styled.div`
   align-items: flex-end;
   justify-content: space-between;
   min-width: 60px;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 1.2rem;
+  }
 `;
 
 export const FreeBadge = styled.div`
@@ -146,6 +149,13 @@ export const BlogImgWrapper = styled.div`
   img {
     max-width: 100px;
     padding: 10px;
+  }
+
+  @media screen and (max-width: 768px) {
+    img {
+      max-width: 110px;
+      padding: 20px 20px;
+    }
   }
 `;
 

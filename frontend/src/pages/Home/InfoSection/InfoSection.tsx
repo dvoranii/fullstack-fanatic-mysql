@@ -27,7 +27,7 @@ const InfoSection: React.FC = () => {
             <CardLink href="#">See more</CardLink>
           </CardLinkWrapper>
           <CardImgWrapper>
-            <img src={MasterImage} alt="" />
+            <img src={MasterImage} alt="Matser Image" loading="lazy" />
           </CardImgWrapper>
         </Card>
         <Card>
@@ -39,7 +39,7 @@ const InfoSection: React.FC = () => {
             <CardLink href="#">See more</CardLink>
           </CardLinkWrapper>
           <CardImgWrapper>
-            <img src={ApplyImage} alt="" />
+            <img src={ApplyImage} alt="Apply Image" loading="lazy" />
           </CardImgWrapper>
         </Card>
         <Card>
@@ -52,7 +52,7 @@ const InfoSection: React.FC = () => {
             <CardLink href="#">See more</CardLink>
           </CardLinkWrapper>
           <CardImgWrapper className="card-3">
-            <img src={CustomizeImage} alt="" />
+            <img src={CustomizeImage} alt="Customize Image" loading="lazy" />
           </CardImgWrapper>
         </Card>
       </InfoSectionWrapperInner>

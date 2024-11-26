@@ -62,6 +62,7 @@ export const ProductsAndServicesWrapperOuter = styled.section`
 `;
 export const ProductsAndServicesWrapperInner = styled.div`
   max-width: 1400px;
+  justify-content: center;
   margin: 0 auto;
   display: flex;
   gap: 3.2rem;
@@ -179,6 +180,11 @@ export const ProductsAndServicesBottomImgWrapper = styled.div`
 
   img {
     width: 100%;
-    /* margin-right: -20px; */
+  }
+
+  @media screen and (max-width: 768px) {
+    padding-top: 0;
+    width: 156%;
+    margin-left: -120px;
   }
 `;

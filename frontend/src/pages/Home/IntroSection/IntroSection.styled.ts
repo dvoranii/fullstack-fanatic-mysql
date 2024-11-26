@@ -130,3 +130,16 @@ export const ButtonWrapper = styled.div`
   position: relative;
   user-select: none;
 `;
+
+export const BgSquaresAndTriangleImg = styled.img`
+  width: 260px;
+  position: absolute;
+  right: 3%;
+  top: 10%;
+
+  @media screen and (max-width: 1024px) {
+    width: 180px;
+    top: 2%;
+    right: 0;
+  }
+`;

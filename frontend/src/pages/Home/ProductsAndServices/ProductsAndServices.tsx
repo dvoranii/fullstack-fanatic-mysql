@@ -50,10 +50,20 @@ const ProductsAndServices: React.FC = () => {
                 </li>
               </CardList>
               <CardImagesWrapper>
-                <img src={RatingsCardImage} className="ratings-img" alt="" />
+                <img
+                  src={RatingsCardImage}
+                  className="ratings-img"
+                  alt="ratings stars image"
+                  loading="lazy"
+                />
               </CardImagesWrapper>
             </Card>
-            <img src={TutorialIcon} className="top-icon" alt="" />
+            <img
+              src={TutorialIcon}
+              className="top-icon"
+              alt="tutorial card icon"
+              loading="lazy"
+            />
           </CardWrapper>
           <CardWrapper>
             <Card>
@@ -80,10 +90,20 @@ const ProductsAndServices: React.FC = () => {
                 </li>
               </CardList>
               <CardImagesWrapper>
-                <img src={BlogsCardImage} className="blogs-img" alt="" />
+                <img
+                  src={BlogsCardImage}
+                  className="blogs-img"
+                  alt="Blogs Card Image"
+                  loading="lazy"
+                />
               </CardImagesWrapper>
             </Card>
-            <img src={BlogIcon} className="top-icon" alt="" />
+            <img
+              src={BlogIcon}
+              className="top-icon"
+              alt="Blog card Icon"
+              loading="lazy"
+            />
           </CardWrapper>
           <CardWrapper>
             <Card>
@@ -110,15 +130,24 @@ const ProductsAndServices: React.FC = () => {
                 </li>
               </CardList>
               <CardImagesWrapper>
-                <img src={ConsultCardImage} alt="" />
+                <img src={ConsultCardImage} alt="Consultation Image" />
               </CardImagesWrapper>
             </Card>
-            <img src={ConsultIcon} className="top-icon consult-icon" alt="" />
+            <img
+              src={ConsultIcon}
+              className="top-icon consult-icon"
+              alt="Consultation Icon"
+              loading="lazy"
+            />
           </CardWrapper>
         </ProductsAndServicesWrapperInner>
       </ProductsAndServicesWrapperOuter>
       <ProductsAndServicesBottomImgWrapper>
-        <img src={ProductsAndServicesBottomImg} alt="" />
+        <img
+          src={ProductsAndServicesBottomImg}
+          alt="Products and Services banner image"
+          loading="lazy"
+        />
       </ProductsAndServicesBottomImgWrapper>
     </>
   );

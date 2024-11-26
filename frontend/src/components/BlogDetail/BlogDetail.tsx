@@ -1,6 +1,5 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import Title from "../Title/Title";
 import { BlogDetailWrapper } from "./BlogDetail.styled";
 import { blogContent } from "../../assets/blogContent";
 import Accordion from "../Accordion/Accordion";
@@ -24,7 +23,7 @@ const BlogDetail: React.FC = () => {
 
   return (
     <BlogDetailWrapper>
-      <Title textContent={blog.title} />
+      <h1>{blog.title}</h1>
       <Accordion steps={blog.steps} />
       <CommentSection contentId={blog.id} contentType="blog" />
     </BlogDetailWrapper>

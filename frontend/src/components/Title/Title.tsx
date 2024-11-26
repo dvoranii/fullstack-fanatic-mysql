@@ -7,13 +7,19 @@ interface TitleProps {
   pseudoBottom?: string;
   pseudoWidth?: string;
   pseudoHeight?: string;
+  pseudoColor?: string;
+  textColor?: string;
+  fontWeight?: number;
 }
 const Title: React.FC<TitleProps> = ({
   textContent,
+  textColor,
   pseudoRight,
   pseudoBottom,
   pseudoWidth,
   pseudoHeight,
+  pseudoColor,
+  fontWeight,
 }) => {
   return (
     <TitleWrapper>
@@ -22,6 +28,9 @@ const Title: React.FC<TitleProps> = ({
         pseudoBottom={pseudoBottom}
         pseudoWidth={pseudoWidth}
         pseudoHeight={pseudoHeight}
+        pseudoColor={pseudoColor}
+        textColor={textColor}
+        fontWeight={fontWeight}
       >
         {textContent}
       </StyledTitle>

@@ -22,7 +22,6 @@ import SearchBar from "../../components/SearchBar/SearchBar";
 import SquaresAndTriangles from "../../assets/images/SquaresAndTriangles.svg";
 import AddToCartButton from "../../components/AddToCartButton/AddToCartButton";
 import { CartItem } from "../../types/CartItem";
-// import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { mapBlogToCartItem } from "../../utils/cartUtils";
 
 const BlogsPage: React.FC = () => {
@@ -82,7 +81,7 @@ const BlogsPage: React.FC = () => {
           className="squares-and-triangles"
           alt=""
         />
-        {/* <div className="block-1"></div> */}
+
         {filteredBlogs.slice(0, visibleBlogs).map((blog) => {
           const isPremiumLocked = blog.isPremium && !canAccessBlog(blog.id);
           const hasAccess = canAccessBlog(blog.id);

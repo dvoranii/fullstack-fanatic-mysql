@@ -1,10 +1,14 @@
 import styled from "styled-components";
+import { colors } from "../../GlobalStyles";
 
 interface StyledTitleProps {
   pseudoBottom?: string;
   pseudoRight?: string;
   pseudoWidth?: string;
   pseudoHeight?: string;
+  pseudoColor?: string;
+  textColor?: string;
+  fontWeight?: number;
 }
 
 export const TitleWrapper = styled.div`
@@ -15,20 +19,26 @@ export const TitleWrapper = styled.div`
 
 export const StyledTitle = styled.h1.withConfig({
   shouldForwardProp: (prop) =>
-    !["pseudoBottom", "pseudoRight", "pseudoWidth", "pseudoHeight"].includes(
-      prop
-    ),
+    ![
+      "pseudoBottom",
+      "pseudoRight",
+      "pseudoWidth",
+      "pseudoHeight",
+      "pseudoColor",
+      "textColor",
+      "fontWeight",
+    ].includes(prop),
 })<StyledTitleProps>`
   position: relative;
   padding: 1rem;
   margin-top: 2.4rem;
   text-align: center;
-  color: #222;
+  color: ${({ textColor }) => textColor || "#222"};
   font-family: "Anybody";
   font-size: 2.4rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  font-weight: 500;
+  font-weight: ${({ fontWeight }) => fontWeight || 500};
   width: fit-content;
   user-select: none;
   z-index: 1;
@@ -40,7 +50,8 @@ export const StyledTitle = styled.h1.withConfig({
     right: ${({ pseudoRight }) => pseudoRight || "0"};
     width: ${({ pseudoWidth }) => pseudoWidth || "95px"};
     height: ${({ pseudoHeight }) => pseudoHeight || "25px"};
-    background-color: #ffb923;
+    background-color: ${({ pseudoColor }) =>
+      pseudoColor || `${colors.secondary}`};
     border-radius: 2px;
     z-index: -1;
   }

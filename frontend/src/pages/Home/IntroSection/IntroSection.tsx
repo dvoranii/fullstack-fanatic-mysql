@@ -8,16 +8,19 @@ import {
   CornerEllipse,
   SwirlyArrow,
   ButtonWrapper,
+  BgSquaresAndTriangleImg,
   ImageWrapper,
 } from "./IntroSection.styled";
 import PersonGraphic from "../../../assets/images/Amico-images/Coding-workshop-amico.svg";
 import CornerEllipseImg from "../../../assets/images/Ellipse-bg-solid.svg";
 import SwirlyArrowImg from "../../../assets/images/swirly-arrow-3.svg";
+import BgSquaresAndTriangle from "../../../assets/images/SquaresAndTriangles.svg";
 
 const IntroSection: React.FC = () => {
   return (
     <IntroSectionWrapper>
-      <LeftGraphic src={PersonGraphic} alt="Person Graphic" />
+      <BgSquaresAndTriangleImg src={BgSquaresAndTriangle} alt="" />
+      <LeftGraphic src={PersonGraphic} alt="Person Graphic" loading="lazy" />
       <ContentWrapper>
         <Title>
           The <span>#1</span> Platform for Current <span>AND</span> Aspiring Web
@@ -33,11 +36,15 @@ const IntroSection: React.FC = () => {
         </IntroText>
         <ButtonWrapper>
           <GetStartedButton>Get Started</GetStartedButton>
-          <SwirlyArrow src={SwirlyArrowImg} alt="Swirly Arrow" />
+          <SwirlyArrow src={SwirlyArrowImg} alt="Swirly Arrow" loading="lazy" />
         </ButtonWrapper>
       </ContentWrapper>
       <ImageWrapper>
-        <CornerEllipse src={CornerEllipseImg} alt="Corner Ellipse" />
+        <CornerEllipse
+          src={CornerEllipseImg}
+          alt="Corner Ellipse"
+          loading="lazy"
+        />
       </ImageWrapper>
     </IntroSectionWrapper>
   );
