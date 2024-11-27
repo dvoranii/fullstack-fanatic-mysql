@@ -5,10 +5,12 @@ import {
   TextArea,
   SubmitButton,
   NameEmailWrapper,
+  SpinnerWrapper,
 } from "./ContactForm.styled";
 import { validateField } from "../../../utils/validationUtils";
 import FormMessage from "../../../components/Form/Message";
 import { submitContactForm } from "../../../services/contactFormService";
+import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 
 const ContactForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -47,7 +49,6 @@ const ContactForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate form fields
     const newErrors = {
       fullName: validateField({
         type: "username",
@@ -148,9 +149,16 @@ const ContactForm: React.FC = () => {
           marginTop="4px"
         />
       </div>
-      <SubmitButton type="submit" disabled={isLoading}>
-        {isLoading ? "Sending..." : "Send"}
-      </SubmitButton>
+
+      {isLoading ? (
+        <SpinnerWrapper>
+          <LoadingSpinner />
+        </SpinnerWrapper>
+      ) : (
+        <SubmitButton type="submit" disabled={isLoading}>
+          Send
+        </SubmitButton>
+      )}
 
       <FormMessage
         message={successMessage}

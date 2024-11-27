@@ -8,6 +8,7 @@ export const FormWrapper = styled.form`
   margin: 3rem auto;
   width: clamp(500px, 60%, 800px);
   padding: 0 20px;
+  position: relative;
   user-select: none;
 
   label {
@@ -91,4 +92,9 @@ export const NameEmailWrapper = styled.div`
   div {
     width: 100%;
   }
+`;
+
+export const SpinnerWrapper = styled.div`
+  width: fit-content;
+  margin: 0 auto;
 `;
