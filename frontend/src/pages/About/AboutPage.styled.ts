@@ -11,6 +11,7 @@ export const AboutPageWrapper = styled.div``;
 
 export const AboutIntroWrapperOuter = styled.div`
   position: relative;
+  padding: 0 20px;
 
   .elipse {
     position: absolute;
@@ -27,6 +28,15 @@ export const AboutIntroWrapperOuter = styled.div`
     left: 80px;
     width: 250px;
     transform: scaleX(-1);
+    z-index: -1;
+  }
+
+  @media screen and (max-width: 548px) {
+    .squares-triangle {
+      left: -3px;
+      width: 40vw;
+      top: 260px;
+    }
   }
 `;
 
@@ -38,14 +48,29 @@ export const AboutIntroWrapper = styled.div`
   align-items: center;
   max-width: 1200px;
   margin: 0 auto;
-  height: 70vh;
+  min-height: 600px;
   gap: 2.4rem;
+
+  @media screen and (max-width: 548px) {
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+  }
 `;
 
 export const AboutImageWrapper = styled.div`
   user-select: none;
+  order: 0;
   img {
-    width: clamp(250px, 26vw, 500px);
+    width: clamp(200px, 26vw, 500px);
+  }
+
+  @media screen and (max-width: 548px) {
+    order: 2;
+
+    img {
+      width: 65vw;
+    }
   }
 `;
 export const LinkWrapper = styled.div`
@@ -77,6 +102,15 @@ export const LinkWrapper = styled.div`
 `;
 export const MissionStatementWrapper = styled.div`
   font-size: 1.4rem;
+  order: 1;
+
+  h2 {
+    font-size: clamp(1.4rem, 4vw, 2.4rem);
+  }
+
+  @media screen and (max-width: 548px) {
+    order: 1;
+  }
 `;
 
 export const CoreTenetsWrapper = styled.div`
@@ -92,6 +126,7 @@ export const CoreTenetsWrapper = styled.div`
   background-repeat: no-repeat;
   padding-bottom: 8.4rem;
   position: relative;
+  padding-top: 2.4rem;
 
   .elipse-solid {
     position: absolute;
@@ -110,12 +145,12 @@ export const CoreTenetsWrapper = styled.div`
     border-bottom: 1px solid rgba(0, 0, 0, 0.25);
     margin-bottom: 2.4rem;
     font-family: "Anybody", sans-serif;
-    width: 70%;
+    width: clamp(250px, 70vw, 100%);
   }
 
   ol {
     margin-inline-start: 1.2rem;
-    margin-top: 2.4rem;
+    margin-top: 1.2rem;
 
     li {
       padding-top: 1.2rem;
@@ -132,12 +167,18 @@ export const CoreTenetsWrapperInner = styled.div`
   display: flex;
   gap: 2.4rem;
   padding-top: 1.2rem;
+  max-width: 1400px;
+  padding: 0 20px;
+  margin: 0 auto;
+
+  @media screen and (max-width: 656px) {
+    flex-direction: column;
+  }
 `;
 
 export const ListSectionTitleWrapper = styled.div<ListSectionTitleWrapperProps>`
-  width: 100%;
-  display: flex;
-  justify-content: center;
+  width: fit-content;
+  margin: 0 auto;
   position: relative;
   z-index: 1;
 
@@ -146,18 +187,8 @@ export const ListSectionTitleWrapper = styled.div<ListSectionTitleWrapperProps>`
     width: fit-content;
     position: relative;
     z-index: 2;
-    font-size: 1.8rem;
-  }
-  &::after {
-    content: "";
-    position: absolute;
-    width: ${(props) => props.width || "114px"};
-    height: 20px;
-    background-color: #ccc;
-    border-radius: 2px;
-    z-index: 1;
-    bottom: 0px;
-    right: ${(props) => props.offset || "172px"};
+    font-size: clamp(1.4rem, 2vw, 1.8rem);
+    border-bottom: 2px solid ${colors.primary};
   }
 `;
 export const TenetListSection = styled.div``;
