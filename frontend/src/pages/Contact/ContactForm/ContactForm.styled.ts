@@ -6,10 +6,11 @@ export const FormWrapper = styled.form`
   flex-direction: column;
   gap: 1.5rem;
   margin: 3rem auto;
-  width: clamp(500px, 60%, 800px);
+  width: clamp(300px, 70%, 800px);
   padding: 0 20px;
   position: relative;
   user-select: none;
+  z-index: 2;
 
   label {
     font-weight: bold;

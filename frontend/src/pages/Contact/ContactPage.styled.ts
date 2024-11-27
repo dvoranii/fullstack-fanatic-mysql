@@ -10,6 +10,12 @@ export const ContactPageWrapper = styled.div`
     width: fit-content;
     margin-top: 4.8rem;
   }
+
+  @media screen and (max-width: 400px) {
+    h1 {
+      transform: scale(0.8);
+    }
+  }
 `;
 
 export const ImgWrapper = styled.div`
@@ -19,6 +25,7 @@ export const ImgWrapper = styled.div`
   .elipse {
     width: 250px;
     bottom: 0;
+    z-index: 1;
   }
 
   .triangle {
