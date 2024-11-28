@@ -39,10 +39,6 @@ export const BannerUploadWrapper = styled.div`
 `;
 
 export const ProfileBanner = styled.div<{ banner_image: string }>`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   padding: 20px 0;
   border-bottom-left-radius: 40px;
   border-bottom-right-radius: 40px;
@@ -54,71 +50,89 @@ export const ProfileBanner = styled.div<{ banner_image: string }>`
 `;
 
 export const ProfileContentWrapper = styled.div`
-  position: absolute;
-  left: 20%;
-  top: 60%;
+  width: 60%;
+  margin: 75px auto;
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  min-height: 200px;
-  min-width: 55%;
-  /* user-select: none; */
+  place-items: center;
 
-  @media (max-width: 959px) {
-    grid-template-columns: 1fr 1fr;
+  @media screen and (max-width: 1024px) {
+    width: 75%;
+  }
+
+  @media screen and (max-width: 768px) {
+    margin-bottom: 2.4rem;
+    grid-template-columns: 2fr 1fr !important;
     grid-template-rows: auto auto;
+    row-gap: 1.2rem;
   }
 `;
 
 export const ProfilePictureWrapper = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 60%;
   user-select: none;
+  margin: 100px auto;
+  place-items: center;
+
+  @media screen and (max-width: 1024px) {
+    width: 75%;
+  }
+
+  @media screen and (max-width: 768px) {
+    img {
+      grid-column: 2;
+    }
+  }
 `;
 
-export const ProfileInfo = styled.div`
-  text-align: center;
+export const ProfileInfoColumn1 = styled.div`
   grid-column: 1;
-  border-right: 2px solid lightgrey;
+  place-items: center;
+  text-align: center;
   padding: 20px;
 
-  h2 {
-    font-family: "ZenKakuGothicNewMedium";
-  }
-
-  h3 {
-    font-family: "ZenKakuGothicNewRegular";
-  }
-
-  button {
-    text-transform: uppercase;
-    padding: 8px 16px;
-    font-weight: bold;
-    background-color: #14213d;
-    color: #f2f2f2f2;
-    letter-spacing: 1.25px;
-    border: none;
-    border-radius: 20px;
+  @media screen and (max-width: 768px) {
+    grid-row: 1;
+    grid-column: span 2;
   }
 `;
+export const ProfileInfoColumn2 = styled.div`
+  grid-column: 2;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: flex-start;
+  border-right: 2px solid lightgrey;
+  border-left: 2px solid lightgrey;
+  padding: 20px;
 
-export const ProfilePlaceholder = styled.div<{ height?: string }>`
-  height: ${(props) => props.height || "190px"};
+  @media screen and (max-width: 768px) {
+    grid-row: 2;
+    grid-column: 1;
+    border-left: none;
+  }
+`;
+export const ProfileInfoColumn3 = styled.div`
+  grid-column: 3;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  padding: 20px;
 
-  @media (max-width: 959px) {
-    height: ${(props) => props.height || "250px"};
+  @media screen and (max-width: 768px) {
+    grid-row: 2;
+    grid-column: 2;
   }
 `;
 
 export const BioContentWrapper = styled.div`
+  width: 100%;
   overflow-wrap: break-word;
-  border-right: 2px solid lightgrey;
-  padding: 20px;
 
-  @media (max-width: 959px) {
-    border-right: none;
-    grid-column: span 2;
-    grid-row: 3;
+  @media screen and (max-width: 768px) {
+    height: 100%;
   }
 `;
 
@@ -158,7 +172,7 @@ export const AccountActivityTitle = styled.h2`
   letter-spacing: 0.5px;
   width: 100%;
   text-align: center;
-  margin-top: 7.2rem;
+
   background: ${colors.secondary};
   color: #222;
   text-transform: uppercase;
@@ -183,9 +197,6 @@ export const Section = styled.div`
   @media screen and (max-width: 1291px) {
     padding: 0 30px 4.2rem 30px;
   }
-  /* &.favorites-section {
-
-  } */
 `;
 
 export const SectionTitle = styled.h3`
@@ -298,9 +309,8 @@ export const FollowsWrapper = styled.div`
 `;
 
 export const PremiumBadge = styled.div<{ level: string }>`
-  margin: 0.8rem auto;
-  width: 90%;
-  padding: 4px 16px;
+  width: fit-content;
+  padding: 4px 32px;
   background: ${({ level }) =>
     level === "starter"
       ? "linear-gradient(315deg, rgba(34, 185, 50, 1) 23%, rgba(157, 233, 165, 1) 50%, rgba(34, 185, 50, 1) 77%)"

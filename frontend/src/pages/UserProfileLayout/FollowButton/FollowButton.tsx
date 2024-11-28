@@ -1,5 +1,5 @@
 import { followUser, unfollowUser } from "../../../services/followService";
-
+import { FollowBtn } from "./FollowButton.styled";
 interface FollowButtonProps {
   userId: number;
   isFollowing: boolean;
@@ -30,9 +30,9 @@ const FollowButton: React.FC<FollowButtonProps> = ({
   };
 
   return (
-    <button onClick={handleFollowToggle}>
+    <FollowBtn onClick={handleFollowToggle}>
       {isFollowing ? "Unfollow" : "Follow"}
-    </button>
+    </FollowBtn>
   );
 };
 

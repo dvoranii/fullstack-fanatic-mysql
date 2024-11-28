@@ -30,7 +30,7 @@ export const ButtonText = styled.span`
 // Icon container with sliding animation
 export const ButtonIcon = styled.div`
   background-color: #ffa000;
-  width: 92px;
+  width: 60px;
   height: 100%;
   position: absolute;
   right: -10px;
@@ -70,7 +70,7 @@ export const CustomIcon = styled.i`
 
 // Complex button styling for "publicUser" variant
 export const StyledButton = styled.a`
-  width: 100%;
+  width: clamp(170px, 3vw, 100%);
   height: 45px;
   display: inline-block;
   position: relative;

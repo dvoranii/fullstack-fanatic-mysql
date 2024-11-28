@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import {
   ProfileBanner,
   ProfilePictureWrapper,
-  ProfileInfo,
   UserName,
   UserProfession,
   BioContentWrapper,
@@ -21,12 +20,15 @@ import {
   CommentLink,
   ViewMoreCommentsLink,
   SocialSectionWrapperOuter,
-  ProfilePlaceholder,
   BannerUploadWrapper,
   UserAccountContainer,
   FollowsWrapper,
   PremiumBadge,
   AccountActivityWrapperOuter,
+  EditProfileLink,
+  ProfileInfoColumn1,
+  ProfileInfoColumn2,
+  ProfileInfoColumn3,
 } from "./UserProfile.styled";
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import SocialLinksDisplay from "./SocialLinksDisplay/SocialLinksDisplay";
@@ -88,83 +90,15 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
               profile.banner_image ? `${BASE_URL}${profile.banner_image}` : ""
             }
           >
-            <ProfileContentWrapper>
-              <ProfilePictureWrapper>
-                <ProfilePicture
-                  src={profile.profile_picture || ""}
-                  alt={`${profile.name}`}
-                  width="150px"
-                  border="4px solid white"
-                  bg="grey"
-                />
-              </ProfilePictureWrapper>
-
-              <ProfileInfo>
-                <UserName>{profile.display_name || profile.name}</UserName>
-                <UserProfession>{profile.profession}</UserProfession>
-
-                {!isEditable && loggedInUser && (
-                  <MessageModalButton
-                    userId={profile.id.toString()}
-                    variant="publicUser"
-                  />
-                )}
-                {!isEditable && loggedInUser && (
-                  <FollowButton
-                    userId={profile.id}
-                    isFollowing={isFollowing}
-                    setIsFollowing={setIsFollowing}
-                    setFollowersCount={setFollowersCount}
-                  />
-                )}
-
-                {isEditable && (
-                  <a href="#" onClick={onEditProfileClick}>
-                    <u>Edit Profile</u>
-                  </a>
-                )}
-
-                {!!profile.isPremium && profile.premiumLevel && (
-                  <PremiumBadge level={profile.premiumLevel}>
-                    <p>{profile.premiumLevel.toUpperCase()}</p>
-                  </PremiumBadge>
-                )}
-              </ProfileInfo>
-
-              <BioContentWrapper>
-                <UserInfoSubtitle>Bio</UserInfoSubtitle>
-                <p>{profile.bio || "No bio available."}</p>
-              </BioContentWrapper>
-
-              <SocialSectionWrapperOuter>
-                <UserInfoSubtitle>Links</UserInfoSubtitle>
-                <SocialLinksDisplay socialLinks={socialLinks} />
-                {children}
-                <FollowsWrapper>
-                  <Link
-                    to={
-                      isOwnProfile
-                        ? "/my-account/followers"
-                        : `/user/${profile.id}/followers`
-                    }
-                  >
-                    {followersCount}{" "}
-                    {followersCount === 1 ? "Follower" : "Followers"}
-                  </Link>
-                </FollowsWrapper>
-                <FollowsWrapper>
-                  <Link
-                    to={
-                      isOwnProfile
-                        ? "/my-account/following"
-                        : `/user/${profile.id}/following`
-                    }
-                  >
-                    {followingCount} Following
-                  </Link>
-                </FollowsWrapper>
-              </SocialSectionWrapperOuter>
-            </ProfileContentWrapper>
+            <ProfilePictureWrapper>
+              <ProfilePicture
+                src={profile.profile_picture || ""}
+                alt={`${profile.name}`}
+                width="150px"
+                border="4px solid white"
+                bg="grey"
+              />
+            </ProfilePictureWrapper>
           </ProfileBanner>
         </BannerWrapperInner>
         {isEditable && (
@@ -175,12 +109,75 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
         )}
       </BannerWrapperOuter>
 
-      {/* might need different approach */}
-      {!isEditable ? (
-        <ProfilePlaceholder height="300px" />
-      ) : (
-        <ProfilePlaceholder height="190px" />
-      )}
+      <ProfileContentWrapper>
+        <ProfileInfoColumn1>
+          <UserName>{profile.display_name || profile.name}</UserName>
+          <UserProfession>{profile.profession}</UserProfession>
+
+          {!!profile.isPremium && profile.premiumLevel && (
+            <PremiumBadge level={profile.premiumLevel}>
+              <p>{profile.premiumLevel.toUpperCase()}</p>
+            </PremiumBadge>
+          )}
+
+          {isEditable && (
+            <EditProfileLink href="#" onClick={onEditProfileClick}>
+              <u>Edit Profile</u>
+            </EditProfileLink>
+          )}
+
+          {!isEditable && loggedInUser && (
+            <MessageModalButton
+              userId={profile.id.toString()}
+              variant="publicUser"
+            />
+          )}
+          {!isEditable && loggedInUser && (
+            <FollowButton
+              userId={profile.id}
+              isFollowing={isFollowing}
+              setIsFollowing={setIsFollowing}
+              setFollowersCount={setFollowersCount}
+            />
+          )}
+        </ProfileInfoColumn1>
+        <ProfileInfoColumn2>
+          <BioContentWrapper>
+            <UserInfoSubtitle>Bio</UserInfoSubtitle>
+            <p>{profile.bio || "No bio available."}</p>
+          </BioContentWrapper>
+        </ProfileInfoColumn2>
+        <ProfileInfoColumn3>
+          <SocialSectionWrapperOuter>
+            <UserInfoSubtitle>Links</UserInfoSubtitle>
+            <SocialLinksDisplay socialLinks={socialLinks} />
+            {children}
+            <FollowsWrapper>
+              <Link
+                to={
+                  isOwnProfile
+                    ? "/my-account/followers"
+                    : `/user/${profile.id}/followers`
+                }
+              >
+                {followersCount}{" "}
+                {followersCount === 1 ? "Follower" : "Followers"}
+              </Link>
+            </FollowsWrapper>
+            <FollowsWrapper>
+              <Link
+                to={
+                  isOwnProfile
+                    ? "/my-account/following"
+                    : `/user/${profile.id}/following`
+                }
+              >
+                {followingCount} Following
+              </Link>
+            </FollowsWrapper>
+          </SocialSectionWrapperOuter>
+        </ProfileInfoColumn3>
+      </ProfileContentWrapper>
 
       <AccountActivityTitle>Account Activity</AccountActivityTitle>
 
