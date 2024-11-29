@@ -16,6 +16,9 @@ export const ConversationWrapper = styled.div`
     background-color: transparent;
   }
 
+  @media screen and (max-width: 981px) {
+    max-width: 80px;
+  }
   @media screen and (max-width: 375px) {
     height: 80px;
     display: flex;
@@ -36,6 +39,10 @@ export const ConversationDetailsWrapper = styled.div`
 export const SubjectPreview = styled.p`
   font-size: 0.9rem;
   color: gray;
+
+  @media screen and (max-width: 981px) {
+    display: none;
+  }
 `;
 
 export const DeleteConvoButtonWrapper = styled.div`

@@ -11,8 +11,9 @@ export const TitleBannerWrapper = styled.div<TitleBannerWrapperProps>`
   user-select: none;
   text-align: ${(props) => (props.centered ? "center" : "left")};
 
-  h2 {
+  h1 {
     text-transform: uppercase;
     letter-spacing: 1px;
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
   }
 `;

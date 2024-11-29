@@ -14,6 +14,7 @@ export const NetworkDefaultContent = styled.div`
   flex-direction: column;
 
   h3 {
+    font-size: clamp(1.2rem, 2vw, 1.4rem);
     padding-top: 2.4rem;
     text-align: center;
     font-family: "Anybody";

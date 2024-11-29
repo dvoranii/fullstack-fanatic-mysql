@@ -23,7 +23,7 @@ export const LayoutContainer = styled.div`
   @media screen and (max-width: 981px) {
     display: flex;
     flex-direction: column;
-    height: 82vh;
+    height: 90vh;
   }
 `;
 

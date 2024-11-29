@@ -3,6 +3,7 @@ import {
   ConvoHistoryContainer,
   ReadFilterWrapper,
   SearchBarReadFilterWrapper,
+  ConversationItemWrapper,
 } from "./MessageInboxConvoHistory.styled";
 import SearchBar from "../../../../components/SearchBar/SearchBar";
 import DeleteConfirmationModal from "../../../../components/DeleteConfirmationModal/DeleteConfirmationModal";
@@ -127,18 +128,20 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
           </ReadFilterWrapper>
         </SearchBarReadFilterWrapper>
 
-        {filteredConversations().map((conversation: Conversation) => (
-          <ConversationItem
-            key={conversation.id}
-            conversation={conversation}
-            userName={
-              userNames[conversation.id] || `User ${conversation.user2_id}`
-            }
-            userPicture={userPictures[conversation.id] || ""}
-            onSelect={onConversationSelect}
-            onDelete={handleDeleteConversationClick}
-          />
-        ))}
+        <ConversationItemWrapper>
+          {filteredConversations().map((conversation: Conversation) => (
+            <ConversationItem
+              key={conversation.id}
+              conversation={conversation}
+              userName={
+                userNames[conversation.id] || `User ${conversation.user2_id}`
+              }
+              userPicture={userPictures[conversation.id] || ""}
+              onSelect={onConversationSelect}
+              onDelete={handleDeleteConversationClick}
+            />
+          ))}
+        </ConversationItemWrapper>
       </ConvoHistoryContainer>
 
       {isDeleteModalOpen && (

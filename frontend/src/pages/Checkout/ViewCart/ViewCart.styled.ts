@@ -11,6 +11,26 @@ export const ViewCartTitleBanner = styled.div`
   }
 `;
 
+export const CartPageWrapperInner = styled.div`
+  display: flex;
+  gap: 2.4rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 4.8rem 2.4rem 4.8rem 2.4rem;
+
+  .mobile-divider {
+    display: none;
+  }
+
+  @media screen and (max-width: 625px) {
+    flex-direction: column;
+
+    .mobile-divider {
+      display: block;
+    }
+  }
+`;
+
 export const CartItemsWrapper = styled.div`
   flex: 2;
   display: flex;
@@ -25,12 +45,19 @@ export const CartItem = styled.div`
   border-radius: 8px;
   padding: 1rem;
   position: relative;
+  user-select: none;
 
   img {
     width: 100px;
-    height: 100px;
+    height: auto;
     object-fit: cover;
     border-radius: 8px;
+  }
+
+  @media screen and (max-width: 425px) {
+    flex-direction: column;
+    gap: 1.2rem;
+    text-align: center;
   }
 `;
 
@@ -50,12 +77,17 @@ export const CartItemDetails = styled.div`
 
 export const RemoveButton = styled.button`
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 4px;
+  right: 8px;
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1rem;
   cursor: pointer;
+  transition: all 150ms ease;
+
+  &:hover {
+    color: #444;
+  }
 `;
 
 export const OrderSummary = styled.div`
@@ -71,6 +103,10 @@ export const OrderSummary = styled.div`
 
   p {
     margin: 0.5rem 0;
+  }
+
+  @media screen and (max-width: 625px) {
+    width: 100%;
   }
 `;
 
@@ -88,9 +124,4 @@ export const ProceedToCheckoutButton = styled.button`
   &:hover {
     background-color: #005bb5;
   }
-`;
-
-export const CartPageWrapperInner = styled.div`
-  display: flex;
-  gap: 2.4rem;
 `;

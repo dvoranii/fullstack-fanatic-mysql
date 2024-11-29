@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface NavLinkStyledProps {
   underlinewidth?: string;
@@ -61,6 +62,16 @@ export const MobileNavList = styled.ul<{ open: boolean }>`
   transition: transform 0.3s ease-in-out;
   z-index: 1000;
 
+  .mobile-network-icon {
+    width: 25px;
+    margin: 0;
+  }
+
+  .mobile-accounts-wrapper {
+    gap: 10px;
+    padding-top: 1.2rem;
+  }
+
   @media (min-width: 915px) {
     display: none;
   }
@@ -68,11 +79,16 @@ export const MobileNavList = styled.ul<{ open: boolean }>`
     margin-top: 6.4rem;
   }
   li:last-child {
-    margin-left: 0;
+    margin: 0 auto;
   }
 
   li {
     margin-top: 2.4rem;
+    margin: 1.42em auto;
+
+    a {
+      width: fit-content;
+    }
   }
 `;
 
@@ -88,12 +104,6 @@ export const NavPipe = styled.span`
   margin: 0 0.5rem;
   font-weight: bold;
 `;
-
-// export const SmallFontSpan = styled.span`
-//   font-size: 0.75em;
-
-//   padding-left: 0.2rem;
-// `;
 
 export const NavLinkStyled = styled(NavLink)<NavLinkStyledProps>`
   color: #222;
@@ -175,5 +185,27 @@ export const NetworkPageLink = styled(NavLink)`
   img {
     width: 30px;
     margin: 10px;
+  }
+`;
+
+export const ShoppingCartLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  img {
+    width: 25px;
+  }
+`;
+export const UserProfileLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  img {
+    width: 25px;
+  }
+`;
+export const NotificationLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  img {
+    width: 25px;
   }
 `;

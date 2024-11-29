@@ -1,6 +1,5 @@
-import { PageWrapper } from "../../../PageWrapper.styled";
 import {
-  ViewCartTitleBanner,
+  // ViewCartTitleBanner,
   CartItemsWrapper,
   CartItem,
   CartItemDetails,
@@ -12,6 +11,7 @@ import {
 import { UserContext } from "../../../context/UserContext";
 import { useContext } from "react";
 import useHandleCheckout from "../../../hooks/useHandleCheckout";
+import TitleBanner from "../../../components/TitleBanner/TitleBanner";
 
 const ViewCart: React.FC = () => {
   const { cartItems = [], removeItemFromCart = () => {} } =
@@ -25,39 +25,37 @@ const ViewCart: React.FC = () => {
 
   return (
     <>
-      <ViewCartTitleBanner>
-        <h1>My Cart &mdash; Tutorials & Blogs</h1>
-      </ViewCartTitleBanner>
-      <PageWrapper>
-        <CartPageWrapperInner>
-          <CartItemsWrapper>
-            {cartItems.map((item) => (
-              <CartItem key={item.id}>
-                <img src={item.image} alt={item.title} />
-                <CartItemDetails>
-                  <h3>{item.title}</h3>
-                  <p>{item.description || "Description of the product"}</p>
-                  <p>
-                    <b>PRICE:</b> ${item.price.toFixed(2)}
-                  </p>
-                </CartItemDetails>
-                <RemoveButton onClick={() => removeItemFromCart(item.id)}>
-                  ✕
-                </RemoveButton>
-              </CartItem>
-            ))}
-          </CartItemsWrapper>
-          <OrderSummary>
-            <h4>ORDER SUMMARY</h4>
-            <p>Subtotal: ${subtotal.toFixed(2)}</p>
-            <p>Taxes (HST): ${taxes.toFixed(2)}</p>
-            <p>Total: ${total.toFixed(2)}</p>
-            <ProceedToCheckoutButton onClick={() => handleCheckout(cartItems)}>
-              PROCEED TO CHECKOUT
-            </ProceedToCheckoutButton>
-          </OrderSummary>
-        </CartPageWrapperInner>
-      </PageWrapper>
+      <TitleBanner textContent="My Cart - Tutorials & Blogs" />
+
+      <CartPageWrapperInner>
+        <CartItemsWrapper>
+          {cartItems.map((item) => (
+            <CartItem key={item.id}>
+              <img src={item.image} alt={item.title} />
+              <CartItemDetails>
+                <h3>{item.title}</h3>
+                <p>{item.description || "Description of the product"}</p>
+                <p>
+                  <b>PRICE:</b> ${item.price.toFixed(2)}
+                </p>
+              </CartItemDetails>
+              <RemoveButton onClick={() => removeItemFromCart(item.id)}>
+                ✕
+              </RemoveButton>
+            </CartItem>
+          ))}
+        </CartItemsWrapper>
+        <hr className="mobile-divider"></hr>
+        <OrderSummary>
+          <h4>ORDER SUMMARY</h4>
+          <p>Subtotal: ${subtotal.toFixed(2)}</p>
+          <p>Taxes (HST): ${taxes.toFixed(2)}</p>
+          <p>Total: ${total.toFixed(2)}</p>
+          <ProceedToCheckoutButton onClick={() => handleCheckout(cartItems)}>
+            PROCEED TO CHECKOUT
+          </ProceedToCheckoutButton>
+        </OrderSummary>
+      </CartPageWrapperInner>
     </>
   );
 };

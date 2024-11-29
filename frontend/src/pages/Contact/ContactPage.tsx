@@ -1,6 +1,5 @@
 import { ContactPageWrapper, ImgWrapper } from "./ContactPage.styled";
 import Title from "../../components/Title/Title";
-// import { PageWrapper } from "../../PageWrapper.styled";
 import ElipseBgWhite from "../../assets/images/Ellipse-bg-white.svg";
 import ContactForm from "./ContactForm/ContactForm";
 import OrangeTriangle from "../../assets/images/orange-triangle.svg";

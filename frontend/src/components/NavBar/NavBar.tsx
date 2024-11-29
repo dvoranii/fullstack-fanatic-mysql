@@ -5,13 +5,15 @@ import {
   NavList,
   NavItem,
   NavPipe,
-  // SmallFontSpan,
   Logo,
   NavLinkStyled,
   MobileNavList,
   LogoWrapper,
   AccountBtnsWrapper,
   NetworkPageLink,
+  ShoppingCartLink,
+  UserProfileLink,
+  NotificationLink,
 } from "./NavBar.styled";
 import FSFLogo from "../../assets/images/fsf-logo-notext.png";
 import UserProfileNavBtn from "./UserProfileNavBtn/UserProfileNavBtn";
@@ -20,6 +22,9 @@ import LoginButton from "./LoginButton/LoginButton";
 import NotificationButton from "./Notifications/Notifications";
 import ShoppingCart from "./ShoppingCart/ShoppingCart";
 import NetworkIcon from "../../assets/images/networking-icon.png";
+import ShoppingCartIcon from "../../assets/images/shopping-cart-icon.png";
+import BellIcon from "../../assets/images/notification-bell.png";
+import UserProfileIcon from "../../assets/images/profile-icon-black.png";
 
 const NavBar: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -87,36 +92,66 @@ const NavBar: React.FC = () => {
 
       <MobileNavList open={open}>
         <NavItem>
-          <NavLinkStyled to="/" onClick={toggleMobileNav}>
+          <NavLinkStyled to="/" onClick={toggleMobileNav} underlinewidth="72%">
             Home
           </NavLinkStyled>
         </NavItem>
         <NavItem>
-          <NavLinkStyled to="/about" onClick={toggleMobileNav}>
+          <NavLinkStyled
+            to="/about"
+            onClick={toggleMobileNav}
+            underlinewidth="72%"
+          >
             About
           </NavLinkStyled>
         </NavItem>
         <NavItem>
-          <NavLinkStyled to="/tutorials" onClick={toggleMobileNav}>
+          <NavLinkStyled
+            to="/tutorials"
+            onClick={toggleMobileNav}
+            underlinewidth="80%"
+          >
             Tutorials
           </NavLinkStyled>
         </NavItem>
         <NavItem>
-          <NavLinkStyled to="/blogs" onClick={toggleMobileNav}>
+          <NavLinkStyled
+            to="/blogs"
+            onClick={toggleMobileNav}
+            underlinewidth="72%"
+          >
             Blog
           </NavLinkStyled>
         </NavItem>
         <NavItem>
-          <NavLinkStyled to="/contact" onClick={toggleMobileNav}>
+          <NavLinkStyled
+            to="/contact"
+            onClick={toggleMobileNav}
+            underlinewidth="80%"
+          >
             Contact
           </NavLinkStyled>
         </NavItem>
         <NavItem>
           {profile ? (
-            <AccountBtnsWrapper>
-              <ShoppingCart />
-              <NotificationButton />
-              <UserProfileNavBtn />
+            <AccountBtnsWrapper className="mobile-accounts-wrapper">
+              <NetworkPageLink to="/network">
+                <img
+                  src={NetworkIcon}
+                  alt="network page"
+                  className="mobile-network-icon"
+                  title="Network"
+                />
+              </NetworkPageLink>
+              <ShoppingCartLink to="/my-cart">
+                <img src={ShoppingCartIcon} alt="" />
+              </ShoppingCartLink>
+              <NotificationLink to="#">
+                <img src={BellIcon} alt="" />
+              </NotificationLink>
+              <UserProfileLink to="/my-account">
+                <img src={UserProfileIcon} alt="" />
+              </UserProfileLink>
             </AccountBtnsWrapper>
           ) : (
             <LoginButton />

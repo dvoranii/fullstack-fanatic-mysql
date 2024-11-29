@@ -39,3 +39,10 @@ export const ReadFilterWrapper = styled.div`
 export const SearchBarReadFilterWrapper = styled.div`
   display: flex;
 `;
+
+export const ConversationItemWrapper = styled.div`
+  @media screen and (max-width: 981px) {
+    display: flex;
+    gap: 10px;
+  }
+`;

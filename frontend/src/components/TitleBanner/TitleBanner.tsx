@@ -12,7 +12,7 @@ const TitleBanner: React.FC<TitleBannerProps> = ({
 }) => {
   return (
     <TitleBannerWrapper centered={centered}>
-      <h2>{textContent}</h2>
+      <h1>{textContent}</h1>
     </TitleBannerWrapper>
   );
 };
