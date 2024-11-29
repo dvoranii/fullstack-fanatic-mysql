@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import { useContext, useState, useEffect } from "react";
 import Title from "../../components/Title/Title";
 import Pagination from "../../components/Pagination/Pagination";
@@ -129,6 +130,10 @@ const TutorialsPage: React.FC = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Tutorials - Full Stack Fanatic</title>
+        <meta name="description" content="Full Stack Fanatic tutorials page." />
+      </Helmet>
       <Title textContent="Tutorials" pseudoRight="-3px" pseudoWidth="120px" />
 
       <TutorialListOuter>

@@ -44,9 +44,7 @@ const Hero: React.FC = () => {
         </LeftSideWrapper>
         <RightSideWrapper>
           <RightSideWrapperInner>
-            {/* <LogoWrapper> */}
             <img src={FSFLogoWhite} alt="" className="white-logo" />
-            {/* </LogoWrapper> */}
 
             <HeroTextWrapper className="desktop-title">
               <h1>Full&nbsp;Stack&nbsp;Fanatic</h1>

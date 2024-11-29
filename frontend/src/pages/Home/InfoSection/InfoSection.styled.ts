@@ -97,7 +97,7 @@ export const CardTitle = styled.h3`
 `;
 
 export const CardContent = styled.p`
-  font-size: clamp(1rem, 2vw, 1.4rem);
+  font-size: clamp(1.2rem, 2vw, 1.4rem);
   line-height: 1.5;
   color: #555;
   margin-bottom: 15px;
@@ -183,7 +183,7 @@ export const CardImgWrapper = styled.div`
   }
 
   @media screen and (max-width: 768px) and (min-height: 1024px) {
-    width: 30vw;
+    width: 35vw;
   }
 
   @media screen and (max-width: 525px) {

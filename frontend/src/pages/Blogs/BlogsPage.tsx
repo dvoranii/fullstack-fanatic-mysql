@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import { useContext, useState, useEffect } from "react";
 import Title from "../../components/Title/Title";
 import {
@@ -72,102 +73,118 @@ const BlogsPage: React.FC = () => {
   };
 
   return (
-    <BlogPageWrapper>
-      <Title textContent="Blogs" />
-      <BlogList>
-        <SearchBar paddingLeft="0" onChange={(value) => setSearchText(value)} />
-        <img
-          src={SquaresAndTriangles}
-          className="squares-and-triangles"
-          alt=""
-        />
+    <>
+      <Helmet>
+        <title>Blogs - Full Stack Fanatic</title>
+        <meta name="description" content="Full Stack Fanatic Blogs Page." />
+      </Helmet>
 
-        {filteredBlogs.slice(0, visibleBlogs).map((blog) => {
-          const isPremiumLocked = blog.isPremium && !canAccessBlog(blog.id);
-          const hasAccess = canAccessBlog(blog.id);
-          const alreadyInCart = isItemInCart(blog.id);
-          const isPurchasedItem = isPurchased(blog.id);
+      <BlogPageWrapper>
+        <Title textContent="Blogs" />
+        <BlogList>
+          <SearchBar
+            paddingLeft="0"
+            onChange={(value) => setSearchText(value)}
+          />
+          <img
+            src={SquaresAndTriangles}
+            className="squares-and-triangles"
+            alt=""
+          />
 
-          const cartItem: CartItem = mapBlogToCartItem(blog);
-          cartItem.isPurchased = isPurchasedItem;
+          {filteredBlogs.slice(0, visibleBlogs).map((blog) => {
+            const isPremiumLocked = blog.isPremium && !canAccessBlog(blog.id);
+            const hasAccess = canAccessBlog(blog.id);
+            const alreadyInCart = isItemInCart(blog.id);
+            const isPurchasedItem = isPurchased(blog.id);
 
-          return (
-            <BlogItem key={blog.id}>
-              {isPremiumLocked ? (
-                <PremiumBlogThumbnailWrapperOuter>
+            const cartItem: CartItem = mapBlogToCartItem(blog);
+            cartItem.isPurchased = isPurchasedItem;
+
+            return (
+              <BlogItem key={blog.id}>
+                {isPremiumLocked ? (
+                  <PremiumBlogThumbnailWrapperOuter>
+                    <BlogImgWrapper>
+                      <img
+                        src={blog.image}
+                        alt={blog.title}
+                        title={blog.title}
+                      />
+                    </BlogImgWrapper>
+                  </PremiumBlogThumbnailWrapperOuter>
+                ) : (
                   <BlogImgWrapper>
                     <img src={blog.image} alt={blog.title} title={blog.title} />
                   </BlogImgWrapper>
-                </PremiumBlogThumbnailWrapperOuter>
-              ) : (
-                <BlogImgWrapper>
-                  <img src={blog.image} alt={blog.title} title={blog.title} />
-                </BlogImgWrapper>
-              )}
-              <BlogContent
-                to={isPremiumLocked ? "#" : `/blog/${blog.id}`}
-                style={{ cursor: isPremiumLocked ? "not-allowed" : "pointer" }}
-                onClick={(e) => {
-                  if (isPremiumLocked) e.preventDefault();
-                }}
-              >
-                <h2>{blog.title}</h2>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Aliquam ab, voluptatibus quia ea cum adipisci fuga
-                  exercitationem, voluptatum eos nobis esse odio molestias
-                  distinctio quibusdam! Optio veniam quae repellat itaque.
-                </p>
-              </BlogContent>
-              <BlogActions>
-                {blog.isPremium === false ? (
-                  <FreeBadge>
-                    <p>FREE</p>
-                  </FreeBadge>
-                ) : (
-                  <PremiumBadge hasAccess={hasAccess}>
-                    <p>Premium</p>
-                    {canAccessBlog(blog.id) ? (
-                      <img src={PremiumUnlockImg} alt="Unlocked" />
-                    ) : (
-                      <img src={PremiumLockImg} alt="Locked" />
-                    )}
-                  </PremiumBadge>
                 )}
+                <BlogContent
+                  to={isPremiumLocked ? "#" : `/blog/${blog.id}`}
+                  style={{
+                    cursor: isPremiumLocked ? "not-allowed" : "pointer",
+                  }}
+                  onClick={(e) => {
+                    if (isPremiumLocked) e.preventDefault();
+                  }}
+                >
+                  <h2>{blog.title}</h2>
+                  <p>
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    Aliquam ab, voluptatibus quia ea cum adipisci fuga
+                    exercitationem, voluptatum eos nobis esse odio molestias
+                    distinctio quibusdam! Optio veniam quae repellat itaque.
+                  </p>
+                </BlogContent>
+                <BlogActions>
+                  {blog.isPremium === false ? (
+                    <FreeBadge>
+                      <p>FREE</p>
+                    </FreeBadge>
+                  ) : (
+                    <PremiumBadge hasAccess={hasAccess}>
+                      <p>Premium</p>
+                      {canAccessBlog(blog.id) ? (
+                        <img src={PremiumUnlockImg} alt="Unlocked" />
+                      ) : (
+                        <img src={PremiumLockImg} alt="Locked" />
+                      )}
+                    </PremiumBadge>
+                  )}
 
-                <BottomButtonsWrapper>
-                  {blog.availableForPurchase &&
-                    profile &&
-                    !isPurchased(blog.id) && (
-                      <AddToCartButton
-                        item={cartItem}
-                        alreadyInCart={alreadyInCart}
-                        isAccessible={hasAccess && blog.isPremium}
-                        onAddToCart={addItemToCart}
+                  <BottomButtonsWrapper>
+                    {blog.availableForPurchase &&
+                      profile &&
+                      !isPurchased(blog.id) && (
+                        <AddToCartButton
+                          item={cartItem}
+                          alreadyInCart={alreadyInCart}
+                          isAccessible={hasAccess && blog.isPremium}
+                          onAddToCart={addItemToCart}
+                        />
+                      )}
+                    {profile && (
+                      <FavouriteButton
+                        isFavourited={favouriteBlogs.some(
+                          (favBlog) => favBlog.id === blog.id
+                        )}
+                        onClick={() => toggleFavourite(blog.id, "blog")}
+                        altText="Blog Favourite Button"
+                        isDisabled={isPremiumLocked}
                       />
                     )}
-                  {profile && (
-                    <FavouriteButton
-                      isFavourited={favouriteBlogs.some(
-                        (favBlog) => favBlog.id === blog.id
-                      )}
-                      onClick={() => toggleFavourite(blog.id, "blog")}
-                      altText="Blog Favourite Button"
-                      isDisabled={isPremiumLocked}
-                    />
-                  )}
-                </BottomButtonsWrapper>
-              </BlogActions>
-            </BlogItem>
-          );
-        })}
-      </BlogList>
-      {visibleBlogs < filteredBlogs.length && (
-        <SeeMoreButtonWrapper>
-          <button onClick={handleSeeMore}>See More Blogs</button>
-        </SeeMoreButtonWrapper>
-      )}
-    </BlogPageWrapper>
+                  </BottomButtonsWrapper>
+                </BlogActions>
+              </BlogItem>
+            );
+          })}
+        </BlogList>
+        {visibleBlogs < filteredBlogs.length && (
+          <SeeMoreButtonWrapper>
+            <button onClick={handleSeeMore}>See More Blogs</button>
+          </SeeMoreButtonWrapper>
+        )}
+      </BlogPageWrapper>
+    </>
   );
 };
 

@@ -1,5 +1,5 @@
+import { Helmet } from "react-helmet";
 import {
-  // ViewCartTitleBanner,
   CartItemsWrapper,
   CartItem,
   CartItemDetails,
@@ -25,6 +25,11 @@ const ViewCart: React.FC = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Checkout - Full Stack Fanatic</title>
+        <meta name="description" content="Shopping cart checkout page." />
+      </Helmet>
+
       <TitleBanner textContent="My Cart - Tutorials & Blogs" />
 
       <CartPageWrapperInner>

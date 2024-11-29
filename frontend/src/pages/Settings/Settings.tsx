@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import { useContext, useEffect, useState } from "react";
 import {
   SettingsContainer,
@@ -43,6 +44,10 @@ const Settings = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Settings - Full Stack Fanatic</title>
+        <meta name="description" content="User settings page." />
+      </Helmet>
       <WarningBar />
       <SettingsContainer>
         <Sidebar>

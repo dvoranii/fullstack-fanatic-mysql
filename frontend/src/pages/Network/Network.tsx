@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import { useState, useEffect, useContext } from "react";
 import {
   SearchBarWrapper,
@@ -104,6 +105,13 @@ export const NetworkPage: React.FC = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Network - Full Stack Fanatic</title>
+        <meta
+          name="description"
+          content="Utilize our database of users to connect with real-world professionals."
+        />
+      </Helmet>
       <TitleBanner textContent="Network" />
       <SearchBarWrapper>
         <SearchBar onSearchChange={handleSearch} />

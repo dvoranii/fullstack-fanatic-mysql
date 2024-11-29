@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import {
   TermsContainer,
   Header,
@@ -11,6 +12,13 @@ import TitleBanner from "../../components/TitleBanner/TitleBanner";
 const TermsAndConditions = () => {
   return (
     <>
+      <Helmet>
+        <title>Terms & Conditions - Full Stack Fanatic</title>
+        <meta
+          name="description"
+          content="These Terms and Conditions govern your use of our website. By accessing or using our site, you agree to comply with and be bound by these terms."
+        />
+      </Helmet>
       <TitleBanner textContent={"Terms & Conditions"} />
       <PageWrapper>
         <TermsContainer>

@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import { InboxWrapper, InboxImgWrapper } from "./UserAccountPage.styled";
 import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../../context/UserContext";
@@ -60,6 +61,13 @@ const UserAccountsPage: React.FC = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{`${profile.name}'s Account - Full Stack Fanatic`}</title>
+        <meta
+          name="description"
+          content={`Manage your account settings, upload a banner, and view your inbox. Welcome, ${profile.name}!`}
+        />
+      </Helmet>
       {isModalOpen && setProfile && (
         <EditProfileModal
           profile={profile}

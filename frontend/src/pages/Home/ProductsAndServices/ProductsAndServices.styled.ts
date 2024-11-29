@@ -67,7 +67,11 @@ export const ProductsAndServicesWrapperInner = styled.div`
   display: flex;
   gap: 3.2rem;
 
-  @media screen and (max-width: 759px) {
+  @media screen and (max-width: 985px) {
+    gap: 1.4rem;
+  }
+
+  @media screen and (max-width: 768px) {
     flex-direction: column;
     height: fit-content;
     gap: 6.4rem;
@@ -75,8 +79,7 @@ export const ProductsAndServicesWrapperInner = styled.div`
 `;
 
 export const CardWrapper = styled.div`
-  max-height: 600px;
-  width: clamp(200px, 25vw, 400px);
+  width: clamp(200px, 30vw, 400px);
   position: relative;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.25);
   border-radius: 20px;

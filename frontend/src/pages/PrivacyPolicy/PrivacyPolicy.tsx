@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import {
   PrivacyPolicyContainer,
   Header,
@@ -11,6 +12,13 @@ import { PageWrapper } from "../../PageWrapper.styled";
 const PrivacyPolicy = () => {
   return (
     <>
+      <Helmet>
+        <title>Privacy Policy - Full Stack Fanatic</title>
+        <meta
+          name="description"
+          content="This Privacy Policy explains how we collect, use, disclose, and protect your information when you use our website."
+        />
+      </Helmet>
       <TitleBanner textContent={"Privacy Policy"} />
       <PageWrapper>
         <PrivacyPolicyContainer>

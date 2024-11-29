@@ -53,6 +53,10 @@ export const LeftSideWrapper = styled.div`
     .fsf-darkblue {
       display: block;
     }
+
+    &::after {
+      display: none;
+    }
   }
 `;
 

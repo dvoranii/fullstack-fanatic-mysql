@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import UserProfilePage from "../UserProfile";
@@ -72,14 +73,23 @@ const PublicUserPage: React.FC = () => {
   if (!profile) return <p>User profile not found</p>;
 
   return (
-    <UserProfilePage
-      profile={profile.user}
-      publicUserId={effectiveUserId}
-      favouriteTutorials={favourites.tutorials}
-      favouriteBlogs={favourites.blogs}
-      comments={profile.comments || []}
-      isOwnProfile={false}
-    ></UserProfilePage>
+    <>
+      <Helmet>
+        <title>{`${profile.user.name}'s Profile - Full Stack Fanatic`}</title>
+        <meta
+          name="description"
+          content={`View ${profile.user.name}'s tutorials, blogs, and comments on Full Stack Fanatic.`}
+        />
+      </Helmet>
+      <UserProfilePage
+        profile={profile.user}
+        publicUserId={effectiveUserId}
+        favouriteTutorials={favourites.tutorials}
+        favouriteBlogs={favourites.blogs}
+        comments={profile.comments || []}
+        isOwnProfile={false}
+      ></UserProfilePage>
+    </>
   );
 };
 
