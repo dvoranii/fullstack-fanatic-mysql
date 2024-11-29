@@ -8,13 +8,8 @@ export const HeroWrapper = styled.section`
   display: flex;
   position: relative;
 
-  &.mobile-hero {
+  @media screen and (max-width: 768px) {
     flex-direction: column;
-    height: 85vh;
-
-    @media screen and (max-width: 430px) {
-      height: 100vh;
-    }
   }
 `;
 
@@ -41,6 +36,10 @@ export const LeftSideWrapper = styled.div`
     background: linear-gradient(to bottom, black, transparent);
     pointer-events: none;
   }
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 export const RightSideWrapper = styled.div`
@@ -49,23 +48,17 @@ export const RightSideWrapper = styled.div`
   background-color: ${colors.secondary};
   position: relative;
   user-select: none;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    height: 50%;
+  }
 `;
 
 export const RightSideWrapperInner = styled.div`
   height: 100%;
   align-content: center;
   position: relative;
-`;
-
-export const LogoWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  user-select: none;
-
-  .orange-logo {
-    width: clamp(150px, 30vw, 400px);
-  }
 
   .white-logo {
     position: absolute;
@@ -77,15 +70,20 @@ export const LogoWrapper = styled.div`
   }
 
   @media screen and (max-width: 768px) {
-    padding-top: 3.2rem;
+    .white-logo {
+      display: none;
+    }
   }
+`;
 
-  @media screen and (max-width: 400px) and (max-height: 700px) {
-    padding-top: 0;
-  }
+export const LogoWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  user-select: none;
 
-  @media screen and (max-width: 768px) and (min-height: 1024px) {
-    padding-top: 0;
+  .orange-logo {
+    width: clamp(150px, 30vw, 400px);
   }
 `;
 
@@ -106,6 +104,10 @@ export const HeroTextWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  &.mobile-title {
+    display: none;
+  }
 
   h1 {
     font-family: "Anybody", sans-serif;
@@ -133,15 +135,27 @@ export const HeroTextWrapper = styled.div`
     h2 {
       color: ${colors.primary};
     }
+
+    &.mobile-title {
+      display: block;
+      text-align: center;
+    }
+
+    &.desktop-title {
+      display: none;
+    }
   }
 `;
 
 export const HeroButtonWrapper = styled.div`
   width: 100%;
+
   display: flex;
+  align-items: center;
   justify-content: center;
 
   button {
+    height: fit-content;
     margin-top: 2.4rem;
     padding: 16px 32px;
     font-size: 1.2rem;
@@ -160,26 +174,11 @@ export const HeroButtonWrapper = styled.div`
       transform: scale(1.01) translateY(-2px);
       cursor: pointer;
     }
+  }
 
-    @media screen and (max-width: 768px) {
-      margin-top: 120px;
-      padding: 24px 48px;
-      border-radius: 50px;
-      font-size: 1.8rem;
-    }
-
-    @media screen and (max-width: 430px) {
-      margin-top: 80px;
-      padding: 16px 32px;
-    }
-
-    @media screen and (max-width: 390px) and (max-height: 840px) {
-      margin-top: 40px;
-    }
-
-    @media screen and (max-width: 768px) and (min-height: 1024px) {
-      margin-top: 80px;
-    }
+  @media screen and (max-width: 768px) {
+    height: 100%;
+    align-items: flex-start;
   }
 `;
 
@@ -193,8 +192,8 @@ export const TriangleArrowWrapper = styled.div`
   flex-direction: column;
   align-items: center;
 
-  @media screen and (max-width: 400px) and (max-height: 700px) {
-    bottom: 50px;
+  @media screen and (max-width: 768px) {
+    transform: translateY(60px);
   }
 `;
 
@@ -252,11 +251,10 @@ export const SocialButtonsWrapper = styled.div`
   user-select: none;
 
   @media screen and (max-width: 768px) {
-    bottom: 10%;
+    padding-bottom: 4.8rem;
   }
-
-  @media screen and (max-width: 400px) and (max-height: 700px) {
-    bottom: 4%;
+  @media screen and (max-width: 400px) {
+    padding-bottom: 4.2rem;
   }
 `;
 export const SocialIconWrapper = styled.div`
@@ -303,5 +301,9 @@ export const SocialIconWrapper = styled.div`
       filter: blur(1px);
       bottom: -16px;
     }
+  }
+
+  @media screen and (max-width: 768px) {
+    transform: scale(0.8);
   }
 `;

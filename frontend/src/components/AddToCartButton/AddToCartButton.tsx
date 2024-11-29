@@ -8,6 +8,8 @@ interface AddToCartButtonProps {
   alreadyInCart: boolean;
   isAccessible: boolean;
   onAddToCart: (item: CartItem) => void;
+  marginLeft?: string;
+  marginBottom?: string;
 }
 
 const AddToCartButton: React.FC<AddToCartButtonProps> = ({
@@ -15,6 +17,8 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   alreadyInCart,
   isAccessible,
   onAddToCart,
+  marginLeft,
+  marginBottom,
 }) => {
   const isDisabled = alreadyInCart || isAccessible;
 
@@ -25,7 +29,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
     : "Add to Cart";
 
   return (
-    <AddToCartWrapper>
+    <AddToCartWrapper marginLeft={marginLeft} marginBottom={marginBottom}>
       <button
         onClick={() => onAddToCart(item)}
         disabled={isDisabled}

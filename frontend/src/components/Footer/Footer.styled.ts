@@ -47,6 +47,7 @@ export const Column2Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0 20px;
 
   @media screen and (max-width: 768px) {
     grid-column: 1;
@@ -106,7 +107,7 @@ export const FooterNavLink = styled(Link)`
 `;
 
 export const CenteredSlogan = styled.div`
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-size: clamp(1.4rem, 6vw, 2.8rem);
   text-align: center;
   color: #14213d;
   font-family: "Anybody";
@@ -167,6 +168,9 @@ export const FooterLogoLink = styled(Link)`
   bottom: 0;
   right: 0;
   padding: 20px;
+  @media screen and (max-width: 450px) {
+    padding: 8px;
+  }
 `;
 
 export const FooterLogo = styled.img`
@@ -176,6 +180,10 @@ export const FooterLogo = styled.img`
 
   @media (max-width: 768px) {
     justify-self: center;
+  }
+
+  @media screen and (max-width: 450px) {
+    width: 35px;
   }
 `;
 

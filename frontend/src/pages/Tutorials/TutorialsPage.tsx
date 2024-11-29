@@ -133,7 +133,6 @@ const TutorialsPage: React.FC = () => {
 
       <TutorialListOuter>
         <SearchBar
-          width="46%"
           paddingLeft="60px"
           onChange={(value) => setSearchText(value)}
         />
@@ -231,6 +230,8 @@ const TutorialsPage: React.FC = () => {
                             alreadyInCart={alreadyInCart}
                             isAccessible={hasAccess && tutorial.isPremium}
                             onAddToCart={addItemToCart}
+                            marginBottom="5px"
+                            marginLeft="10px"
                           />
                         )}
 

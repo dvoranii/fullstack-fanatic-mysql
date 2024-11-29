@@ -79,6 +79,7 @@ export const BlogActions = styled.div`
     flex-direction: row;
     justify-content: flex-end;
     gap: 1.2rem;
+    padding-top: 1.2rem;
   }
 `;
 
@@ -181,6 +182,7 @@ export const SeeMoreButtonWrapper = styled.div`
 
 export const BottomButtonsWrapper = styled.div`
   display: flex;
+  align-items: center;
   gap: 1.2rem;
 `;
 

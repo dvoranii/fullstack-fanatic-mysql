@@ -15,7 +15,7 @@ import {
 } from "./NavBar.styled";
 import FSFLogo from "../../assets/images/fsf-logo-notext.png";
 import UserProfileNavBtn from "./UserProfileNavBtn/UserProfileNavBtn";
-import BurgerMenu from "../BurgerMenu/BurgerMenu";
+import BurgerMenu from "./BurgerMenu/BurgerMenu";
 import LoginButton from "./LoginButton/LoginButton";
 import NotificationButton from "./Notifications/Notifications";
 import ShoppingCart from "./ShoppingCart/ShoppingCart";
@@ -47,24 +47,23 @@ const NavBar: React.FC = () => {
         <NavItem>
           <NavLinkStyled to="/about" underlinewidth="62%">
             About
-            {/* &nbsp;<SmallFontSpan>▼</SmallFontSpan> */}
           </NavLinkStyled>
           <NavPipe>|</NavPipe>
         </NavItem>
         <NavItem>
-          <NavLinkStyled to="/tutorials" underlinewidth="68%">
+          <NavLinkStyled to="/tutorials" underlinewidth="72%">
             Tutorials
           </NavLinkStyled>
           <NavPipe>|</NavPipe>
         </NavItem>
         <NavItem>
-          <NavLinkStyled to="/blogs" underlinewidth="50%">
+          <NavLinkStyled to="/blogs" underlinewidth="60%">
             Blog
           </NavLinkStyled>
           <NavPipe>|</NavPipe>
         </NavItem>
         <NavItem>
-          <NavLinkStyled to="/contact" underlinewidth="65%">
+          <NavLinkStyled to="/contact" underlinewidth="80%">
             Contact
           </NavLinkStyled>
         </NavItem>

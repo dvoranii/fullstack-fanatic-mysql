@@ -16,7 +16,7 @@ interface SearchBarWrapperInnerProps {
 export const SearchBarWrapperInner = styled.div<SearchBarWrapperInnerProps>`
   border: 2px solid rgba(0, 0, 0, 0.5);
   display: flex;
-  width: ${(props) => props.width || "25%"};
+  width: ${(props) => props.width || "clamp(150px, 25%, 300px)"};
   height: fit-content;
   border-radius: 4px;
   user-select: none;
