@@ -5,7 +5,7 @@ import {
   NavList,
   NavItem,
   NavPipe,
-  SmallFontSpan,
+  // SmallFontSpan,
   Logo,
   NavLinkStyled,
   MobileNavList,
@@ -40,13 +40,14 @@ const NavBar: React.FC = () => {
       <NavList>
         <NavItem>
           <NavLinkStyled to="/" underlinewidth="60%">
-            Home&nbsp;<SmallFontSpan>▼</SmallFontSpan>
+            Home
           </NavLinkStyled>
           <NavPipe>|</NavPipe>
         </NavItem>
         <NavItem>
           <NavLinkStyled to="/about" underlinewidth="62%">
-            About&nbsp;<SmallFontSpan>▼</SmallFontSpan>
+            About
+            {/* &nbsp;<SmallFontSpan>▼</SmallFontSpan> */}
           </NavLinkStyled>
           <NavPipe>|</NavPipe>
         </NavItem>
@@ -88,12 +89,12 @@ const NavBar: React.FC = () => {
       <MobileNavList open={open}>
         <NavItem>
           <NavLinkStyled to="/" onClick={toggleMobileNav}>
-            Home <SmallFontSpan>▼</SmallFontSpan>
+            Home
           </NavLinkStyled>
         </NavItem>
         <NavItem>
           <NavLinkStyled to="/about" onClick={toggleMobileNav}>
-            About <SmallFontSpan>▼</SmallFontSpan>
+            About
           </NavLinkStyled>
         </NavItem>
         <NavItem>

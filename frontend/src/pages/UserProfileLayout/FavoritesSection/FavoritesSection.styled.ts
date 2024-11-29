@@ -6,10 +6,11 @@ export const FavoritesWrapper = styled.div`
 
 export const FavouritesContent = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   gap: 2.4rem;
   height: 100%;
+  padding-top: 1.2rem;
 
   div {
     display: flex;

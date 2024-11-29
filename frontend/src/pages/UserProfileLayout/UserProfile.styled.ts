@@ -1,14 +1,16 @@
 import styled from "styled-components";
-import { PageWrapper } from "../../PageWrapper.styled";
+
 import { Link } from "react-router-dom";
 import { colors } from "../../GlobalStyles";
 
-export const UserAccountContainer = styled(PageWrapper)`
+export const UserAccountContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 20px;
+  padding: 20px 20px 80px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
 `;
 
 export const AccountActivityWrapperOuter = styled.div`
@@ -185,17 +187,27 @@ export const AccountActivity = styled.div`
   text-align: center;
   gap: 8.2rem;
   margin-top: 40px;
+
+  @media screen and (max-width: 1130px) {
+    gap: 2.4rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 export const Section = styled.div`
-  width: 45%;
+  width: clamp(250px, 45%, 450px);
   background-color: #fff;
   border-radius: 10px;
-  padding: 20px 40px 120px 40px;
+  height: fit-content;
+  padding: 20px 40px 60px 40px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
-  @media screen and (max-width: 1291px) {
-    padding: 0 30px 4.2rem 30px;
+  @media screen and (max-width: 768px) {
+    width: 75vw;
   }
 `;
 
@@ -205,14 +217,9 @@ export const SectionTitle = styled.h3`
   text-align: center;
   color: #031f2a;
   letter-spacing: 1px;
-  padding-top: 1.2rem;
   padding-bottom: 1.2rem;
   margin-bottom: 1.2rem;
   border-bottom: 1px solid #ccc;
-
-  @media screen and (max-width: 1291px) {
-    padding-top: 2.4rem;
-  }
 `;
 
 export const CommentHistory = styled.div`
@@ -236,6 +243,7 @@ export const CommentItem = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+  gap: 10px;
 `;
 
 export const CommentText = styled.p`

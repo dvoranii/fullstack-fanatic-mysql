@@ -89,11 +89,11 @@ export const NavPipe = styled.span`
   font-weight: bold;
 `;
 
-export const SmallFontSpan = styled.span`
-  font-size: 0.75em;
+// export const SmallFontSpan = styled.span`
+//   font-size: 0.75em;
 
-  padding-left: 0.2rem;
-`;
+//   padding-left: 0.2rem;
+// `;
 
 export const NavLinkStyled = styled(NavLink)<NavLinkStyledProps>`
   color: #222;
