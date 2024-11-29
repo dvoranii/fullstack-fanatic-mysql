@@ -41,7 +41,7 @@ export const NavList = styled.ul`
   margin: 0;
   padding: 0;
 
-  @media (max-width: 915px) {
+  @media (max-width: 989px) {
     display: none;
   }
 `;
@@ -72,7 +72,7 @@ export const MobileNavList = styled.ul<{ open: boolean }>`
     padding-top: 1.2rem;
   }
 
-  @media (min-width: 915px) {
+  @media (min-width: 989px) {
     display: none;
   }
   li:first-child {
@@ -111,7 +111,7 @@ export const NavLinkStyled = styled(NavLink)<NavLinkStyledProps>`
   padding-right: 2.2rem;
   position: relative;
   font-family: "ZenKakuGothicNewMedium", sans-serif;
-  width: 100%;
+  width: fit-content;
 
   &::after {
     content: "";

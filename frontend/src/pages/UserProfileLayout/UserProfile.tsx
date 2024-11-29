@@ -160,7 +160,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                     : `/user/${profile.id}/followers`
                 }
               >
-                {followersCount}{" "}
+                {followersCount}&nbsp;
                 {followersCount === 1 ? "Follower" : "Followers"}
               </Link>
             </FollowsWrapper>

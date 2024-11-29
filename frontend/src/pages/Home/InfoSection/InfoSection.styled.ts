@@ -31,7 +31,7 @@ export const InfoSectionWrapperInner = styled.div`
     gap: 3.2rem;
   }
 
-  @media screen and (max-width: 760px) {
+  @media screen and (max-width: 768px) {
     flex-direction: column;
     gap: 6.4rem;
   }
@@ -174,12 +174,16 @@ export const CardImgWrapper = styled.div`
     bottom: -80px;
   }
 
-  @media screen and (max-width: 760px) {
+  @media screen and (max-width: 768px) {
     width: 35vw;
 
     &.card-3 {
       bottom: -100px;
     }
+  }
+
+  @media screen and (max-width: 768px) and (min-height: 1024px) {
+    width: 30vw;
   }
 
   @media screen and (max-width: 525px) {

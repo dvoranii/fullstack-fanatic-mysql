@@ -41,8 +41,10 @@ export const SearchBarReadFilterWrapper = styled.div`
 `;
 
 export const ConversationItemWrapper = styled.div`
+  max-width: 500px;
   @media screen and (max-width: 981px) {
     display: flex;
     gap: 10px;
+    overflow-x: scroll;
   }
 `;

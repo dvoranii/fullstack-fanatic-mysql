@@ -37,7 +37,7 @@ export const BlogItem = styled.div`
 
   @media screen and (max-width: 768px) {
     flex-direction: column;
-    width: 85vw;
+    width: 93vw;
     margin: 0 auto;
   }
 `;

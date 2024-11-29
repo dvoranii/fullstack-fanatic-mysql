@@ -24,7 +24,7 @@ export const Burger = styled.div.withConfig({
     border-radius: 2px;
   }
 
-  @media (min-width: 915px) {
+  @media (min-width: 989px) {
     display: none;
   }
 `;

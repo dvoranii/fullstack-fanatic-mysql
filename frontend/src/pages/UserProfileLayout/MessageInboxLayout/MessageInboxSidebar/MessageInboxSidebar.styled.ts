@@ -13,7 +13,7 @@ export const SidebarContainer = styled.div`
   }
 
   @media screen and (max-width: 981px) {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     height: 70px;
   }
 `;

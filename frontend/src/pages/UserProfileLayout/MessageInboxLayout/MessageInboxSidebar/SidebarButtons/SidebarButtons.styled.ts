@@ -7,6 +7,7 @@ export const IconBGWrapper = styled.div`
   align-items: center;
   gap: 1.2rem;
   margin-top: 2.2rem;
+  user-select: none;
 
   @media screen and (max-width: 981px) {
     flex-direction: row;

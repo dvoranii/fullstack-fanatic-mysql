@@ -6,6 +6,7 @@ export const ConversationWrapper = styled.div`
   margin-top: 10px;
   padding: 10px;
   transition: all 150ms ease;
+  position: relative;
 
   &:hover {
     cursor: pointer;
@@ -17,23 +18,37 @@ export const ConversationWrapper = styled.div`
   }
 
   @media screen and (max-width: 981px) {
-    max-width: 80px;
+    display: flex;
+    flex-direction: column;
+    width: 85px;
+    min-width: 85px;
+    height: 120px;
   }
   @media screen and (max-width: 375px) {
-    height: 80px;
     display: flex;
   }
 `;
 
 export const ProfilePictureWrapper = styled.div`
-  margin-right: 10px;
   user-select: none;
+
+  @media screen and (max-width: 981px) {
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 export const ConversationDetailsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   user-select: none;
+
+  @media screen and (max-width: 981px) {
+    p {
+      line-height: 1;
+      text-align: center;
+    }
+  }
 `;
 
 export const SubjectPreview = styled.p`
@@ -60,6 +75,14 @@ export const DeleteConvoButtonWrapper = styled.div`
       &:hover {
         filter: brightness(0.9);
       }
+    }
+  }
+
+  @media screen and (max-width: 981px) {
+    button {
+      position: absolute;
+      left: 4px;
+      bottom: 0;
     }
   }
 `;

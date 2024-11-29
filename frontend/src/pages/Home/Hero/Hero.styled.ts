@@ -37,8 +37,22 @@ export const LeftSideWrapper = styled.div`
     pointer-events: none;
   }
 
+  .fsf-darkblue {
+    position: absolute;
+    width: 40px;
+    top: 0;
+    left: 0;
+    margin: 20px;
+    opacity: 0.5;
+    display: none;
+  }
+
   @media screen and (max-width: 768px) {
     width: 100%;
+
+    .fsf-darkblue {
+      display: block;
+    }
   }
 `;
 
@@ -52,7 +66,7 @@ export const RightSideWrapper = styled.div`
   @media screen and (max-width: 768px) {
     width: 100%;
     height: 50%;
-    border-top: 3px solid ${colors.primary};
+    border-top: 5px solid ${colors.primary};
   }
 `;
 
@@ -96,6 +110,14 @@ export const ElipseWrapper = styled.div`
 
   img {
     width: 250px;
+  }
+
+  @media screen and (max-width: 768px) {
+    transform: scaleX(-1);
+    right: 0;
+    img {
+      width: 125px;
+    }
   }
 `;
 

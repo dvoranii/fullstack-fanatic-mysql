@@ -23,7 +23,7 @@ export const LayoutContainer = styled.div`
   @media screen and (max-width: 981px) {
     display: flex;
     flex-direction: column;
-    height: 90vh;
+    height: 100vh;
   }
 `;
 
@@ -34,7 +34,7 @@ export const RightContainer = styled.div`
 
   @media screen and (max-width: 981px) {
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 2fr;
+    grid-template-rows: 1fr 3fr;
     max-height: 740px;
   }
 

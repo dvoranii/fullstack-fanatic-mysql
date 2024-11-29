@@ -21,12 +21,14 @@ import ElipseBG from "../../../assets/images/Ellipse-bg.svg";
 import GithubLogo from "../../../assets/images/socials/github-icon.png";
 import CodepenLogo from "../../../assets/images/socials/codepen.png";
 import LinkedinLogo from "../../../assets/images/socials/linkedin-icon-black.png";
+import FsfLogoDarkblue from "../../../assets/images/fsf-logo-darkblue.png";
 
 const Hero: React.FC = () => {
   return (
     <>
       <HeroWrapper>
         <LeftSideWrapper>
+          <img src={FsfLogoDarkblue} className="fsf-darkblue" alt="" />
           <LogoWrapper>
             <img src={FSFLogo} alt="" className="orange-logo" />
           </LogoWrapper>

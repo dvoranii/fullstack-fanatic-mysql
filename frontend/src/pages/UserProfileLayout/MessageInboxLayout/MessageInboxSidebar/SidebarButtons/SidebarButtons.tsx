@@ -25,8 +25,11 @@ const SidebarButton: React.FC = () => {
       </IconBG>
 
       <IconBG>
-        <IconImg src={SettingsGear} />
+        <NavLink to="/my-account/settings">
+          <IconImg src={SettingsGear} />
+        </NavLink>
       </IconBG>
+
       <IconBG>
         <NavLink to="/">
           <IconImg src={HomeIcon} title="Home" />

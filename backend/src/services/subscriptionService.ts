@@ -1,5 +1,3 @@
-// /services/subscriptionService.ts
-
 import Stripe from "stripe";
 import connectionPromise from "../db";
 
