@@ -56,6 +56,7 @@ export const ProfileContentWrapper = styled.div`
   margin: 75px auto;
   display: grid;
   place-items: center;
+  grid-template-columns: 1fr 1fr 1fr;
 
   @media screen and (max-width: 1024px) {
     width: 75%;
@@ -92,7 +93,8 @@ export const ProfileInfoColumn1 = styled.div`
   grid-column: 1;
   place-items: center;
   text-align: center;
-  padding: 20px;
+
+  width: 100%;
 
   @media screen and (max-width: 768px) {
     grid-row: 1;
