@@ -14,6 +14,7 @@ import {
   LegalText,
   LegalLinksWrapper,
   LegalLink,
+  Column2Wrapper,
 } from "./Footer.styled";
 
 import logo from "../../assets/images/fsf-logo-darkblue.png";
@@ -41,67 +42,70 @@ const Footer = () => {
           </FooterNav>
         </FooterNavWrapper>
 
-        <CenteredSlogan>
-          Full&nbsp;stack.&nbsp;Full&nbsp;potential.
-        </CenteredSlogan>
-        <img className="seperator" src={Seperator} alt="" />
+        <Column2Wrapper>
+          <CenteredSlogan>
+            Full&nbsp;stack.&nbsp;Full&nbsp;potential.
+          </CenteredSlogan>
+          <img className="seperator" src={Seperator} alt="" />
 
-        <FooterSocialLinks>
-          <IconWrapper>
-            <a
-              href="https://github.com/yourprofile"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <SocialLinkIcon src={githubIcon} alt="GitHub" />
-            </a>
-          </IconWrapper>
+          <FooterSocialLinks>
+            <IconWrapper>
+              <a
+                href="https://github.com/yourprofile"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <SocialLinkIcon src={githubIcon} alt="GitHub" />
+              </a>
+            </IconWrapper>
 
-          <IconWrapper>
-            <a
-              href="https://facebook.com/yourprofile"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <SocialLinkIcon src={facebookIcon} alt="Facebook" />
-            </a>
-          </IconWrapper>
-          <IconWrapper>
-            <a
-              href="https://codepen.io/yourprofile"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <SocialLinkIcon src={codepenIcon} alt="CodePen" />
-            </a>
-          </IconWrapper>
-          <IconWrapper>
-            <a
-              href="https://tiktok.com/@yourprofile"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <SocialLinkIcon src={tiktokIcon} alt="TikTok" />
-            </a>
-          </IconWrapper>
-        </FooterSocialLinks>
+            <IconWrapper>
+              <a
+                href="https://facebook.com/yourprofile"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <SocialLinkIcon src={facebookIcon} alt="Facebook" />
+              </a>
+            </IconWrapper>
+            <IconWrapper>
+              <a
+                href="https://codepen.io/yourprofile"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <SocialLinkIcon src={codepenIcon} alt="CodePen" />
+              </a>
+            </IconWrapper>
+            <IconWrapper>
+              <a
+                href="https://tiktok.com/@yourprofile"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <SocialLinkIcon src={tiktokIcon} alt="TikTok" />
+              </a>
+            </IconWrapper>
+          </FooterSocialLinks>
 
-        <FooterLogoLink to="/">
-          <FooterLogo src={logo} alt="Company Logo" />
-        </FooterLogoLink>
-
-        <LegalWrapper>
-          <LegalLinksWrapper>
-            <LegalLink href="/privacy-policy">Privacy Policy</LegalLink>
-            <LegalLink href="/terms-and-conditions">
-              Terms and Conditions
-            </LegalLink>
-          </LegalLinksWrapper>
-          <LegalText>
-            &copy; {currentYear} Full Stack Fanatic Inc.™. All rights reserved.
-          </LegalText>
-        </LegalWrapper>
+          <LegalWrapper>
+            <LegalLinksWrapper>
+              <LegalLink href="/privacy-policy">Privacy Policy</LegalLink>
+              <LegalLink href="/terms-and-conditions">
+                Terms and Conditions
+              </LegalLink>
+            </LegalLinksWrapper>
+            <LegalText>
+              &copy; {currentYear} Full Stack Fanatic Inc.™. All rights
+              reserved.
+            </LegalText>
+          </LegalWrapper>
+        </Column2Wrapper>
       </FooterWrapperInner>
+
+      <FooterLogoLink to="/">
+        <FooterLogo src={logo} alt="Company Logo" />
+      </FooterLogoLink>
     </FooterWrapperOuter>
   );
 };

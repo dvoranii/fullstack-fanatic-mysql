@@ -18,15 +18,12 @@ export const FooterWrapperOuter = styled.footer`
   background-size: cover;
   background-repeat: no-repeat;
   padding-bottom: 3.2rem;
+  position: relative;
 `;
 
 export const FooterWrapperInner = styled.div`
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 20px;
-  align-items: center;
-  justify-items: center;
+  grid-template-columns: repeat(3, 1fr);
   width: 100%;
   margin: 0 auto;
 
@@ -45,9 +42,19 @@ export const FooterWrapperInner = styled.div`
   }
 `;
 
+export const Column2Wrapper = styled.div`
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media screen and (max-width: 768px) {
+    grid-column: 1;
+  }
+`;
+
 export const FooterNavWrapper = styled.div`
   grid-column: 1;
-  grid-row: 1 / 3;
   width: 100%;
   padding-left: 2.4rem;
 
@@ -57,6 +64,10 @@ export const FooterNavWrapper = styled.div`
     width: fit-content;
     text-transform: uppercase;
     font-family: "Roboto";
+  }
+
+  @media (max-width: 768px) {
+    display: none;
   }
 `;
 
@@ -95,11 +106,8 @@ export const FooterNavLink = styled(Link)`
 `;
 
 export const CenteredSlogan = styled.div`
-  grid-column: 2;
-  grid-row: 1 / 3;
   font-size: clamp(1.8rem, 4vw, 2.8rem);
   text-align: center;
-  margin-top: -40px;
   color: #14213d;
   font-family: "Anybody";
   font-weight: bold;
@@ -108,12 +116,8 @@ export const CenteredSlogan = styled.div`
 `;
 
 export const FooterSocialLinks = styled.div`
-  grid-column: 2;
-  grid-row: 2;
   display: flex;
   gap: 1.2rem;
-  height: 100%;
-  align-items: flex-end;
 `;
 
 export const IconWrapper = styled.div`
@@ -159,15 +163,15 @@ export const SocialLinkIcon = styled.img`
 `;
 
 export const FooterLogoLink = styled(Link)`
-  grid-column: 3;
-  grid-row: 4;
-  justify-self: end;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 20px;
 `;
 
 export const FooterLogo = styled.img`
-  width: 70px;
-  height: 70px;
-  margin-right: 2.4rem;
+  width: clamp(50px, 5vw, 70px);
+  height: auto;
   opacity: 0.9;
 
   @media (max-width: 768px) {
@@ -176,15 +180,9 @@ export const FooterLogo = styled.img`
 `;
 
 export const LegalWrapper = styled.div`
-  grid-column: 1 / -1;
   text-align: center;
   margin-top: 20px;
   grid-row: 4;
-
-  @media (max-width: 768px) {
-    margin-top: 15px;
-    grid-column: 2;
-  }
 `;
 
 export const LegalLinksWrapper = styled.div`
@@ -199,7 +197,7 @@ export const LegalLink = styled.a`
   transition: color 150ms ease;
 
   &:hover {
-    color: ${colors.primary}; /* Accent color for hover effect */
+    color: ${colors.primary};
   }
 `;
 
