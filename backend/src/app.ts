@@ -1,6 +1,6 @@
 import express from "express";
+import security from "./middleware/security";
 import cors from "cors";
-import helmet from "helmet";
 import path from "path";
 import profileRoutes from "./routes/profile";
 import tutorialsRoutes from "./routes/tutorials";
@@ -15,6 +15,7 @@ import formsRoutes from "./routes/forms";
 import stripeRoutes from "./routes/stripe";
 import networkRoutes from "./routes/network";
 import purchasesRoutes from "./routes/purchases";
+import csrfRoutes from "./routes/csrf";
 import { Server } from "socket.io";
 import http from "http";
 
@@ -22,14 +23,14 @@ import cookieParser from "cookie-parser";
 
 const app = express();
 app.use(cookieParser());
+security(app);
 
-app.use(helmet());
 app.use(
   cors({
     origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
-    allowedHeaders: ["Authorization", "Content-Type"],
+    allowedHeaders: ["Authorization", "Content-Type", "x-csrf-token"],
   })
 );
 
@@ -63,6 +64,7 @@ app.use("/api/forms", formsRoutes);
 app.use("/api/stripe", stripeRoutes);
 app.use("/api/network", networkRoutes);
 app.use("/api/purchases", purchasesRoutes);
+app.use("/api/csrf", csrfRoutes);
 
 const server = http.createServer(app);
 

@@ -7,5 +7,6 @@ declare module "express-serve-static-core" {
       googleId: string;
       email: string;
     };
+    csrfToken?: () => string;
   }
 }

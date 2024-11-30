@@ -3,6 +3,7 @@ import connectionPromise from "../db";
 import { RowDataPacket, ResultSetHeader } from "mysql2/promise";
 import { Comment } from "../types/Comment";
 import { authenticate } from "../middleware/authenticate";
+import { csrfProtection } from "../middleware/csrf";
 import { fetchReplies } from "../utils/fetchReplies";
 import {
   insertComment,
@@ -140,117 +141,134 @@ router.get("/:contentType/:contentId", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/", authenticate, async (req: Request, res: Response) => {
-  const { content_id, content_type, content } = req.body as {
-    content_id: number;
-    content_type: "tutorial" | "blog";
-    content: string;
-    parent_comment_id?: number;
-  };
-  const { userId } = req.user!;
+router.post(
+  "/",
+  authenticate,
+  csrfProtection,
+  async (req: Request, res: Response) => {
+    const { content_id, content_type, content } = req.body as {
+      content_id: number;
+      content_type: "tutorial" | "blog";
+      content: string;
+      parent_comment_id?: number;
+    };
+    const { userId } = req.user!;
 
-  try {
-    const newCommentId = await insertComment(
-      content_id,
-      content_type,
-      content,
-      userId,
-      null
-    );
+    try {
+      const newCommentId = await insertComment(
+        content_id,
+        content_type,
+        content,
+        userId,
+        null
+      );
 
-    const newComment = await fetchCommentById(newCommentId);
+      const newComment = await fetchCommentById(newCommentId);
 
-    res.json(newComment);
-  } catch (err) {
-    res.status(500).json({ error: (err as Error).message });
-  }
-});
-
-router.put("/:id", authenticate, async (req: Request, res: Response) => {
-  const { id } = req.params as { id: string };
-  const { content } = req.body as { content: string };
-  const { userId } = req.user!;
-
-  try {
-    const commentOwnerId = await fetchCommentOwner(Number(id));
-
-    if (commentOwnerId !== userId) {
-      return res
-        .status(403)
-        .json({ error: "Unauthorized to edit this comment" });
+      res.json(newComment);
+    } catch (err) {
+      res.status(500).json({ error: (err as Error).message });
     }
-
-    await updateComment(Number(id), content);
-
-    res.json({ id, content });
-  } catch (err) {
-    res.status(500).json({ error: (err as Error).message });
   }
-});
+);
 
-router.post("/reply", authenticate, async (req: Request, res: Response) => {
-  const { content_id, content_type, content, parent_comment_id } = req.body as {
-    content_id: number;
-    content_type: "tutorial" | "blog";
-    content: string;
-    parent_comment_id: number | null;
-  };
+router.put(
+  "/:id",
+  authenticate,
+  csrfProtection,
+  async (req: Request, res: Response) => {
+    const { id } = req.params as { id: string };
+    const { content } = req.body as { content: string };
+    const { userId } = req.user!;
 
-  const { userId } = req.user!;
+    try {
+      const commentOwnerId = await fetchCommentOwner(Number(id));
 
-  try {
-    const connection = await connectionPromise;
+      if (commentOwnerId !== userId) {
+        return res
+          .status(403)
+          .json({ error: "Unauthorized to edit this comment" });
+      }
 
-    const [results] = await connection.query<ResultSetHeader>(
-      "INSERT INTO comments (content_id, content_type, content, user_id, parent_comment_id) VALUES (?, ?, ?, ?, ?)",
-      [content_id, content_type, content, userId, parent_comment_id || null]
-    );
+      await updateComment(Number(id), content);
 
-    const [newReply] = await connection.query<RowDataPacket[]>(
-      `SELECT c.*, u.name as user_name, u.profile_picture
+      res.json({ id, content });
+    } catch (err) {
+      res.status(500).json({ error: (err as Error).message });
+    }
+  }
+);
+
+router.post(
+  "/reply",
+  authenticate,
+  csrfProtection,
+  async (req: Request, res: Response) => {
+    const { content_id, content_type, content, parent_comment_id } =
+      req.body as {
+        content_id: number;
+        content_type: "tutorial" | "blog";
+        content: string;
+        parent_comment_id: number | null;
+      };
+
+    const { userId } = req.user!;
+
+    try {
+      const connection = await connectionPromise;
+
+      const [results] = await connection.query<ResultSetHeader>(
+        "INSERT INTO comments (content_id, content_type, content, user_id, parent_comment_id) VALUES (?, ?, ?, ?, ?)",
+        [content_id, content_type, content, userId, parent_comment_id || null]
+      );
+
+      const [newReply] = await connection.query<RowDataPacket[]>(
+        `SELECT c.*, u.name as user_name, u.profile_picture
       FROM comments c
       JOIN users u ON c.user_id = u.id
       WHERE c.id = ?`,
-      [results.insertId]
-    );
-
-    if (newReply.length > 0) {
-      const [parentCommentOwner] = await connection.query<RowDataPacket[]>(
-        "SELECT user_id FROM comments WHERE id = ?",
-        [parent_comment_id]
+        [results.insertId]
       );
 
-      if (
-        parentCommentOwner.length > 0 &&
-        parentCommentOwner[0].user_id !== userId
-      ) {
-        await connection.execute(
-          "INSERT INTO notifications (user_id, type, sender_id, comment_id, content_id, content_type, is_read, created_at) VALUES (?, 'reply', ?, ?, ?, ?, 0, NOW())",
-          [
-            parentCommentOwner[0].user_id,
-            userId,
-            results.insertId,
-            content_id,
-            content_type,
-          ]
+      if (newReply.length > 0) {
+        const [parentCommentOwner] = await connection.query<RowDataPacket[]>(
+          "SELECT user_id FROM comments WHERE id = ?",
+          [parent_comment_id]
         );
-      }
 
-      res.json(newReply[0]);
-    } else {
-      res
-        .status(500)
-        .json({ error: "Failed to fetch the newly inserted reply." });
+        if (
+          parentCommentOwner.length > 0 &&
+          parentCommentOwner[0].user_id !== userId
+        ) {
+          await connection.execute(
+            "INSERT INTO notifications (user_id, type, sender_id, comment_id, content_id, content_type, is_read, created_at) VALUES (?, 'reply', ?, ?, ?, ?, 0, NOW())",
+            [
+              parentCommentOwner[0].user_id,
+              userId,
+              results.insertId,
+              content_id,
+              content_type,
+            ]
+          );
+        }
+
+        res.json(newReply[0]);
+      } else {
+        res
+          .status(500)
+          .json({ error: "Failed to fetch the newly inserted reply." });
+      }
+    } catch (err) {
+      const error = err as Error;
+      res.status(500).json({ error: error.message });
     }
-  } catch (err) {
-    const error = err as Error;
-    res.status(500).json({ error: error.message });
   }
-});
+);
 
 router.put(
   "/:id/toggle-like",
   authenticate,
+  csrfProtection,
   async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
     const { userId } = req.user!;
@@ -267,26 +285,31 @@ router.put(
   }
 );
 
-router.delete("/:id", authenticate, async (req: Request, res: Response) => {
-  const { id } = req.params as { id: string };
-  const { userId } = req.user!;
+router.delete(
+  "/:id",
+  authenticate,
+  csrfProtection,
+  async (req: Request, res: Response) => {
+    const { id } = req.params as { id: string };
+    const { userId } = req.user!;
 
-  try {
-    const commentOwnerId = await fetchCommentOwner(Number(id));
+    try {
+      const commentOwnerId = await fetchCommentOwner(Number(id));
 
-    if (commentOwnerId !== userId) {
-      return res
-        .status(403)
-        .json({ error: "Unauthorized to delete this comment" });
+      if (commentOwnerId !== userId) {
+        return res
+          .status(403)
+          .json({ error: "Unauthorized to delete this comment" });
+      }
+
+      await deleteComment(Number(id));
+
+      res.json({ id });
+    } catch (err) {
+      res.status(500).json({ error: (err as Error).message });
     }
-
-    await deleteComment(Number(id));
-
-    res.json({ id });
-  } catch (err) {
-    res.status(500).json({ error: (err as Error).message });
   }
-});
+);
 
 router.get(
   "/users/:id/comment-history",
