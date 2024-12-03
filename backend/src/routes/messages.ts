@@ -66,10 +66,18 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
         );
       }
 
-      const [notificationResult] = await connection.execute<ResultSetHeader>(
+      await connection.execute<ResultSetHeader>(
         "INSERT INTO notifications (user_id, type, sender_id, conversation_id, is_read, created_at) VALUES (?, 'message', ?, ?, 0, NOW())",
         [receiver_id, sender_id, conversation_id]
       );
+
+      io.to(`user_${receiver_id}`).emit("newNotification", {
+        type: "message",
+        sender_id,
+        conversation_id,
+        content,
+        sent_at: new Date(),
+      });
     }
 
     io.to(`conversation_${conversation_id}`).emit("newMessage", newMessage);
@@ -107,7 +115,6 @@ router.get("/:conversationId", authenticate, async (req, res) => {
       [userId, userId, conversationId]
     );
 
-    // Get total count of messages for pagination
     const [totalCountResult] = await connection.execute<RowDataPacket[]>(
       "SELECT COUNT(*) as total FROM messages WHERE conversation_id = ?",
       [Number(conversationId)]

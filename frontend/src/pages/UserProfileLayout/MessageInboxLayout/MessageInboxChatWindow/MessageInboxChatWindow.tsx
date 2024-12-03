@@ -14,7 +14,6 @@ import {
 } from "./MessageInboxChatWindow.styled";
 import SentMessages from "./SentMessages/SentMessages";
 import { UserContext } from "../../../../context/UserContext";
-import { io } from "socket.io-client";
 import { Message } from "../../../../types/Message";
 import {
   getMessagesForConversation,
@@ -30,6 +29,7 @@ import NewChatDropdown from "../NewChatDropdown/NewChatDropdown";
 import useClickOutside from "../../../../hooks/useClickOutside";
 import { User } from "../../../../types/User/User";
 import { useCsrfToken } from "../../../../hooks/useCsrfToken";
+import { useWebSocketMessages } from "../../../../hooks/useWebSocketMessages";
 
 interface MessageInboxChatWindowProps {
   conversationId: number | null;
@@ -37,9 +37,6 @@ interface MessageInboxChatWindowProps {
   onConversationSelect: (conversationId: number) => void;
   onClearConversation: () => void;
 }
-
-const BASE_URL = "http://localhost:5000";
-const socket = io(BASE_URL);
 
 const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   conversationId,
@@ -145,20 +142,12 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
     fetchInitialMessages();
   }, [conversationId]);
 
-  useEffect(() => {
-    if (conversationId) {
-      socket.on("newMessage", (message) => {
-        if (message.conversation_id === conversationId) {
-          setMessages((prevMessages) => [...prevMessages, message]);
-          scrollToBottom();
-        }
-      });
-
-      return () => {
-        socket.off("newMessage");
-      };
+  useWebSocketMessages((message: Message) => {
+    if (message.conversation_id === conversationId) {
+      setMessages((prevMessages) => [...prevMessages, message]);
+      scrollToBottom();
     }
-  }, [conversationId]);
+  });
 
   useEffect(() => {
     const determineReceiver = async () => {

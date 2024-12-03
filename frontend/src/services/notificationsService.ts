@@ -15,10 +15,17 @@ export const fetchNotifications = async (
   return data;
 };
 
-export const markNotificationAsRead = async (notificationId: number) => {
+export const markNotificationAsRead = async (
+  notificationId: number
+  // csrfToken: string
+) => {
   const endpoint = `/api/notifications/${notificationId}/read`;
   const { data } = await apiCall(endpoint, {
     method: "PATCH",
+    // credentials: "include",
+    // headers: {
+    //   "x-csrf-token": csrfToken,
+    // },
   });
 
   return data;

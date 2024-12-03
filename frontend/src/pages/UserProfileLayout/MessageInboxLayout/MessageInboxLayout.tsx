@@ -7,7 +7,7 @@ import {
 import MessageInboxSidebar from "./MessageInboxSidebar/MessageInboxSidebar";
 import MessageInboxConvoHistory from "./MessageInboxConvoHistory/MessageInboxConvoHistory";
 import MessageInboxChatWindow from "./MessageInboxChatWindow/MessageInboxChatWindow";
-import { useNotificationHandler } from "../../../hooks/useNotificationHandler";
+import { useNotifications } from "../../../hooks/useNotifications";
 import {
   updateConversationReadStatus,
   fetchConversations,
@@ -29,7 +29,7 @@ const MessageInboxLayout: React.FC = () => {
   const { profile } = useContext(UserContext) || {};
   const loggedInUserId = profile?.id;
 
-  const { markNotificationsAsRead } = useNotificationHandler();
+  const { markNotificationAsReadById } = useNotifications();
 
   useEffect(() => {
     const getConversations = async () => {
@@ -66,7 +66,7 @@ const MessageInboxLayout: React.FC = () => {
     );
 
     try {
-      await markNotificationsAsRead(conversationId);
+      await markNotificationAsReadById(conversationId);
     } catch (error) {
       console.error("Failed to mark notifications as read:", error);
     }

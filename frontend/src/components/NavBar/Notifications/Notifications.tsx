@@ -68,7 +68,6 @@ const Notifications: React.FC = () => {
     }
   };
 
-  // Load additional notifications for infinite scroll
   const loadMoreNotifications = async () => {
     try {
       const { notifications: fetchedNotifications, hasMore } =

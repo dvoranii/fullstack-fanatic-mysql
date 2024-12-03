@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import connectionPromise from "../db";
 import { authenticate } from "../middleware/authenticate";
 import { RowDataPacket } from "mysql2";
+// import { csrfProtection } from "../middleware/csrf";
 
 const router = express.Router();
 
@@ -11,7 +12,6 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
   const limit = 5;
   const offset = (page - 1) * limit;
 
-  console.log(page);
   if (!userId) {
     return res.status(400).json({ error: "Invalid user ID" });
   }
@@ -47,27 +47,32 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
   }
 });
 
-router.patch("/:id/read", authenticate, async (req: Request, res: Response) => {
-  const userId = req.user?.userId;
-  const notificationId = req.params.id;
+router.patch(
+  "/:id/read",
+  authenticate,
+  // csrfProtection,
+  async (req: Request, res: Response) => {
+    const userId = req.user?.userId;
+    const notificationId = req.params.id;
 
-  if (!userId) {
-    return res.status(400).json({ error: "Invalid user ID" });
+    if (!userId) {
+      return res.status(400).json({ error: "Invalid user ID" });
+    }
+
+    try {
+      const connection = await connectionPromise;
+      await connection.execute(
+        "UPDATE notifications SET is_read = 1 WHERE id = ? AND user_id = ?",
+        [notificationId, userId]
+      );
+
+      res.status(200).json({ message: "Notification marked as read" });
+    } catch (error) {
+      console.error("Error updating notification:", error);
+      res.status(500).json({ error: "Failed to update notification" });
+    }
   }
-
-  try {
-    const connection = await connectionPromise;
-    await connection.execute(
-      "UPDATE notifications SET is_read = 1 WHERE id = ? AND user_id = ?",
-      [notificationId, userId]
-    );
-
-    res.status(200).json({ message: "Notification marked as read" });
-  } catch (error) {
-    console.error("Error updating notification:", error);
-    res.status(500).json({ error: "Failed to update notification" });
-  }
-});
+);
 
 router.get(
   "/unread/count",
@@ -82,7 +87,6 @@ router.get(
     try {
       const connection = await connectionPromise;
 
-      // Query to count unread notifications
       const [result] = await connection.query<RowDataPacket[]>(
         `SELECT COUNT(*) AS unreadCount
        FROM notifications

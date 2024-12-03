@@ -274,7 +274,64 @@ router.put(
     const { userId } = req.user!;
 
     try {
-      const totalLikes = await toggleLike(Number(id), userId);
+      const connection = await connectionPromise;
+
+      const [existingLike] = await connection.query<RowDataPacket[]>(
+        "SELECT user_id FROM comment_likes WHERE comment_id = ? AND user_id = ?",
+        [Number(id), userId]
+      );
+
+      let totalLikes;
+
+      if (existingLike.length > 0) {
+        await connection.execute(
+          "DELETE FROM comment_likes WHERE comment_id = ? AND user_id = ?",
+          [Number(id), userId]
+        );
+
+        await connection.execute(
+          "UPDATE comments SET likes = likes - 1 WHERE id = ?",
+          [Number(id)]
+        );
+
+        const [updatedLikes] = await connection.query<RowDataPacket[]>(
+          "SELECT likes FROM comments WHERE id = ?",
+          [Number(id)]
+        );
+        totalLikes = updatedLikes[0].likes;
+
+        await connection.execute(
+          "DELETE FROM notifications WHERE user_id = ? AND sender_id = ? AND comment_id = ? AND type = 'like'",
+          [existingLike[0].user_id, userId, Number(id)]
+        );
+      } else {
+        await connection.execute(
+          "INSERT INTO comment_likes (comment_id, user_id) VALUES (?, ?)",
+          [Number(id), userId]
+        );
+        await connection.execute(
+          "UPDATE comments SET likes = likes + 1 WHERE id = ?",
+          [Number(id)]
+        );
+
+        const [updatedLikes] = await connection.query<RowDataPacket[]>(
+          "SELECT likes FROM comments WHERE id = ?",
+          [Number(id)]
+        );
+        totalLikes = updatedLikes[0].likes;
+
+        const [commentOwner] = await connection.query<RowDataPacket[]>(
+          "SELECT user_id FROM comments WHERE id = ?",
+          [Number(id)]
+        );
+
+        if (commentOwner.length > 0 && commentOwner[0].user_id !== userId) {
+          await connection.execute(
+            "INSERT INTO notifications (user_id, type, sender_id, comment_id, content_id, content_type, is_read, created_at) VALUES (?, 'like', ?, ?, NULL, 'comment', 0, NOW())",
+            [commentOwner[0].user_id, userId, Number(id)]
+          );
+        }
+      }
 
       res.json({ id, likes: totalLikes });
     } catch (err) {
