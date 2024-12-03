@@ -20,9 +20,7 @@ import { sendMessage } from "../../../services/messageService";
 import CloseIcon from "../../../assets/images/close-icon.png";
 import { UserContext } from "../../../context/UserContext";
 import { getAvatarUrl } from "../../../utils/imageUtils";
-
-// const BASE_URL = "http://localhost:5000";
-
+import { useCsrfToken } from "../../../hooks/useCsrfToken";
 interface MessageUserModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -35,6 +33,7 @@ const MessageUserModal: React.FC<MessageUserModalProps> = ({
   onClose,
   userId,
 }) => {
+  const csrfToken = useCsrfToken();
   const { profile } = useContext(UserContext) || {};
   const loggedInUserId = profile?.id;
 
@@ -86,7 +85,8 @@ const MessageUserModal: React.FC<MessageUserModalProps> = ({
       const conversation = await createOrGetConversation(
         loggedInUserId,
         numericUserId,
-        conversationExists ? "" : subject
+        conversationExists ? "" : subject,
+        csrfToken
       );
 
       await sendMessage(

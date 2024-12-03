@@ -12,6 +12,7 @@ import { useConversations } from "../../../../hooks/useConversations";
 import { Conversation } from "../../../../types/Conversations";
 import { deleteConversation } from "../../../../services/conversationService";
 import ConversationItem from "./ConversationItem/ConversationItem";
+import { useCsrfToken } from "../../../../hooks/useCsrfToken";
 
 interface MessageInboxConvoHistoryProps {
   conversations: Conversation[];
@@ -26,6 +27,7 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
   onConversationSelect,
   onConversationDelete,
 }) => {
+  const csrfToken = useCsrfToken();
   const { profile } = useContext(UserContext) || {};
   const loggedInUserId = profile?.id;
   const { userNames, userPictures } = useConversations(loggedInUserId);
@@ -85,7 +87,7 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
     );
 
     try {
-      await deleteConversation(selectedConversationId);
+      await deleteConversation(selectedConversationId, csrfToken);
       onConversationDelete();
     } catch (error) {
       console.error("Failed to delete conversation:", error);

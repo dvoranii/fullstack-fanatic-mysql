@@ -16,8 +16,10 @@ import {
 import { Conversation } from "../../../types/Conversations";
 import { UserContext } from "../../../context/UserContext";
 import { getUserPublicProfile } from "../../../services/userService";
+import { useCsrfToken } from "../../../hooks/useCsrfToken";
 
 const MessageInboxLayout: React.FC = () => {
+  const csrfToken = useCsrfToken();
   const [selectedConversationId, setSelectedConversationId] = useState<
     number | null
   >(null);
@@ -72,7 +74,7 @@ const MessageInboxLayout: React.FC = () => {
     setSelectedConversationId(conversationId);
 
     try {
-      await updateConversationReadStatus(conversationId);
+      await updateConversationReadStatus(conversationId, csrfToken);
 
       const conversation = await fetchConversationById(conversationId);
       if (conversation) {

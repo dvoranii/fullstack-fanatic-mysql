@@ -29,6 +29,7 @@ import PlusIcon from "../../../../assets/images/account/plus-icon.png";
 import NewChatDropdown from "../NewChatDropdown/NewChatDropdown";
 import useClickOutside from "../../../../hooks/useClickOutside";
 import { User } from "../../../../types/User/User";
+import { useCsrfToken } from "../../../../hooks/useCsrfToken";
 
 interface MessageInboxChatWindowProps {
   conversationId: number | null;
@@ -43,10 +44,10 @@ const socket = io(BASE_URL);
 const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   conversationId,
   receiverName,
-
   onConversationSelect,
   onClearConversation,
 }) => {
+  const csrfToken = useCsrfToken();
   const { profile } = useContext(UserContext) || {};
   const loggedInUserId = profile?.id;
   const [newMessage, setNewMessage] = useState<string>("");
@@ -55,7 +56,6 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   const [hasMore, setHasMore] = useState(true);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [receiverId, setReceiverId] = useState<number | null>(null);
-  // const [receiverName, setReceiverName] = useState<string | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
@@ -95,7 +95,8 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
         const newConversation = await createOrGetConversation(
           profile.id,
           user.id,
-          ""
+          "",
+          csrfToken
         );
         onConversationSelect(newConversation.id);
       }

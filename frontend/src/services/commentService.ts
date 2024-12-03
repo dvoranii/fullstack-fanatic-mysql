@@ -47,43 +47,55 @@ export const fetchReplies = async (
 export const submitComment = async (
   contentId: number,
   contentType: string,
-  newComment: string
+  newComment: string,
+  csrfToken: string
 ): Promise<CommentType> => {
   const endpoint = `/api/comments`;
 
   const { data } = await apiCall<CommentType>(endpoint, {
     method: "POST",
+    credentials: "include",
     body: JSON.stringify({
       content_id: contentId,
       content_type: contentType,
       content: newComment,
     }),
+    headers: {
+      "x-csrf-token": csrfToken,
+    },
   });
 
   return data;
 };
 
-export const submitReply = async ({
-  content_id,
-  content_type,
-  content,
-  parent_comment_id,
-}: {
-  content_id: number;
-  content_type: "tutorial" | "blog";
-  content: string;
-  parent_comment_id: number;
-}): Promise<CommentType> => {
+export const submitReply = async (
+  {
+    content_id,
+    content_type,
+    content,
+    parent_comment_id,
+  }: {
+    content_id: number;
+    content_type: "tutorial" | "blog";
+    content: string;
+    parent_comment_id: number;
+  },
+  csrfToken: string
+): Promise<CommentType> => {
   const endpoint = `/api/comments/reply`;
 
   const { data } = await apiCall<CommentType>(endpoint, {
     method: "POST",
+    credentials: "include",
     body: JSON.stringify({
       content_id,
       content_type,
       content,
       parent_comment_id,
     }),
+    headers: {
+      "x-csrf-token": csrfToken,
+    },
   });
 
   return data;
@@ -91,31 +103,50 @@ export const submitReply = async ({
 
 export const updateComment = async (
   id: number,
-  editedComment: string
+  editedComment: string,
+  csrfToken: string
 ): Promise<CommentType> => {
   const endpoint = `/api/comments/${id}`;
 
   const { data } = await apiCall<CommentType>(endpoint, {
     method: "PUT",
+    credentials: "include",
     body: JSON.stringify({ content: editedComment }),
+    headers: {
+      "x-csrf-token": csrfToken,
+    },
   });
 
   return data;
 };
 
-export const deleteComment = async (id: number): Promise<void> => {
+export const deleteComment = async (
+  id: number,
+  csrfToken: string
+): Promise<void> => {
   const endpoint = `/api/comments/${id}`;
 
   await apiCall<void>(endpoint, {
     method: "DELETE",
+    credentials: "include",
+    headers: {
+      "x-csrf-token": csrfToken,
+    },
   });
 };
 
-export const toggleLike = async (id: number): Promise<number> => {
+export const toggleLike = async (
+  id: number,
+  csrfToken: string
+): Promise<number> => {
   const endpoint = `/api/comments/${id}/toggle-like`;
 
   const { data } = await apiCall<{ likes: number }>(endpoint, {
     method: "PUT",
+    credentials: "include",
+    headers: {
+      "x-csrf-token": csrfToken,
+    },
   });
 
   return data.likes;

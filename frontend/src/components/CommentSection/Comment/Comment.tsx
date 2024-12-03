@@ -22,6 +22,7 @@ import { Link, useNavigate } from "react-router-dom";
 import EditIcon from "../../../assets/images/edit-icon.png";
 import DeleteIcon from "../../../assets/images/discard-icon.png";
 import ReplyIcon from "../../../assets/images/reply-icon.png";
+import { useCsrfToken } from "../../../hooks/useCsrfToken";
 
 const Comment: React.FC<CommentProps> = ({
   comment,
@@ -38,6 +39,7 @@ const Comment: React.FC<CommentProps> = ({
   onReplySubmit,
   ...restProps
 }) => {
+  const csrfToken = useCsrfToken();
   const { profile } = useContext(UserContext) || {};
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likes, setLikes] = useState(comment.likes);
@@ -51,7 +53,7 @@ const Comment: React.FC<CommentProps> = ({
 
   const handleLikeClick = async () => {
     try {
-      const updatedLikes = await toggleLike(comment.id);
+      const updatedLikes = await toggleLike(comment.id, csrfToken);
       setLikes(updatedLikes);
       setIsLiked((prevIsLiked) => !prevIsLiked);
     } catch (error) {

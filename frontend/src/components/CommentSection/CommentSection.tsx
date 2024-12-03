@@ -38,6 +38,7 @@ import {
 import { useScrollToComment } from "../../hooks/useScrollToComment";
 import { useLoadComments } from "../../hooks/useLoadComments";
 import { useLoadInitialTopLevelComments } from "../../hooks/useLoadInitialTopLevelComments";
+import { useCsrfToken } from "../../hooks/useCsrfToken";
 
 const TOP_LEVEL_BATCH_SIZE = 5;
 const REPLY_BATCH_SIZE = 3;
@@ -47,6 +48,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   contentType,
   commentId: propCommentId,
 }) => {
+  const csrfToken = useCsrfToken();
   const [comments, setComments] = useState<CommentType[]>([]);
   const [newComment, setNewComment] = useState("");
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
@@ -149,12 +151,15 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     if (replyContent.trim() === "") return;
 
     try {
-      const newReply = await submitReply({
-        content_id: contentId,
-        content_type: contentType,
-        content: replyContent,
-        parent_comment_id: parentCommentId,
-      });
+      const newReply = await submitReply(
+        {
+          content_id: contentId,
+          content_type: contentType,
+          content: replyContent,
+          parent_comment_id: parentCommentId,
+        },
+        csrfToken
+      );
 
       setComments((prevComments) => {
         const updatedComments = addReplyToComments(prevComments, newReply);
@@ -185,7 +190,12 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     }
 
     try {
-      const data = await submitComment(contentId, contentType, newComment);
+      const data = await submitComment(
+        contentId,
+        contentType,
+        newComment,
+        csrfToken
+      );
       setComments((prevComments) => [data, ...prevComments]);
       setNewComment("");
       setError(null);
@@ -228,7 +238,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     setError(null);
 
     try {
-      await updateComment(id, editedComment);
+      await updateComment(id, editedComment, csrfToken);
     } catch (error) {
       console.error("Failed to update comment:", error);
       setError("Failed to update comment");

@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { deleteComment } from "../services/commentService";
 import { CommentType } from "../types/Comment/Comment";
+import { useCsrfToken } from "./useCsrfToken";
 
 export const useDeleteComment = (
   setComments: React.Dispatch<React.SetStateAction<CommentType[]>>,
   setError: React.Dispatch<React.SetStateAction<string | null>>
 ) => {
+  const csrfToken = useCsrfToken();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
 
@@ -17,7 +19,7 @@ export const useDeleteComment = (
   const confirmDelete = async () => {
     if (commentToDelete !== null) {
       try {
-        await deleteComment(commentToDelete);
+        await deleteComment(commentToDelete, csrfToken);
         setComments((prevComments) => {
           const removeCommentById = (
             comments: CommentType[],

@@ -16,19 +16,23 @@ export const checkExistingConversation = async (
 export const createOrGetConversation = async (
   loggedInUserId: number,
   userId: number,
-  subject: string
+  subject: string,
+  csrfToken: string
 ): Promise<Conversation> => {
   const endpoint = `/api/conversations`;
   const { data } = await apiCall<Conversation>(endpoint, {
     method: "POST",
+    credentials: "include",
     body: JSON.stringify({
       user1_id: loggedInUserId,
       user2_id: userId,
       subject,
     }),
+    headers: {
+      "x-csrf-token": csrfToken,
+    },
   });
 
-  console.log(data);
   return data;
 };
 
@@ -58,19 +62,33 @@ export const fetchConversations = async (): Promise<Conversation[]> => {
   return data;
 };
 
-export const updateConversationReadStatus = async (conversationId: number) => {
+export const updateConversationReadStatus = async (
+  conversationId: number,
+  csrfToken: string
+) => {
   const endpoint = `/api/conversations/${conversationId}/read`;
   const { data } = await apiCall(endpoint, {
     method: "PATCH",
+    credentials: "include",
+    headers: {
+      "x-csrf-token": csrfToken,
+    },
   });
 
   return data;
 };
 
-export const deleteConversation = async (conversationId: number) => {
+export const deleteConversation = async (
+  conversationId: number,
+  csrfToken: string
+) => {
   const endpoint = `/api/conversations/${conversationId}`;
   await apiCall(endpoint, {
     method: "DELETE",
+    credentials: "include",
+    headers: {
+      "x-csrf-token": csrfToken,
+    },
   });
 };
 

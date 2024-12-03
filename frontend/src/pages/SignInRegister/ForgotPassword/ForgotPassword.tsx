@@ -25,7 +25,6 @@ const ForgotPassword = () => {
       await forgotPassword(email);
       setMessage("Password reset link has been sent to your email.");
       setMessageType("success");
-      // Optionally navigate after some time
       setTimeout(() => {
         navigate("/login");
       }, 3000);
