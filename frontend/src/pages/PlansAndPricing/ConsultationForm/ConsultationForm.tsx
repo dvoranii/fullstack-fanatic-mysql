@@ -14,10 +14,12 @@ import FormMessage from "../../../components/Form/Message";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import { submitConsultationForm } from "../../../services/consultFormService";
 import { validateField } from "../../../utils/validationUtils";
+import { useCsrfToken } from "../../../hooks/useCsrfToken";
 
 const ConsultationForm: React.FC<{
   formRef: React.RefObject<HTMLDivElement>;
 }> = ({ formRef }) => {
+  const csrfToken = useCsrfToken();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -53,7 +55,8 @@ const ConsultationForm: React.FC<{
       await submitConsultationForm(
         formData.name,
         formData.email,
-        formData.message
+        formData.message,
+        csrfToken
       );
       setSuccessMessage("Form submission successful!");
 

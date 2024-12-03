@@ -11,8 +11,10 @@ import { validateField } from "../../../utils/validationUtils";
 import FormMessage from "../../../components/Form/Message";
 import { submitContactForm } from "../../../services/contactFormService";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
+import { useCsrfToken } from "../../../hooks/useCsrfToken";
 
 const ContactForm: React.FC = () => {
+  const csrfToken = useCsrfToken();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -72,7 +74,8 @@ const ContactForm: React.FC = () => {
       await submitContactForm(
         formData.fullName,
         formData.email,
-        formData.message
+        formData.message,
+        csrfToken
       );
 
       setSuccessMessage("Your message has been sent!");
