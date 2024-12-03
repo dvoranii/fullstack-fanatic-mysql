@@ -7,8 +7,10 @@ import {
 import { Notification } from "../types/Notifications";
 import { UserContext } from "../context/UserContext";
 import { UserContextType } from "../types/User/UserContextType";
+import { useCsrfToken } from "./useCsrfToken";
 
 export const useNotifications = (type?: string) => {
+  const csrfToken = useCsrfToken();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const { setUnreadNotificationCount, setIsReadNotificationUIUpdate } =
@@ -44,7 +46,7 @@ export const useNotifications = (type?: string) => {
   const markNotificationAsReadById = async (notificationId: number) => {
     try {
       // Backend call to mark the notification as read using the markNotificationAsRead function from notificationsService
-      await markNotificationAsRead(notificationId);
+      await markNotificationAsRead(notificationId, csrfToken);
 
       // Update the UI state to reflect the changes locally
       setIsReadNotificationUIUpdate((prev) => ({

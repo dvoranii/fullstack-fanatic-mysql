@@ -16,16 +16,16 @@ export const fetchNotifications = async (
 };
 
 export const markNotificationAsRead = async (
-  notificationId: number
-  // csrfToken: string
+  notificationId: number,
+  csrfToken: string
 ) => {
   const endpoint = `/api/notifications/${notificationId}/read`;
   const { data } = await apiCall(endpoint, {
     method: "PATCH",
-    // credentials: "include",
-    // headers: {
-    //   "x-csrf-token": csrfToken,
-    // },
+    credentials: "include",
+    headers: {
+      "x-csrf-token": csrfToken,
+    },
   });
 
   return data;

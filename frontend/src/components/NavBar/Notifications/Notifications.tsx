@@ -15,8 +15,10 @@ import NotificationBadge from "../../NotificationBadge/NotificationBadge";
 import { UserContext } from "../../../context/UserContext";
 import { UserContextType } from "../../../types/User/UserContextType";
 import { useNotifications } from "../../../hooks/useNotifications";
+import { useCsrfToken } from "../../../hooks/useCsrfToken";
 
 const Notifications: React.FC = () => {
+  const csrfToken = useCsrfToken();
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const { notifications, setNotifications, loading } = useNotifications();
@@ -53,7 +55,7 @@ const Notifications: React.FC = () => {
     );
 
     try {
-      await markNotificationAsRead(notificationId);
+      await markNotificationAsRead(notificationId, csrfToken);
     } catch (error) {
       console.error("Failed to mark notification as read:", error);
 

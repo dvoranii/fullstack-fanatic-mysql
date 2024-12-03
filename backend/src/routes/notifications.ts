@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import connectionPromise from "../db";
 import { authenticate } from "../middleware/authenticate";
 import { RowDataPacket } from "mysql2";
-// import { csrfProtection } from "../middleware/csrf";
+import { csrfProtection } from "../middleware/csrf";
 
 const router = express.Router();
 
@@ -50,7 +50,7 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
 router.patch(
   "/:id/read",
   authenticate,
-  // csrfProtection,
+  csrfProtection,
   async (req: Request, res: Response) => {
     const userId = req.user?.userId;
     const notificationId = req.params.id;
