@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import connectionPromise from "../db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { authenticate } from "../middleware/authenticate";
+import { csrfProtection } from "../middleware/csrf";
 
 const router = express.Router();
 
@@ -29,31 +30,28 @@ router.get("/existing", authenticate, async (req: Request, res: Response) => {
   }
 });
 
-router.post("/", authenticate, async (req: Request, res: Response) => {
-  const { user1_id, user2_id, subject = "No subject" } = req.body;
+router.post(
+  "/",
+  authenticate,
+  csrfProtection,
+  async (req: Request, res: Response) => {
+    const { user1_id, user2_id, subject = "No subject" } = req.body;
 
-  try {
-    const connection = await connectionPromise;
-    const [existingConversation] = await connection.execute<RowDataPacket[]>(
-      "SELECT id FROM conversations WHERE (user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)",
-      [user1_id, user2_id, user2_id, user1_id]
-    );
+    try {
+      const connection = await connectionPromise;
 
-    if (existingConversation.length > 0) {
-      return res.status(200).json({ id: existingConversation[0].id });
+      const [result] = await connection.execute<ResultSetHeader>(
+        "INSERT INTO conversations (user1_id, user2_id, subject, created_at, is_read_user1, is_read_user2) VALUES (?, ?, ?, NOW(), TRUE, FALSE)",
+        [user1_id, user2_id, subject]
+      );
+
+      res.status(201).json({ id: result.insertId });
+    } catch (err) {
+      console.error("Error creating conversation:", err);
+      res.status(500).json({ error: "Failed to create conversation" });
     }
-
-    const [result] = await connection.execute<ResultSetHeader>(
-      "INSERT INTO conversations (user1_id, user2_id, subject, created_at, is_read_user1, is_read_user2) VALUES (?, ?, ?, NOW(), TRUE, FALSE)",
-      [user1_id, user2_id, subject]
-    );
-
-    res.status(201).json({ id: result.insertId });
-  } catch (err) {
-    console.error("Error creating conversation:", err);
-    res.status(500).json({ error: "Failed to create conversation" });
   }
-});
+);
 
 router.get(
   "/:conversationId",
@@ -117,6 +115,7 @@ router.get(
 router.patch(
   "/:conversationId/read",
   authenticate,
+  csrfProtection,
   async (req: Request, res: Response) => {
     const { conversationId } = req.params;
     const userId = req.user?.userId;
@@ -159,18 +158,22 @@ router.patch(
   }
 );
 
-router.get("/", authenticate, async (req: Request, res: Response) => {
-  const userId = req.user?.userId;
+router.get(
+  "/",
+  authenticate,
+  csrfProtection,
+  async (req: Request, res: Response) => {
+    const userId = req.user?.userId;
 
-  if (!userId) {
-    return res.status(400).json({ error: "User ID is required" });
-  }
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
 
-  try {
-    const connection = await connectionPromise;
+    try {
+      const connection = await connectionPromise;
 
-    const [conversations] = await connection.execute<RowDataPacket[]>(
-      `
+      const [conversations] = await connection.execute<RowDataPacket[]>(
+        `
       SELECT conversations.*, 
              (SELECT MAX(sent_at) FROM messages WHERE messages.conversation_id = conversations.id) AS last_message_at 
       FROM conversations 
@@ -178,19 +181,21 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
          OR (user2_id = ? AND is_deleted_user2 = 0)
       ORDER BY last_message_at DESC
       `,
-      [userId, userId]
-    );
+        [userId, userId]
+      );
 
-    res.status(200).json(conversations);
-  } catch (err) {
-    console.error("Error fetching conversations:", err);
-    res.status(500).json({ error: "Failed to fetch conversations" });
+      res.status(200).json(conversations);
+    } catch (err) {
+      console.error("Error fetching conversations:", err);
+      res.status(500).json({ error: "Failed to fetch conversations" });
+    }
   }
-});
+);
 
 router.delete(
   "/:conversationId",
   authenticate,
+  csrfProtection,
   async (req: Request, res: Response) => {
     const { conversationId } = req.params;
     const userId = req.user?.userId;
