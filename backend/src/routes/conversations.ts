@@ -158,22 +158,18 @@ router.patch(
   }
 );
 
-router.get(
-  "/",
-  authenticate,
-  csrfProtection,
-  async (req: Request, res: Response) => {
-    const userId = req.user?.userId;
+router.get("/", authenticate, async (req: Request, res: Response) => {
+  const userId = req.user?.userId;
 
-    if (!userId) {
-      return res.status(400).json({ error: "User ID is required" });
-    }
+  if (!userId) {
+    return res.status(400).json({ error: "User ID is required" });
+  }
 
-    try {
-      const connection = await connectionPromise;
+  try {
+    const connection = await connectionPromise;
 
-      const [conversations] = await connection.execute<RowDataPacket[]>(
-        `
+    const [conversations] = await connection.execute<RowDataPacket[]>(
+      `
       SELECT conversations.*, 
              (SELECT MAX(sent_at) FROM messages WHERE messages.conversation_id = conversations.id) AS last_message_at 
       FROM conversations 
@@ -181,16 +177,15 @@ router.get(
          OR (user2_id = ? AND is_deleted_user2 = 0)
       ORDER BY last_message_at DESC
       `,
-        [userId, userId]
-      );
+      [userId, userId]
+    );
 
-      res.status(200).json(conversations);
-    } catch (err) {
-      console.error("Error fetching conversations:", err);
-      res.status(500).json({ error: "Failed to fetch conversations" });
-    }
+    res.status(200).json(conversations);
+  } catch (err) {
+    console.error("Error fetching conversations:", err);
+    res.status(500).json({ error: "Failed to fetch conversations" });
   }
-);
+});
 
 router.delete(
   "/:conversationId",
