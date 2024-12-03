@@ -5,8 +5,8 @@
 **/.env
 
 # Ignore build/dist folders
-/backend/dist/
-/frontend/dist/
+
+**/dist/
 
 # Ignore IDE and tool-related folders
 .VSCodeCounter/
