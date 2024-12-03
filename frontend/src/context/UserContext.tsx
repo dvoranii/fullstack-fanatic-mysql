@@ -8,12 +8,14 @@ import { PurchasedItem } from "../types/PurchasedItem";
 import { CommentType } from "../types/Comment/Comment";
 import { UserContextType } from "../types/User/UserContextType";
 import { CartItem } from "../types/CartItem";
+import { useCsrfToken } from "../hooks/useCsrfToken";
 
 export const UserContext = createContext<UserContextType | undefined>(
   undefined
 );
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
+  const csrfToken = useCsrfToken();
   const [profile, setProfile] = useState<User | null>(null);
   const [favouriteTutorials, setFavouriteTutorials] = useState<Tutorial[]>([]);
   const [favouriteBlogs, setFavouriteBlogs] = useState<Blog[]>([]);
@@ -94,12 +96,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     setFavourites: React.Dispatch<React.SetStateAction<T[]>>
   ) => {
     if (isCurrentlyFavourited) {
-      // Create a new array reference when removing an item
       setFavourites((prevFavourites) =>
         prevFavourites.filter((item) => item.id !== itemId)
       );
     } else {
-      // Create a new array reference when adding an item
       setFavourites((prevFavourites) => [
         ...prevFavourites,
         { id: itemId } as T,
@@ -115,9 +115,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   ) => {
     try {
       if (isCurrentlyFavourited) {
-        await removeFavourite(itemId, contentType);
+        await removeFavourite(itemId, contentType, csrfToken);
       } else {
-        const newFavourite = await addFavourite(itemId, contentType);
+        const newFavourite = await addFavourite(itemId, contentType, csrfToken);
         if (!newFavourite) {
           updateFavourites(!isCurrentlyFavourited, itemId, setFavourites);
         }

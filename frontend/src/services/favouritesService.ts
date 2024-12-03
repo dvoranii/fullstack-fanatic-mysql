@@ -35,7 +35,8 @@ export const getPublicUserFavourites = async (
 
 export const addFavourite = async (
   itemId: number,
-  contentType: "tutorial" | "blog"
+  contentType: "tutorial" | "blog",
+  csrfToken: string
 ): Promise<Tutorial | Blog | undefined> => {
   try {
     const endpoint = "/api/favourites";
@@ -47,6 +48,9 @@ export const addFavourite = async (
         item_id: itemId,
         content_type: contentType,
       }),
+      headers: {
+        "x-csrf-token": csrfToken,
+      },
     });
 
     return contentType === "tutorial" ? (data as Tutorial) : (data as Blog);
@@ -58,16 +62,21 @@ export const addFavourite = async (
 
 export const removeFavourite = async (
   itemId: number,
-  contentType: "tutorial" | "blog"
+  contentType: "tutorial" | "blog",
+  csrfToken: string
 ): Promise<void> => {
   const endpoint = "/api/favourites";
   try {
     await apiCall<void>(endpoint, {
       method: "DELETE",
+      credentials: "include",
       body: JSON.stringify({
         item_id: itemId,
         content_type: contentType,
       }),
+      headers: {
+        "x-csrf-token": csrfToken,
+      },
     });
   } catch (error) {
     console.error("Error removing favourite:", error);
