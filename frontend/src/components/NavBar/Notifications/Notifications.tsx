@@ -1,4 +1,11 @@
-import { useState, useRef, useContext } from "react";
+import {
+  useState,
+  useRef,
+  useContext,
+  useCallback,
+  useMemo,
+  memo,
+} from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import NotificationBell from "../../../assets/images/notification-bell.png";
 import { NotificationContentWrapper } from "./Notifications.styled";
@@ -29,50 +36,52 @@ const Notifications: React.FC = () => {
     UserContext
   ) as UserContextType;
 
-  const handleDropdownToggle = async (e: React.MouseEvent) => {
+  const handleDropdownToggle = useCallback(async (e: React.MouseEvent) => {
     e.stopPropagation();
 
-    if (!isDropdownVisible) {
-      setPage(1);
-      setHasMore(true);
-      await loadMoreNotifications();
-    }
+    setDropdownVisible((prev) => {
+      if (!prev) {
+        setPage(1);
+        setHasMore(true);
+        loadMoreNotifications();
+      }
+      return !prev;
+    });
+  }, []);
 
-    setDropdownVisible(!isDropdownVisible);
-  };
+  const markAsRead = useCallback(
+    async (notificationId: number) => {
+      setUnreadNotificationCount((prevCount) => Math.max(prevCount - 1, 0));
 
-  useClickOutside(containerRef, () => setDropdownVisible(false));
-
-  const markAsRead = async (notificationId: number) => {
-    setUnreadNotificationCount((prevCount) => Math.max(prevCount - 1, 0));
-
-    setNotifications((prevNotifications) =>
-      prevNotifications.map((notification) =>
-        notification.id === notificationId
-          ? { ...notification, is_read: true }
-          : notification
-      )
-    );
-
-    try {
-      await markNotificationAsRead(notificationId, csrfToken);
-    } catch (error) {
-      console.error("Failed to mark notification as read:", error);
-
-      setUnreadNotificationCount((prevCount: number) => prevCount + 1);
       setNotifications((prevNotifications) =>
         prevNotifications.map((notification) =>
           notification.id === notificationId
-            ? { ...notification, is_read: false }
+            ? { ...notification, is_read: true }
             : notification
         )
       );
-    }
-  };
 
-  const loadMoreNotifications = async () => {
+      try {
+        await markNotificationAsRead(notificationId, csrfToken);
+      } catch (error) {
+        console.error("Failed to mark notification as read:", error);
+        // Revert changes on error
+        setUnreadNotificationCount((prevCount) => prevCount + 1);
+        setNotifications((prevNotifications) =>
+          prevNotifications.map((notification) =>
+            notification.id === notificationId
+              ? { ...notification, is_read: false }
+              : notification
+          )
+        );
+      }
+    },
+    [setUnreadNotificationCount, setNotifications, csrfToken]
+  );
+
+  const loadMoreNotifications = useCallback(async () => {
     try {
-      const { notifications: fetchedNotifications, hasMore } =
+      const { notifications: fetchedNotifications, hasMore: newHasMore } =
         await fetchNotifications(page);
 
       setNotifications((prevNotifications) => [
@@ -85,12 +94,31 @@ const Notifications: React.FC = () => {
         ),
       ]);
 
-      setHasMore(hasMore);
+      setHasMore(newHasMore);
       setPage((prevPage) => prevPage + 1);
     } catch (error) {
       console.error("Failed to fetch notifications:", error);
     }
-  };
+  }, [page, setNotifications]);
+
+  const notificationList = useMemo(
+    () =>
+      notifications.length === 0 ? (
+        <p>No notifications currently</p>
+      ) : (
+        notifications.map((notification, index) => (
+          <NotificationItem
+            key={`${notification.id}-${index}`}
+            notification={notification}
+            markAsRead={markAsRead}
+            isLast={index === notifications.length - 1}
+          />
+        ))
+      ),
+    [notifications, markAsRead]
+  );
+
+  useClickOutside(containerRef, () => setDropdownVisible(false));
 
   return (
     <div ref={containerRef}>
@@ -121,18 +149,7 @@ const Notifications: React.FC = () => {
                   loader={<LoadingSpinner width="30px" color="#3498db" />}
                   scrollableTarget="scrollableDiv"
                 >
-                  {notifications.length === 0 ? (
-                    <p>No notifications currently</p>
-                  ) : (
-                    notifications.map((notification, index) => (
-                      <NotificationItem
-                        key={`${notification.id}-${index}`}
-                        notification={notification}
-                        markAsRead={markAsRead}
-                        isLast={index === notifications.length - 1}
-                      />
-                    ))
-                  )}
+                  {notificationList}
                 </InfiniteScroll>
               )}
             </NotificationContentWrapper>
@@ -143,4 +160,4 @@ const Notifications: React.FC = () => {
   );
 };
 
-export default Notifications;
+export default memo(Notifications);

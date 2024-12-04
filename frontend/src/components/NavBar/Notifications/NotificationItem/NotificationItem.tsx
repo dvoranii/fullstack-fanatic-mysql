@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useCallback, useMemo, memo } from "react";
 import ProfilePicture from "../../../ProfilePicture/ProfilePicture";
 import { Notification } from "../../../../types/Notifications";
 import {
@@ -23,12 +23,13 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   isLast,
 }) => {
   const { isReadNotificationUIUpdate } = useContext(UserContext) || {};
-  const isRead =
-    isReadNotificationUIUpdate?.[notification.id] ?? notification.is_read;
 
-  console.log(isRead);
+  const isRead = useMemo(
+    () => isReadNotificationUIUpdate?.[notification.id] ?? notification.is_read,
+    [notification.id, notification.is_read, isReadNotificationUIUpdate]
+  );
 
-  const renderNotificationMessage = () => {
+  const notificationMessage = useMemo(() => {
     switch (notification.type) {
       case "like":
         return `${notification.sender_name} liked your comment`;
@@ -41,65 +42,76 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
       default:
         return "Unknown notification type";
     }
-  };
+  }, [notification.type, notification.sender_name]);
 
-  const renderNotificationLink = () => {
-    const { content_id, content_type, comment_id } = notification;
+  const notificationLink = useMemo(() => {
+    const { content_id, content_type, comment_id, type } = notification;
 
-    switch (notification.type) {
+    switch (type) {
       case "like":
       case "reply":
         if (content_type === "tutorial") {
-          return (
-            <Link to={`/tutorial/${content_id}/comments/${comment_id}`}>
-              View&nbsp;Comment
-            </Link>
-          );
+          return `/tutorial/${content_id}/comments/${comment_id}`;
         } else if (content_type === "blog") {
-          return (
-            <Link to={`/blog/${content_id}/comments/${comment_id}`}>
-              View&nbsp;Comment
-            </Link>
-          );
+          return `/blog/${content_id}/comments/${comment_id}`;
         }
         return null;
 
       case "follow":
-        return <Link to="/my-account/followers">View&nbsp;Followers</Link>;
+        return "/my-account/followers";
 
       case "message":
-        return <Link to="/my-account/inbox">Visit&nbsp;Inbox</Link>;
+        return "/my-account/inbox";
 
       default:
         return null;
     }
-  };
+  }, [notification]);
+
+  const handleClick = useCallback(() => {
+    markAsRead(notification.id);
+  }, [notification.id, markAsRead]);
+
+  // Memoize formatted time
+  const formattedTime = useMemo(
+    () => formatTimeAgo(notification.created_at),
+    [notification.created_at]
+  );
 
   return (
     <>
-      <NotificationItemWrapper
-        isRead={isRead}
-        onClick={() => markAsRead(notification.id)}
-      >
+      <NotificationItemWrapper isRead={isRead} onClick={handleClick}>
         <ProfilePicture
           src={notification.sender_profile_picture}
-          alt={"User Profile Picture"}
-          width={"40px"}
-          border={"1px solid black"}
+          alt="User Profile Picture"
+          width="40px"
+          border="1px solid black"
         />
-        <NotificationMessage>{renderNotificationMessage()}</NotificationMessage>
+        <NotificationMessage>{notificationMessage}</NotificationMessage>
         <NotificationLinkWrapper>
-          {renderNotificationLink()}
+          {notificationLink && (
+            <Link to={notificationLink}>
+              {notification.type === "like" || notification.type === "reply"
+                ? "View Comment"
+                : notification.type === "follow"
+                ? "View Followers"
+                : "Visit Inbox"}
+            </Link>
+          )}
         </NotificationLinkWrapper>
       </NotificationItemWrapper>
       <NotificationTimeWrapper>
-        <time dateTime={notification.created_at}>
-          {formatTimeAgo(notification.created_at)}
-        </time>
+        <time dateTime={notification.created_at}>{formattedTime}</time>
       </NotificationTimeWrapper>
       {!isLast && <hr />}
     </>
   );
 };
 
-export default NotificationItem;
+export default memo(NotificationItem, (prevProps, nextProps) => {
+  return (
+    prevProps.notification.id === nextProps.notification.id &&
+    prevProps.notification.is_read === nextProps.notification.is_read &&
+    prevProps.isLast === nextProps.isLast
+  );
+});
