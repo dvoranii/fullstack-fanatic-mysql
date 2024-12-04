@@ -1,4 +1,11 @@
-import React, { useState, useRef, useContext } from "react";
+import {
+  useState,
+  useRef,
+  useContext,
+  useCallback,
+  useMemo,
+  memo,
+} from "react";
 import cartIcon from "../../../assets/images/shopping-cart-icon.png";
 import { NavIconWrapper, NavIconImg } from "../../NavBar/NavBar.styled";
 import {
@@ -25,14 +32,61 @@ const ShoppingCart: React.FC = () => {
     removeItemFromCart = () => {},
     clearCart = () => {},
   } = useContext(UserContext) || {};
+
   const { handleCheckout } = useHandleCheckout();
 
-  const toggleCartVisibility = (e: React.MouseEvent) => {
+  const toggleCartVisibility = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsCartVisible(!isCartVisible);
-  };
+    setIsCartVisible((prev) => !prev);
+  }, []);
 
   useClickOutside(containerRef, () => setIsCartVisible(false));
+
+  const totalPrice = useMemo(
+    () => cartItems.reduce((total, item) => total + item.price, 0).toFixed(2),
+    [cartItems]
+  );
+
+  const handleRemoveItem = useCallback(
+    (id: number) => removeItemFromCart(id),
+    [removeItemFromCart]
+  );
+
+  const cartContent = useMemo(
+    () =>
+      cartItems.length > 0 ? (
+        cartItems.map((item) => (
+          <ShoppingCartItem key={item.id}>
+            <CartItemTitleWrapper>
+              <p>{item.title}</p>
+            </CartItemTitleWrapper>
+            <span>Price: ${item.price.toFixed(2)}</span>
+            <button onClick={() => handleRemoveItem(item.id)}>Remove</button>
+          </ShoppingCartItem>
+        ))
+      ) : (
+        <p>Your cart is empty</p>
+      ),
+    [cartItems, handleRemoveItem]
+  );
+
+  const cartActions = useMemo(
+    () =>
+      cartItems.length > 0 && (
+        <>
+          <CartBtnWrapper>
+            <ViewCartLink to="/my-cart">View Cart</ViewCartLink>
+            <CheckoutBtn onClick={() => handleCheckout(cartItems)}>
+              Proceed to Checkout
+            </CheckoutBtn>
+          </CartBtnWrapper>
+          <ClearCartBtnWrapper>
+            <button onClick={clearCart}>Clear Cart</button>
+          </ClearCartBtnWrapper>
+        </>
+      ),
+    [cartItems, handleCheckout, clearCart]
+  );
 
   return (
     <div ref={containerRef}>
@@ -47,42 +101,11 @@ const ShoppingCart: React.FC = () => {
         <Dropdown isVisible={isCartVisible} alignRight width="400px">
           <ShoppingCartContentWrapper>
             <h3>Shopping Cart</h3>
-            {cartItems.length > 0 ? (
-              cartItems.map((item) => (
-                <ShoppingCartItem key={item.id}>
-                  <CartItemTitleWrapper>
-                    <p>{item.title}</p>
-                  </CartItemTitleWrapper>
-                  <span>Price: ${item.price.toFixed(2)}</span>
-                  <button onClick={() => removeItemFromCart(item.id)}>
-                    Remove
-                  </button>
-                </ShoppingCartItem>
-              ))
-            ) : (
-              <p>Your cart is empty</p>
-            )}
+            {cartContent}
             <CartDetails>
-              <p>
-                Total: $
-                {cartItems
-                  .reduce((total, item) => total + item.price, 0)
-                  .toFixed(2)}
-              </p>
-              {cartItems.length > 0 && (
-                <CartBtnWrapper>
-                  <ViewCartLink to="/my-cart">View Cart</ViewCartLink>
-                  <CheckoutBtn onClick={() => handleCheckout(cartItems)}>
-                    Proceed to Checkout
-                  </CheckoutBtn>
-                </CartBtnWrapper>
-              )}
+              <p>Total: ${totalPrice}</p>
+              {cartActions}
             </CartDetails>
-            {cartItems.length !== 0 && (
-              <ClearCartBtnWrapper>
-                <button onClick={clearCart}>Clear Cart</button>
-              </ClearCartBtnWrapper>
-            )}
           </ShoppingCartContentWrapper>
         </Dropdown>
       </NavIconWrapper>
@@ -90,4 +113,4 @@ const ShoppingCart: React.FC = () => {
   );
 };
 
-export default ShoppingCart;
+export default memo(ShoppingCart);

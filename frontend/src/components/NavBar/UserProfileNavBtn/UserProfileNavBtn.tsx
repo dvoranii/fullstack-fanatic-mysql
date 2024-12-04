@@ -1,4 +1,10 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useRef,
+  useCallback,
+} from "react";
 import ProfileIconBlack from "../../../assets/images/profile-icon-black.png";
 import {
   ProfileName,
@@ -21,61 +27,77 @@ import { useAuthUtils } from "../../../utils/useAuthUtils";
 import Dropdown from "../../Dropdown/Dropdown";
 import NotificationBadge from "../../NotificationBadge/NotificationBadge";
 import { getUnreadConversationsCount } from "../../../services/conversationService";
-import { UserContextType } from "../../../types/User/UserContextType";
 import UnderConstructionIcon from "../../../assets/images/under-construction.png";
 
 const UserProfileNavBtn: React.FC = () => {
-  const { profile } = useContext(UserContext) || {};
+  const isMounted = useRef(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const { logOut } = useAuthUtils();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { unreadNotificationCount, setUnreadNotificationCount } = useContext(
-    UserContext
-  ) as UserContextType;
 
-  const handleDropdownToggle = async (e: React.MouseEvent) => {
+  const {
+    profile,
+    unreadNotificationCount = 0,
+    setUnreadNotificationCount = () => {},
+  } = useContext(UserContext) || {};
+
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  const handleDropdownToggle = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
+    setDropdownVisible((prev) => !prev);
+  }, []);
 
-    if (!isDropdownVisible) {
+  const handleClickOutside = useCallback((event: MouseEvent) => {
+    if (
+      containerRef.current &&
+      !containerRef.current.contains(event.target as Node)
+    ) {
+      setDropdownVisible(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    let pollInterval: ReturnType<typeof setInterval>;
+
+    const fetchUnreadCount = async () => {
       try {
         const count = await getUnreadConversationsCount();
-        setUnreadNotificationCount(count);
+        if (isMounted.current) {
+          setUnreadNotificationCount(count);
+        }
       } catch (error) {
         console.error("Failed to fetch unread conversations count:", error);
       }
-    }
-
-    setDropdownVisible(!isDropdownVisible);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-        setDropdownVisible(false);
-      }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    fetchUnreadCount();
+
+    if (isDropdownVisible) {
+      pollInterval = setInterval(fetchUnreadCount, 30000);
+    }
+
+    return () => {
+      if (pollInterval) {
+        clearInterval(pollInterval);
+      }
+    };
+  }, [isDropdownVisible, setUnreadNotificationCount]);
+
+  useEffect(() => {
+    if (isDropdownVisible) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
-
-  useEffect(() => {
-    const fetchUnreadInboxCount = async () => {
-      try {
-        const count = await getUnreadConversationsCount();
-        setUnreadNotificationCount(count);
-      } catch (error) {
-        console.error("Failed to fetch unread conversations count:", error);
-      }
-    };
-
-    fetchUnreadInboxCount();
-  }, []);
+  }, [isDropdownVisible, handleClickOutside]);
 
   return (
     <div ref={containerRef}>
@@ -107,7 +129,10 @@ const UserProfileNavBtn: React.FC = () => {
           <UserProfiledropdownWrapper>
             <AccountTitle>Account</AccountTitle>
             <DropdownItem to="/my-account/inbox" className="inbox-item">
-              Inbox <NotificationBadge count={unreadNotificationCount} />
+              Inbox{" "}
+              {unreadNotificationCount > 0 && (
+                <NotificationBadge count={unreadNotificationCount} />
+              )}
             </DropdownItem>
             <DropdownItem to="/my-account/settings">
               <SettingsWrapper>
