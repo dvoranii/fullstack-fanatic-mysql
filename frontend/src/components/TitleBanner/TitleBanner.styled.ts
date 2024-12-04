@@ -5,11 +5,13 @@ interface TitleBannerWrapperProps {
   centered?: boolean;
 }
 
-export const TitleBannerWrapper = styled.div<TitleBannerWrapperProps>`
+export const TitleBannerWrapper = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "centered",
+})<TitleBannerWrapperProps>`
   padding: 20px;
   background-color: ${colors.secondary};
   user-select: none;
-  text-align: ${(props) => (props.centered ? "center" : "left")};
+  text-align: ${({ centered }) => (centered ? "center" : "left")};
 
   h1 {
     text-transform: uppercase;
