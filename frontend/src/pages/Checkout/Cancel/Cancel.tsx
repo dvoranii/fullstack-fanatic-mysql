@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { CheckoutResultPageWrapper } from "../Checkout.styles";
 import { PageWrapper } from "../../../PageWrapper.styled";
 

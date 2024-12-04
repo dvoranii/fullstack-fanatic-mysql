@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { NotFoundWrapper } from "./NotFound.styled";
 import { Link } from "react-router-dom";
 import TitleBanner from "../../components/TitleBanner/TitleBanner";

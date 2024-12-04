@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { useContext, useEffect, useState } from "react";
 import {
   SettingsContainer,

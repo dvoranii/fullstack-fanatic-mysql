@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { useContext, useState, useEffect } from "react";
 import Title from "../../components/Title/Title";
 import {

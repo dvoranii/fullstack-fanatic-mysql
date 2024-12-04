@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { HomePageWrapper } from "./HomePage.styled";
 import Hero from "./Hero/Hero";
 import IntroSection from "./IntroSection/IntroSection";

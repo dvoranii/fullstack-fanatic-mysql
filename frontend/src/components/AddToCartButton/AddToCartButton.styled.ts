@@ -5,7 +5,9 @@ interface AddToCartWrapperProps {
   marginBottom?: string;
 }
 
-export const AddToCartWrapper = styled.div<AddToCartWrapperProps>`
+export const AddToCartWrapper = styled.div.withConfig({
+  shouldForwardProp: (prop) => !["marginLeft", "marginBottom"].includes(prop),
+})<AddToCartWrapperProps>`
   user-select: none;
 
   button {

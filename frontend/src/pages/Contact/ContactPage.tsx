@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { ContactPageWrapper, ImgWrapper } from "./ContactPage.styled";
 import Title from "../../components/Title/Title";
 import ElipseBgWhite from "../../assets/images/Ellipse-bg-white.svg";

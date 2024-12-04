@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { SuccessWrapper } from "./Sucess.styled";
 import { useContext, useEffect } from "react";
 import { UserContext } from "../../../context/UserContext";

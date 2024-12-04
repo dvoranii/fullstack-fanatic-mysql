@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
 import CommentSection from "../CommentSection/CommentSection";
 import { tutorialContent } from "../../assets/tutorialContent";

@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
 import { BlogDetailWrapper } from "./BlogDetail.styled";
 import { blogContent } from "../../assets/blogContent";

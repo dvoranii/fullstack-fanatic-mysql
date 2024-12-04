@@ -1,4 +1,5 @@
 import React from "react";
+import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter as Router } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import NavBar from "./components/NavBar/NavBar";
@@ -12,16 +13,18 @@ const clientId = import.meta.env.VITE_CLIENT_ID;
 const App: React.FC = () => {
   return (
     <>
-      <GlobalStyles />
-      <GoogleOAuthProvider clientId={clientId}>
-        <UserProvider>
-          <Router>
-            <NavBar />
-            <Navigation />
-            <Footer />
-          </Router>
-        </UserProvider>
-      </GoogleOAuthProvider>
+      <HelmetProvider>
+        <GlobalStyles />
+        <GoogleOAuthProvider clientId={clientId}>
+          <UserProvider>
+            <Router>
+              <NavBar />
+              <Navigation />
+              <Footer />
+            </Router>
+          </UserProvider>
+        </GoogleOAuthProvider>
+      </HelmetProvider>
     </>
   );
 };
