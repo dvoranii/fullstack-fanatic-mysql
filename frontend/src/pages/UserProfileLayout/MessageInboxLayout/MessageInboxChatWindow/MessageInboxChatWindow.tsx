@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+} from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {
   ChatWindowContainerOuter,
@@ -142,12 +148,17 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
     fetchInitialMessages();
   }, [conversationId]);
 
-  useWebSocketMessages((message: Message) => {
-    if (message.conversation_id === conversationId) {
-      setMessages((prevMessages) => [...prevMessages, message]);
-      scrollToBottom();
-    }
-  });
+  const onNewMessageHandler = useCallback(
+    (message: Message) => {
+      if (message.conversation_id === conversationId) {
+        setMessages((prevMessages) => [...prevMessages, message]);
+        scrollToBottom();
+      }
+    },
+    [conversationId]
+  );
+
+  useWebSocketMessages(onNewMessageHandler);
 
   useEffect(() => {
     const determineReceiver = async () => {

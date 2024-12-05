@@ -18,7 +18,7 @@ router.post(
       const connection = await connectionPromise;
 
       const [conversation] = await connection.execute<RowDataPacket[]>(
-        "SELECT user1_id, user2_id FROM conversations WHERE id = ?",
+        "SELECT user1_id, user2_id, is_deleted_user1, is_deleted_user2 FROM conversations WHERE id = ?",
         [conversation_id]
       );
 
@@ -26,14 +26,15 @@ router.post(
         return res.status(404).json({ error: "Conversation not found" });
       }
 
-      const { user1_id, user2_id } = conversation[0];
+      const { user1_id, user2_id, is_deleted_user1, is_deleted_user2 } =
+        conversation[0];
 
-      if (receiver_id === user1_id) {
+      if (receiver_id === user1_id && is_deleted_user1) {
         await connection.execute<ResultSetHeader>(
           "UPDATE conversations SET is_deleted_user1 = FALSE WHERE id = ?",
           [conversation_id]
         );
-      } else if (receiver_id === user2_id) {
+      } else if (receiver_id === user2_id && is_deleted_user2) {
         await connection.execute<ResultSetHeader>(
           "UPDATE conversations SET is_deleted_user2 = FALSE WHERE id = ?",
           [conversation_id]
@@ -51,25 +52,18 @@ router.post(
         sender_id,
         receiver_id,
         content,
-        sent_at: new Date(),
+        sent_at: new Date().toISOString(),
       };
 
       if (sender_id !== receiver_id) {
-        if (receiver_id === user1_id) {
-          await connection.execute<ResultSetHeader>(
-            `UPDATE conversations 
-           SET is_read_user1 = FALSE 
-           WHERE id = ?`,
-            [conversation_id]
-          );
-        } else if (receiver_id === user2_id) {
-          await connection.execute<ResultSetHeader>(
-            `UPDATE conversations 
-           SET is_read_user2 = FALSE 
-           WHERE id = ?`,
-            [conversation_id]
-          );
-        }
+        const updateQuery =
+          receiver_id === user1_id
+            ? "UPDATE conversations SET is_read_user1 = FALSE WHERE id = ?"
+            : "UPDATE conversations SET is_read_user2 = FALSE WHERE id = ?";
+
+        await connection.execute<ResultSetHeader>(updateQuery, [
+          conversation_id,
+        ]);
 
         await connection.execute<ResultSetHeader>(
           "INSERT INTO notifications (user_id, type, sender_id, conversation_id, is_read, created_at) VALUES (?, 'message', ?, ?, 0, NOW())",
@@ -81,7 +75,7 @@ router.post(
           sender_id,
           conversation_id,
           content,
-          sent_at: new Date(),
+          sent_at: newMessage.sent_at,
         });
       }
 
