@@ -75,3 +75,25 @@ export const updateUserProfile = async (
 
   return data;
 };
+
+export const deleteSocialLink = async (
+  platform: string,
+  token: string,
+  csrfToken: string
+) => {
+  const endpoint = `/api/profile/social-link/${platform}`;
+
+  const { status } = await apiCall(endpoint, {
+    method: "DELETE",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+      "x-csrf-token": csrfToken,
+    },
+  });
+
+  if (status < 200 || status >= 300) {
+    throw new Error("Failed to delete social link");
+  }
+};

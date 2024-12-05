@@ -6,12 +6,15 @@ import {
 import { Input, FormGroup, Label } from "../EditProfileModal.styled";
 import { handleTokenExpiration } from "../../../../services/tokenService";
 import { SocialLinksEditorProps } from "../../../../types/SocialLinksEditorProps";
+import { deleteSocialLink } from "../../../../services/profileService";
+import { useCsrfToken } from "../../../../hooks/useCsrfToken";
 
 const SocialLinksEditor: React.FC<SocialLinksEditorProps> = ({
   socialLinks,
   setSocialLinks,
   markSocialLinksChanged,
 }) => {
+  const csrfToken = useCsrfToken();
   const handleSocialLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSocialLinks({
       ...socialLinks,
@@ -40,17 +43,7 @@ const SocialLinksEditor: React.FC<SocialLinksEditorProps> = ({
       throw new Error("User not authenticated");
     }
     try {
-      const response = await fetch(`/api/profile/social-link/${platform}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to delete social link");
-      }
+      await deleteSocialLink(platform, token, csrfToken);
 
       const updatedLinks = { ...socialLinks };
       delete updatedLinks[platform];

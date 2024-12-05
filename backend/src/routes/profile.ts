@@ -177,6 +177,7 @@ router.put(
 router.delete(
   "/social-link/:platform",
   authenticate,
+  csrfProtection,
   async (req: Request, res: Response) => {
     const userId = req.user?.userId;
     const { platform } = req.params;

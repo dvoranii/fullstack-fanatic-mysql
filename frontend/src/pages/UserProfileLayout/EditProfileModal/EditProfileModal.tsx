@@ -112,7 +112,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
       let profilePicturePath = profile.profile_picture;
 
       if (isChanged.profilePicture && profilePicture) {
-        const profilePictureData = new FormData(); // Renamed for clarity
+        const profilePictureData = new FormData();
         profilePictureData.append("profile_picture", profilePicture);
 
         const data = await uploadImage(
