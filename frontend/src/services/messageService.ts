@@ -5,17 +5,22 @@ export const sendMessage = async (
   conversationId: number,
   loggedInUserId: number,
   receiverId: number,
-  content: string
+  content: string,
+  csrfToken: string
 ): Promise<Message> => {
   const endpoint = `/api/messages`;
   const { data } = await apiCall<Message>(endpoint, {
     method: "POST",
+    credentials: "include",
     body: JSON.stringify({
       conversation_id: conversationId,
       sender_id: loggedInUserId,
       receiver_id: receiverId,
       content,
     }),
+    headers: {
+      "x-csrf-token": csrfToken,
+    },
   });
 
   return data;

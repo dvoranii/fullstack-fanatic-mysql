@@ -82,22 +82,42 @@ const MessageUserModal: React.FC<MessageUserModalProps> = ({
     try {
       const numericUserId = Number(userId);
 
-      const conversation = await createOrGetConversation(
-        loggedInUserId,
-        numericUserId,
-        conversationExists ? "" : subject,
-        csrfToken
-      );
+      let conversationId;
 
-      await sendMessage(
-        conversation.id,
-        loggedInUserId,
-        numericUserId,
-        message
-      );
+      if (conversationExists) {
+        const existingConversation = await checkExistingConversation(
+          loggedInUserId,
+          numericUserId
+        );
+        if (existingConversation.exists) {
+          conversationId = existingConversation.id;
+        } else {
+          console.error("Conversation not found after checking its existence");
+          return;
+        }
+      } else {
+        const conversation = await createOrGetConversation(
+          loggedInUserId,
+          numericUserId,
+          subject,
+          csrfToken
+        );
+        conversationId = conversation.id;
+      }
 
-      console.log("Message sent successfully");
-      onClose();
+      if (conversationId !== undefined) {
+        await sendMessage(
+          conversationId,
+          loggedInUserId,
+          numericUserId,
+          message,
+          csrfToken
+        );
+        console.log("Message sent successfully");
+        onClose();
+      } else {
+        console.error("Failed to obtain a valid conversation ID");
+      }
     } catch (error) {
       console.error("Failed to send message:", error);
     }

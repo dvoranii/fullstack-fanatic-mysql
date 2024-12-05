@@ -192,7 +192,8 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
         conversationId,
         Number(loggedInUserId),
         receiverId,
-        newMessage
+        newMessage,
+        csrfToken
       );
       setNewMessage("");
     } catch (error) {

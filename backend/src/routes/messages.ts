@@ -3,91 +3,97 @@ import connectionPromise from "../db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { authenticate } from "../middleware/authenticate";
 import { io } from "../app";
+import { csrfProtection } from "../middleware/csrf";
 
 const router = express.Router();
 
-router.post("/", authenticate, async (req: Request, res: Response) => {
-  const { conversation_id, sender_id, receiver_id, content } = req.body;
+router.post(
+  "/",
+  authenticate,
+  csrfProtection,
+  async (req: Request, res: Response) => {
+    const { conversation_id, sender_id, receiver_id, content } = req.body;
 
-  try {
-    const connection = await connectionPromise;
+    try {
+      const connection = await connectionPromise;
 
-    const [conversation] = await connection.execute<RowDataPacket[]>(
-      "SELECT user1_id, user2_id FROM conversations WHERE id = ?",
-      [conversation_id]
-    );
-
-    if (conversation.length === 0) {
-      return res.status(404).json({ error: "Conversation not found" });
-    }
-
-    const { user1_id, user2_id } = conversation[0];
-
-    if (receiver_id === user1_id) {
-      await connection.execute<ResultSetHeader>(
-        "UPDATE conversations SET is_deleted_user1 = FALSE WHERE id = ?",
+      const [conversation] = await connection.execute<RowDataPacket[]>(
+        "SELECT user1_id, user2_id FROM conversations WHERE id = ?",
         [conversation_id]
       );
-    } else if (receiver_id === user2_id) {
-      await connection.execute<ResultSetHeader>(
-        "UPDATE conversations SET is_deleted_user2 = FALSE WHERE id = ?",
-        [conversation_id]
-      );
-    }
 
-    const [result] = await connection.execute<ResultSetHeader>(
-      "INSERT INTO messages (conversation_id, sender_id, receiver_id, content, sent_at) VALUES (?, ?, ?, ?, NOW())",
-      [conversation_id, sender_id, receiver_id, content]
-    );
+      if (conversation.length === 0) {
+        return res.status(404).json({ error: "Conversation not found" });
+      }
 
-    const newMessage = {
-      id: result.insertId,
-      conversation_id,
-      sender_id,
-      receiver_id,
-      content,
-      sent_at: new Date(),
-    };
+      const { user1_id, user2_id } = conversation[0];
 
-    if (sender_id !== receiver_id) {
       if (receiver_id === user1_id) {
         await connection.execute<ResultSetHeader>(
-          `UPDATE conversations 
-           SET is_read_user1 = FALSE 
-           WHERE id = ?`,
+          "UPDATE conversations SET is_deleted_user1 = FALSE WHERE id = ?",
           [conversation_id]
         );
       } else if (receiver_id === user2_id) {
         await connection.execute<ResultSetHeader>(
-          `UPDATE conversations 
-           SET is_read_user2 = FALSE 
-           WHERE id = ?`,
+          "UPDATE conversations SET is_deleted_user2 = FALSE WHERE id = ?",
           [conversation_id]
         );
       }
 
-      await connection.execute<ResultSetHeader>(
-        "INSERT INTO notifications (user_id, type, sender_id, conversation_id, is_read, created_at) VALUES (?, 'message', ?, ?, 0, NOW())",
-        [receiver_id, sender_id, conversation_id]
+      const [result] = await connection.execute<ResultSetHeader>(
+        "INSERT INTO messages (conversation_id, sender_id, receiver_id, content, sent_at) VALUES (?, ?, ?, ?, NOW())",
+        [conversation_id, sender_id, receiver_id, content]
       );
 
-      io.to(`user_${receiver_id}`).emit("newNotification", {
-        type: "message",
-        sender_id,
+      const newMessage = {
+        id: result.insertId,
         conversation_id,
+        sender_id,
+        receiver_id,
         content,
         sent_at: new Date(),
-      });
+      };
+
+      if (sender_id !== receiver_id) {
+        if (receiver_id === user1_id) {
+          await connection.execute<ResultSetHeader>(
+            `UPDATE conversations 
+           SET is_read_user1 = FALSE 
+           WHERE id = ?`,
+            [conversation_id]
+          );
+        } else if (receiver_id === user2_id) {
+          await connection.execute<ResultSetHeader>(
+            `UPDATE conversations 
+           SET is_read_user2 = FALSE 
+           WHERE id = ?`,
+            [conversation_id]
+          );
+        }
+
+        await connection.execute<ResultSetHeader>(
+          "INSERT INTO notifications (user_id, type, sender_id, conversation_id, is_read, created_at) VALUES (?, 'message', ?, ?, 0, NOW())",
+          [receiver_id, sender_id, conversation_id]
+        );
+
+        io.to(`user_${receiver_id}`).emit("newNotification", {
+          type: "message",
+          sender_id,
+          conversation_id,
+          content,
+          sent_at: new Date(),
+        });
+      }
+
+      io.to(`conversation_${conversation_id}`).emit("newMessage", newMessage);
+
+      res.status(201).json({ message: "Message sent successfully" });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Failed to send message" });
     }
-
-    io.to(`conversation_${conversation_id}`).emit("newMessage", newMessage);
-
-    res.status(201).json({ message: "Message sent successfully" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to send message" });
   }
-});
+);
 
 router.get("/:conversationId", authenticate, async (req, res) => {
   const { conversationId } = req.params;

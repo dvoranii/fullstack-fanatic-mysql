@@ -91,11 +91,13 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
         <NotificationLinkWrapper>
           {notificationLink && (
             <Link to={notificationLink}>
-              {notification.type === "like" || notification.type === "reply"
-                ? "View Comment"
-                : notification.type === "follow"
-                ? "View Followers"
-                : "Visit Inbox"}
+              {notification.type === "like" || notification.type === "reply" ? (
+                <>View{" "}Comment</>
+              ) : notification.type === "follow" ? (
+                <>View{" "}Followers</>
+              ) : (
+                <>Visit{" "}Inbox</>
+              )}
             </Link>
           )}
         </NotificationLinkWrapper>
