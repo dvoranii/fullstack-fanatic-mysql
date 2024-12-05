@@ -1,6 +1,4 @@
-// utils/userUtils.ts
-
-import { getUserProfile } from "../services/userService";
+import { getUserProfile } from "../services/profileService";
 import { getUserFavourites } from "../services/favouritesService";
 import { handleTokenExpiration } from "../services/tokenService";
 import { User } from "../types/User/User";

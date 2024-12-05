@@ -7,7 +7,7 @@ import {
   SenderName,
   TextContainer,
 } from "./SentMessages.styled";
-import { getUserPublicProfile } from "../../../../../services/userService";
+import { getUserPublicProfile } from "../../../../../services/profileService";
 import { UserContext } from "../../../../../context/UserContext";
 import ProfilePicture from "../../../../../components/ProfilePicture/ProfilePicture";
 

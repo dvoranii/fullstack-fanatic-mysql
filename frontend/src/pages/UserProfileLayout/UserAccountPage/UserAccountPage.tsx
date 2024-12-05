@@ -9,8 +9,10 @@ import { ImageUploadResponse } from "../../../types/ImageUploadResponse";
 import InboxIcon from "../../../assets/images/account/inbox.png";
 import { getUnreadConversationsCount } from "../../../services/conversationService";
 import NotificationBadge from "../../../components/NotificationBadge/NotificationBadge";
+import { useCsrfToken } from "../../../hooks/useCsrfToken";
 
 const UserAccountsPage: React.FC = () => {
+  const csrfToken = useCsrfToken();
   const [bannerImage, setBannerImage] = useState<File | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { profile, setProfile, comments } = useContext(UserContext) || {};
@@ -45,7 +47,8 @@ const UserAccountsPage: React.FC = () => {
       try {
         const data: ImageUploadResponse = await uploadImage(
           "/api/profile/upload-banner",
-          formData
+          formData,
+          csrfToken
         );
         if (data.imagePath && setProfile) {
           setProfile({

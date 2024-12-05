@@ -17,12 +17,15 @@ import { EditProfileModalProps } from "../../../types/EditProfileProps";
 import { handleTokenExpiration } from "../../../services/tokenService";
 import { uploadImage } from "../../../services/imageUploadService";
 import { getAvatarUrl } from "../../../utils/imageUtils";
+import { useCsrfToken } from "../../../hooks/useCsrfToken";
+import { updateUserProfile } from "../../../services/profileService";
 
 const EditProfileModal: React.FC<EditProfileModalProps> = ({
   profile,
   setProfile,
   closeModal,
 }) => {
+  const csrfToken = useCsrfToken();
   const [displayName, setDisplayName] = useState(
     profile.display_name || profile.name || ""
   );
@@ -114,7 +117,8 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
 
         const data = await uploadImage(
           "/api/profile/upload-profile-picture",
-          profilePictureData
+          profilePictureData,
+          csrfToken
         );
 
         if (!data.imagePath)
@@ -139,17 +143,11 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
         profileData.append("profile_picture", profilePicturePath);
       }
 
-      const response = await fetch("/api/profile/update-profile", {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: profileData,
-      });
-
-      if (!response.ok) throw new Error("Failed to update profile");
-
-      const updatedProfile = await response.json();
+      const updatedProfile = await updateUserProfile(
+        profileData,
+        token,
+        csrfToken
+      );
       setProfile(updatedProfile);
       alert("Profile updated successfully!");
       closeModal();

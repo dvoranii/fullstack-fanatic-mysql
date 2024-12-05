@@ -7,7 +7,6 @@ const BASE_URL = "http://localhost:5000";
 export const useWebSocketMessages = (
   onNewMessage: (message: Message) => void
 ) => {
-  // Use useRef to maintain the same socket instance
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
@@ -19,7 +18,6 @@ export const useWebSocketMessages = (
         onNewMessage(message);
       });
 
-      // Clean up connection when the component unmounts
       return () => {
         socket.disconnect();
         socketRef.current = null;

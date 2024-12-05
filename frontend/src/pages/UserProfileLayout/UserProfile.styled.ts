@@ -186,7 +186,7 @@ export const AccountActivity = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  text-align: center;
+
   gap: 8.2rem;
   margin-top: 40px;
 
@@ -256,6 +256,7 @@ export const CommentText = styled.p`
 export const CommentLink = styled.a`
   color: #007bff;
   text-decoration: none;
+  text-align: center;
 
   &:hover {
     text-decoration: underline;

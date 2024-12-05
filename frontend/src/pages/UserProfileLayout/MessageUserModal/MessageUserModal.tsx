@@ -11,7 +11,7 @@ import {
   AvatarContainer,
   CloseBtn,
 } from "./MessageUserModal.styled";
-import { getUserPublicProfile } from "../../../services/userService";
+import { getUserPublicProfile } from "../../../services/profileService";
 import {
   checkExistingConversation,
   createOrGetConversation,

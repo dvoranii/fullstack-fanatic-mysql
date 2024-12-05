@@ -5,6 +5,7 @@ import { RowDataPacket } from "mysql2";
 import { authenticate } from "../middleware/authenticate";
 import { upload } from "../utils/storageConfig";
 import fs from "fs";
+import { csrfProtection } from "../middleware/csrf";
 
 const router = express.Router();
 
@@ -32,6 +33,7 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
 router.post(
   "/upload-banner",
   authenticate,
+  csrfProtection,
   upload.single("bannerimage"),
   async (req: Request, res: Response) => {
     const userId = req.user?.userId;
@@ -44,7 +46,6 @@ router.post(
     const connection = await connectionPromise;
 
     try {
-      // Fetch current banner image path
       const [currentUser] = await connection.query<RowDataPacket[]>(
         "SELECT banner_image FROM users WHERE id = ?",
         [userId]
@@ -54,12 +55,10 @@ router.post(
         ? path.join(__dirname, `../../public${currentUser[0].banner_image}`)
         : null;
 
-      // Delete old banner image if it exists
       if (oldBannerPath && fs.existsSync(oldBannerPath)) {
         fs.unlinkSync(oldBannerPath);
       }
 
-      // Update banner image path in the database
       await connection.execute(
         "UPDATE users SET banner_image = ? WHERE id = ?",
         [bannerImagePath, userId]
@@ -79,6 +78,7 @@ router.post(
 router.post(
   "/upload-profile-picture",
   authenticate,
+  csrfProtection,
   upload.single("profile_picture"),
   async (req: Request, res: Response) => {
     const userId = req.user?.userId;
@@ -91,7 +91,6 @@ router.post(
     const connection = await connectionPromise;
 
     try {
-      // Fetch current profile picture path
       const [currentUser] = await connection.query<RowDataPacket[]>(
         "SELECT profile_picture FROM users WHERE id = ?",
         [userId]
@@ -101,12 +100,10 @@ router.post(
         ? path.join(__dirname, `../../public${currentUser[0].profile_picture}`)
         : null;
 
-      // Delete old profile picture if it exists
       if (oldProfilePicturePath && fs.existsSync(oldProfilePicturePath)) {
         fs.unlinkSync(oldProfilePicturePath);
       }
 
-      // Update profile picture path in the database
       await connection.execute(
         "UPDATE users SET profile_picture = ? WHERE id = ?",
         [profilePicturePath, userId]
@@ -126,6 +123,7 @@ router.post(
 router.put(
   "/update-profile",
   authenticate,
+  csrfProtection,
   upload.none(),
   async (req: Request, res: Response) => {
     const userId = req.user?.userId;
