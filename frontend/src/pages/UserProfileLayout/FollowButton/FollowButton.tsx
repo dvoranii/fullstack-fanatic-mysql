@@ -1,5 +1,6 @@
 import { followUser, unfollowUser } from "../../../services/followService";
 import { FollowBtn } from "./FollowButton.styled";
+import { useCsrfToken } from "../../../hooks/useCsrfToken";
 interface FollowButtonProps {
   userId: number;
   isFollowing: boolean;
@@ -13,14 +14,15 @@ const FollowButton: React.FC<FollowButtonProps> = ({
   setIsFollowing,
   setFollowersCount,
 }) => {
+  const csrfToken = useCsrfToken();
   const handleFollowToggle = async () => {
     try {
       if (isFollowing) {
-        await unfollowUser(userId);
+        await unfollowUser(userId, csrfToken);
         setIsFollowing(false);
         setFollowersCount((prev) => prev - 1);
       } else {
-        await followUser(userId);
+        await followUser(userId, csrfToken);
         setIsFollowing(true);
         setFollowersCount((prev) => prev + 1);
       }

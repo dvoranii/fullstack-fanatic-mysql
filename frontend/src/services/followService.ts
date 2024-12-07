@@ -55,17 +55,25 @@ export const fetchFollowingState = async (
   }
 };
 
-export const followUser = async (userId: number) => {
+export const followUser = async (userId: number, csrfToken: string) => {
   const { status } = await apiCall(`/api/users/${userId}/follow`, {
     method: "POST",
+    credentials: "include",
+    headers: {
+      "x-csrf-token": csrfToken,
+    },
   });
 
   return status;
 };
 
-export const unfollowUser = async (userId: number) => {
+export const unfollowUser = async (userId: number, csrfToken: string) => {
   const { status } = await apiCall(`/api/users/${userId}/follow`, {
     method: "DELETE",
+    credentials: "include",
+    headers: {
+      "x-csrf-token": csrfToken,
+    },
   });
   return status;
 };

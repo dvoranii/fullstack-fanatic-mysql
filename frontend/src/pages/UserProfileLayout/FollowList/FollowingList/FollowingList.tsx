@@ -10,12 +10,14 @@ import {
 import TitleBanner from "../../../../components/TitleBanner/TitleBanner";
 import UserList from "../../../../components/UserList/UserList";
 import { User } from "../../../../types/User/User";
+import { useCsrfToken } from "../../../../hooks/useCsrfToken";
 
 interface FollowingListProps {
   userId?: number;
 }
 
 const FollowingList: React.FC<FollowingListProps> = ({ userId }) => {
+  const csrfToken = useCsrfToken();
   const { id } = useParams<{ id: string }>();
   const effectiveUserId = userId || Number(id);
 
@@ -39,7 +41,7 @@ const FollowingList: React.FC<FollowingListProps> = ({ userId }) => {
   const handleUnfollow = async (userId: number) => {
     setFollowing((prev) => prev.filter((user) => user.id !== userId));
     try {
-      const status = await unfollowUser(userId);
+      const status = await unfollowUser(userId, csrfToken);
       if (status !== 200) {
         console.error("Error: Failed to unfollow the user.");
       }

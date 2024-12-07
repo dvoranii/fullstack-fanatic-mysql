@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import UserProfilePage from "../UserProfile";
 import { PublicProfile } from "../../../types/PublicProfileType";
-import { getUserPublicProfile } from "../../../services/userService";
+import { getUserPublicProfile } from "../../../services/profileService";
 import { getPublicUserFavourites } from "../../../services/favouritesService"; // Importing the new function
 import { UserContext } from "../../../context/UserContext";
 import { fetchUserComments } from "../../../services/commentService";

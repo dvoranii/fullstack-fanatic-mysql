@@ -11,12 +11,14 @@ import {
 import TitleBanner from "../../../../components/TitleBanner/TitleBanner";
 import UserList from "../../../../components/UserList/UserList";
 import { User } from "../../../../types/User/User";
+import { useCsrfToken } from "../../../../hooks/useCsrfToken";
 
 interface FollowersListProps {
   userId?: number;
 }
 
 const FollowersList: React.FC<FollowersListProps> = ({ userId }) => {
+  const csrfToken = useCsrfToken();
   const { id } = useParams<{ id: string }>();
   const effectiveUserId = userId || Number(id);
 
@@ -55,7 +57,7 @@ const FollowersList: React.FC<FollowersListProps> = ({ userId }) => {
 
   const handleFollow = async (userId: number) => {
     try {
-      const status = await followUser(userId);
+      const status = await followUser(userId, csrfToken);
       if (status === 200) {
         setFollowing((prev) => [...prev, userId]);
       }
@@ -67,7 +69,7 @@ const FollowersList: React.FC<FollowersListProps> = ({ userId }) => {
   const handleUnfollow = async (userId: number) => {
     setFollowing((prev) => prev.filter((id) => id !== userId));
     try {
-      const status = await unfollowUser(userId);
+      const status = await unfollowUser(userId, csrfToken);
       if (status !== 200) {
         setFollowing((prev) => [...prev, userId]);
       }
