@@ -7,8 +7,6 @@ export const getUserAuthType = async (): Promise<string> => {
     credentials: "include",
   });
 
-  console.log(data);
-
   return data.auth_type;
 };
 

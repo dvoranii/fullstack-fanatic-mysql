@@ -4,6 +4,7 @@ import { authenticate } from "../middleware/authenticate";
 import { CartItem } from "../types/CartItem";
 import Stripe from "stripe";
 import connectionPromise from "../db";
+import { csrfProtection } from "../middleware/csrf";
 
 dotenv.config();
 
@@ -58,6 +59,7 @@ const router = express.Router();
   router.post(
     "/create-checkout-session-payment",
     authenticate,
+    csrfProtection,
     async (req: Request, res: Response) => {
       const { cartItems } = req.body;
 
@@ -109,6 +111,7 @@ const router = express.Router();
   router.post(
     "/create-checkout-session-subscription",
     authenticate,
+    csrfProtection,
     async (req: Request, res: Response) => {
       const { cartItems } = req.body;
 
@@ -259,7 +262,6 @@ const router = express.Router();
         }
       }
 
-      // Send a response only once at the end
       res.sendStatus(200);
     }
   );

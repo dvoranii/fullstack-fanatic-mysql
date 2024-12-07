@@ -15,7 +15,7 @@ import {
 } from "../../../services/conversationService";
 import { Conversation } from "../../../types/Conversations";
 import { UserContext } from "../../../context/UserContext";
-import { getUserPublicProfile } from "../../../services/userService";
+import { getUserPublicProfile } from "../../../services/profileService";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
 
 const MessageInboxLayout: React.FC = () => {

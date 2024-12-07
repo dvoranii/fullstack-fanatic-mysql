@@ -12,6 +12,7 @@ export const useCsrfToken = () => {
         if (response.ok) {
           const data = await response.json();
           setCsrfToken(data.csrfToken);
+          localStorage.setItem("csrfToken", data.csrfToken);
         } else {
           console.error("Failed to fetch CSRF token");
         }

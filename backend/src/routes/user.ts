@@ -13,6 +13,7 @@ import {
 import bcrypt from "bcrypt";
 import { authenticate } from "../middleware/authenticate";
 import { getUserIdFromToken } from "../utils/getUserIdFromToken";
+import { csrfProtection } from "../middleware/csrf";
 
 dotenv.config();
 
@@ -270,27 +271,31 @@ router.post("/google-login", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/refresh-token", async (req: Request, res: Response) => {
-  const { refreshToken } = req.cookies;
+router.post(
+  "/refresh-token",
+  csrfProtection,
+  async (req: Request, res: Response) => {
+    const { refreshToken } = req.cookies;
 
-  if (!refreshToken) {
-    return res.status(401).json({ error: "Refresh token is required" });
+    if (!refreshToken) {
+      return res.status(401).json({ error: "Refresh token is required" });
+    }
+
+    try {
+      const payload = verifyRefreshToken(refreshToken);
+      const newJwtToken = createJwtToken(
+        payload.userId,
+        payload.email,
+        payload.googleId || undefined
+      );
+
+      res.status(200).json({ token: newJwtToken });
+    } catch (error) {
+      console.error("Error verifying refresh token:", error);
+      res.status(401).json({ error: "Invalid refresh token" });
+    }
   }
-
-  try {
-    const payload = verifyRefreshToken(refreshToken);
-    const newJwtToken = createJwtToken(
-      payload.userId,
-      payload.email,
-      payload.googleId || undefined
-    );
-
-    res.status(200).json({ token: newJwtToken });
-  } catch (error) {
-    console.error("Error verifying refresh token:", error);
-    res.status(401).json({ error: "Invalid refresh token" });
-  }
-});
+);
 
 router.get("/user-profile/:id", async (req: Request, res: Response) => {
   const { id } = req.params;

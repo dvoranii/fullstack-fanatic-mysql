@@ -207,13 +207,13 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                           <CommentLink
                             href={`/tutorial/${comment.content_id}/comments/${comment.id}`}
                           >
-                            View in Tutorial
+                            View&nbsp;in&nbsp;Tutorial
                           </CommentLink>
                         ) : (
                           <CommentLink
                             href={`/blog/${comment.content_id}/comments/${comment.id}`}
                           >
-                            View in Blog
+                            View&nbsp;in&nbsp;Blog
                           </CommentLink>
                         )}
                       </CommentItem>

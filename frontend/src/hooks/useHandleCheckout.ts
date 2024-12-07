@@ -6,16 +6,18 @@ import {
 import { CartItem } from "../types/CartItem";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
+import { useCsrfToken } from "./useCsrfToken";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const useHandleCheckout = () => {
+  const csrfToken = useCsrfToken();
   const { clearCart, removeSubscriptionFromCart } =
     useContext(UserContext) || {};
 
   const handleCheckout = async (cartItems: CartItem[]) => {
     try {
-      const { data } = await createCheckoutPaymentSession(cartItems);
+      const { data } = await createCheckoutPaymentSession(cartItems, csrfToken);
 
       const stripe = await stripePromise;
 
@@ -43,7 +45,10 @@ const useHandleCheckout = () => {
 
   const handleSubscriptionCheckout = async (cartItems: CartItem[]) => {
     try {
-      const { data } = await createCheckoutSubscriptionSession(cartItems);
+      const { data } = await createCheckoutSubscriptionSession(
+        cartItems,
+        csrfToken
+      );
 
       const stripe = await stripePromise;
 

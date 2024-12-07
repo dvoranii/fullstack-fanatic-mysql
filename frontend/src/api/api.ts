@@ -3,7 +3,10 @@ import { LoginRequestBody } from "../types/LoginRequestBody";
 import { User } from "../types/User/User";
 import { apiCall } from "../utils/apiUtils";
 
-export const registerUser = async (requestBody: AuthRequestBody) => {
+export const registerUser = async (
+  requestBody: AuthRequestBody,
+  csrfToken: string
+) => {
   const endpoint = `/api/users/register`;
   const { status, data } = await apiCall<User>(endpoint, {
     method: "POST",
@@ -11,6 +14,7 @@ export const registerUser = async (requestBody: AuthRequestBody) => {
     body: JSON.stringify(requestBody),
     headers: {
       "Content-Type": "application/json",
+      "x-csrf-token": csrfToken,
     },
   });
 
@@ -22,7 +26,8 @@ export const registerUser = async (requestBody: AuthRequestBody) => {
 };
 
 export const loginUser = async (
-  requestBody: LoginRequestBody
+  requestBody: LoginRequestBody,
+  csrfToken: string
 ): Promise<User> => {
   const endpoint = `/api/users/login`;
   const { data } = await apiCall<User>(endpoint, {
@@ -31,13 +36,14 @@ export const loginUser = async (
     body: JSON.stringify(requestBody),
     headers: {
       "Content-Type": "application/json",
+      "x-csrf-token": csrfToken,
     },
   });
 
   return data;
 };
 
-export const googleRegister = async (token: string) => {
+export const googleRegister = async (token: string, csrfToken: string) => {
   const endpoint = `/api/users/google-register`;
   const { status, data } = await apiCall<{ message: string }>(endpoint, {
     method: "POST",
@@ -45,6 +51,7 @@ export const googleRegister = async (token: string) => {
     body: JSON.stringify({ token }),
     headers: {
       "Content-Type": "application/json",
+      "x-csrf-token": csrfToken,
     },
   });
 
@@ -59,7 +66,7 @@ export const googleRegister = async (token: string) => {
   return { status, message: data.message };
 };
 
-export const googleLogin = async (token: string) => {
+export const googleLogin = async (token: string, csrfToken: string) => {
   const endpoint = `/api/users/google-login`;
   const { status, data } = await apiCall<{ message: string }>(endpoint, {
     method: "POST",
@@ -67,6 +74,7 @@ export const googleLogin = async (token: string) => {
     body: JSON.stringify({ token }),
     headers: {
       "Content-Type": "application/json",
+      "x-csrf-token": csrfToken,
     },
   });
 
@@ -77,15 +85,16 @@ export const googleLogin = async (token: string) => {
   return { status, message: data.message };
 };
 
-// hard code endpoint
 export const refreshJwt = async () => {
-  const response = await fetch(
-    `http://localhost:5000/api/users/refresh-token`,
-    {
-      method: "POST",
-      credentials: "include",
-    }
-  );
+  const csrfToken = localStorage.getItem("csrfToken");
+  console.log(csrfToken);
+  const response = await fetch(`/api/users/refresh-token`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "X-CSRF-Token": csrfToken || "",
+    },
+  });
 
   if (!response.ok) {
     throw new Error("Failed to refresh JWT");

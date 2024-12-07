@@ -1,7 +1,7 @@
 // useConversations.ts (Custom Hook)
 import { useState, useEffect, useCallback } from "react";
 import { fetchConversations } from "../services/conversationService";
-import { fetchUserNamesAndPictures } from "../services/userService";
+import { fetchUserNamesAndPictures } from "../services/profileService";
 import { Conversation } from "../types/Conversations";
 
 export const useConversations = (loggedInUserId: number | undefined) => {
