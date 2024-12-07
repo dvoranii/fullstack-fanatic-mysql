@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { googleLogout } from "@react-oauth/google";
 import useUser from "../hooks/useUser";
+import { logOutUser } from "../services/userService";
 
 export const useAuthUtils = () => {
   const navigate = useNavigate();
@@ -21,10 +22,7 @@ export const useAuthUtils = () => {
     }
 
     try {
-      await fetch("/api/users/logout", {
-        method: "POST",
-        credentials: "include",
-      });
+      await logOutUser();
       googleLogout();
       setProfile(null);
       setFavouriteTutorials([]);

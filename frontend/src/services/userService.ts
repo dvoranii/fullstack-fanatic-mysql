@@ -60,3 +60,13 @@ export const verifyPassword = async (
 
   return data.message;
 };
+
+export const logOutUser = async () => {
+  const response = await fetch("/api/users/logout", {
+    method: "POST",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to log out");
+  }
+};

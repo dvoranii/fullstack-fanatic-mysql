@@ -65,7 +65,7 @@ router.post("/register", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/login", async (req: Request, res: Response) => {
+router.post("/login", csrfProtection, async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
   try {
@@ -140,136 +140,144 @@ router.get("/", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/google-register", async (req: Request, res: Response) => {
-  const { token } = req.body;
+router.post(
+  "/google-register",
+  csrfProtection,
+  async (req: Request, res: Response) => {
+    const { token } = req.body;
 
-  if (!token) {
-    return res.status(400).json({ error: "Token is required" });
-  }
+    if (!token) {
+      return res.status(400).json({ error: "Token is required" });
+    }
 
-  try {
-    const googleUserInfoResponse = await fetch(
-      `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
+    try {
+      const googleUserInfoResponse = await fetch(
+        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+
+      if (!googleUserInfoResponse.ok) {
+        throw new Error("Failed to fetch user info from Google");
       }
-    );
 
-    if (!googleUserInfoResponse.ok) {
-      throw new Error("Failed to fetch user info from Google");
-    }
-
-    const googleUserInfo = await googleUserInfoResponse.json();
-    const {
-      email,
-      name,
-      id: googleId,
-      picture: googleProfilePicture,
-    } = googleUserInfo;
-
-    const existingUser = await fetchUserByColumn("google_id", googleId);
-
-    if (existingUser.length > 0) {
-      return res.status(409).json({ message: "User already exists" });
-    }
-
-    const userId = await insertUser(
-      email ?? null,
-      name ?? null,
-      googleId ?? null,
-      null,
-      "google",
-      googleProfilePicture ?? null
-    );
-
-    const jwtToken = createJwtToken(userId, email, googleId);
-    const refreshToken = createRefreshToken(userId, email, googleId);
-
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: "/",
-    });
-
-    res.status(201).json({
-      message: jwtToken,
-      user: {
-        userId,
+      const googleUserInfo = await googleUserInfoResponse.json();
+      const {
         email,
         name,
-        googleId,
-        profile_picture: googleProfilePicture,
-      },
-    });
-  } catch (error) {
-    console.error("Error during Google registration: ", error);
-    res.status(500).json({ error: "Failed to register with Google" });
-  }
-});
+        id: googleId,
+        picture: googleProfilePicture,
+      } = googleUserInfo;
 
-router.post("/google-login", async (req: Request, res: Response) => {
-  const { token } = req.body;
+      const existingUser = await fetchUserByColumn("google_id", googleId);
 
-  if (!token) {
-    return res.status(400).json({ error: "Token is required" });
-  }
-
-  try {
-    const googleUserInfoResponse = await fetch(
-      `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
+      if (existingUser.length > 0) {
+        return res.status(409).json({ message: "User already exists" });
       }
-    );
 
-    if (!googleUserInfoResponse.ok) {
-      throw new Error("Failed to fetch user info from Google");
+      const userId = await insertUser(
+        email ?? null,
+        name ?? null,
+        googleId ?? null,
+        null,
+        "google",
+        googleProfilePicture ?? null
+      );
+
+      const jwtToken = createJwtToken(userId, email, googleId);
+      const refreshToken = createRefreshToken(userId, email, googleId);
+
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        path: "/",
+      });
+
+      res.status(201).json({
+        message: jwtToken,
+        user: {
+          userId,
+          email,
+          name,
+          googleId,
+          profile_picture: googleProfilePicture,
+        },
+      });
+    } catch (error) {
+      console.error("Error during Google registration: ", error);
+      res.status(500).json({ error: "Failed to register with Google" });
     }
-
-    const googleUserInfo = await googleUserInfoResponse.json();
-    const { email, id: googleId } = googleUserInfo;
-
-    const existingUser = await fetchUserByColumn("google_id", googleId);
-
-    if (existingUser.length === 0) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const userId = existingUser[0].id;
-
-    const jwtToken = createJwtToken(userId, email, googleId);
-    const refreshToken = createRefreshToken(userId, email, googleId);
-
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: "/",
-    });
-
-    return res.status(200).json({
-      message: jwtToken,
-      user: {
-        userId,
-        email,
-        googleId,
-        profile_picture: existingUser[0].profile_picture,
-      },
-    });
-  } catch (error) {
-    console.error("Error during Google login: ", error);
-    res.status(500).json({ error: "Failed to log in with Google" });
   }
-});
+);
+
+router.post(
+  "/google-login",
+  csrfProtection,
+  async (req: Request, res: Response) => {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({ error: "Token is required" });
+    }
+
+    try {
+      const googleUserInfoResponse = await fetch(
+        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+
+      if (!googleUserInfoResponse.ok) {
+        throw new Error("Failed to fetch user info from Google");
+      }
+
+      const googleUserInfo = await googleUserInfoResponse.json();
+      const { email, id: googleId } = googleUserInfo;
+
+      const existingUser = await fetchUserByColumn("google_id", googleId);
+
+      if (existingUser.length === 0) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const userId = existingUser[0].id;
+
+      const jwtToken = createJwtToken(userId, email, googleId);
+      const refreshToken = createRefreshToken(userId, email, googleId);
+
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        path: "/",
+      });
+
+      return res.status(200).json({
+        message: jwtToken,
+        user: {
+          userId,
+          email,
+          googleId,
+          profile_picture: existingUser[0].profile_picture,
+        },
+      });
+    } catch (error) {
+      console.error("Error during Google login: ", error);
+      res.status(500).json({ error: "Failed to log in with Google" });
+    }
+  }
+);
 
 router.post(
   "/refresh-token",
@@ -339,6 +347,7 @@ router.get("/user-profile/:id", async (req: Request, res: Response) => {
 router.post(
   "/:id/follow",
   authenticate,
+  csrfProtection,
   async (req: Request, res: Response) => {
     const followerId = req.user?.userId;
     const followedId = parseInt(req.params.id);
@@ -526,81 +535,91 @@ router.get("/auth-type", authenticate, async (req: Request, res: Response) => {
   }
 });
 
-router.post("/forgot-password", async (req: Request, res: Response) => {
-  const { email } = req.body;
+router.post(
+  "/forgot-password",
+  csrfProtection,
+  async (req: Request, res: Response) => {
+    const { email } = req.body;
 
-  try {
-    const connection = await connectionPromise;
-    const [users] = await connection.execute<RowDataPacket[]>(
-      "SELECT * FROM users WHERE email = ?",
-      [email]
-    );
+    try {
+      const connection = await connectionPromise;
+      const [users] = await connection.execute<RowDataPacket[]>(
+        "SELECT * FROM users WHERE email = ?",
+        [email]
+      );
 
-    if (users.length === 0) {
-      return res.status(404).json({ message: "User not found" });
+      if (users.length === 0) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const resetToken = crypto.randomBytes(32).toString("hex");
+      const resetTokenExpiry = Date.now() + 3600000;
+
+      await connection.execute(
+        "UPDATE users SET reset_token = ?, reset_token_expiry = ? WHERE email = ?",
+        [resetToken, resetTokenExpiry, email]
+      );
+
+      const transporter = nodemailer.createTransport({
+        service: "Gmail",
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+        tls: {
+          rejectUnauthorized: false,
+        },
+      });
+
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: "Password Reset Request",
+        text: `You have requested to reset your password. Please click the following link to reset your password: ${process.env.CLIENT_URL}/reset-password/${resetToken}`,
+      };
+
+      await transporter.sendMail(mailOptions);
+
+      res
+        .status(200)
+        .json({ message: "Password reset link sent successfully" });
+    } catch (err) {
+      console.error("Error sending password reset email:", err);
+      res.status(500).json({ error: "Failed to send password reset email" });
     }
-
-    const resetToken = crypto.randomBytes(32).toString("hex");
-    const resetTokenExpiry = Date.now() + 3600000;
-
-    await connection.execute(
-      "UPDATE users SET reset_token = ?, reset_token_expiry = ? WHERE email = ?",
-      [resetToken, resetTokenExpiry, email]
-    );
-
-    const transporter = nodemailer.createTransport({
-      service: "Gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-      tls: {
-        rejectUnauthorized: false,
-      },
-    });
-
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: "Password Reset Request",
-      text: `You have requested to reset your password. Please click the following link to reset your password: ${process.env.CLIENT_URL}/reset-password/${resetToken}`,
-    };
-
-    await transporter.sendMail(mailOptions);
-
-    res.status(200).json({ message: "Password reset link sent successfully" });
-  } catch (err) {
-    console.error("Error sending password reset email:", err);
-    res.status(500).json({ error: "Failed to send password reset email" });
   }
-});
+);
 
-router.post("/reset-password/:token", async (req: Request, res: Response) => {
-  const { token } = req.params;
-  const { password } = req.body;
+router.post(
+  "/reset-password/:token",
+  csrfProtection,
+  async (req: Request, res: Response) => {
+    const { token } = req.params;
+    const { password } = req.body;
 
-  try {
-    const connection = await connectionPromise;
-    const [users] = await connection.execute<RowDataPacket[]>(
-      "SELECT * FROM users WHERE reset_token = ? AND reset_token_expiry > ?",
-      [token, Date.now()]
-    );
+    try {
+      const connection = await connectionPromise;
+      const [users] = await connection.execute<RowDataPacket[]>(
+        "SELECT * FROM users WHERE reset_token = ? AND reset_token_expiry > ?",
+        [token, Date.now()]
+      );
 
-    if (users.length === 0) {
-      return res.status(400).json({ message: "Invalid or expired token" });
+      if (users.length === 0) {
+        return res.status(400).json({ message: "Invalid or expired token" });
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await connection.execute(
+        "UPDATE users SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE id = ?",
+        [hashedPassword, users[0].id]
+      );
+
+      res.status(200).json({ message: "Password reset successful" });
+    } catch (err) {
+      console.error("Error resetting password:", err);
+      res.status(500).json({ error: "Failed to reset password" });
     }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    await connection.execute(
-      "UPDATE users SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE id = ?",
-      [hashedPassword, users[0].id]
-    );
-
-    res.status(200).json({ message: "Password reset successful" });
-  } catch (err) {
-    console.error("Error resetting password:", err);
-    res.status(500).json({ error: "Failed to reset password" });
   }
-});
+);
 
 export default router;

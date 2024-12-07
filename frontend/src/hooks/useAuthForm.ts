@@ -10,8 +10,10 @@ import {
 } from "../api/api";
 import { validateField, ValidationRule } from "../utils/validationUtils";
 import { fetchUserProfileFavouritesAndComments } from "../utils/userUtils";
+import { useCsrfToken } from "./useCsrfToken";
 
 export const useAuthForm = (defaultToLogin = false) => {
+  const csrfToken = useCsrfToken();
   const [isLogin, setIsLogin] = useState(defaultToLogin);
   const [error, setError] = useState<string | null>(null);
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
@@ -36,7 +38,10 @@ export const useAuthForm = (defaultToLogin = false) => {
 
   const handleGoogleRegister = async (codeResponse: TokenResponse) => {
     try {
-      const response = await googleRegister(codeResponse.access_token);
+      const response = await googleRegister(
+        codeResponse.access_token,
+        csrfToken
+      );
 
       if (response.status === 409) {
         setError("This Google account is already registered. Please log in.");
@@ -61,7 +66,7 @@ export const useAuthForm = (defaultToLogin = false) => {
 
   const handleGoogleLogin = async (codeResponse: TokenResponse) => {
     try {
-      await googleLogin(codeResponse.access_token);
+      await googleLogin(codeResponse.access_token, csrfToken);
 
       await fetchUserProfileFavouritesAndComments(
         setProfile,
@@ -113,7 +118,7 @@ export const useAuthForm = (defaultToLogin = false) => {
     }
 
     try {
-      await registerUser({ email, password, name: username });
+      await registerUser({ email, password, name: username }, csrfToken);
       await fetchUserProfileFavouritesAndComments(
         setProfile,
         setFavouriteTutorials,
@@ -162,7 +167,7 @@ export const useAuthForm = (defaultToLogin = false) => {
     }
 
     try {
-      const { token } = await loginUser({ username, password });
+      const { token } = await loginUser({ username, password }, csrfToken);
 
       localStorage.setItem("accessToken", token);
 
