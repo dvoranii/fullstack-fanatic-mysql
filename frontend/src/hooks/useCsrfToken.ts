@@ -1,27 +1,20 @@
 import { useState, useEffect } from "react";
+import { fetchCsrfToken } from "../services/csrfService";
 
 export const useCsrfToken = () => {
-  const [csrfToken, setCsrfToken] = useState("");
+  const [csrfToken, setCsrfToken] = useState<string>("");
 
   useEffect(() => {
-    const fetchCsrfToken = async () => {
+    const getToken = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/csrf`, {
-          credentials: "include",
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setCsrfToken(data.csrfToken);
-          localStorage.setItem("csrfToken", data.csrfToken);
-        } else {
-          console.error("Failed to fetch CSRF token");
-        }
+        const token = await fetchCsrfToken();
+        setCsrfToken(token);
       } catch (error) {
-        console.error("Error fetching CSRF token:", error);
+        console.error("Failed to fetch CSRF token");
       }
     };
 
-    fetchCsrfToken();
+    getToken();
   }, []);
 
   return csrfToken;

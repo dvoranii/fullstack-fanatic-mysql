@@ -198,7 +198,6 @@ router.delete(
     try {
       const connection = await connectionPromise;
 
-      // Determine which user is deleting the conversation
       const [conversation] = await connection.execute<RowDataPacket[]>(
         "SELECT user1_id, user2_id FROM conversations WHERE id = ?",
         [conversationId]
@@ -216,7 +215,6 @@ router.delete(
           .json({ error: "You are not part of this conversation" });
       }
 
-      // Update the appropriate is_deleted flag based on which user is deleting
       if (userId === user1_id) {
         await connection.execute<ResultSetHeader>(
           "UPDATE conversations SET is_deleted_user1 = 1 WHERE id = ?",
@@ -229,7 +227,6 @@ router.delete(
         );
       }
 
-      // Check if both users have deleted the conversation
       const [updatedConversation] = await connection.execute<RowDataPacket[]>(
         "SELECT is_deleted_user1, is_deleted_user2 FROM conversations WHERE id = ?",
         [conversationId]
@@ -239,7 +236,6 @@ router.delete(
         updatedConversation[0].is_deleted_user1 &&
         updatedConversation[0].is_deleted_user2
       ) {
-        // If both users have deleted the conversation, remove it completely
         await connection.execute<ResultSetHeader>(
           "DELETE FROM conversations WHERE id = ?",
           [conversationId]

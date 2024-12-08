@@ -2,6 +2,7 @@ import { AuthRequestBody } from "../types/AuthRequest";
 import { LoginRequestBody } from "../types/LoginRequestBody";
 import { User } from "../types/User/User";
 import { apiCall } from "../utils/apiUtils";
+import { fetchCsrfToken } from "../services/csrfService";
 
 export const registerUser = async (
   requestBody: AuthRequestBody,
@@ -86,20 +87,25 @@ export const googleLogin = async (token: string, csrfToken: string) => {
 };
 
 export const refreshJwt = async () => {
-  const csrfToken = localStorage.getItem("csrfToken");
-  console.log(csrfToken);
-  const response = await fetch(`/api/users/refresh-token`, {
-    method: "POST",
-    credentials: "include",
-    headers: {
-      "X-CSRF-Token": csrfToken || "",
-    },
-  });
+  try {
+    const csrfToken = await fetchCsrfToken();
 
-  if (!response.ok) {
-    throw new Error("Failed to refresh JWT");
+    const response = await fetch(`/api/users/refresh-token`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "X-CSRF-Token": csrfToken,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to refresh JWT");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error refreshing JWT:", error);
+    throw error;
   }
-
-  const data = await response.json();
-  return data;
 };
