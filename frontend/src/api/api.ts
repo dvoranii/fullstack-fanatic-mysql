@@ -1,14 +1,14 @@
+import { fetchCsrfToken } from "../services/csrfService";
 import { AuthRequestBody } from "../types/AuthRequest";
 import { LoginRequestBody } from "../types/LoginRequestBody";
 import { User } from "../types/User/User";
 import { apiCall } from "../utils/apiUtils";
-import { fetchCsrfToken } from "../services/csrfService";
 
 export const registerUser = async (
   requestBody: AuthRequestBody,
   csrfToken: string
 ) => {
-  const endpoint = `/api/users/register`;
+  const endpoint = `/users/register`;
   const { status, data } = await apiCall<User>(endpoint, {
     method: "POST",
     credentials: "include",
@@ -30,7 +30,7 @@ export const loginUser = async (
   requestBody: LoginRequestBody,
   csrfToken: string
 ): Promise<User> => {
-  const endpoint = `/api/users/login`;
+  const endpoint = `/users/login`;
   const { data } = await apiCall<User>(endpoint, {
     method: "POST",
     credentials: "include",
@@ -45,7 +45,7 @@ export const loginUser = async (
 };
 
 export const googleRegister = async (token: string, csrfToken: string) => {
-  const endpoint = `/api/users/google-register`;
+  const endpoint = `/users/google-register`;
   const { status, data } = await apiCall<{ message: string }>(endpoint, {
     method: "POST",
     credentials: "include",
@@ -68,7 +68,7 @@ export const googleRegister = async (token: string, csrfToken: string) => {
 };
 
 export const googleLogin = async (token: string, csrfToken: string) => {
-  const endpoint = `/api/users/google-login`;
+  const endpoint = `/users/google-login`;
   const { status, data } = await apiCall<{ message: string }>(endpoint, {
     method: "POST",
     credentials: "include",
@@ -86,6 +86,7 @@ export const googleLogin = async (token: string, csrfToken: string) => {
   return { status, message: data.message };
 };
 
+// change url later
 export const refreshJwt = async () => {
   try {
     const csrfToken = await fetchCsrfToken();

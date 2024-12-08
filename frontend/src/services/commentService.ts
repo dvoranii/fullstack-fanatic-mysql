@@ -7,7 +7,7 @@ export const fetchTopLevelComments = async (
   page: number,
   limit: number
 ): Promise<{ comments: CommentType[]; hasMore: boolean }> => {
-  const endpoint = `/api/comments/${contentType}/${contentId}?page=${page}&parentCommentId=null&limit=${limit}&includeLikedStatus=true`;
+  const endpoint = `/comments/${contentType}/${contentId}?page=${page}&parentCommentId=null&limit=${limit}&includeLikedStatus=true`;
 
   const { data } = await apiCall<{ comments: CommentType[]; hasMore: boolean }>(
     endpoint
@@ -31,7 +31,7 @@ export const fetchReplies = async (
   limit: number,
   offset: number
 ): Promise<{ comments: CommentType[]; hasMore: boolean }> => {
-  const endpoint = `/api/comments/${contentType}/${contentId}?parentCommentId=${parentCommentId}&limit=${limit}&offset=${offset}&includeLikedStatus=true`;
+  const endpoint = `/comments/${contentType}/${contentId}?parentCommentId=${parentCommentId}&limit=${limit}&offset=${offset}&includeLikedStatus=true`;
 
   const { data } = await apiCall<{
     hasMore: boolean;
@@ -50,7 +50,7 @@ export const submitComment = async (
   newComment: string,
   csrfToken: string
 ): Promise<CommentType> => {
-  const endpoint = `/api/comments`;
+  const endpoint = `/comments`;
 
   const { data } = await apiCall<CommentType>(endpoint, {
     method: "POST",
@@ -82,7 +82,7 @@ export const submitReply = async (
   },
   csrfToken: string
 ): Promise<CommentType> => {
-  const endpoint = `/api/comments/reply`;
+  const endpoint = `/comments/reply`;
 
   const { data } = await apiCall<CommentType>(endpoint, {
     method: "POST",
@@ -106,7 +106,7 @@ export const updateComment = async (
   editedComment: string,
   csrfToken: string
 ): Promise<CommentType> => {
-  const endpoint = `/api/comments/${id}`;
+  const endpoint = `/comments/${id}`;
 
   const { data } = await apiCall<CommentType>(endpoint, {
     method: "PUT",
@@ -124,7 +124,7 @@ export const deleteComment = async (
   id: number,
   csrfToken: string
 ): Promise<void> => {
-  const endpoint = `/api/comments/${id}`;
+  const endpoint = `/comments/${id}`;
 
   await apiCall<void>(endpoint, {
     method: "DELETE",
@@ -139,7 +139,7 @@ export const toggleLike = async (
   id: number,
   csrfToken: string
 ): Promise<number> => {
-  const endpoint = `/api/comments/${id}/toggle-like`;
+  const endpoint = `/comments/${id}/toggle-like`;
 
   const { data } = await apiCall<{ likes: number }>(endpoint, {
     method: "PUT",
@@ -158,8 +158,8 @@ export const fetchUserComments = async (
   limit?: number
 ): Promise<{ comments: CommentType[]; hasMore?: boolean }> => {
   let endpoint = userId
-    ? `/api/comments/users/${userId}/comment-history`
-    : `/api/comments/users`;
+    ? `/comments/users/${userId}/comment-history`
+    : `/comments/users`;
 
   if (page !== undefined && limit !== undefined) {
     endpoint += `?page=${page}&limit=${limit}`;
@@ -179,7 +179,7 @@ export const fetchUserComments = async (
 export const fetchReplyAndParent = async (
   id: number
 ): Promise<CommentType[]> => {
-  let endpoint = `/api/comments/reply-and-parent`;
+  let endpoint = `/comments/reply-and-parent`;
 
   if (id) {
     endpoint += `?id=${id}`;

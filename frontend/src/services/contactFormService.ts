@@ -6,7 +6,7 @@ export async function submitContactForm(
   message: string,
   csrfToken: string
 ) {
-  return apiCall<{ message: string }>("/api/forms/contact", {
+  return apiCall<{ message: string }>("/forms/contact", {
     method: "POST",
     credentials: "include",
     body: JSON.stringify({ fullName, email, message }),

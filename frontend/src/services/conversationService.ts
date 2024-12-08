@@ -5,7 +5,7 @@ export const checkExistingConversation = async (
   user1Id: number,
   user2Id: number
 ): Promise<{ exists: boolean; id?: number }> => {
-  const endpoint = `/api/conversations/existing?user1_id=${user1Id}&user2_id=${user2Id}`;
+  const endpoint = `/conversations/existing?user1_id=${user1Id}&user2_id=${user2Id}`;
   const { data } = await apiCall<{ exists: boolean; id?: number }>(endpoint, {
     method: "GET",
   });
@@ -19,7 +19,7 @@ export const createOrGetConversation = async (
   subject: string,
   csrfToken: string
 ): Promise<Conversation> => {
-  const endpoint = `/api/conversations`;
+  const endpoint = `/conversations`;
   const { data } = await apiCall<Conversation>(endpoint, {
     method: "POST",
     credentials: "include",
@@ -39,7 +39,7 @@ export const createOrGetConversation = async (
 export const fetchConversationById = async (
   conversationId: number
 ): Promise<Conversation | null> => {
-  const endpoint = `/api/conversations/${conversationId}`;
+  const endpoint = `/conversations/${conversationId}`;
   try {
     const { data } = await apiCall<Conversation>(endpoint, {
       method: "GET",
@@ -54,7 +54,7 @@ export const fetchConversationById = async (
 };
 
 export const fetchConversations = async (): Promise<Conversation[]> => {
-  const endpoint = `/api/conversations`;
+  const endpoint = `/conversations`;
   const { data } = await apiCall<Conversation[]>(endpoint, {
     method: "GET",
   });
@@ -66,7 +66,7 @@ export const updateConversationReadStatus = async (
   conversationId: number,
   csrfToken: string
 ) => {
-  const endpoint = `/api/conversations/${conversationId}/read`;
+  const endpoint = `/conversations/${conversationId}/read`;
   const { data } = await apiCall(endpoint, {
     method: "PATCH",
     credentials: "include",
@@ -82,7 +82,7 @@ export const deleteConversation = async (
   conversationId: number,
   csrfToken: string
 ) => {
-  const endpoint = `/api/conversations/${conversationId}`;
+  const endpoint = `/conversations/${conversationId}`;
   await apiCall(endpoint, {
     method: "DELETE",
     credentials: "include",
@@ -93,7 +93,7 @@ export const deleteConversation = async (
 };
 
 export const getUnreadConversationsCount = async (): Promise<number> => {
-  const endpoint = `/api/conversations/unread/count`;
+  const endpoint = `/conversations/unread/count`;
   const { data } = await apiCall<{ unreadCount: number }>(endpoint, {
     method: "GET",
   });

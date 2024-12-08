@@ -6,7 +6,7 @@ export const getUserFavourites = async (): Promise<{
   tutorials: Tutorial[];
   blogs: Blog[];
 }> => {
-  const endpoint = "/api/favourites";
+  const endpoint = "/favourites";
 
   const { data } = await apiCall<{ tutorials: Tutorial[]; blogs: Blog[] }>(
     endpoint,
@@ -21,7 +21,7 @@ export const getUserFavourites = async (): Promise<{
 export const getPublicUserFavourites = async (
   userId: number
 ): Promise<{ tutorials: Tutorial[]; blogs: Blog[] }> => {
-  const endpoint = `/api/favourites/${userId}`;
+  const endpoint = `/favourites/${userId}`;
 
   const { data } = await apiCall<{ tutorials: Tutorial[]; blogs: Blog[] }>(
     endpoint,
@@ -39,7 +39,7 @@ export const addFavourite = async (
   csrfToken: string
 ): Promise<Tutorial | Blog | undefined> => {
   try {
-    const endpoint = "/api/favourites";
+    const endpoint = "/favourites";
 
     const { data } = await apiCall<Tutorial | Blog>(endpoint, {
       method: "POST",
@@ -65,7 +65,7 @@ export const removeFavourite = async (
   contentType: "tutorial" | "blog",
   csrfToken: string
 ): Promise<void> => {
-  const endpoint = "/api/favourites";
+  const endpoint = "/favourites";
   try {
     await apiCall<void>(endpoint, {
       method: "DELETE",

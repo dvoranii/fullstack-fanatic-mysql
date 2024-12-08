@@ -1,3 +1,5 @@
+import { apiCall } from "../utils/apiUtils";
+
 let csrfToken: string = "";
 
 export const fetchCsrfToken = async (): Promise<string> => {
@@ -6,15 +8,12 @@ export const fetchCsrfToken = async (): Promise<string> => {
   }
 
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/csrf`, {
+    const { data } = await apiCall<{ csrfToken: string }>("/csrf", {
+      method: "GET",
       credentials: "include",
+      headers: {},
     });
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch CSRF token");
-    }
-
-    const data = await response.json();
     csrfToken = data.csrfToken;
     return csrfToken;
   } catch (error) {

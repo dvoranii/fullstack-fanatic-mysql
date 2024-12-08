@@ -68,11 +68,17 @@ app.use("/api/purchases", purchasesRoutes);
 app.use("/api/csrf", csrfRoutes);
 
 // Rate limited
-app.use("/api/users", authRateLimiter, userRoutes);
-app.use("/api/comments", commentRateLimiter, commentsRoutes);
-app.use("/api/forms", formRateLimiter, formsRoutes);
-app.use("/api/blogs", contentRateLimiter, blogsRoutes);
-app.use("/api/tutorials", contentRateLimiter, tutorialsRoutes);
+// app.use("/api/users", authRateLimiter, userRoutes);
+// app.use("/api/comments", commentRateLimiter, commentsRoutes);
+// app.use("/api/forms", formRateLimiter, formsRoutes);
+// app.use("/api/blogs", contentRateLimiter, blogsRoutes);
+// app.use("/api/tutorials", contentRateLimiter, tutorialsRoutes);
+
+app.use("/api/users", userRoutes);
+app.use("/api/comments", commentsRoutes);
+app.use("/api/forms", formsRoutes);
+app.use("/api/blogs", blogsRoutes);
+app.use("/api/tutorials", tutorialsRoutes);
 
 const server = http.createServer(app);
 

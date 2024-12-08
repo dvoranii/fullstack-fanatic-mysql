@@ -1,7 +1,7 @@
 import { apiCall } from "../utils/apiUtils";
 
 export const getUserAuthType = async (): Promise<string> => {
-  const endpoint = `/api/users/auth-type`;
+  const endpoint = `/users/auth-type`;
   const { data } = await apiCall<{ auth_type: string }>(endpoint, {
     method: "GET",
     credentials: "include",
@@ -19,7 +19,7 @@ export const changePassword = async ({
   currentPassword: string;
   newPassword: string;
 }) => {
-  const endpoint = `/api/users/${userId}/change-password`;
+  const endpoint = `/users/${userId}/change-password`;
 
   try {
     const { data } = await apiCall(endpoint, {
@@ -45,7 +45,7 @@ export const verifyPassword = async (
   userId: number,
   currentPassword: string
 ) => {
-  const endpoint = `/api/users/${userId}/verify-password`;
+  const endpoint = `/users/${userId}/verify-password`;
   const { status, data } = await apiCall<{ message: string }>(endpoint, {
     method: "POST",
     body: JSON.stringify({ currentPassword }),
@@ -61,6 +61,7 @@ export const verifyPassword = async (
   return data.message;
 };
 
+// might change url later
 export const logOutUser = async () => {
   const response = await fetch("/api/users/logout", {
     method: "POST",

@@ -5,7 +5,7 @@ export const searchUsers = async (
   searchQuery: string,
   filter: "name" | "profession"
 ): Promise<User[]> => {
-  const endpoint = `/api/network/search-users?searchQuery=${encodeURIComponent(
+  const endpoint = `/network/search-users?searchQuery=${encodeURIComponent(
     searchQuery
   )}&filter=${filter}`;
 

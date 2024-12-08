@@ -4,7 +4,7 @@ import { PurchasedItem } from "../types/PurchasedItem";
 export const fetchPurchasedItems = async (
   userId: number
 ): Promise<PurchasedItem[]> => {
-  const endpoint = `/api/purchases?userId=${userId}`;
+  const endpoint = `/purchases?userId=${userId}`;
 
   try {
     const { data } = await apiCall<{ purchases: PurchasedItem[] }>(endpoint, {

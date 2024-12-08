@@ -1,7 +1,7 @@
 import { apiCall } from "../utils/apiUtils";
 
 export const forgotPassword = async (email: string) => {
-  const endpoint = "/api/users/forgot-password";
+  const endpoint = "/users/forgot-password";
   await apiCall(endpoint, {
     method: "POST",
     credentials: "include",
@@ -13,7 +13,7 @@ export const forgotPassword = async (email: string) => {
 };
 
 export const resetPassword = async (token: string, password: string) => {
-  const endpoint = `/api/users/reset-password/${token}`;
+  const endpoint = `/users/reset-password/${token}`;
   await apiCall(endpoint, {
     method: "POST",
     credentials: "include",
@@ -28,7 +28,7 @@ export const changePassword = async (
   currentPassword: string,
   newPassword: string
 ) => {
-  const endpoint = "/api/users/change-password";
+  const endpoint = "/users/change-password";
   await apiCall(endpoint, {
     method: "POST",
     credentials: "include",

@@ -13,7 +13,7 @@ export interface FollowingState {
 export const fetchFollowersState = async (
   profileId: number
 ): Promise<FollowersState> => {
-  const endpointFollowers = `/api/users/${profileId}/followers`;
+  const endpointFollowers = `/users/${profileId}/followers`;
 
   try {
     const { data: followersData } = await apiCall<{
@@ -36,7 +36,7 @@ export const fetchFollowersState = async (
 export const fetchFollowingState = async (
   profileId: number
 ): Promise<FollowingState> => {
-  const endpointFollowing = `/api/users/${profileId}/following`;
+  const endpointFollowing = `/users/${profileId}/following`;
 
   try {
     const { data: followingData } = await apiCall<{ followingCount: number }>(
@@ -56,7 +56,7 @@ export const fetchFollowingState = async (
 };
 
 export const followUser = async (userId: number, csrfToken: string) => {
-  const { status } = await apiCall(`/api/users/${userId}/follow`, {
+  const { status } = await apiCall(`/users/${userId}/follow`, {
     method: "POST",
     credentials: "include",
     headers: {
@@ -68,7 +68,7 @@ export const followUser = async (userId: number, csrfToken: string) => {
 };
 
 export const unfollowUser = async (userId: number, csrfToken: string) => {
-  const { status } = await apiCall(`/api/users/${userId}/follow`, {
+  const { status } = await apiCall(`/users/${userId}/follow`, {
     method: "DELETE",
     credentials: "include",
     headers: {
@@ -79,7 +79,7 @@ export const unfollowUser = async (userId: number, csrfToken: string) => {
 };
 
 export const fetchFollowers = async (userId: number): Promise<User[]> => {
-  const endpoint = `/api/users/${userId}/followers-list`;
+  const endpoint = `/users/${userId}/followers-list`;
 
   try {
     const { data } = await apiCall<{ followers: User[] }>(endpoint, {
@@ -93,7 +93,7 @@ export const fetchFollowers = async (userId: number): Promise<User[]> => {
 };
 
 export const fetchFollowing = async (userId: number): Promise<User[]> => {
-  const endpoint = `/api/users/${userId}/following-list`;
+  const endpoint = `/users/${userId}/following-list`;
 
   try {
     const { data } = await apiCall<{ following: User[] }>(endpoint, {

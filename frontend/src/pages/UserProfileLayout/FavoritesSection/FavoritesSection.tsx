@@ -22,7 +22,7 @@ import BackIcon from "../../../assets/images/back-icon.png";
 import { UserContext } from "../../../context/UserContext";
 import { getPublicUserFavourites } from "../../../services/favouritesService";
 
-const BASE_URL = "http://localhost:5173";
+const BASE_URL = import.meta.env.VITE_CLIENT_URL;
 
 interface FavoritesSectionProps {
   isOwnProfile: boolean;

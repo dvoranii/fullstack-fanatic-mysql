@@ -8,7 +8,7 @@ export const sendMessage = async (
   content: string,
   csrfToken: string
 ): Promise<Message> => {
-  const endpoint = `/api/messages`;
+  const endpoint = `/messages`;
   const { data } = await apiCall<Message>(endpoint, {
     method: "POST",
     credentials: "include",
@@ -31,7 +31,7 @@ export const getMessagesForConversation = async (
   page: number = 1,
   limit: number = 10
 ): Promise<Message[]> => {
-  const endpoint = `/api/messages/${conversationId}?page=${page}&limit=${limit}`;
+  const endpoint = `/messages/${conversationId}?page=${page}&limit=${limit}`;
 
   const { data } = await apiCall<{ messages: Message[]; hasMore: boolean }>(
     endpoint,

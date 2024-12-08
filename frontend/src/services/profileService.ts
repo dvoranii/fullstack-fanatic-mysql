@@ -4,7 +4,7 @@ import { PublicProfile } from "../types/PublicProfileType";
 import { Conversation } from "../types/Conversations";
 
 export const getUserProfile = async (): Promise<User> => {
-  const endpoint = "/api/profile";
+  const endpoint = "/profile";
   const { data } = await apiCall<User>(endpoint, {
     method: "GET",
     credentials: "include",
@@ -16,7 +16,7 @@ export const getUserProfile = async (): Promise<User> => {
 export const getUserPublicProfile = async (
   userId: string
 ): Promise<PublicProfile> => {
-  const endpoint = `/api/users/user-profile/${userId}`;
+  const endpoint = `/users/user-profile/${userId}`;
   const { data } = await apiCall<PublicProfile>(endpoint, {
     method: "GET",
   });
@@ -57,7 +57,7 @@ export const updateUserProfile = async (
   token: string,
   csrfToken: string
 ) => {
-  const endpoint = `/api/profile/update-profile`;
+  const endpoint = `/profile/update-profile`;
 
   const { status, data } = await apiCall<User>(endpoint, {
     method: "PUT",
@@ -81,7 +81,7 @@ export const deleteSocialLink = async (
   token: string,
   csrfToken: string
 ) => {
-  const endpoint = `/api/profile/social-link/${platform}`;
+  const endpoint = `/profile/social-link/${platform}`;
 
   const { status } = await apiCall(endpoint, {
     method: "DELETE",
