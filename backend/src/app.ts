@@ -18,8 +18,14 @@ import purchasesRoutes from "./routes/purchases";
 import csrfRoutes from "./routes/csrf";
 import { Server } from "socket.io";
 import http from "http";
-
 import cookieParser from "cookie-parser";
+
+import {
+  authRateLimiter,
+  commentRateLimiter,
+  formRateLimiter,
+  contentRateLimiter,
+} from "./middleware/rateLimit";
 
 const app = express();
 app.use(cookieParser());
@@ -51,20 +57,22 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/assets", express.static(path.join(__dirname, "../public/assets")));
 
-app.use("/api/tutorials", tutorialsRoutes);
-app.use("/api/comments", commentsRoutes);
-app.use("/api/blogs", blogsRoutes);
-app.use("/api/users", userRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/favourites", favouriteRoutes);
 app.use("/api/conversations", conversationsRoutes);
 app.use("/api/messages", messagesRoutes);
 app.use("/api/notifications", notificationsRoutes);
-app.use("/api/forms", formsRoutes);
 app.use("/api/stripe", stripeRoutes);
 app.use("/api/network", networkRoutes);
 app.use("/api/purchases", purchasesRoutes);
 app.use("/api/csrf", csrfRoutes);
+
+// Rate limited
+app.use("/api/users", authRateLimiter, userRoutes);
+app.use("/api/comments", commentRateLimiter, commentsRoutes);
+app.use("/api/forms", formRateLimiter, formsRoutes);
+app.use("/api/blogs", contentRateLimiter, blogsRoutes);
+app.use("/api/tutorials", contentRateLimiter, tutorialsRoutes);
 
 const server = http.createServer(app);
 
