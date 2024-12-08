@@ -12,4 +12,5 @@ export interface User {
   banner_image?: string;
   isPremium: boolean;
   premiumLevel?: "starter" | "casual pro" | "premium";
+  refreshToken: string;
 }

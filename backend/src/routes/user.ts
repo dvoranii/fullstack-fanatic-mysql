@@ -65,7 +65,7 @@ router.post("/register", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/login", csrfProtection, async (req: Request, res: Response) => {
+router.post("/login", async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
   try {
@@ -89,19 +89,11 @@ router.post("/login", csrfProtection, async (req: Request, res: Response) => {
     const jwtToken = createJwtToken(user.id, user.name);
     const refreshToken = createRefreshToken(user.id, user.name);
 
-    // Set the refresh token in an HTTP-only cookie
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: "/",
-    });
-
     res.status(200).json({
       message: "User logged in successfully",
       user: { id: user.id, username: user.username, name: user.name },
       token: jwtToken,
+      refreshToken: refreshToken,
     });
   } catch (err) {
     const error = err as Error;
@@ -188,19 +180,15 @@ router.post(
         googleProfilePicture ?? null
       );
 
+      // Generate tokens
       const jwtToken = createJwtToken(userId, email, googleId);
       const refreshToken = createRefreshToken(userId, email, googleId);
 
-      res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        secure: false,
-        sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        path: "/",
-      });
-
+      // Return tokens and user data in the response body
       res.status(201).json({
-        message: jwtToken,
+        message: "Registration successful",
+        accessToken: jwtToken,
+        refreshToken: refreshToken,
         user: {
           userId,
           email,
@@ -255,16 +243,10 @@ router.post(
       const jwtToken = createJwtToken(userId, email, googleId);
       const refreshToken = createRefreshToken(userId, email, googleId);
 
-      res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        secure: false,
-        sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        path: "/",
-      });
-
       return res.status(200).json({
-        message: jwtToken,
+        message: "Login successful",
+        accessToken: jwtToken,
+        refreshToken: refreshToken,
         user: {
           userId,
           email,
@@ -279,31 +261,27 @@ router.post(
   }
 );
 
-router.post(
-  "/refresh-token",
-  csrfProtection,
-  async (req: Request, res: Response) => {
-    const { refreshToken } = req.cookies;
+router.post("/refresh-token", async (req: Request, res: Response) => {
+  const { refreshToken } = req.body;
 
-    if (!refreshToken) {
-      return res.status(401).json({ error: "Refresh token is required" });
-    }
-
-    try {
-      const payload = verifyRefreshToken(refreshToken);
-      const newJwtToken = createJwtToken(
-        payload.userId,
-        payload.email,
-        payload.googleId || undefined
-      );
-
-      res.status(200).json({ token: newJwtToken });
-    } catch (error) {
-      console.error("Error verifying refresh token:", error);
-      res.status(401).json({ error: "Invalid refresh token" });
-    }
+  if (!refreshToken) {
+    return res.status(401).json({ error: "Refresh token is required" });
   }
-);
+
+  try {
+    const payload = verifyRefreshToken(refreshToken);
+    const newJwtToken = createJwtToken(
+      payload.userId,
+      payload.email,
+      payload.googleId || undefined
+    );
+
+    res.status(200).json({ token: newJwtToken });
+  } catch (error) {
+    console.error("Error verifying refresh token:", error);
+    res.status(401).json({ error: "Invalid refresh token" });
+  }
+});
 
 router.get("/user-profile/:id", async (req: Request, res: Response) => {
   const { id } = req.params;

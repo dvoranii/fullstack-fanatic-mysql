@@ -1,4 +1,3 @@
-import { fetchCsrfToken } from "../services/csrfService";
 import { AuthRequestBody } from "../types/AuthRequest";
 import { LoginRequestBody } from "../types/LoginRequestBody";
 import { User } from "../types/User/User";
@@ -26,14 +25,20 @@ export const registerUser = async (
   return data;
 };
 
+interface LoginResponse {
+  token: string;
+  refreshToken: string;
+  user: User;
+}
+
 export const loginUser = async (
   requestBody: LoginRequestBody,
   csrfToken: string
-): Promise<User> => {
+): Promise<LoginResponse> => {
   const endpoint = `/users/login`;
-  const { data } = await apiCall<User>(endpoint, {
+  const { data } = await apiCall<LoginResponse>(endpoint, {
     method: "POST",
-    credentials: "include",
+    credentials: "include", // Remove if not needed
     body: JSON.stringify(requestBody),
     headers: {
       "Content-Type": "application/json",
@@ -41,35 +46,61 @@ export const loginUser = async (
     },
   });
 
+  // Store the refresh token in localStorage
+  localStorage.setItem("accessToken", data.token);
+  localStorage.setItem("refreshToken", data.refreshToken);
+
   return data;
 };
 
 export const googleRegister = async (token: string, csrfToken: string) => {
   const endpoint = `/users/google-register`;
-  const { status, data } = await apiCall<{ message: string }>(endpoint, {
+
+  const { status, data } = await apiCall<{
+    accessToken: string;
+    refreshToken: string;
+    user: {
+      userId: number;
+      email: string;
+      googleId: string;
+      profile_picture: string;
+    };
+  }>(endpoint, {
     method: "POST",
-    credentials: "include",
+    credentials: "include", // To include CSRF cookie
     body: JSON.stringify({ token }),
     headers: {
       "Content-Type": "application/json",
-      "x-csrf-token": csrfToken,
+      "x-csrf-token": csrfToken, // Include CSRF token
     },
   });
 
+  // Handle 'User already exists' status
   if (status === 409) {
     return { status: 409, message: "User already exists" };
   }
 
-  if (data.message) {
-    localStorage.setItem("accessToken", data.message);
+  // Store tokens in localStorage
+  if (data.accessToken && data.refreshToken) {
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
   }
 
-  return { status, message: data.message };
+  return {
+    status,
+    user: data.user, // Return the user object for further use
+    message: "Registration successful",
+  };
 };
 
 export const googleLogin = async (token: string, csrfToken: string) => {
   const endpoint = `/users/google-login`;
-  const { status, data } = await apiCall<{ message: string }>(endpoint, {
+
+  const { status, data } = await apiCall<{
+    accessToken: string;
+    refreshToken: string;
+    user: { userId: number; email: string; googleId: string };
+  }>(endpoint, {
     method: "POST",
     credentials: "include",
     body: JSON.stringify({ token }),
@@ -79,24 +110,29 @@ export const googleLogin = async (token: string, csrfToken: string) => {
     },
   });
 
-  if (data.message) {
-    localStorage.setItem("accessToken", data.message);
+  if (data.accessToken && data.refreshToken) {
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
   }
 
-  return { status, message: data.message };
+  return { status, user: data.user };
 };
 
-// change url later
+// change url later maybe
 export const refreshJwt = async () => {
   try {
-    const csrfToken = await fetchCsrfToken();
+    const refreshToken = localStorage.getItem("refreshToken");
+
+    if (!refreshToken) {
+      throw new Error("No refresh token available");
+    }
 
     const response = await fetch(`/api/users/refresh-token`, {
       method: "POST",
-      credentials: "include",
       headers: {
-        "X-CSRF-Token": csrfToken,
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify({ refreshToken }),
     });
 
     if (!response.ok) {
