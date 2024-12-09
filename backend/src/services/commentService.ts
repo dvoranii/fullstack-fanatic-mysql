@@ -133,7 +133,7 @@ export const fetchTotalComments = async (
 
 export async function findTopLevelComment(
   commentId: number,
-  connection: Connection // Use the connection passed as a parameter
+  connection: Connection
 ): Promise<RowDataPacket | null> {
   try {
     let currentCommentId = commentId;
@@ -154,11 +154,9 @@ export async function findTopLevelComment(
       const comment = rows[0];
 
       if (comment.parent_comment_id === null) {
-        // If we reach a top-level comment, log and exit the loop
         console.log(`The top-level parent comment is:`, comment);
         return comment;
       } else {
-        // Continue traversing upwards
         currentCommentId = comment.parent_comment_id;
       }
     }

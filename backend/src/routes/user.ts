@@ -180,11 +180,9 @@ router.post(
         googleProfilePicture ?? null
       );
 
-      // Generate tokens
       const jwtToken = createJwtToken(userId, email, googleId);
       const refreshToken = createRefreshToken(userId, email, googleId);
 
-      // Return tokens and user data in the response body
       res.status(201).json({
         message: "Registration successful",
         accessToken: jwtToken,

@@ -17,6 +17,9 @@ import {
   NewChatBar,
   ChatHeader,
   ClearButtonWrapper,
+  EmojiPickerButton,
+  ButtonsWrapper,
+  PickerWrapper,
 } from "./MessageInboxChatWindow.styled";
 import SentMessages from "./SentMessages/SentMessages";
 import { UserContext } from "../../../../context/UserContext";
@@ -36,6 +39,7 @@ import useClickOutside from "../../../../hooks/useClickOutside";
 import { User } from "../../../../types/User/User";
 import { useCsrfToken } from "../../../../hooks/useCsrfToken";
 import { useWebSocketMessages } from "../../../../hooks/useWebSocketMessages";
+import Picker, { EmojiClickData } from "emoji-picker-react";
 
 interface MessageInboxChatWindowProps {
   conversationId: number | null;
@@ -61,9 +65,13 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   const [receiverId, setReceiverId] = useState<number | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
+
   const [isDropdownVisible, setDropdownVisible] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   useClickOutside(containerRef, () => setDropdownVisible(false));
+  useClickOutside(emojiPickerRef, () => setShowEmojiPicker(false));
 
   const toggleDropdown = () => setDropdownVisible((prev) => !prev);
 
@@ -108,6 +116,10 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
     } catch (error) {
       console.error("Error handling user selection:", error);
     }
+  };
+
+  const handleEmojiClick = (emojiObject: EmojiClickData) => {
+    setNewMessage((prevMessage) => prevMessage + emojiObject.emoji);
   };
 
   const fetchOlderMessages = async () => {
@@ -261,7 +273,19 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type your message..."
         />
-        <ChatSubmitButton onClick={handleSendMessage}>Send</ChatSubmitButton>
+        <ButtonsWrapper>
+          <EmojiPickerButton
+            onClick={() => setShowEmojiPicker((prev) => !prev)}
+          >
+            😀
+          </EmojiPickerButton>
+          {showEmojiPicker && (
+            <PickerWrapper ref={emojiPickerRef}>
+              <Picker onEmojiClick={handleEmojiClick} />
+            </PickerWrapper>
+          )}
+          <ChatSubmitButton onClick={handleSendMessage}>Send</ChatSubmitButton>
+        </ButtonsWrapper>
       </TextInputWrapper>
     </ChatWindowContainerOuter>
   );

@@ -11,7 +11,6 @@ import {
   updateComment,
   fetchCommentOwner,
   deleteComment,
-  toggleLike,
   fetchCommentLikes,
   fetchTotalComments,
   findTopLevelComment,
@@ -54,7 +53,6 @@ router.get("/:contentType/:contentId", async (req: Request, res: Response) => {
         `;
       params = [contentType, contentId, topLevelLimit, offset];
     } else {
-      // Fetching replies, but fetching `replyLimit + 1` to check if there are more
       commentsQuery = `
           SELECT c.*, u.name as user_name, u.profile_picture, 
                  EXISTS (SELECT 1 FROM comments r WHERE r.parent_comment_id = c.id) as has_replies 

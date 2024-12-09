@@ -46,7 +46,7 @@ export default function security(app: Application): void {
 
   app.use(helmet.referrerPolicy({ policy: "no-referrer" }));
 
-  app.use((req, res, next) => {
+  app.use((_req, res, next) => {
     res.setHeader(
       "Cache-Control",
       "no-store, no-cache, must-revalidate, proxy-revalidate"

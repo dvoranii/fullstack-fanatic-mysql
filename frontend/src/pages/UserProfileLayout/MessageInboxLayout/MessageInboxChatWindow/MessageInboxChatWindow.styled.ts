@@ -57,7 +57,7 @@ export const ChatInput = styled.textarea`
 export const ChatSubmitButton = styled.button`
   width: 80px;
   padding: 10px;
-  margin: 10px 0px 10px 0px;
+
   background-color: #007bff;
   color: white;
   border: none;
@@ -124,5 +124,46 @@ export const ClearButtonWrapper = styled.div`
     &:hover {
       color: red;
     }
+  }
+`;
+
+export const EmojiPickerButton = styled.button`
+  width: fit-content;
+  height: fit-content;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  border: none;
+  background-color: #007bff;
+  transition: all 250ms ease;
+
+  &:hover {
+    filter: brightness(1.15);
+  }
+`;
+export const ButtonsWrapper = styled.div`
+  width: 100%;
+  margin: 10px 0px 10px 0px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  user-select: none;
+`;
+
+export const PickerWrapper = styled.div`
+  position: absolute;
+  bottom: 110%;
+  left: 0;
+  z-index: 100;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+
+  @media (max-width: 981px) {
+    width: 90vw;
+    max-height: 40vh;
+    overflow-y: auto;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 60vw;
   }
 `;

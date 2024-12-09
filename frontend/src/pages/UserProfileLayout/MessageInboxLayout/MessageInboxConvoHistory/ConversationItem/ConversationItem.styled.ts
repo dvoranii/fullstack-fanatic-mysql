@@ -20,8 +20,8 @@ export const ConversationWrapper = styled.div`
   @media screen and (max-width: 981px) {
     display: flex;
     flex-direction: column;
-    width: 85px;
-    min-width: 85px;
+    width: 25%;
+
     height: 120px;
   }
   @media screen and (max-width: 375px) {
@@ -45,6 +45,7 @@ export const ConversationDetailsWrapper = styled.div`
 
   @media screen and (max-width: 981px) {
     p {
+      font-size: 1rem;
       line-height: 1;
       text-align: center;
     }
