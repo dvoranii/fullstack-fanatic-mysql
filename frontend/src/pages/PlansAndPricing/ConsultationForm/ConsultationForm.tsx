@@ -16,6 +16,7 @@ import { submitConsultationForm } from "../../../services/consultFormService";
 import { validateField } from "../../../utils/validationUtils";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
 import useReCaptcha from "../../../hooks/useRecaptcha";
+import { sanitizeInput } from "../../../utils/sanitizationUtils";
 
 const ConsultationForm: React.FC<{
   formRef: React.RefObject<HTMLDivElement>;
@@ -40,10 +41,20 @@ const ConsultationForm: React.FC<{
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const sanitizedName = sanitizeInput(formData.name);
+    const sanitizedEmail = sanitizeInput(formData.email);
+    const sanitizedMessage = sanitizeInput(formData.message);
+
     const newErrors = {
-      name: validateField({ type: "username", value: formData.name }),
-      email: validateField({ type: "email", value: formData.email }),
-      message: formData.message ? null : "Please enter your message",
+      name: validateField({
+        type: "username",
+        value: sanitizedName,
+      }),
+      email: validateField({
+        type: "email",
+        value: sanitizedEmail,
+      }),
+      message: sanitizedMessage ? null : "Please enter your message",
     };
 
     setErrors(newErrors);
@@ -57,12 +68,13 @@ const ConsultationForm: React.FC<{
       const recaptchaToken = await getReCaptchaToken("consultation_form");
 
       await submitConsultationForm(
-        formData.name,
-        formData.email,
-        formData.message,
+        sanitizedName,
+        sanitizedEmail,
+        sanitizedMessage,
         csrfToken,
         recaptchaToken
       );
+
       setSuccessMessage("Form submission successful!");
 
       setTimeout(() => {

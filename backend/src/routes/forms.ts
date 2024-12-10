@@ -3,6 +3,7 @@ import { authenticate } from "../middleware/authenticate";
 import { csrfProtection } from "../middleware/csrf";
 import { validateGenericForm } from "../utils/formValidation";
 import { verifyRecaptchaToken } from "../utils/recaptchaUtils";
+import { blacklist } from "../middleware/IPblacklist";
 
 const router = express.Router();
 
@@ -53,8 +54,10 @@ const router = express.Router();
 
   router.post(
     "/contact",
+    blacklist,
     authenticate,
     csrfProtection,
+
     async (req, res): Promise<void> => {
       const { fullName, email, message, recaptchaToken } = req.body;
 

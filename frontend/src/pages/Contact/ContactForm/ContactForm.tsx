@@ -13,6 +13,7 @@ import { submitContactForm } from "../../../services/contactFormService";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
 import useReCaptcha from "../../../hooks/useRecaptcha";
+import { sanitizeInput } from "../../../utils/sanitizationUtils";
 
 const ContactForm: React.FC = () => {
   const { getReCaptchaToken } = useReCaptcha();
@@ -53,16 +54,29 @@ const ContactForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Sanitize inputs
+    const sanitizedName = sanitizeInput(formData.fullName);
+    const sanitizedEmail = sanitizeInput(formData.email);
+    const sanitizedMessage = sanitizeInput(formData.message);
+
+    // Stop form submission if sanitization fails
+    const hasEmptyFields =
+      !sanitizedName || !sanitizedEmail || !sanitizedMessage;
+
+    if (hasEmptyFields) {
+      setErrors({
+        fullName: !sanitizedName ? "Name is invalid or empty." : null,
+        email: !sanitizedEmail ? "Email is invalid or empty." : null,
+        message: !sanitizedMessage ? "Message is invalid or empty." : null,
+      });
+      return;
+    }
+
+    // Validate sanitized inputs
     const newErrors = {
-      fullName: validateField({
-        type: "username",
-        value: formData.fullName,
-      }),
-      email: validateField({
-        type: "email",
-        value: formData.email,
-      }),
-      message: formData.message ? null : "Please enter your message",
+      fullName: validateField({ type: "username", value: sanitizedName }),
+      email: validateField({ type: "email", value: sanitizedEmail }),
+      message: sanitizedMessage ? null : "Please enter your message",
     };
 
     setErrors(newErrors);
@@ -76,9 +90,9 @@ const ContactForm: React.FC = () => {
       const recaptchaToken = await getReCaptchaToken("contact_form");
 
       await submitContactForm(
-        formData.fullName,
-        formData.email,
-        formData.message,
+        sanitizedName,
+        sanitizedEmail,
+        sanitizedMessage,
         csrfToken,
         recaptchaToken
       );
