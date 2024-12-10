@@ -54,7 +54,7 @@ const PlansAndPricing: React.FC = () => {
           <CardsContainer>
             <SubscriptionCard
               title="STARTER"
-              price="$7"
+              price="$5"
               frequency="Month"
               buttonLabel="SUBSCRIBE"
               className="first-card"

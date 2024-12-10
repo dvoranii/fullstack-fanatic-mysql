@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { colors } from "../../../GlobalStyles";
 
 interface CardWrapperProps {
@@ -178,22 +178,39 @@ export const SubscribeButton = styled("button").withConfig({
   font-size: 1rem;
   border: none;
   border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  transition: background-color 0.3s, transform 0.3s;
   font-weight: bold;
-  transition: all 150ms ease;
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      background-color: #ccc;
+      color: #666;
+      cursor: not-allowed;
+
+      &:hover,
+      &:active,
+      &:focus {
+        background-color: #ccc;
+        color: #666;
+        transform: none;
+      }
+    `}
+
   &:hover {
-    ${({ highlighted }) =>
-      highlighted
+    ${({ disabled, highlighted }) =>
+      !disabled &&
+      (highlighted
         ? `
           background-color: white;
           color: ${colors.primary};
-          transform: translateY(-4px) scale(1.01)
+          transform: translateY(-4px) scale(1.01);
         `
         : `
           background-color: ${colors.primary};
-          color: ${colors.white}
-        `}
+          color: ${colors.white};
+        `)}
   }
 `;
 

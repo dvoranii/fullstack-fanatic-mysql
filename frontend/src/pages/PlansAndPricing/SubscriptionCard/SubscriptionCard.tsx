@@ -14,7 +14,6 @@ import { UserContext } from "../../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { CartItem } from "../../../types/CartItem";
 import SubscriptionIcon from "../../../assets/images/plansAndPricing/subscription-icon.png";
-
 interface SubscriptionCardProps {
   title: string;
   price: string;
@@ -34,8 +33,12 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
   children,
   className,
 }) => {
-  const { addSubscriptionToCart = () => {} } = useContext(UserContext) || {};
+  const { profile, addSubscriptionToCart = () => {} } =
+    useContext(UserContext) || {};
   const navigate = useNavigate();
+
+  const isSubscribed =
+    profile?.premiumLevel?.toLowerCase() === title.toLowerCase();
 
   const handleSubscribeClick = () => {
     if (addSubscriptionToCart) {
@@ -73,8 +76,14 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
         <SubscribeButton
           highlighted={highlighted}
           onClick={handleSubscribeClick}
+          disabled={isSubscribed}
+          title={
+            isSubscribed
+              ? "You are already at this subscription level"
+              : undefined
+          }
         >
-          {buttonLabel}
+          {isSubscribed ? "SUBSCRIBED" : buttonLabel}
         </SubscribeButton>
       </SubscribeButtonWrapper>
     </CardWrapper>
