@@ -9,8 +9,7 @@ const setAuthToken = (token: string) => {
 
 const refreshJwt = async () => {
   try {
-    const data = await apiRefreshJwt();
-    const { token } = data;
+    const token = await apiRefreshJwt();
     setAuthToken(token);
     return token;
   } catch (error) {

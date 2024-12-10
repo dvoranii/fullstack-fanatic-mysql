@@ -10,7 +10,7 @@ export const registerUser = async (
   const endpoint = `/users/register`;
   const { status, data } = await apiCall<User>(endpoint, {
     method: "POST",
-    credentials: "include",
+    credentials: "include", // Ensures cookies are sent with the request
     body: JSON.stringify(requestBody),
     headers: {
       "Content-Type": "application/json",
@@ -26,8 +26,7 @@ export const registerUser = async (
 };
 
 interface LoginResponse {
-  token: string;
-  refreshToken: string;
+  token: string; // Access token
   user: User;
 }
 
@@ -38,7 +37,7 @@ export const loginUser = async (
   const endpoint = `/users/login`;
   const { data } = await apiCall<LoginResponse>(endpoint, {
     method: "POST",
-    credentials: "include",
+    credentials: "include", // Ensures cookies are sent with the request
     body: JSON.stringify(requestBody),
     headers: {
       "Content-Type": "application/json",
@@ -47,7 +46,6 @@ export const loginUser = async (
   });
 
   localStorage.setItem("accessToken", data.token);
-  localStorage.setItem("refreshToken", data.refreshToken);
 
   return data;
 };
@@ -57,7 +55,6 @@ export const googleRegister = async (token: string, csrfToken: string) => {
 
   const { status, data } = await apiCall<{
     accessToken: string;
-    refreshToken: string;
     user: {
       userId: number;
       email: string;
@@ -78,9 +75,8 @@ export const googleRegister = async (token: string, csrfToken: string) => {
     return { status: 409, message: "User already exists" };
   }
 
-  if (data.accessToken && data.refreshToken) {
+  if (data.accessToken) {
     localStorage.setItem("accessToken", data.accessToken);
-    localStorage.setItem("refreshToken", data.refreshToken);
   }
 
   return {
@@ -95,7 +91,6 @@ export const googleLogin = async (token: string, csrfToken: string) => {
 
   const { status, data } = await apiCall<{
     accessToken: string;
-    refreshToken: string;
     user: { userId: number; email: string; googleId: string };
   }>(endpoint, {
     method: "POST",
@@ -107,29 +102,19 @@ export const googleLogin = async (token: string, csrfToken: string) => {
     },
   });
 
-  if (data.accessToken && data.refreshToken) {
+  if (data.accessToken) {
     localStorage.setItem("accessToken", data.accessToken);
-    localStorage.setItem("refreshToken", data.refreshToken);
   }
 
   return { status, user: data.user };
 };
 
-// change url later maybe
+// Handles automatic refresh of the JWT using cookies
 export const refreshJwt = async () => {
   try {
-    const refreshToken = localStorage.getItem("refreshToken");
-
-    if (!refreshToken) {
-      throw new Error("No refresh token available");
-    }
-
     const response = await fetch(`/api/users/refresh-token`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ refreshToken }),
+      credentials: "include", // Ensures the HttpOnly refresh token is sent
     });
 
     if (!response.ok) {
@@ -137,7 +122,13 @@ export const refreshJwt = async () => {
     }
 
     const data = await response.json();
-    return data;
+    const { token } = data;
+
+    if (token) {
+      localStorage.setItem("accessToken", token);
+    }
+
+    return token;
   } catch (error) {
     console.error("Error refreshing JWT:", error);
     throw error;

@@ -35,8 +35,6 @@ const BlogsPage: React.FC = () => {
     purchasedItems = [],
   } = useContext(UserContext) || {};
 
-  console.log(purchasedItems);
-
   const [visibleBlogs, setVisibleBlogs] = useState<number>(4);
   const [searchText, setSearchText] = useState<string>("");
 

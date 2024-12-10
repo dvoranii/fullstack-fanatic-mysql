@@ -91,11 +91,18 @@ router.post("/login", async (req: Request, res: Response): Promise<void> => {
     const jwtToken = createJwtToken(user.id, user.name);
     const refreshToken = createRefreshToken(user.id, user.name);
 
+    // Set refresh token in HttpOnly cookie
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // HTTPS only in production
+      sameSite: "strict", // CSRF protection
+      path: "/api/users/refresh-token", // Scope cookie to refresh-token endpoint
+    });
+
     res.status(200).json({
       message: "User logged in successfully",
       user: { id: user.id, username: user.username, name: user.name },
-      token: jwtToken,
-      refreshToken: refreshToken,
+      token: jwtToken, // Send access token in response
     });
   } catch (err) {
     const error = err as Error;
@@ -105,7 +112,12 @@ router.post("/login", async (req: Request, res: Response): Promise<void> => {
 });
 
 router.post("/logout", (req, res) => {
-  res.clearCookie("refreshToken");
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    path: "/api/users/refresh-token",
+  });
   res.status(200).json({ message: "Logged Out" });
 });
 
@@ -185,15 +197,20 @@ router.post(
         googleProfilePicture ?? null
       );
 
-      // Generate tokens
       const jwtToken = createJwtToken(userId, email, googleId);
       const refreshToken = createRefreshToken(userId, email, googleId);
 
-      // Return tokens and user data in the response body
+      // Set refresh token in HttpOnly cookie
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/api/users/refresh-token",
+      });
+
       res.status(201).json({
         message: "Registration successful",
         accessToken: jwtToken,
-        refreshToken: refreshToken,
         user: {
           userId,
           email,
@@ -250,10 +267,17 @@ router.post(
       const jwtToken = createJwtToken(userId, email, googleId);
       const refreshToken = createRefreshToken(userId, email, googleId);
 
+      // Set refresh token in HttpOnly cookie
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/api/users/refresh-token",
+      });
+
       res.status(200).json({
         message: "Login successful",
         accessToken: jwtToken,
-        refreshToken: refreshToken,
         user: {
           userId,
           email,
@@ -261,7 +285,6 @@ router.post(
           profile_picture: existingUser[0].profile_picture,
         },
       });
-      return;
     } catch (error) {
       console.error("Error during Google login: ", error);
       res.status(500).json({ error: "Failed to log in with Google" });
@@ -272,7 +295,7 @@ router.post(
 router.post(
   "/refresh-token",
   async (req: Request, res: Response): Promise<void> => {
-    const { refreshToken } = req.body;
+    const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {
       res.status(401).json({ error: "Refresh token is required" });
