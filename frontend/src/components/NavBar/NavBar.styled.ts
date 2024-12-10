@@ -164,6 +164,7 @@ export const NavIconImg = styled.img.withConfig({
   shouldForwardProp: (prop) => prop !== "hoverEffect",
 })<{ hoverEffect?: string }>`
   width: 30px;
+  height: auto;
   margin: 10px;
   transition: all 150ms ease;
 
@@ -184,6 +185,7 @@ export const NetworkPageLink = styled(NavLink)`
   align-items: center;
   img {
     width: 30px;
+    height: auto;
     margin: 10px;
   }
 `;
@@ -193,6 +195,7 @@ export const ShoppingCartLink = styled(Link)`
   align-items: center;
   img {
     width: 25px;
+    height: auto;
   }
 `;
 export const UserProfileLink = styled(Link)`
@@ -200,6 +203,7 @@ export const UserProfileLink = styled(Link)`
   align-items: center;
   img {
     width: 25px;
+    height: auto;
   }
 `;
 export const NotificationLink = styled(Link)`
@@ -207,5 +211,6 @@ export const NotificationLink = styled(Link)`
   align-items: center;
   img {
     width: 25px;
+    height: auto;
   }
 `;

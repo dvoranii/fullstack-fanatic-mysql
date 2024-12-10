@@ -28,9 +28,23 @@ const Hero: React.FC = () => {
     <>
       <HeroWrapper>
         <LeftSideWrapper>
-          <img src={FsfLogoDarkblue} className="fsf-darkblue" alt="" />
+          <img
+            src={FsfLogoDarkblue}
+            className="fsf-darkblue"
+            alt="logo"
+            loading="lazy"
+            height="40"
+            width="40"
+          />
           <LogoWrapper>
-            <img src={FSFLogo} alt="" className="orange-logo" />
+            <img
+              src={FSFLogo}
+              alt="logo"
+              className="orange-logo"
+              width="400"
+              height="400"
+              loading="lazy"
+            />
           </LogoWrapper>
 
           <HeroTextWrapper className="mobile-title">
@@ -39,12 +53,24 @@ const Hero: React.FC = () => {
           </HeroTextWrapper>
 
           <ElipseWrapper>
-            <img src={ElipseBG} alt="" />
+            <img
+              src={ElipseBG}
+              alt="elipse bg image"
+              width="250"
+              height="193"
+            />
           </ElipseWrapper>
         </LeftSideWrapper>
         <RightSideWrapper>
           <RightSideWrapperInner>
-            <img src={FSFLogoWhite} alt="" className="white-logo" />
+            <img
+              src={FSFLogoWhite}
+              alt="logo"
+              className="white-logo"
+              loading="lazy"
+              height="60"
+              width="60"
+            />
 
             <HeroTextWrapper className="desktop-title">
               <h1>Full&nbsp;Stack&nbsp;Fanatic</h1>
@@ -58,17 +84,35 @@ const Hero: React.FC = () => {
             <SocialButtonsWrapper>
               <SocialIconWrapper>
                 <Link to="#">
-                  <img src={GithubLogo} alt="" />
+                  <img
+                    src={GithubLogo}
+                    alt="github logo"
+                    loading="lazy"
+                    width="40"
+                    height="40"
+                  />
                 </Link>
               </SocialIconWrapper>
               <SocialIconWrapper>
                 <Link to="#">
-                  <img src={CodepenLogo} alt="" />
+                  <img
+                    src={CodepenLogo}
+                    alt="codepen logo"
+                    loading="lazy"
+                    width="40"
+                    height="40"
+                  />
                 </Link>
               </SocialIconWrapper>
               <SocialIconWrapper>
                 <Link to="#">
-                  <img src={LinkedinLogo} alt="" />
+                  <img
+                    src={LinkedinLogo}
+                    alt="linkedin logo"
+                    loading="lazy"
+                    width="40"
+                    height="40"
+                  />
                 </Link>
               </SocialIconWrapper>
             </SocialButtonsWrapper>

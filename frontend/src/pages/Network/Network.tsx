@@ -21,8 +21,10 @@ import {
   fetchFollowing,
 } from "../../services/followService";
 import { PageWrapper } from "../../PageWrapper.styled";
+import { useCsrfToken } from "../../hooks/useCsrfToken";
 
 export const NetworkPage: React.FC = () => {
+  const csrfToken = useCsrfToken();
   const userContext = useContext(UserContext);
   const loggedInUser = userContext?.profile;
 
@@ -79,7 +81,7 @@ export const NetworkPage: React.FC = () => {
 
   const handleFollow = async (userId: number) => {
     try {
-      const status = await followUser(userId);
+      const status = await followUser(userId, csrfToken);
       if (status === 200) {
         setFollowing((prev) => [...prev, userId]);
       }
@@ -91,7 +93,7 @@ export const NetworkPage: React.FC = () => {
   const handleUnfollow = async (userId: number) => {
     setFollowing((prev) => prev.filter((id) => id !== userId));
     try {
-      const status = await unfollowUser(userId);
+      const status = await unfollowUser(userId, csrfToken);
       if (status !== 200) {
         setFollowing((prev) => [...prev, userId]);
       }

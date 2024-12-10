@@ -60,11 +60,12 @@ const router = express.Router();
     "/create-checkout-session-payment",
     authenticate,
     csrfProtection,
-    async (req: Request, res: Response) => {
+    async (req: Request, res: Response): Promise<void> => {
       const { cartItems } = req.body;
 
       if (!cartItems || cartItems.length === 0) {
-        return res.status(400).json({ error: "No items in cart" });
+        res.status(400).json({ error: "No items in cart" });
+        return;
       }
 
       try {
@@ -112,11 +113,12 @@ const router = express.Router();
     "/create-checkout-session-subscription",
     authenticate,
     csrfProtection,
-    async (req: Request, res: Response) => {
+    async (req: Request, res: Response): Promise<void> => {
       const { cartItems } = req.body;
 
       if (!cartItems || cartItems.length === 0) {
-        return res.status(400).json({ error: "No items in cart" });
+        res.status(400).json({ error: "No items in cart" });
+        return;
       }
 
       try {
@@ -162,7 +164,7 @@ const router = express.Router();
   router.post(
     "/webhook",
     express.raw({ type: "application/json" }),
-    async (req: Request, res: Response) => {
+    async (req: Request, res: Response): Promise<void> => {
       const sig = req.headers["stripe-signature"];
 
       let event;
@@ -181,9 +183,8 @@ const router = express.Router();
         );
       } catch (error) {
         console.error("Webhook signature verification failed.", error);
-        return res
-          .status(400)
-          .send(`Webhook Error: ${(error as Error).message}`);
+        res.status(400).send(`Webhook Error: ${(error as Error).message}`);
+        return;
       }
 
       if (event.type === "checkout.session.completed") {
@@ -225,9 +226,10 @@ const router = express.Router();
             }
           } catch (error) {
             console.error("Error updating user's premium level:", error);
-            return res
+            res
               .status(500)
               .json({ error: "Failed to update user's premium level" });
+            return;
           }
         } else if (session.mode === "payment") {
           try {
@@ -255,9 +257,10 @@ const router = express.Router();
             }
           } catch (error) {
             console.error("Error recording one-off purchases: ", error);
-            return res
+            res
               .status(500)
               .json({ error: "Failed to record one-off purchases" });
+            return;
           }
         }
       }

@@ -82,6 +82,7 @@ export const LeftGraphic = styled.img`
   left: 200px;
   bottom: 0;
   width: clamp(200px, 22vw, 390px);
+  height: auto;
   object-fit: contain;
   z-index: 1;
 
@@ -107,6 +108,7 @@ export const CornerEllipse = styled.img`
   bottom: 0px;
   right: 0px;
   height: clamp(120px, 20vw, 200px);
+  width: auto;
   object-fit: contain;
   z-index: 0;
   user-select: none;
@@ -133,6 +135,7 @@ export const ButtonWrapper = styled.div`
 
 export const BgSquaresAndTriangleImg = styled.img`
   width: 260px;
+  height: auto;
   position: absolute;
   right: 3%;
   top: 10%;

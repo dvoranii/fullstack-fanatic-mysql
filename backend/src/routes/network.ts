@@ -8,20 +8,22 @@ const router = express.Router();
 router.get(
   "/search-users",
   authenticate,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     try {
       const { searchQuery, filter } = req.query;
 
       if (!searchQuery || typeof searchQuery !== "string") {
-        return res
+        res
           .status(400)
           .json({ error: "Search query is required and must be a string" });
+        return;
       }
 
       if (filter !== "name" && filter !== "profession") {
-        return res
+        res
           .status(400)
           .json({ error: "Filter must be 'name' or 'profession'" });
+        return;
       }
 
       const connection = await connectionPromise;
@@ -37,7 +39,8 @@ router.get(
       ]);
 
       if (users.length === 0) {
-        return res.status(404).json({ message: "No users found" });
+        res.status(404).json({ message: "No users found" });
+        return;
       }
 
       res.status(200).json({ users });

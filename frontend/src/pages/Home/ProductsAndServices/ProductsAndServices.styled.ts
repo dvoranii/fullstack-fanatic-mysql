@@ -90,9 +90,11 @@ export const CardWrapper = styled.div`
     top: -50px;
     right: calc((50%) - 32.5px);
     width: 70px;
+    height: auto;
   }
   .top-icon.consult-icon {
     width: 90px;
+    height: auto;
     right: calc((50%) - 45px);
   }
 
@@ -166,6 +168,7 @@ export const CardImagesWrapper = styled.div`
 
   img {
     width: 90%;
+    height: auto;
   }
 
   @media screen and (max-width: 759px) {
@@ -183,6 +186,7 @@ export const ProductsAndServicesBottomImgWrapper = styled.div`
 
   img {
     width: 100%;
+    height: auto;
   }
 
   @media screen and (max-width: 768px) {

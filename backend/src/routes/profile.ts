@@ -9,26 +9,31 @@ import { csrfProtection } from "../middleware/csrf";
 
 const router = express.Router();
 
-router.get("/", authenticate, async (req: Request, res: Response) => {
-  try {
-    const userId = req.user?.userId;
+router.get(
+  "/",
+  authenticate,
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const userId = req.user?.userId;
 
-    const connection = await connectionPromise;
-    const [user] = await connection.query<RowDataPacket[]>(
-      "SELECT id, email, name, display_name, profession, bio, social_links, profile_picture , banner_image, isPremium, premiumLevel FROM users WHERE id = ?",
-      [userId]
-    );
+      const connection = await connectionPromise;
+      const [user] = await connection.query<RowDataPacket[]>(
+        "SELECT id, email, name, display_name, profession, bio, social_links, profile_picture , banner_image, isPremium, premiumLevel FROM users WHERE id = ?",
+        [userId]
+      );
 
-    if (!user.length) {
-      return res.status(404).json({ message: "User not found" });
+      if (!user.length) {
+        res.status(404).json({ message: "User not found" });
+        return;
+      }
+
+      res.json(user[0]);
+    } catch (error) {
+      console.error("Failed to fetch user profile: ", error);
+      res.status(500).json({ error: "Failed to fetch user profile" });
     }
-
-    res.json(user[0]);
-  } catch (error) {
-    console.error("Failed to fetch user profile: ", error);
-    res.status(500).json({ error: "Failed to fetch user profile" });
   }
-});
+);
 
 router.post(
   "/upload-banner",
@@ -125,12 +130,13 @@ router.put(
   authenticate,
   csrfProtection,
   upload.none(),
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     const userId = req.user?.userId;
     const { display_name, profession, bio, social_links } = req.body;
 
     if (!userId) {
-      return res.status(400).json({ error: "User ID is required" });
+      res.status(400).json({ error: "User ID is required" });
+      return;
     }
 
     try {
@@ -163,7 +169,8 @@ router.put(
       );
 
       if (!user.length) {
-        return res.status(404).json({ message: "User not found" });
+        res.status(404).json({ message: "User not found" });
+        return;
       }
 
       res.status(200).json(user[0]);
@@ -178,12 +185,13 @@ router.delete(
   "/social-link/:platform",
   authenticate,
   csrfProtection,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     const userId = req.user?.userId;
     const { platform } = req.params;
 
     if (!userId) {
-      return res.status(400).json({ error: "User ID is required" });
+      res.status(400).json({ error: "User ID is required" });
+      return;
     }
 
     try {
@@ -198,7 +206,8 @@ router.delete(
       );
 
       if (!currentUser.length) {
-        return res.status(404).json({ message: "User not found" });
+        res.status(404).json({ message: "User not found" });
+        return;
       }
 
       let socialLinks;
@@ -211,7 +220,8 @@ router.delete(
       } catch (parseError) {
         console.error("Error parsing social links JSON:", parseError);
         await connection.rollback();
-        return res.status(500).json({ error: "Failed to parse social links" });
+        res.status(500).json({ error: "Failed to parse social links" });
+        return;
       }
 
       delete socialLinks[platform];

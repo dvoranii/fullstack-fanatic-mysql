@@ -11,7 +11,7 @@ router.post(
   "/",
   authenticate,
   csrfProtection,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     const { conversation_id, sender_id, receiver_id, content } = req.body;
 
     try {
@@ -23,7 +23,8 @@ router.post(
       );
 
       if (conversation.length === 0) {
-        return res.status(404).json({ error: "Conversation not found" });
+        res.status(404).json({ error: "Conversation not found" });
+        return;
       }
 
       const { user1_id, user2_id, is_deleted_user1, is_deleted_user2 } =

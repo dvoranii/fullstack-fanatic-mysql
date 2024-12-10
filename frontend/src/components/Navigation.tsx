@@ -1,9 +1,12 @@
-import { Suspense, lazy, useContext, useEffect, useState } from "react";
+import { Suspense, lazy, useContext, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import LoadingOverlay from "./LoadingOverlay/LoadingOverlay";
 
 const HomePage = lazy(() => import("../pages/Home/HomePage"));
+const preloadHomePage = () => import("../pages/Home/HomePage");
+preloadHomePage();
+
 const AboutPage = lazy(() => import("../pages/About/AboutPage"));
 const TutorialsPage = lazy(() => import("../pages/Tutorials/TutorialsPage"));
 const TutorialPage = lazy(() => import("../pages/Tutorial/TutorialPage"));
@@ -16,52 +19,69 @@ const SignInRegisterPage = lazy(
 const UserAccountPage = lazy(
   () => import("../pages/UserProfileLayout/UserAccountPage/UserAccountPage")
 );
+const FollowersList = lazy(
+  () =>
+    import("../pages/UserProfileLayout/FollowList/FollowersList/FollowersList")
+);
+const FollowingList = lazy(
+  () =>
+    import("../pages/UserProfileLayout/FollowList/FollowingList/FollowingList")
+);
+
 const PublicUserPage = lazy(
   () => import("../pages/UserProfileLayout/PublicUserPage/PublicUserPage")
 );
-const MessageInboxPage = lazy(
+const MessageInboxLayout = lazy(
   () =>
     import("../pages/UserProfileLayout/MessageInboxLayout/MessageInboxLayout")
 );
-import NetworkPage from "../pages/Network/Network";
-import FollowersList from "../pages/UserProfileLayout/FollowList/FollowersList/FollowersList";
-import FollowingList from "../pages/UserProfileLayout/FollowList/FollowingList/FollowingList";
-import CommentHistory from "../pages/UserProfileLayout/CommentHistory/CommentHistory";
-import ViewCartPage from "../pages/Checkout/ViewCart/ViewCart";
-import CheckoutSuccess from "../pages/Checkout/Success/Success";
-import CheckoutCancel from "../pages/Checkout/Cancel/Cancel";
-import PlansAndPricing from "../pages/PlansAndPricing/PlansAndPricing";
-import SubscriptionCart from "../pages/Checkout/SubscriptionCart/SubscriptionCart";
-import Settings from "../pages/Settings/Settings";
+
+const NetworkPage = lazy(() => import("../pages/Network/Network"));
+const CommentHistory = lazy(
+  () => import("../pages/UserProfileLayout/CommentHistory/CommentHistory")
+);
+
+const ViewCart = lazy(() => import("../pages/Checkout/ViewCart/ViewCart"));
+const SubscriptionCart = lazy(
+  () => import("../pages/Checkout/SubscriptionCart/SubscriptionCart")
+);
+const Settings = lazy(() => import("../pages/Settings/Settings"));
+const PlansAndPricing = lazy(
+  () => import("../pages/PlansAndPricing/PlansAndPricing")
+);
+
+const ProtectedRoute = lazy(
+  () => import("../components/ProtectedRoute/ProtectedRoute")
+);
+const PublicOnlyRoute = lazy(() => import("./PublicOnlyRoute/PublicOnlyRoute"));
+
+const CheckoutSuccess = lazy(() => import("../pages/Checkout/Success/Success"));
+const CheckoutCancel = lazy(() => import("../pages/Checkout/Cancel/Cancel"));
+const ForgotPassword = lazy(
+  () => import("../pages/SignInRegister/ForgotPassword/ForgotPassword")
+);
+const ResetPassword = lazy(
+  () => import("../pages/SignInRegister/ResetPassword/ResetPassword")
+);
+
 import NotFound from "../pages/NotFound/NotFound";
-import ForgotPassword from "../pages/SignInRegister/ForgotPassword/ForgotPassword";
-import ResetPassword from "../pages/SignInRegister/ResetPassword/ResetPassword";
 import PrivacyPolicy from "../pages/PrivacyPolicy/PrivacyPolicy";
 import TermsAndConditions from "../pages/TermsAndConditions/TermsAndConditions";
 
-import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
-import PublicOnlyRoute from "./PublicOnlyRoute/PublicOnlyRoute";
+import usePurchasedItems from "../hooks/usePurchasedItems";
 
-import { fetchPurchasedItems } from "../services/purchasesService";
+const preloadMyAccountPage = () =>
+  import("../pages/UserProfileLayout/UserAccountPage/UserAccountPage");
 
 const Navigation: React.FC = () => {
   const { profile } = useContext(UserContext) || {};
-  const [purchasedItemIds, setPurchasedItemIds] = useState<number[]>([]);
+  const purchasedItemIds = usePurchasedItems(profile?.id);
 
   useEffect(() => {
-    const loadPurchasedItems = async () => {
-      if (profile?.id) {
-        try {
-          const purchases = await fetchPurchasedItems(profile.id);
-          setPurchasedItemIds(purchases.map((p) => p.product_id));
-        } catch (error) {
-          console.error("Error fetching purchases:", error);
-        }
-      }
-    };
-
-    loadPurchasedItems();
-  }, [profile?.id]);
+    if (profile?.id) {
+      preloadMyAccountPage();
+    }
+  }, [profile]);
 
   return (
     <Suspense fallback={<LoadingOverlay />}>
@@ -73,8 +93,8 @@ const Navigation: React.FC = () => {
           path="/tutorial/:id"
           element={
             <ProtectedRoute
-              element={<TutorialPage />}
-              purchasedItemIds={purchasedItemIds}
+              component={TutorialPage}
+              props={{ purchasedItemIds: purchasedItemIds }}
             />
           }
         />
@@ -87,8 +107,8 @@ const Navigation: React.FC = () => {
           path="/blog/:id"
           element={
             <ProtectedRoute
-              element={<BlogDetail />}
-              purchasedItemIds={purchasedItemIds}
+              component={BlogDetail}
+              props={{ purchasedItemIds: purchasedItemIds }}
             />
           }
         />
@@ -113,52 +133,61 @@ const Navigation: React.FC = () => {
 
         <Route
           path="/my-account"
-          element={<ProtectedRoute element={<UserAccountPage />} />}
+          element={<ProtectedRoute component={UserAccountPage} />}
         />
 
         <Route
           path="/my-account/inbox"
-          element={<ProtectedRoute element={<MessageInboxPage />} />}
+          element={<ProtectedRoute component={MessageInboxLayout} />}
         />
         <Route path="/user/:id" element={<PublicUserPage />} />
         <Route
           path="/my-account/followers"
+          element={<ProtectedRoute component={FollowersList} />}
+        />
+        <Route
+          path="/my-account/following"
+          element={<ProtectedRoute component={FollowingList} />}
+        />
+
+        <Route
+          path="/user/:id/followers"
           element={
             <ProtectedRoute
-              element={<FollowersList userId={Number(profile?.id)} />}
+              component={FollowersList}
+              props={{ isPublicView: true }}
             />
           }
         />
         <Route
-          path="/my-account/following"
+          path="/user/:id/following"
           element={
             <ProtectedRoute
-              element={<FollowingList userId={Number(profile?.id)} />}
+              component={FollowingList}
+              props={{ isPublicView: true }}
             />
           }
         />
 
-        <Route path="/user/:id/followers" element={<FollowersList />} />
-        <Route path="/user/:id/following" element={<FollowingList />} />
         <Route
           path="/my-account/comment-history"
-          element={<ProtectedRoute element={<CommentHistory />} />}
+          element={<ProtectedRoute component={CommentHistory} />}
         />
 
         <Route path="/user/:id/comment-history" element={<CommentHistory />} />
         <Route
           path="/my-cart"
-          element={<ProtectedRoute element={<ViewCartPage />} />}
+          element={<ProtectedRoute component={ViewCart} />}
         />
         <Route
           path="/my-subscription-cart"
-          element={<ProtectedRoute element={<SubscriptionCart />} />}
+          element={<ProtectedRoute component={SubscriptionCart} />}
         />
         <Route path="/checkout/success" element={<CheckoutSuccess />} />
         <Route path="/checkout/cancel" element={<CheckoutCancel />} />
         <Route
           path="/plans-and-pricing"
-          element={<ProtectedRoute element={<PlansAndPricing />} />}
+          element={<ProtectedRoute component={PlansAndPricing} />}
         />
         <Route path="/network" element={<NetworkPage />} />
         <Route
@@ -171,7 +200,7 @@ const Navigation: React.FC = () => {
         />
         <Route
           path="/my-account/settings"
-          element={<ProtectedRoute element={<Settings />} />}
+          element={<ProtectedRoute component={Settings} />}
         />
         <Route path="*" element={<NotFound />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />

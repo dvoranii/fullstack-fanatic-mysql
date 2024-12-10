@@ -55,6 +55,8 @@ const ProductsAndServices: React.FC = () => {
                   className="ratings-img"
                   alt="ratings stars image"
                   loading="lazy"
+                  width="360"
+                  height="80"
                 />
               </CardImagesWrapper>
             </Card>
@@ -63,6 +65,8 @@ const ProductsAndServices: React.FC = () => {
               className="top-icon"
               alt="tutorial card icon"
               loading="lazy"
+              width="70"
+              height="78"
             />
           </CardWrapper>
           <CardWrapper>
@@ -95,6 +99,8 @@ const ProductsAndServices: React.FC = () => {
                   className="blogs-img"
                   alt="Blogs Card Image"
                   loading="lazy"
+                  width="360"
+                  height="125"
                 />
               </CardImagesWrapper>
             </Card>
@@ -103,6 +109,8 @@ const ProductsAndServices: React.FC = () => {
               className="top-icon"
               alt="Blog card Icon"
               loading="lazy"
+              width="70"
+              height="73"
             />
           </CardWrapper>
           <CardWrapper>
@@ -130,7 +138,12 @@ const ProductsAndServices: React.FC = () => {
                 </li>
               </CardList>
               <CardImagesWrapper>
-                <img src={ConsultCardImage} alt="Consultation Image" />
+                <img
+                  src={ConsultCardImage}
+                  alt="Consultation Image"
+                  width="360"
+                  height="128"
+                />
               </CardImagesWrapper>
             </Card>
             <img
@@ -138,6 +151,8 @@ const ProductsAndServices: React.FC = () => {
               className="top-icon consult-icon"
               alt="Consultation Icon"
               loading="lazy"
+              width="90"
+              height="85"
             />
           </CardWrapper>
         </ProductsAndServicesWrapperInner>
@@ -147,6 +162,8 @@ const ProductsAndServices: React.FC = () => {
           src={ProductsAndServicesBottomImg}
           alt="Products and Services banner image"
           loading="lazy"
+          width="1920"
+          height="1080"
         />
       </ProductsAndServicesBottomImgWrapper>
     </>

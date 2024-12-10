@@ -38,7 +38,7 @@ export const loginUser = async (
   const endpoint = `/users/login`;
   const { data } = await apiCall<LoginResponse>(endpoint, {
     method: "POST",
-    credentials: "include", // Remove if not needed
+    credentials: "include",
     body: JSON.stringify(requestBody),
     headers: {
       "Content-Type": "application/json",
@@ -46,7 +46,6 @@ export const loginUser = async (
     },
   });
 
-  // Store the refresh token in localStorage
   localStorage.setItem("accessToken", data.token);
   localStorage.setItem("refreshToken", data.refreshToken);
 
@@ -67,20 +66,18 @@ export const googleRegister = async (token: string, csrfToken: string) => {
     };
   }>(endpoint, {
     method: "POST",
-    credentials: "include", // To include CSRF cookie
+    credentials: "include",
     body: JSON.stringify({ token }),
     headers: {
       "Content-Type": "application/json",
-      "x-csrf-token": csrfToken, // Include CSRF token
+      "x-csrf-token": csrfToken,
     },
   });
 
-  // Handle 'User already exists' status
   if (status === 409) {
     return { status: 409, message: "User already exists" };
   }
 
-  // Store tokens in localStorage
   if (data.accessToken && data.refreshToken) {
     localStorage.setItem("accessToken", data.accessToken);
     localStorage.setItem("refreshToken", data.refreshToken);
@@ -88,7 +85,7 @@ export const googleRegister = async (token: string, csrfToken: string) => {
 
   return {
     status,
-    user: data.user, // Return the user object for further use
+    user: data.user,
     message: "Registration successful",
   };
 };

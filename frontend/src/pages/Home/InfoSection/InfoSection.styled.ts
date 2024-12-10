@@ -165,6 +165,12 @@ export const CardImgWrapper = styled.div`
   right: -125px;
   bottom: -180px;
 
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
   @media screen and (max-width: 1320px) {
     right: -40px;
     bottom: -120px;

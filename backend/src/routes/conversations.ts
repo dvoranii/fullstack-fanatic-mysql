@@ -6,29 +6,32 @@ import { csrfProtection } from "../middleware/csrf";
 
 const router = express.Router();
 
-router.get("/existing", authenticate, async (req: Request, res: Response) => {
-  const { user1_id, user2_id } = req.query;
+router.get(
+  "/existing",
+  authenticate,
+  async (req: Request, res: Response): Promise<void> => {
+    const { user1_id, user2_id } = req.query;
 
-  try {
-    const connection = await connectionPromise;
+    try {
+      const connection = await connectionPromise;
 
-    const [existingConversation] = await connection.execute<RowDataPacket[]>(
-      "SELECT id FROM conversations WHERE (user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)",
-      [user1_id, user2_id, user2_id, user1_id]
-    );
+      const [existingConversation] = await connection.execute<RowDataPacket[]>(
+        "SELECT id FROM conversations WHERE (user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)",
+        [user1_id, user2_id, user2_id, user1_id]
+      );
 
-    if (existingConversation.length > 0) {
-      return res
-        .status(200)
-        .json({ exists: true, id: existingConversation[0].id });
+      if (existingConversation.length > 0) {
+        res.status(200).json({ exists: true, id: existingConversation[0].id });
+        return;
+      }
+
+      res.status(200).json({ exists: false });
+    } catch (err) {
+      console.error("Error checking existing conversation:", err);
+      res.status(500).json({ error: "Failed to check conversation" });
     }
-
-    res.status(200).json({ exists: false });
-  } catch (err) {
-    console.error("Error checking existing conversation:", err);
-    res.status(500).json({ error: "Failed to check conversation" });
   }
-});
+);
 
 router.post(
   "/",
@@ -56,7 +59,7 @@ router.post(
 router.get(
   "/:conversationId",
   authenticate,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     const { conversationId } = req.params;
     const userId = req.user?.userId;
 
@@ -69,7 +72,8 @@ router.get(
       );
 
       if (conversation.length === 0) {
-        return res.status(404).json({ error: "Conversation not found" });
+        res.status(404).json({ error: "Conversation not found" });
+        return;
       }
 
       await connection.execute<ResultSetHeader>(
@@ -116,7 +120,7 @@ router.patch(
   "/:conversationId/read",
   authenticate,
   csrfProtection,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     const { conversationId } = req.params;
     const userId = req.user?.userId;
 
@@ -129,7 +133,8 @@ router.patch(
       );
 
       if (conversation.length === 0) {
-        return res.status(404).json({ error: "Conversation not found" });
+        res.status(404).json({ error: "Conversation not found" });
+        return;
       }
 
       const { user1_id, user2_id } = conversation[0];
@@ -145,9 +150,10 @@ router.patch(
           [conversationId]
         );
       } else {
-        return res
+        res
           .status(403)
           .json({ error: "You are not part of this conversation" });
+        return;
       }
 
       res.status(200).json({ message: "Conversation marked as read" });
@@ -158,18 +164,22 @@ router.patch(
   }
 );
 
-router.get("/", authenticate, async (req: Request, res: Response) => {
-  const userId = req.user?.userId;
+router.get(
+  "/",
+  authenticate,
+  async (req: Request, res: Response): Promise<void> => {
+    const userId = req.user?.userId;
 
-  if (!userId) {
-    return res.status(400).json({ error: "User ID is required" });
-  }
+    if (!userId) {
+      res.status(400).json({ error: "User ID is required" });
+      return;
+    }
 
-  try {
-    const connection = await connectionPromise;
+    try {
+      const connection = await connectionPromise;
 
-    const [conversations] = await connection.execute<RowDataPacket[]>(
-      `
+      const [conversations] = await connection.execute<RowDataPacket[]>(
+        `
       SELECT conversations.*, 
              (SELECT MAX(sent_at) FROM messages WHERE messages.conversation_id = conversations.id) AS last_message_at 
       FROM conversations 
@@ -177,21 +187,22 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
          OR (user2_id = ? AND is_deleted_user2 = 0)
       ORDER BY last_message_at DESC
       `,
-      [userId, userId]
-    );
+        [userId, userId]
+      );
 
-    res.status(200).json(conversations);
-  } catch (err) {
-    console.error("Error fetching conversations:", err);
-    res.status(500).json({ error: "Failed to fetch conversations" });
+      res.status(200).json(conversations);
+    } catch (err) {
+      console.error("Error fetching conversations:", err);
+      res.status(500).json({ error: "Failed to fetch conversations" });
+    }
   }
-});
+);
 
 router.delete(
   "/:conversationId",
   authenticate,
   csrfProtection,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     const { conversationId } = req.params;
     const userId = req.user?.userId;
 
@@ -204,15 +215,17 @@ router.delete(
       );
 
       if (conversation.length === 0) {
-        return res.status(404).json({ error: "Conversation not found" });
+        res.status(404).json({ error: "Conversation not found" });
+        return;
       }
 
       const { user1_id, user2_id } = conversation[0];
 
       if (userId !== user1_id && userId !== user2_id) {
-        return res
+        res
           .status(403)
           .json({ error: "You are not part of this conversation" });
+        return;
       }
 
       if (userId === user1_id) {

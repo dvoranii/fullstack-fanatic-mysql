@@ -38,7 +38,7 @@ const NavBar: React.FC = () => {
     <Nav>
       <NavLinkStyled to="/" underlinewidth="0%">
         <LogoWrapper>
-          <Logo src={FSFLogo} />
+          <Logo src={FSFLogo} alt="logo" width="100" height="100" />
         </LogoWrapper>
       </NavLinkStyled>
 
@@ -76,7 +76,13 @@ const NavBar: React.FC = () => {
           {profile ? (
             <AccountBtnsWrapper>
               <NetworkPageLink to="/network">
-                <img src={NetworkIcon} alt="network page" title="Network" />
+                <img
+                  src={NetworkIcon}
+                  alt="network page"
+                  title="Network"
+                  height="54"
+                  width="50"
+                />
               </NetworkPageLink>
               <ShoppingCart />
               <NotificationButton />
@@ -141,16 +147,28 @@ const NavBar: React.FC = () => {
                   alt="network page"
                   className="mobile-network-icon"
                   title="Network"
+                  width="25"
+                  height="25"
                 />
               </NetworkPageLink>
               <ShoppingCartLink to="/my-cart">
-                <img src={ShoppingCartIcon} alt="" />
+                <img
+                  src={ShoppingCartIcon}
+                  alt="shopping cart icon"
+                  width="25"
+                  height="25"
+                />
               </ShoppingCartLink>
               <NotificationLink to="#">
-                <img src={BellIcon} alt="" />
+                <img src={BellIcon} alt="bell icon" width="25" height="25" />
               </NotificationLink>
               <UserProfileLink to="/my-account">
-                <img src={UserProfileIcon} alt="" />
+                <img
+                  src={UserProfileIcon}
+                  alt="profile icon"
+                  width="25"
+                  height="25"
+                />
               </UserProfileLink>
             </AccountBtnsWrapper>
           ) : (

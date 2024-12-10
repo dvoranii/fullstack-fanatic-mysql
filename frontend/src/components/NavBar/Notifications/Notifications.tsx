@@ -128,6 +128,8 @@ const Notifications: React.FC = () => {
           onClick={handleDropdownToggle}
           alt="Notifications"
           title="Notifications"
+          width="50"
+          height="50"
         />
         <NotificationBadge
           count={unreadNotificationCount}

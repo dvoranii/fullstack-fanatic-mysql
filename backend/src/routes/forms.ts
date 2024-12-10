@@ -12,12 +12,13 @@ const router = express.Router();
     "/consultation",
     authenticate,
     csrfProtection,
-    async (req, res) => {
+    async (req, res): Promise<void> => {
       const { name, email, message } = req.body;
 
       const errors = validateGenericForm(name, email, message);
       if (errors.length > 0) {
-        return res.status(400).json({ errors });
+        res.status(400).json({ errors });
+        return;
       }
 
       try {
@@ -28,38 +29,46 @@ const router = express.Router();
           userMessage: `Thank you for reaching out to us, ${name}. We will get back to you shortly.`,
         });
 
-        return res
-          .status(200)
-          .json({ message: "Form submitted successfully." });
+        res.status(200).json({ message: "Form submitted successfully." });
+        return;
       } catch (error) {
         console.error("Error sending email", error);
-        return res.status(500).json({ error: "Failed to send email" });
+        res.status(500).json({ error: "Failed to send email" });
+        return;
       }
     }
   );
 
-  router.post("/contact", authenticate, csrfProtection, async (req, res) => {
-    const { fullName, email, message } = req.body;
+  router.post(
+    "/contact",
+    authenticate,
+    csrfProtection,
+    async (req, res): Promise<void> => {
+      const { fullName, email, message } = req.body;
 
-    const errors = validateGenericForm(fullName, email, message);
-    if (errors.length > 0) {
-      return res.status(400).json({ errors });
+      const errors = validateGenericForm(fullName, email, message);
+      if (errors.length > 0) {
+        res.status(400).json({ errors });
+        return;
+      }
+
+      try {
+        await sendEmails({
+          to: email,
+          subject: "New Contact Form Submission",
+          ownerMessage: `You have received a new contact form submission.\n\nFull Name: ${fullName}\nEmail: ${email}\nMessage: ${message}`,
+          userMessage: `Thank you for contacting us, ${fullName}. We will get back to you shortly.`,
+        });
+
+        res.status(200).json({ message: "Form submitted successfully." });
+        return;
+      } catch (error) {
+        console.error("Error sending email", error);
+        res.status(500).json({ error: "Failed to send email" });
+        return;
+      }
     }
-
-    try {
-      await sendEmails({
-        to: email,
-        subject: "New Contact Form Submission",
-        ownerMessage: `You have received a new contact form submission.\n\nFull Name: ${fullName}\nEmail: ${email}\nMessage: ${message}`,
-        userMessage: `Thank you for contacting us, ${fullName}. We will get back to you shortly.`,
-      });
-
-      return res.status(200).json({ message: "Form submitted successfully." });
-    } catch (error) {
-      console.error("Error sending email", error);
-      return res.status(500).json({ error: "Failed to send email" });
-    }
-  });
+  );
 })();
 
 export default router;

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, Suspense, ComponentType } from "react";
 import { Navigate, useLocation, useParams } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import { tutorialContent } from "../../assets/tutorialContent";
@@ -25,12 +25,14 @@ const isBlogPremium = (id: string | undefined) => {
 };
 
 interface ProtectedRouteProps {
-  element: JSX.Element;
+  component: ComponentType<any>;
+  props?: Record<string, any>;
   purchasedItemIds?: number[];
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
-  element,
+  component: Component,
+  props = {},
   purchasedItemIds,
 }) => {
   const { profile, loading } = useContext(UserContext) || {};
@@ -54,7 +56,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     const accessLevel = getTutorialAccessLevel(id);
 
     if (accessLevel === "free") {
-      return element;
+      return (
+        <Suspense fallback={<LoadingSpinner />}>
+          <Component {...props} />
+        </Suspense>
+      );
     }
 
     if (!profile) {
@@ -64,12 +70,22 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     const purchasedTutorial = purchasedItemIds?.includes(tutorialId);
 
     if (purchasedTutorial) {
-      return element;
+      return (
+        <Suspense fallback={<LoadingSpinner />}>
+          <Component {...props} />
+        </Suspense>
+      );
     }
 
     const requiredLevel = getTutorialPremiumLevel(id);
 
-    if (!requiredLevel) return element;
+    if (!requiredLevel) {
+      return (
+        <Suspense fallback={<LoadingSpinner />}>
+          <Component {...props} />
+        </Suspense>
+      );
+    }
 
     const levels = ["starter", "casual pro", "premium"];
     const userIndex = levels.indexOf(profile?.premiumLevel || "");
@@ -79,17 +95,29 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       return <Navigate to="/plans-and-pricing" replace />;
     }
 
-    return element;
+    return (
+      <Suspense fallback={<LoadingSpinner />}>
+        <Component {...props} />
+      </Suspense>
+    );
   } else if (isBlogRoute) {
     const blogId = Number(id);
     const isPremium = isBlogPremium(id);
 
     if (!profile && !isPremium) {
-      return element;
+      return (
+        <Suspense fallback={<LoadingSpinner />}>
+          <Component {...props} />
+        </Suspense>
+      );
     }
 
     if (purchasedItemIds?.includes(blogId) || !isPremium) {
-      return element;
+      return (
+        <Suspense fallback={<LoadingSpinner />}>
+          <Component {...props} />
+        </Suspense>
+      );
     }
 
     if (!profile) {
@@ -104,10 +132,22 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       return <Navigate to="/plans-and-pricing" replace />;
     }
 
-    return element;
+    return (
+      <Suspense fallback={<LoadingSpinner />}>
+        <Component {...props} />
+      </Suspense>
+    );
   }
 
-  return element;
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <Component
+        {...props}
+        purchasedItemIds={purchasedItemIds}
+        userId={id ? Number(id) : profile?.id}
+      />
+    </Suspense>
+  );
 };
 
 export default ProtectedRoute;

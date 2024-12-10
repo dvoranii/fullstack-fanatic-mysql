@@ -19,30 +19,32 @@ import { getUserIdFromToken } from "../utils/getUserIdFromToken";
 
 const router = express.Router();
 
-router.get("/:contentType/:contentId", async (req: Request, res: Response) => {
-  const { contentType, contentId } = req.params;
-  const userId = getUserIdFromToken(req.headers.authorization);
-  const includeLikedStatus = req.query.includeLikedStatus === "true";
+router.get(
+  "/:contentType/:contentId",
+  async (req: Request, res: Response): Promise<void> => {
+    const { contentType, contentId } = req.params;
+    const userId = getUserIdFromToken(req.headers.authorization);
+    const includeLikedStatus = req.query.includeLikedStatus === "true";
 
-  const page = parseInt(req.query.page as string) || 1;
-  const topLevelLimit = parseInt(req.query.topLevelLimit as string) || 5;
-  const replyLimit = parseInt(req.query.replyLimit as string) || 3;
-  const offset = parseInt(req.query.offset as string) || 0;
+    const page = parseInt(req.query.page as string) || 1;
+    const topLevelLimit = parseInt(req.query.topLevelLimit as string) || 5;
+    const replyLimit = parseInt(req.query.replyLimit as string) || 3;
+    const offset = parseInt(req.query.offset as string) || 0;
 
-  const parentCommentId = req.query.parentCommentId
-    ? parseInt(req.query.parentCommentId as string, 10)
-    : null;
+    const parentCommentId = req.query.parentCommentId
+      ? parseInt(req.query.parentCommentId as string, 10)
+      : null;
 
-  try {
-    const connection = await connectionPromise;
+    try {
+      const connection = await connectionPromise;
 
-    let commentsQuery;
-    let params;
+      let commentsQuery;
+      let params;
 
-    if (!parentCommentId) {
-      // Fetching top-level comments
-      const offset = (page - 1) * topLevelLimit;
-      commentsQuery = `
+      if (!parentCommentId) {
+        // Fetching top-level comments
+        const offset = (page - 1) * topLevelLimit;
+        commentsQuery = `
           SELECT c.*, u.name as user_name, u.profile_picture, 
                  EXISTS (SELECT 1 FROM comments r WHERE r.parent_comment_id = c.id) as has_replies 
           FROM comments c 
@@ -51,9 +53,9 @@ router.get("/:contentType/:contentId", async (req: Request, res: Response) => {
           ORDER BY c.created_at DESC
           LIMIT ? OFFSET ?
         `;
-      params = [contentType, contentId, topLevelLimit, offset];
-    } else {
-      commentsQuery = `
+        params = [contentType, contentId, topLevelLimit, offset];
+      } else {
+        commentsQuery = `
           SELECT c.*, u.name as user_name, u.profile_picture, 
                  EXISTS (SELECT 1 FROM comments r WHERE r.parent_comment_id = c.id) as has_replies 
           FROM comments c 
@@ -62,82 +64,86 @@ router.get("/:contentType/:contentId", async (req: Request, res: Response) => {
           ORDER BY c.created_at ASC
           LIMIT ? OFFSET ?
         `;
-      params = [
-        contentType,
-        contentId,
-        parentCommentId,
-        replyLimit + 1,
-        offset,
-      ];
-    }
+        params = [
+          contentType,
+          contentId,
+          parentCommentId,
+          replyLimit + 1,
+          offset,
+        ];
+      }
 
-    const [rows] = await connection.query<RowDataPacket[]>(
-      commentsQuery,
-      params
-    );
-
-    if (!rows || rows.length === 0) {
-      return res.status(200).json({ comments: [], hasMore: false });
-    }
-
-    let commentsWithReplies: Comment[] = rows as Comment[];
-
-    if (parentCommentId) {
-      const hasMoreReplies = commentsWithReplies.length > replyLimit;
-
-      commentsWithReplies = commentsWithReplies.slice(0, replyLimit);
-
-      commentsWithReplies = await Promise.all(
-        commentsWithReplies.map(async (comment) => {
-          const { replies, hasMore } = await fetchReplies(
-            connection,
-            comment.id,
-            replyLimit,
-            offset,
-            userId
-          );
-
-          return {
-            ...comment,
-            replies,
-            hasMoreReplies: hasMore,
-          };
-        })
+      const [rows] = await connection.query<RowDataPacket[]>(
+        commentsQuery,
+        params
       );
 
-      return res.json({
-        comments: commentsWithReplies,
-        hasMore: hasMoreReplies,
-      });
-    }
+      if (!rows || rows.length === 0) {
+        res.status(200).json({ comments: [], hasMore: false });
+        return;
+      }
 
-    if (includeLikedStatus && userId) {
-      const likedCommentIds = await fetchCommentLikes(userId);
+      let commentsWithReplies: Comment[] = rows as Comment[];
 
-      const setLikedStatus = (comments: Comment[]) => {
-        comments.forEach((comment) => {
-          comment.likedByUser = likedCommentIds.includes(comment.id);
-          if (comment.replies && comment.replies.length > 0) {
-            setLikedStatus(comment.replies);
-          }
+      if (parentCommentId) {
+        const hasMoreReplies = commentsWithReplies.length > replyLimit;
+
+        commentsWithReplies = commentsWithReplies.slice(0, replyLimit);
+
+        commentsWithReplies = await Promise.all(
+          commentsWithReplies.map(async (comment) => {
+            const { replies, hasMore } = await fetchReplies(
+              connection,
+              comment.id,
+              replyLimit,
+              offset,
+              userId
+            );
+
+            return {
+              ...comment,
+              replies,
+              hasMoreReplies: hasMore,
+            };
+          })
+        );
+
+        res.json({
+          comments: commentsWithReplies,
+          hasMore: hasMoreReplies,
         });
-      };
+        return;
+      }
 
-      setLikedStatus(commentsWithReplies);
-    }
+      if (includeLikedStatus && userId) {
+        const likedCommentIds = await fetchCommentLikes(userId);
 
-    if (!parentCommentId) {
-      const totalCount = await fetchTotalComments(
-        contentType,
-        Number(contentId)
-      );
-      const hasMore = offset + topLevelLimit < totalCount;
-      return res.json({ comments: commentsWithReplies, hasMore });
+        const setLikedStatus = (comments: Comment[]) => {
+          comments.forEach((comment) => {
+            comment.likedByUser = likedCommentIds.includes(comment.id);
+            if (comment.replies && comment.replies.length > 0) {
+              setLikedStatus(comment.replies);
+            }
+          });
+        };
+
+        setLikedStatus(commentsWithReplies);
+      }
+
+      if (!parentCommentId) {
+        const totalCount = await fetchTotalComments(
+          contentType,
+          Number(contentId)
+        );
+        const hasMore = offset + topLevelLimit < totalCount;
+        res.json({ comments: commentsWithReplies, hasMore });
+        return;
+      }
+    } catch (err) {
+      res.status(500).json({ error: (err as Error).message });
     }
-  } catch (err) {
-    res.status(500).json({ error: (err as Error).message });
   }
-});
+);
 
 router.post(
   "/",
@@ -174,7 +180,7 @@ router.put(
   "/:id",
   authenticate,
   csrfProtection,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params as { id: string };
     const { content } = req.body as { content: string };
     const { userId } = req.user!;
@@ -183,9 +189,8 @@ router.put(
       const commentOwnerId = await fetchCommentOwner(Number(id));
 
       if (commentOwnerId !== userId) {
-        return res
-          .status(403)
-          .json({ error: "Unauthorized to edit this comment" });
+        res.status(403).json({ error: "Unauthorized to edit this comment" });
+        return;
       }
 
       await updateComment(Number(id), content);
@@ -344,7 +349,7 @@ router.delete(
   "/:id",
   authenticate,
   csrfProtection,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params as { id: string };
     const { userId } = req.user!;
 
@@ -352,9 +357,8 @@ router.delete(
       const commentOwnerId = await fetchCommentOwner(Number(id));
 
       if (commentOwnerId !== userId) {
-        return res
-          .status(403)
-          .json({ error: "Unauthorized to delete this comment" });
+        res.status(403).json({ error: "Unauthorized to delete this comment" });
+        return;
       }
 
       await deleteComment(Number(id));
@@ -416,49 +420,54 @@ router.get(
   }
 );
 
-router.get("/reply-and-parent", async (req: Request, res: Response) => {
-  const { id } = req.query;
+router.get(
+  "/reply-and-parent",
+  async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.query;
 
-  try {
-    const connection = await connectionPromise;
+    try {
+      const connection = await connectionPromise;
 
-    let commentsQuery = `
+      let commentsQuery = `
       SELECT c.*, u.name as user_name, u.profile_picture, c.parent_comment_id
       FROM comments c
       JOIN users u ON c.user_id = u.id
       WHERE c.id = ?
     `;
 
-    const params: any[] = [Number(id)];
+      const params: any[] = [Number(id)];
 
-    const [comments] = await connection.query<RowDataPacket[]>(
-      commentsQuery,
-      params
-    );
+      const [comments] = await connection.query<RowDataPacket[]>(
+        commentsQuery,
+        params
+      );
 
-    if (comments.length === 0) {
-      return res.status(404).json({ message: "Comment not found" });
-    }
+      if (comments.length === 0) {
+        res.status(404).json({ message: "Comment not found" });
+        return;
+      }
 
-    const initialComment = comments[0];
+      const initialComment = comments[0];
 
-    if (initialComment.parent_comment_id === null) {
-      return res.status(200).json({
+      if (initialComment.parent_comment_id === null) {
+        res.status(200).json({
+          initialComment,
+          topLevelComment: initialComment,
+        });
+        return;
+      }
+
+      const topLevelComment = await findTopLevelComment(Number(id), connection);
+
+      res.status(200).json({
         initialComment,
-        topLevelComment: initialComment,
+        topLevelComment,
       });
+    } catch (err) {
+      console.error("Error fetching all comments:", err);
+      res.status(500).json({ error: (err as Error).message });
     }
-
-    const topLevelComment = await findTopLevelComment(Number(id), connection);
-
-    res.status(200).json({
-      initialComment,
-      topLevelComment,
-    });
-  } catch (err) {
-    console.error("Error fetching all comments:", err);
-    res.status(500).json({ error: (err as Error).message });
   }
-});
+);
 
 export default router;

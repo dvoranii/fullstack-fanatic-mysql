@@ -96,6 +96,8 @@ const ShoppingCart: React.FC = () => {
           alt="Cart"
           title="Shopping Cart"
           onClick={toggleCartVisibility}
+          height="50"
+          width="50"
         />
 
         <Dropdown isVisible={isCartVisible} alignRight width="400px">

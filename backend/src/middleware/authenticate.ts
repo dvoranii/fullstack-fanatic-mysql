@@ -16,7 +16,8 @@ export const authenticate = (
   const authHeader = req.headers["authorization"] as string | undefined;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ error: "Unauthorized" });
+    res.status(401).json({ error: "Unauthorized" });
+    return;
   }
 
   const token = authHeader.split(" ")[1];
@@ -40,6 +41,7 @@ export const authenticate = (
 
     next();
   } catch (error) {
-    return res.status(401).json({ error: "Unauthorized" });
+    res.status(401).json({ error: "Unauthorized" });
+    return;
   }
 };

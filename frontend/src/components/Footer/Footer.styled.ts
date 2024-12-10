@@ -7,6 +7,7 @@ export const FooterWrapperOuter = styled.footer`
   background-color: ${colors.secondary};
   color: #fff;
   width: 100%;
+  min-height: 100px;
   padding: 20px 0;
   user-select: none;
   background-image: linear-gradient(
@@ -29,6 +30,7 @@ export const FooterWrapperInner = styled.div`
 
   .seperator {
     width: 220px;
+    height: auto;
     grid-column: 2;
     grid-row: 2;
     margin-bottom: 2.4rem;
@@ -154,7 +156,7 @@ export const IconWrapper = styled.div`
 
 export const SocialLinkIcon = styled.img`
   width: 30px;
-  height: 30px;
+  height: auto;
   transition: all 300ms ease;
 
   ${IconWrapper}:hover & {

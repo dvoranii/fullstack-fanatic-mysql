@@ -19,8 +19,19 @@ import BgSquaresAndTriangle from "../../../assets/images/SquaresAndTriangles.svg
 const IntroSection: React.FC = () => {
   return (
     <IntroSectionWrapper>
-      <BgSquaresAndTriangleImg src={BgSquaresAndTriangle} alt="" />
-      <LeftGraphic src={PersonGraphic} alt="Person Graphic" loading="lazy" />
+      <BgSquaresAndTriangleImg
+        src={BgSquaresAndTriangle}
+        alt=""
+        width="260"
+        height="153"
+      />
+      <LeftGraphic
+        src={PersonGraphic}
+        alt="Person Graphic"
+        loading="lazy"
+        width="314"
+        height="314"
+      />
       <ContentWrapper>
         <Title>
           The <span>#1</span> Platform for Current <span>AND</span> Aspiring Web
@@ -36,7 +47,13 @@ const IntroSection: React.FC = () => {
         </IntroText>
         <ButtonWrapper>
           <GetStartedButton>Get Started</GetStartedButton>
-          <SwirlyArrow src={SwirlyArrowImg} alt="Swirly Arrow" loading="lazy" />
+          <SwirlyArrow
+            src={SwirlyArrowImg}
+            alt="Swirly Arrow"
+            loading="lazy"
+            width="120"
+            height="95"
+          />
         </ButtonWrapper>
       </ContentWrapper>
       <ImageWrapper>
@@ -44,6 +61,8 @@ const IntroSection: React.FC = () => {
           src={CornerEllipseImg}
           alt="Corner Ellipse"
           loading="lazy"
+          width="235"
+          height="200"
         />
       </ImageWrapper>
     </IntroSectionWrapper>

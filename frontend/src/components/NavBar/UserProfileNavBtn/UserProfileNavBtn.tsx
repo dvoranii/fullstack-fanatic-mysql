@@ -108,6 +108,8 @@ const UserProfileNavBtn: React.FC = () => {
           alt="Profile Icon"
           title="User Profile"
           hoverEffect="opacity: 0.8;"
+          height="50"
+          width="50"
         />
         <Dropdown isVisible={isDropdownVisible} alignRight>
           <ProfilePictureAndInfoWrapper>

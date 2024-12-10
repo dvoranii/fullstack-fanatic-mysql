@@ -101,12 +101,13 @@ router.delete(
   "/",
   authenticate,
   csrfProtection,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     const { item_id, content_type } = req.body;
     const { userId: user_id, googleId: google_id } = req.user!;
 
     if (!item_id || !content_type) {
-      return res.status(400).json({ error: "Missing required parameters" });
+      res.status(400).json({ error: "Missing required parameters" });
+      return;
     }
 
     try {

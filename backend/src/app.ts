@@ -31,15 +31,27 @@ const app = express();
 app.use(cookieParser());
 security(app);
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:4173",
+  "http://localhost:5000",
+  process.env.CLIENT_URL || "https://your-production-frontend.com",
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
     allowedHeaders: ["Authorization", "Content-Type", "x-csrf-token"],
   })
 );
-
 app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
   next();
@@ -52,6 +64,13 @@ app.use((req, res, next) => {
     express.json()(req, res, next);
   }
 });
+
+// const frontendPath = path.join(__dirname, "../../frontend/dist");
+// app.use(express.static(frontendPath));
+
+// app.get("*", (_req, res) => {
+//   res.sendFile(path.join(frontendPath, "index.html"));
+// });
 
 app.use(express.urlencoded({ extended: true }));
 

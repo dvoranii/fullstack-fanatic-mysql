@@ -85,6 +85,7 @@ export const RightSideWrapperInner = styled.div`
     top: 0;
     right: 0;
     width: 60px;
+    height: auto;
     margin: 20px;
   }
 
@@ -103,6 +104,7 @@ export const LogoWrapper = styled.div`
 
   .orange-logo {
     width: clamp(150px, 30vw, 400px);
+    height: auto;
   }
 `;
 
@@ -114,6 +116,7 @@ export const ElipseWrapper = styled.div`
 
   img {
     width: 250px;
+    height: auto;
   }
 
   @media screen and (max-width: 768px) {
@@ -301,6 +304,7 @@ export const SocialIconWrapper = styled.div`
 
   img {
     width: 40px;
+    height: auto;
   }
 
   a {

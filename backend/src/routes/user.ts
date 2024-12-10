@@ -19,7 +19,7 @@ dotenv.config();
 
 const router = express.Router();
 
-router.post("/register", async (req: Request, res: Response) => {
+router.post("/register", async (req: Request, res: Response): Promise<void> => {
   const { email, name, password } = req.body;
 
   const defaultProfilePicture = "/assets/images/profile-icon.png";
@@ -33,9 +33,8 @@ router.post("/register", async (req: Request, res: Response) => {
 
     if (existingUserByEmail.length > 0) {
       console.log("User already exists");
-      return res
-        .status(409)
-        .json({ message: "User with this email already exists" });
+      res.status(409).json({ message: "User with this email already exists" });
+      return;
     }
 
     const [existingUserByName] = await connection.execute<RowDataPacket[]>(
@@ -45,7 +44,8 @@ router.post("/register", async (req: Request, res: Response) => {
 
     if (existingUserByName.length > 0) {
       console.log("Username already exists");
-      return res.status(409).json({ message: "Username already taken" });
+      res.status(409).json({ message: "Username already taken" });
+      return;
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -65,7 +65,7 @@ router.post("/register", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/login", async (req: Request, res: Response) => {
+router.post("/login", async (req: Request, res: Response): Promise<void> => {
   const { username, password } = req.body;
 
   try {
@@ -76,14 +76,16 @@ router.post("/login", async (req: Request, res: Response) => {
     );
 
     if (results.length === 0) {
-      return res.status(401).json({ message: "User not found" });
+      res.status(401).json({ message: "User not found" });
+      return;
     }
 
     const user = results[0];
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid password" });
+      res.status(401).json({ message: "Invalid password" });
+      return;
     }
 
     const jwtToken = createJwtToken(user.id, user.name);
@@ -107,11 +109,12 @@ router.post("/logout", (req, res) => {
   res.status(200).json({ message: "Logged Out" });
 });
 
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response): Promise<void> => {
   const { google_id } = req.query;
 
   if (typeof google_id !== "string") {
-    return res.status(400).json({ error: "Invalid google_id" });
+    res.status(400).json({ error: "Invalid google_id" });
+    return;
   }
 
   try {
@@ -135,11 +138,12 @@ router.get("/", async (req: Request, res: Response) => {
 router.post(
   "/google-register",
   csrfProtection,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     const { token } = req.body;
 
     if (!token) {
-      return res.status(400).json({ error: "Token is required" });
+      res.status(400).json({ error: "Token is required" });
+      return;
     }
 
     try {
@@ -168,7 +172,8 @@ router.post(
       const existingUser = await fetchUserByColumn("google_id", googleId);
 
       if (existingUser.length > 0) {
-        return res.status(409).json({ message: "User already exists" });
+        res.status(409).json({ message: "User already exists" });
+        return;
       }
 
       const userId = await insertUser(
@@ -180,9 +185,11 @@ router.post(
         googleProfilePicture ?? null
       );
 
+      // Generate tokens
       const jwtToken = createJwtToken(userId, email, googleId);
       const refreshToken = createRefreshToken(userId, email, googleId);
 
+      // Return tokens and user data in the response body
       res.status(201).json({
         message: "Registration successful",
         accessToken: jwtToken,
@@ -205,11 +212,12 @@ router.post(
 router.post(
   "/google-login",
   csrfProtection,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     const { token } = req.body;
 
     if (!token) {
-      return res.status(400).json({ error: "Token is required" });
+      res.status(400).json({ error: "Token is required" });
+      return;
     }
 
     try {
@@ -233,7 +241,8 @@ router.post(
       const existingUser = await fetchUserByColumn("google_id", googleId);
 
       if (existingUser.length === 0) {
-        return res.status(404).json({ message: "User not found" });
+        res.status(404).json({ message: "User not found" });
+        return;
       }
 
       const userId = existingUser[0].id;
@@ -241,7 +250,7 @@ router.post(
       const jwtToken = createJwtToken(userId, email, googleId);
       const refreshToken = createRefreshToken(userId, email, googleId);
 
-      return res.status(200).json({
+      res.status(200).json({
         message: "Login successful",
         accessToken: jwtToken,
         refreshToken: refreshToken,
@@ -252,6 +261,7 @@ router.post(
           profile_picture: existingUser[0].profile_picture,
         },
       });
+      return;
     } catch (error) {
       console.error("Error during Google login: ", error);
       res.status(500).json({ error: "Failed to log in with Google" });
@@ -259,77 +269,86 @@ router.post(
   }
 );
 
-router.post("/refresh-token", async (req: Request, res: Response) => {
-  const { refreshToken } = req.body;
+router.post(
+  "/refresh-token",
+  async (req: Request, res: Response): Promise<void> => {
+    const { refreshToken } = req.body;
 
-  if (!refreshToken) {
-    return res.status(401).json({ error: "Refresh token is required" });
-  }
-
-  try {
-    const payload = verifyRefreshToken(refreshToken);
-    const newJwtToken = createJwtToken(
-      payload.userId,
-      payload.email,
-      payload.googleId || undefined
-    );
-
-    res.status(200).json({ token: newJwtToken });
-  } catch (error) {
-    console.error("Error verifying refresh token:", error);
-    res.status(401).json({ error: "Invalid refresh token" });
-  }
-});
-
-router.get("/user-profile/:id", async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  try {
-    const connection = await connectionPromise;
-    const [user] = await connection.query<RowDataPacket[]>(
-      "Select id, email, name, profile_picture, banner_image, profession, social_links, bio FROM users WHERE id = ?",
-      [id]
-    );
-
-    if (!user.length) {
-      return res.status(404).json({ message: "User not found" });
+    if (!refreshToken) {
+      res.status(401).json({ error: "Refresh token is required" });
+      return;
     }
 
-    const [favouriteTutorials] = await connection.query<RowDataPacket[]>(
-      `SELECT t.* from tutorials t 
+    try {
+      const payload = verifyRefreshToken(refreshToken);
+      const newJwtToken = createJwtToken(
+        payload.userId,
+        payload.email,
+        payload.googleId || undefined
+      );
+
+      res.status(200).json({ token: newJwtToken });
+    } catch (error) {
+      console.error("Error verifying refresh token:", error);
+      res.status(401).json({ error: "Invalid refresh token" });
+    }
+  }
+);
+
+router.get(
+  "/user-profile/:id",
+  async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.params;
+
+    try {
+      const connection = await connectionPromise;
+      const [user] = await connection.query<RowDataPacket[]>(
+        "Select id, email, name, profile_picture, banner_image, profession, social_links, bio FROM users WHERE id = ?",
+        [id]
+      );
+
+      if (!user.length) {
+        res.status(404).json({ message: "User not found" });
+        return;
+      }
+
+      const [favouriteTutorials] = await connection.query<RowDataPacket[]>(
+        `SELECT t.* from tutorials t 
       JOIN favourites f ON t.id = f.item_id 
       WHERE f.user_id = ? AND f.content_type = 'tutorial'`,
-      [id]
-    );
+        [id]
+      );
 
-    const [favouriteBlogs] = await connection.query<RowDataPacket[]>(
-      `SELECT b.* FROM blogs b
+      const [favouriteBlogs] = await connection.query<RowDataPacket[]>(
+        `SELECT b.* FROM blogs b
        JOIN favourites f ON b.id = f.item_id
        WHERE f.user_id = ? AND f.content_type = 'blog'`,
-      [id]
-    );
+        [id]
+      );
 
-    res.json({
-      user: user[0],
-      favouriteTutorials,
-      favouriteBlogs,
-    });
-  } catch (error) {
-    console.error("Failed to load user page: ", error);
-    res.status(500).json({ error: "Failed to fetch public profile" });
+      res.json({
+        user: user[0],
+        favouriteTutorials,
+        favouriteBlogs,
+      });
+    } catch (error) {
+      console.error("Failed to load user page: ", error);
+      res.status(500).json({ error: "Failed to fetch public profile" });
+    }
   }
-});
+);
 
 router.post(
   "/:id/follow",
   authenticate,
   csrfProtection,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     const followerId = req.user?.userId;
     const followedId = parseInt(req.params.id);
 
     if (!followerId || !followedId) {
-      return res.status(400).json({ message: "Invalid user IDs" });
+      res.status(400).json({ message: "Invalid user IDs" });
+      return;
     }
 
     try {
@@ -351,9 +370,8 @@ router.post(
       if (error instanceof Error && "code" in error) {
         const sqlError = error as { code: string };
         if (sqlError.code === "ER_DUP_ENTRY") {
-          return res
-            .status(409)
-            .json({ message: "Already following this user" });
+          res.status(409).json({ message: "Already following this user" });
+          return;
         }
       }
 
@@ -366,12 +384,13 @@ router.post(
 router.delete(
   "/:id/follow",
   authenticate,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     const followerId = req.user?.userId;
     const followedId = parseInt(req.params.id);
 
     if (!followerId || !followedId) {
-      return res.status(400).json({ message: "Invalid user IDs" });
+      res.status(400).json({ message: "Invalid user IDs" });
+      return;
     }
 
     try {
@@ -389,35 +408,40 @@ router.delete(
   }
 );
 
-router.get("/:id/followers", async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const followerId = getUserIdFromToken(req.headers.authorization);
+router.get(
+  "/:id/followers",
+  async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.params;
+    const followerId = getUserIdFromToken(req.headers.authorization);
 
-  try {
-    const connection = await connectionPromise;
+    try {
+      const connection = await connectionPromise;
 
-    const [countRows] = await connection.query<RowDataPacket[]>(
-      `SELECT COUNT(*) as followersCount FROM followers WHERE followed_id = ?`,
-      [id]
-    );
-
-    const followersCount = countRows[0]?.followersCount || 0;
-    let isFollowing = false;
-
-    if (followerId) {
-      const [isFollowingResult] = await connection.execute<RowDataPacket[]>(
-        "SELECT COUNT(*) AS isFollowing FROM followers WHERE follower_id = ? AND followed_id = ?",
-        [followerId, id]
+      const [countRows] = await connection.query<RowDataPacket[]>(
+        `SELECT COUNT(*) as followersCount FROM followers WHERE followed_id = ?`,
+        [id]
       );
-      isFollowing = isFollowingResult[0]?.isFollowing > 0;
-    }
 
-    return res.status(200).json({ followersCount, isFollowing });
-  } catch (err) {
-    console.error("Error fetching follow state:", err);
-    return res.status(500).json({ error: "Failed to fetch follow state" });
+      const followersCount = countRows[0]?.followersCount || 0;
+      let isFollowing = false;
+
+      if (followerId) {
+        const [isFollowingResult] = await connection.execute<RowDataPacket[]>(
+          "SELECT COUNT(*) AS isFollowing FROM followers WHERE follower_id = ? AND followed_id = ?",
+          [followerId, id]
+        );
+        isFollowing = isFollowingResult[0]?.isFollowing > 0;
+      }
+
+      res.status(200).json({ followersCount, isFollowing });
+      return;
+    } catch (err) {
+      console.error("Error fetching follow state:", err);
+      res.status(500).json({ error: "Failed to fetch follow state" });
+      return;
+    }
   }
-});
+);
 
 router.get(
   "/:id/following",
@@ -485,36 +509,41 @@ router.get("/:id/following-list", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/auth-type", authenticate, async (req: Request, res: Response) => {
-  const userId = req.user?.userId;
+router.get(
+  "/auth-type",
+  authenticate,
+  async (req: Request, res: Response): Promise<void> => {
+    const userId = req.user?.userId;
 
-  if (!userId) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-
-  try {
-    const connection = await connectionPromise;
-    const [rows] = await connection.query<RowDataPacket[]>(
-      "SELECT auth_type FROM users WHERE id = ?",
-      [userId]
-    );
-
-    if (rows.length > 0) {
-      const { auth_type } = rows[0];
-      res.status(200).json({ auth_type });
-    } else {
-      res.status(404).json({ message: "User not found" });
+    if (!userId) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
     }
-  } catch (error) {
-    console.error("Error fetching auth type:", error);
-    res.status(500).json({ error: "Failed to fetch auth type" });
+
+    try {
+      const connection = await connectionPromise;
+      const [rows] = await connection.query<RowDataPacket[]>(
+        "SELECT auth_type FROM users WHERE id = ?",
+        [userId]
+      );
+
+      if (rows.length > 0) {
+        const { auth_type } = rows[0];
+        res.status(200).json({ auth_type });
+      } else {
+        res.status(404).json({ message: "User not found" });
+      }
+    } catch (error) {
+      console.error("Error fetching auth type:", error);
+      res.status(500).json({ error: "Failed to fetch auth type" });
+    }
   }
-});
+);
 
 router.post(
   "/forgot-password",
   csrfProtection,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     const { email } = req.body;
 
     try {
@@ -525,7 +554,8 @@ router.post(
       );
 
       if (users.length === 0) {
-        return res.status(404).json({ message: "User not found" });
+        res.status(404).json({ message: "User not found" });
+        return;
       }
 
       const resetToken = crypto.randomBytes(32).toString("hex");
@@ -569,7 +599,7 @@ router.post(
 router.post(
   "/reset-password/:token",
   csrfProtection,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     const { token } = req.params;
     const { password } = req.body;
 
@@ -581,7 +611,8 @@ router.post(
       );
 
       if (users.length === 0) {
-        return res.status(400).json({ message: "Invalid or expired token" });
+        res.status(400).json({ message: "Invalid or expired token" });
+        return;
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);

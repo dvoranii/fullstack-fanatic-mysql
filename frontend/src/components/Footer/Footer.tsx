@@ -46,7 +46,14 @@ const Footer = () => {
           <CenteredSlogan>
             Full&nbsp;stack.&nbsp;Full&nbsp;potential.
           </CenteredSlogan>
-          <img className="seperator" src={Seperator} alt="" />
+          <img
+            className="seperator"
+            src={Seperator}
+            alt="seperator"
+            loading="lazy"
+            width="220"
+            height="47"
+          />
 
           <FooterSocialLinks>
             <IconWrapper>
@@ -55,7 +62,13 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <SocialLinkIcon src={githubIcon} alt="GitHub" />
+                <SocialLinkIcon
+                  src={githubIcon}
+                  alt="GitHub"
+                  loading="lazy"
+                  width="30"
+                  height="30"
+                />
               </a>
             </IconWrapper>
 
@@ -65,7 +78,13 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <SocialLinkIcon src={facebookIcon} alt="Facebook" />
+                <SocialLinkIcon
+                  src={facebookIcon}
+                  alt="Facebook"
+                  loading="lazy"
+                  width="30"
+                  height="30"
+                />
               </a>
             </IconWrapper>
             <IconWrapper>
@@ -74,7 +93,13 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <SocialLinkIcon src={codepenIcon} alt="CodePen" />
+                <SocialLinkIcon
+                  src={codepenIcon}
+                  alt="CodePen"
+                  loading="lazy"
+                  width="30"
+                  height="30"
+                />
               </a>
             </IconWrapper>
             <IconWrapper>
@@ -83,7 +108,13 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <SocialLinkIcon src={tiktokIcon} alt="TikTok" />
+                <SocialLinkIcon
+                  src={tiktokIcon}
+                  alt="TikTok"
+                  loading="lazy"
+                  width="30"
+                  height="30"
+                />
               </a>
             </IconWrapper>
           </FooterSocialLinks>
@@ -104,7 +135,13 @@ const Footer = () => {
       </FooterWrapperInner>
 
       <FooterLogoLink to="/">
-        <FooterLogo src={logo} alt="Company Logo" />
+        <FooterLogo
+          src={logo}
+          alt="Company Logo"
+          loading="lazy"
+          width="70"
+          height="70"
+        />
       </FooterLogoLink>
     </FooterWrapperOuter>
   );

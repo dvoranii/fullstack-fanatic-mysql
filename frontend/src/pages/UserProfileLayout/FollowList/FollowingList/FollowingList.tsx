@@ -26,6 +26,7 @@ const FollowingList: React.FC<FollowingListProps> = ({ userId }) => {
 
   useEffect(() => {
     if (!effectiveUserId) return;
+
     const fetchFollowingList = async () => {
       try {
         const followingData = await fetchFollowing(effectiveUserId);
@@ -36,7 +37,7 @@ const FollowingList: React.FC<FollowingListProps> = ({ userId }) => {
     };
 
     fetchFollowingList();
-  }, [effectiveUserId]);
+  }, [effectiveUserId, loggedInUser]);
 
   const handleUnfollow = async (userId: number) => {
     setFollowing((prev) => prev.filter((user) => user.id !== userId));
@@ -64,7 +65,7 @@ const FollowingList: React.FC<FollowingListProps> = ({ userId }) => {
           handleFollow={() => {}}
           handleUnfollow={handleUnfollow}
           removeUserAfterUnfollow={true}
-          hideButtons={!loggedInUser || loggedInUser.id !== userId}
+          hideButtons={!loggedInUser || loggedInUser.id !== effectiveUserId}
         />
       </PageWrapper>
     </>
