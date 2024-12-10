@@ -200,7 +200,6 @@ router.post(
       const jwtToken = createJwtToken(userId, email, googleId);
       const refreshToken = createRefreshToken(userId, email, googleId);
 
-      // Set refresh token in HttpOnly cookie
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",

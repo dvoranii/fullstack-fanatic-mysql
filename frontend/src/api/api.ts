@@ -37,7 +37,7 @@ export const loginUser = async (
   const endpoint = `/users/login`;
   const { data } = await apiCall<LoginResponse>(endpoint, {
     method: "POST",
-    credentials: "include", // Ensures cookies are sent with the request
+    credentials: "include",
     body: JSON.stringify(requestBody),
     headers: {
       "Content-Type": "application/json",
@@ -109,12 +109,11 @@ export const googleLogin = async (token: string, csrfToken: string) => {
   return { status, user: data.user };
 };
 
-// Handles automatic refresh of the JWT using cookies
 export const refreshJwt = async () => {
   try {
     const response = await fetch(`/api/users/refresh-token`, {
       method: "POST",
-      credentials: "include", // Ensures the HttpOnly refresh token is sent
+      credentials: "include",
     });
 
     if (!response.ok) {

@@ -15,10 +15,12 @@ import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import { submitConsultationForm } from "../../../services/consultFormService";
 import { validateField } from "../../../utils/validationUtils";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
+import useReCaptcha from "../../../hooks/useRecaptcha";
 
 const ConsultationForm: React.FC<{
   formRef: React.RefObject<HTMLDivElement>;
 }> = ({ formRef }) => {
+  const { getReCaptchaToken } = useReCaptcha();
   const csrfToken = useCsrfToken();
   const [formData, setFormData] = useState({
     name: "",
@@ -52,11 +54,14 @@ const ConsultationForm: React.FC<{
     setIsLoading(true);
 
     try {
+      const recaptchaToken = await getReCaptchaToken("consultation_form");
+
       await submitConsultationForm(
         formData.name,
         formData.email,
         formData.message,
-        csrfToken
+        csrfToken,
+        recaptchaToken
       );
       setSuccessMessage("Form submission successful!");
 

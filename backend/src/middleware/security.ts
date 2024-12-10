@@ -21,14 +21,20 @@ export default function security(app: Application): void {
     helmet.contentSecurityPolicy({
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "https://www.google.com/recaptcha/"],
-        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        scriptSrc: [
+          "'self'",
+          "https://www.google.com/recaptcha/",
+          "https://www.gstatic.com/",
+        ],
+        frameSrc: ["https://www.google.com/"],
+        styleSrc: ["'self'", "https://fonts.googleapis.com"],
         imgSrc: ["'self'", "data:"],
         connectSrc: ["'self'"],
         fontSrc: ["'self'", "https://fonts.gstatic.com"],
         objectSrc: ["'none'"],
         ...(isProduction && { upgradeInsecureRequests: [] }),
       },
+      reportOnly: false,
     })
   );
 

@@ -2,6 +2,7 @@ import express from "express";
 import { authenticate } from "../middleware/authenticate";
 import { csrfProtection } from "../middleware/csrf";
 import { validateGenericForm } from "../utils/formValidation";
+import { verifyRecaptchaToken } from "../utils/recaptchaUtils";
 
 const router = express.Router();
 
@@ -13,11 +14,22 @@ const router = express.Router();
     authenticate,
     csrfProtection,
     async (req, res): Promise<void> => {
-      const { name, email, message } = req.body;
+      const { name, email, message, recaptchaToken } = req.body;
 
       const errors = validateGenericForm(name, email, message);
       if (errors.length > 0) {
         res.status(400).json({ errors });
+        return;
+      }
+
+      if (!recaptchaToken) {
+        res.status(400).json({ error: "ReCAPTCHA token is required." });
+        return;
+      }
+
+      const isRecaptchaValid = await verifyRecaptchaToken(recaptchaToken);
+      if (!isRecaptchaValid) {
+        res.status(400).json({ error: "ReCAPTCHA verification failed." });
         return;
       }
 
@@ -44,11 +56,22 @@ const router = express.Router();
     authenticate,
     csrfProtection,
     async (req, res): Promise<void> => {
-      const { fullName, email, message } = req.body;
+      const { fullName, email, message, recaptchaToken } = req.body;
 
       const errors = validateGenericForm(fullName, email, message);
       if (errors.length > 0) {
         res.status(400).json({ errors });
+        return;
+      }
+
+      if (!recaptchaToken) {
+        res.status(400).json({ error: "ReCAPTCHA token is required." });
+        return;
+      }
+
+      const isRecaptchaValid = await verifyRecaptchaToken(recaptchaToken);
+      if (!isRecaptchaValid) {
+        res.status(400).json({ error: "ReCAPTCHA verification failed." });
         return;
       }
 

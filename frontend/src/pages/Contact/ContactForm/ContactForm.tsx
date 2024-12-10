@@ -12,8 +12,10 @@ import FormMessage from "../../../components/Form/Message";
 import { submitContactForm } from "../../../services/contactFormService";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
+import useReCaptcha from "../../../hooks/useRecaptcha";
 
 const ContactForm: React.FC = () => {
+  const { getReCaptchaToken } = useReCaptcha();
   const csrfToken = useCsrfToken();
   const [formData, setFormData] = useState({
     fullName: "",
@@ -71,11 +73,14 @@ const ContactForm: React.FC = () => {
     setIsLoading(true);
 
     try {
+      const recaptchaToken = await getReCaptchaToken("consultation_form");
+
       await submitContactForm(
         formData.fullName,
         formData.email,
         formData.message,
-        csrfToken
+        csrfToken,
+        recaptchaToken
       );
 
       setSuccessMessage("Your message has been sent!");
