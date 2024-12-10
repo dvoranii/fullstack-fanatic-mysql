@@ -73,7 +73,7 @@ const ContactForm: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const recaptchaToken = await getReCaptchaToken("consultation_form");
+      const recaptchaToken = await getReCaptchaToken("contact_form");
 
       await submitContactForm(
         formData.fullName,

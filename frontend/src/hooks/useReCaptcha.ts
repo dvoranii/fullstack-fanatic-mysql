@@ -25,10 +25,8 @@ const useReCaptcha = () => {
       script.async = true;
       script.defer = true;
 
-      script.onload = () => {
-        resolve();
-      };
-      script.onerror = () => reject("Failed to load Google ReCAPTCHA script");
+      script.onload = () => resolve();
+      script.onerror = () => reject("Failed to load ReCAPTCHA script");
 
       document.body.appendChild(script);
     });
