@@ -12,7 +12,7 @@ import FormMessage from "../../../components/Form/Message";
 import { submitContactForm } from "../../../services/contactFormService";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
-import useReCaptcha from "../../../hooks/useRecaptcha";
+import useReCaptcha from "../../../hooks/useReCaptcha";
 import { sanitizeInput } from "../../../utils/sanitizationUtils";
 
 const ContactForm: React.FC = () => {
@@ -54,12 +54,10 @@ const ContactForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Sanitize inputs
     const sanitizedName = sanitizeInput(formData.fullName);
     const sanitizedEmail = sanitizeInput(formData.email);
     const sanitizedMessage = sanitizeInput(formData.message);
 
-    // Stop form submission if sanitization fails
     const hasEmptyFields =
       !sanitizedName || !sanitizedEmail || !sanitizedMessage;
 
@@ -72,7 +70,6 @@ const ContactForm: React.FC = () => {
       return;
     }
 
-    // Validate sanitized inputs
     const newErrors = {
       fullName: validateField({ type: "username", value: sanitizedName }),
       email: validateField({ type: "email", value: sanitizedEmail }),

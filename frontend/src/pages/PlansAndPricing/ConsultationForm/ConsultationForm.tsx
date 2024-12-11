@@ -15,7 +15,7 @@ import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import { submitConsultationForm } from "../../../services/consultFormService";
 import { validateField } from "../../../utils/validationUtils";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
-import useReCaptcha from "../../../hooks/useRecaptcha";
+import useReCaptcha from "../../../hooks/useReCaptcha";
 import { sanitizeInput } from "../../../utils/sanitizationUtils";
 
 const ConsultationForm: React.FC<{
