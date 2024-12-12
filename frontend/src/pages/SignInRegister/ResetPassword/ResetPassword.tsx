@@ -17,8 +17,10 @@ import {
 import FormMessage from "../../../components/Form/Message";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
+import useReCaptcha from "../../../hooks/useReCaptcha";
 
 const ResetPassword = () => {
+  const { getReCaptchaToken } = useReCaptcha();
   const csrfToken = useCsrfToken();
   const { token } = useParams<{ token: string }>();
   const [password, setPassword] = useState("");
@@ -53,7 +55,8 @@ const ResetPassword = () => {
     setLoading(true);
 
     try {
-      await resetPassword(token!, sanitizedPassword, csrfToken);
+      const recaptchaToken = await getReCaptchaToken("reset_password_form");
+      await resetPassword(token!, sanitizedPassword, csrfToken, recaptchaToken);
       setMessage("Password successfully reset. Redirecting to login...");
       setMessageType("success");
       setTimeout(() => {

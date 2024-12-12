@@ -14,6 +14,7 @@ import bcrypt from "bcrypt";
 import { authenticate } from "../middleware/authenticate";
 import { getUserIdFromToken } from "../utils/getUserIdFromToken";
 import { csrfProtection } from "../middleware/csrf";
+import { verifyRecaptchaToken } from "../utils/recaptchaUtils";
 
 dotenv.config();
 
@@ -596,7 +597,18 @@ router.post(
   "/forgot-password",
   csrfProtection,
   async (req: Request, res: Response): Promise<void> => {
-    const { email } = req.body;
+    const { email, recaptchaToken } = req.body;
+
+    if (!recaptchaToken) {
+      res.status(400).json({ error: "ReCAPTCHA token is required." });
+      return;
+    }
+
+    const isRecaptchaValid = await verifyRecaptchaToken(recaptchaToken);
+    if (!isRecaptchaValid) {
+      res.status(400).json({ error: "ReCAPTCHA verification failed." });
+      return;
+    }
 
     try {
       const connection = await connectionPromise;
@@ -653,7 +665,18 @@ router.post(
   csrfProtection,
   async (req: Request, res: Response): Promise<void> => {
     const { token } = req.params;
-    const { password } = req.body;
+    const { password, recaptchaToken } = req.body;
+
+    if (!recaptchaToken) {
+      res.status(400).json({ error: "ReCAPTCHA token is required." });
+      return;
+    }
+
+    const isRecaptchaValid = await verifyRecaptchaToken(recaptchaToken);
+    if (!isRecaptchaValid) {
+      res.status(400).json({ error: "ReCAPTCHA verification failed." });
+      return;
+    }
 
     try {
       const connection = await connectionPromise;

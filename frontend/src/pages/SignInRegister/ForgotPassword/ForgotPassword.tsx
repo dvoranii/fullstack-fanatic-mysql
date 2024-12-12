@@ -18,8 +18,10 @@ import FormMessage from "../../../components/Form/Message";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
 import { getAuthTypeByEmail } from "../../../services/passwordService";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
+import useReCaptcha from "../../../hooks/useReCaptcha";
 
 const ForgotPassword = () => {
+  const { getReCaptchaToken } = useReCaptcha();
   const csrfToken = useCsrfToken();
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState<string | null>(null);
@@ -57,7 +59,9 @@ const ForgotPassword = () => {
         return;
       }
 
-      await forgotPassword(sanitizedEmail, csrfToken);
+      const recaptchaToken = await getReCaptchaToken("forgot_password_form");
+
+      await forgotPassword(sanitizedEmail, csrfToken, recaptchaToken);
       setMessage("Password reset link has been sent to your email.");
       setMessageType("success");
 

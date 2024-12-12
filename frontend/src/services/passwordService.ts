@@ -1,11 +1,15 @@
 import { apiCall } from "../utils/apiUtils";
 
-export const forgotPassword = async (email: string, csrfToken: string) => {
+export const forgotPassword = async (
+  email: string,
+  csrfToken: string,
+  recaptchaToken: string
+) => {
   const endpoint = "/users/forgot-password";
   await apiCall(endpoint, {
     method: "POST",
     credentials: "include",
-    body: JSON.stringify({ email }),
+    body: JSON.stringify({ email, recaptchaToken }),
     headers: {
       "Content-Type": "application/json",
       "x-csrf-token": csrfToken,
@@ -27,13 +31,14 @@ export const getAuthTypeByEmail = async (email: string): Promise<string> => {
 export const resetPassword = async (
   token: string,
   password: string,
-  csrfToken: string
+  csrfToken: string,
+  recaptchaToken: string
 ) => {
   const endpoint = `/users/reset-password/${token}`;
   await apiCall(endpoint, {
     method: "POST",
     credentials: "include",
-    body: JSON.stringify({ password }),
+    body: JSON.stringify({ password, recaptchaToken }),
     headers: {
       "Content-Type": "application/json",
       "x-csrf-token": csrfToken,
