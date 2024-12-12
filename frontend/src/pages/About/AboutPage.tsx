@@ -35,7 +35,7 @@ const AboutPage: React.FC = () => {
         <AboutIntroWrapperOuter>
           <AboutIntroWrapper>
             <AboutImageWrapper>
-              <img src={AboutImage} alt="" />
+              <img src={AboutImage} alt="about image" />
             </AboutImageWrapper>
 
             <MissionStatementWrapper>
@@ -47,18 +47,22 @@ const AboutPage: React.FC = () => {
                 fundamentals through hands-on development and study.
               </p>
               <LinkWrapper>
-                <Link to="#">Join Us</Link>
+                <Link to="/plans-and-pricing">Join Us</Link>
               </LinkWrapper>
             </MissionStatementWrapper>
           </AboutIntroWrapper>
           <ImgWrapper>
-            <img src={ElipseImg} className="elipse" alt="" />
+            <img
+              src={ElipseImg}
+              className="elipse"
+              alt="elipse background image"
+            />
           </ImgWrapper>
           <ImgWrapper>
             <img
               src={BgSquaresAndTriangle}
               className="squares-triangle"
-              alt=""
+              alt="squares and triangles background image"
             />
           </ImgWrapper>
         </AboutIntroWrapperOuter>
@@ -176,7 +180,11 @@ const AboutPage: React.FC = () => {
               </ol>
             </TenetListSection>
           </CoreTenetsWrapperInner>
-          <img src={ElipseImgSolid} className="elipse-solid" alt="" />
+          <img
+            src={ElipseImgSolid}
+            className="elipse-solid"
+            alt="elipse background image"
+          />
         </CoreTenetsWrapper>
       </AboutPageWrapper>
     </>

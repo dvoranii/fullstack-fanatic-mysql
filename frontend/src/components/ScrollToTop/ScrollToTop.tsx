@@ -5,11 +5,8 @@ const ScrollToTop = () => {
   const location = useLocation();
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "instant",
-    });
-  }, [location.key]);
+    window.scrollTo(0, 0);
+  }, [location]);
 
   return null;
 };

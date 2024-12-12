@@ -2,7 +2,6 @@ import { Suspense, lazy, useContext, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import LoadingOverlay from "./LoadingOverlay/LoadingOverlay";
-// import ScrollToTop from "./ScrollToTop/ScrollToTop";
 
 const HomePage = lazy(() => import("../pages/Home/HomePage"));
 const preloadHomePage = () => import("../pages/Home/HomePage");
@@ -86,7 +85,6 @@ const Navigation: React.FC = () => {
 
   return (
     <Suspense fallback={<LoadingOverlay />}>
-      {/* <ScrollToTop /> */}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
