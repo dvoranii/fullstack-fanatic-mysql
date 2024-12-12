@@ -6,7 +6,7 @@ interface Grecaptcha {
 
 declare global {
   interface Window {
-    grecaptcha: Grecaptcha;
+    grecaptcha?: Grecaptcha;
   }
 }
 
@@ -32,6 +32,20 @@ const useReCaptcha = () => {
     });
   };
 
+  const removeReCaptchaScript = () => {
+    const script = document.querySelector(`script[src*="recaptcha/api.js"]`);
+    if (script) {
+      script.parentNode?.removeChild(script);
+    }
+
+    const badge = document.querySelector(".grecaptcha-badge");
+    if (badge) {
+      badge.parentNode?.removeChild(badge);
+    }
+
+    delete window.grecaptcha;
+  };
+
   useEffect(() => {
     if (!SITE_KEY) {
       console.error("ReCAPTCHA site key is missing.");
@@ -41,6 +55,10 @@ const useReCaptcha = () => {
     loadReCaptchaScript().catch((error) => {
       console.error(error);
     });
+
+    return () => {
+      removeReCaptchaScript();
+    };
   }, []);
 
   const getReCaptchaToken = async (action: string): Promise<string> => {
