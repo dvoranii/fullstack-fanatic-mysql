@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import {
   PlansAndPricingContainerOuter,
   PageBGWrapper,
@@ -26,6 +27,17 @@ import { Link } from "react-router-dom";
 
 const PlansAndPricing: React.FC = () => {
   const formRef = useRef<HTMLDivElement>(null);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.getElementById(location.hash.substring(1));
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location]);
 
   const scrollToForm = () => {
     formRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -167,11 +179,10 @@ const PlansAndPricing: React.FC = () => {
             alt=""
             className="bg-squares-and-triangles"
           />
-          <ConsultationSectionWrapperInner>
+          <ConsultationSectionWrapperInner id="consultation-section">
             <Title textContent={"Consultations"} />
             <ConsultationContentWrapper>
               <ConsultationTextWrapper>
-                {" "}
                 <p>
                   Need personalized guidance or expert advice? Our 1-on-1
                   consultations are the perfect opportunity to get tailored

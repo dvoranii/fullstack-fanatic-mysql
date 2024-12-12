@@ -8,6 +8,7 @@ import {
   ProductsAndServiceTitleWrapper,
   ProductsAndServiceTitle,
   ProductsAndServicesBottomImgWrapper,
+  CardLink,
 } from "./ProductsAndServices.styled";
 import TutorialIcon from "../../../assets/images/tutorial-icon-home.svg";
 import BlogIcon from "../../../assets/images/blog-icon-home.svg";
@@ -59,6 +60,8 @@ const ProductsAndServices: React.FC = () => {
                   height="80"
                 />
               </CardImagesWrapper>
+
+              <CardLink to="/tutorials">View Tutorials</CardLink>
             </Card>
             <img
               src={TutorialIcon}
@@ -103,6 +106,7 @@ const ProductsAndServices: React.FC = () => {
                   height="125"
                 />
               </CardImagesWrapper>
+              <CardLink to="/blogs">View Blogs</CardLink>
             </Card>
             <img
               src={BlogIcon}
@@ -145,6 +149,9 @@ const ProductsAndServices: React.FC = () => {
                   height="128"
                 />
               </CardImagesWrapper>
+              <CardLink to="/plans-and-pricing#consultation-section">
+                Book Consultation
+              </CardLink>
             </Card>
             <img
               src={ConsultIcon}

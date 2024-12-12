@@ -1,5 +1,6 @@
 import { styled } from "styled-components";
 import { colors } from "../../../GlobalStyles";
+import { Link } from "react-router-dom";
 
 export const ProductsAndServiceTitleWrapper = styled.div`
   width: 100%;
@@ -113,6 +114,9 @@ export const CardWrapper = styled.div`
 export const Card = styled.div`
   padding-top: 2.4rem;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   h3 {
     text-transform: uppercase;
@@ -193,5 +197,25 @@ export const ProductsAndServicesBottomImgWrapper = styled.div`
     padding-top: 0;
     width: 156%;
     margin-left: -120px;
+  }
+`;
+
+export const CardLink = styled(Link)`
+  padding: 8px 16px;
+  background-color: ${colors.secondary};
+  color: ${colors.primary};
+  text-decoration: none;
+  border-radius: 20px;
+  width: fit-content;
+  margin: 20px auto;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-family: "Roboto";
+  transition: all 250ms ease;
+
+  &:hover {
+    background-color: ${colors.primary};
+    color: ${colors.white};
   }
 `;

@@ -3,7 +3,9 @@ import { authenticate } from "../middleware/authenticate";
 import { csrfProtection } from "../middleware/csrf";
 import { validateGenericForm } from "../utils/formValidation";
 import { verifyRecaptchaToken } from "../utils/recaptchaUtils";
+import { sanitizeAndValidate } from "../middleware/inputValidation";
 import { blacklist } from "../middleware/IPblacklist";
+import { body } from "express-validator";
 
 const router = express.Router();
 
@@ -14,6 +16,11 @@ const router = express.Router();
     "/consultation",
     authenticate,
     csrfProtection,
+    sanitizeAndValidate([
+      body("fullName").notEmpty().withMessage("Full Name is required."),
+      body("email").notEmpty().isEmail().withMessage("Invalid email format."),
+      body("message").notEmpty().withMessage("Message is required."),
+    ]),
     async (req, res): Promise<void> => {
       const { name, email, message, recaptchaToken } = req.body;
 
@@ -57,6 +64,12 @@ const router = express.Router();
     blacklist,
     authenticate,
     csrfProtection,
+    csrfProtection,
+    sanitizeAndValidate([
+      body("fullName").notEmpty().withMessage("Full Name is required."),
+      body("email").notEmpty().isEmail().withMessage("Invalid email format."),
+      body("message").notEmpty().withMessage("Message is required."),
+    ]),
 
     async (req, res): Promise<void> => {
       const { fullName, email, message, recaptchaToken } = req.body;

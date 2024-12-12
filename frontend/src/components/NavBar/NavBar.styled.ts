@@ -206,11 +206,3 @@ export const UserProfileLink = styled(Link)`
     height: auto;
   }
 `;
-export const NotificationLink = styled(Link)`
-  display: flex;
-  align-items: center;
-  img {
-    width: 25px;
-    height: auto;
-  }
-`;

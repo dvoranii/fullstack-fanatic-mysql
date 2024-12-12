@@ -13,7 +13,6 @@ import {
   NetworkPageLink,
   ShoppingCartLink,
   UserProfileLink,
-  NotificationLink,
 } from "./NavBar.styled";
 import FSFLogo from "../../assets/images/fsf-logo-notext.png";
 import UserProfileNavBtn from "./UserProfileNavBtn/UserProfileNavBtn";
@@ -23,7 +22,6 @@ import NotificationButton from "./Notifications/Notifications";
 import ShoppingCart from "./ShoppingCart/ShoppingCart";
 import NetworkIcon from "../../assets/images/networking-icon.png";
 import ShoppingCartIcon from "../../assets/images/shopping-cart-icon.png";
-import BellIcon from "../../assets/images/notification-bell.png";
 import UserProfileIcon from "../../assets/images/profile-icon-black.png";
 
 const NavBar: React.FC = () => {
@@ -159,9 +157,6 @@ const NavBar: React.FC = () => {
                   height="25"
                 />
               </ShoppingCartLink>
-              <NotificationLink to="#">
-                <img src={BellIcon} alt="bell icon" width="25" height="25" />
-              </NotificationLink>
               <UserProfileLink to="/my-account">
                 <img
                   src={UserProfileIcon}

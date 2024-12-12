@@ -24,7 +24,7 @@ const InfoSection: React.FC = () => {
             scenarios.
           </CardContent>
           <CardLinkWrapper>
-            <CardLink href="#">See more</CardLink>
+            <CardLink href="/tutorials">See more</CardLink>
           </CardLinkWrapper>
           <CardImgWrapper>
             <img
@@ -42,7 +42,7 @@ const InfoSection: React.FC = () => {
             Apply your knowledge with hands-on projects.
           </CardContent>
           <CardLinkWrapper>
-            <CardLink href="#">See more</CardLink>
+            <CardLink href="/tutorials">See more</CardLink>
           </CardLinkWrapper>
           <CardImgWrapper>
             <img
@@ -61,7 +61,7 @@ const InfoSection: React.FC = () => {
             that fit your goals.
           </CardContent>
           <CardLinkWrapper>
-            <CardLink href="#">See more</CardLink>
+            <CardLink href="/tutorials">See more</CardLink>
           </CardLinkWrapper>
           <CardImgWrapper className="card-3">
             <img

@@ -65,16 +65,36 @@ export const GetStartedLink = styled(Link)`
   border-radius: 30px;
   cursor: pointer;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
+  transition: all 250ms ease;
 
   &:hover {
-    background-color: ${colors.secondary};
-    transform: translateY(-4px);
+    background-color: ${colors.primary};
+    color: ${colors.white};
   }
 
   @media screen and (max-width: 760px) {
     padding: 12px 24px;
   }
+`;
+
+export const SwirlyArrow = styled.img`
+  position: absolute;
+  right: 25%;
+  bottom: -80px;
+  width: clamp(100px, 10vw, 120px);
+  height: auto;
+  object-fit: contain;
+  z-index: 1;
+
+  @media screen and (max-width: 760px) {
+    bottom: -65px;
+  }
+`;
+
+export const LinkWrapper = styled.div`
+  position: relative;
+  user-select: none;
+  height: 100%;
 `;
 
 export const LeftGraphic = styled.img`
@@ -111,25 +131,6 @@ export const CornerEllipse = styled.img`
   width: auto;
   object-fit: contain;
   z-index: 0;
-  user-select: none;
-`;
-
-export const SwirlyArrow = styled.img`
-  position: absolute;
-  right: 25%;
-  bottom: -80px;
-  width: clamp(100px, 10vw, 120px);
-  height: auto;
-  object-fit: contain;
-  z-index: 1;
-
-  @media screen and (max-width: 760px) {
-    bottom: -65px;
-  }
-`;
-
-export const LinkWrapper = styled.div`
-  position: relative;
   user-select: none;
 `;
 
