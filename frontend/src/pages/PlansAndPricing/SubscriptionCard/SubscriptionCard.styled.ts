@@ -46,17 +46,9 @@ export const CardWrapper = styled("div").withConfig({
   `}
 
 @media screen and (max-width: 739px) {
-    ${({ highlighted }) =>
-      highlighted &&
-      `
-    width: 300px;
+    width: clamp(300px, 60vw, 450px);
     height: auto;
-  `}
-    ${({ highlighted }) =>
-      !highlighted &&
-      `
-    transform: translateY(0px); 
-  `}
+    transform: translateY(0px);
   }
 `;
 
@@ -75,7 +67,9 @@ export const MedalWrapper = styled.div`
   }
 
   @media screen and (max-width: 739px) {
-    right: -230px;
+    left: 50%;
+    transform: translateX(-60px) translateY(-20px);
+    /* transform: translateX(-50%); */
   }
 `;
 

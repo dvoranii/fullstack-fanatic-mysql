@@ -10,6 +10,7 @@ interface TitleProps {
   pseudoColor?: string;
   textColor?: string;
   fontWeight?: number;
+  className?: string;
 }
 const Title: React.FC<TitleProps> = ({
   textContent,
@@ -20,7 +21,9 @@ const Title: React.FC<TitleProps> = ({
   pseudoHeight,
   pseudoColor,
   fontWeight,
+  className,
 }) => {
+  const nonBreakingText = textContent.replace(/\s+/g, "\u00A0");
   return (
     <TitleWrapper>
       <StyledTitle
@@ -31,8 +34,9 @@ const Title: React.FC<TitleProps> = ({
         pseudoColor={pseudoColor}
         textColor={textColor}
         fontWeight={fontWeight}
+        className={className}
       >
-        {textContent}
+        {nonBreakingText}
       </StyledTitle>
     </TitleWrapper>
   );

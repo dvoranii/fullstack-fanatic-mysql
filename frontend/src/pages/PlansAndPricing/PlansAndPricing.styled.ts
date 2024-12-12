@@ -11,14 +11,6 @@ export const PageBGWrapper = styled.div`
   position: relative;
   padding-bottom: 4.2rem;
 
-  .swirly-1 {
-    width: 15%;
-    position: absolute;
-    bottom: 0px;
-    left: -30px;
-    z-index: -1;
-  }
-
   .bg-swoosh {
     position: absolute;
     width: 170vh;
@@ -59,6 +51,12 @@ export const PageBGWrapper = styled.div`
       right: -12%;
     }
   }
+
+  @media screen and (max-width: 413px) {
+    .plans-and-pricing-title {
+      transform: scale(0.8);
+    }
+  }
 `;
 
 export const CardsContainer = styled.div`
@@ -90,11 +88,25 @@ export const CardsContainer = styled.div`
       grid-row: 3;
     }
   }
+
+  @media screen and (max-width: 413px) {
+    padding: 0 10px;
+  }
 `;
 
 export const PayPerPostWrapper = styled.div`
   width: 100%;
   padding-top: 4.2rem;
+
+  @media screen and (max-width: 987px) {
+    padding-top: 0;
+  }
+
+  @media screen and (max-width: 413px) {
+    .pay-per-post-title {
+      transform: scale(0.8);
+    }
+  }
 `;
 
 export const PayPerPostTextWrapper = styled.div`
@@ -148,13 +160,20 @@ export const ConsultationSectionWrapperInner = styled.div`
 
   @media screen and (max-width: 987px) {
     width: 95%;
+    padding-top: 0;
+  }
+
+  @media screen and (max-width: 413px) {
+    .consultation-title {
+      transform: scale(0.8);
+    }
   }
 `;
 
 export const ConsultationSectionWrapperOuter = styled.div`
   position: relative;
   .bg-squares-and-triangles {
-    width: 20%;
+    width: clamp(200px, 20%, 350px);
     position: absolute;
     top: 90px;
     left: -70px;
@@ -179,11 +198,18 @@ export const ScrollButton = styled.button`
 export const SwirlyImgBgWrapper = styled.div`
   width: 100%;
   position: relative;
+  .swirly-1 {
+    width: clamp(180px, 15%, 300px);
+    position: absolute;
+    bottom: 0px;
+    left: -30px;
+    z-index: -1;
+  }
   .swirly-2 {
     position: absolute;
     right: -20px;
     top: -100px;
-    width: 12%;
+    width: clamp(180px, 15%, 300px);
   }
 `;
 
@@ -216,5 +242,10 @@ export const ConsultFormTitleWrapper = styled.div`
   h2 {
     font-family: "Anybody";
     text-transform: uppercase;
+  }
+
+  @media screen and (max-width: 567px) {
+    width: 90%;
+    justify-content: center;
   }
 `;

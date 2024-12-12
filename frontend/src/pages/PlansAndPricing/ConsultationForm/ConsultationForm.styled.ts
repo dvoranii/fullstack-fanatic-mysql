@@ -52,6 +52,10 @@ export const ConsultationFormWrapper = styled.div`
       outline: 1px solid ${colors.primary};
     }
   }
+
+  @media screen and (max-width: 567px) {
+    max-width: 90%;
+  }
 `;
 export const NameWrapper = styled.div`
   display: flex;
@@ -85,6 +89,10 @@ export const UserInfoWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 20px;
+
+  @media screen and (max-width: 386px) {
+    gap: 8px;
+  }
 `;
 
 export const SubmitBtnWrapper = styled.div`

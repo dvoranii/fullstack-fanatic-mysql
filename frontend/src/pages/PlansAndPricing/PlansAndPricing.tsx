@@ -63,7 +63,10 @@ const PlansAndPricing: React.FC = () => {
             alt="decorative background squares and triangles"
             className="bg-squares-and-triangles"
           />
-          <Title textContent={"Plans And Pricing"} />
+          <Title
+            textContent={"Plans And Pricing"}
+            className="plans-and-pricing-title"
+          />
           <CardsContainer>
             <SubscriptionCard
               title="STARTER"
@@ -126,11 +129,13 @@ const PlansAndPricing: React.FC = () => {
               </li>
             </SubscriptionCard>
           </CardsContainer>
-          <img src={SwirlyLineImg} className="swirly-1" alt="" />
+          <SwirlyImgBgWrapper>
+            <img src={SwirlyLineImg} className="swirly-1" alt="" />
+          </SwirlyImgBgWrapper>
         </PageBGWrapper>
 
         <PayPerPostWrapper>
-          <Title textContent={"Pay per post"} />
+          <Title textContent={"Pay per post"} className="pay-per-post-title" />
           <PayPerPostTextWrapper>
             <p>
               Looking for flexibility? Only need the info from a specific
@@ -180,7 +185,10 @@ const PlansAndPricing: React.FC = () => {
             className="bg-squares-and-triangles"
           />
           <ConsultationSectionWrapperInner id="consultation-section">
-            <Title textContent={"Consultations"} />
+            <Title
+              textContent={"Consultations"}
+              className="consultation-title"
+            />
             <ConsultationContentWrapper>
               <ConsultationTextWrapper>
                 <p>
