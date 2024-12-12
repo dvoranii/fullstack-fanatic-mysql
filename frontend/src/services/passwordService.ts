@@ -1,6 +1,6 @@
 import { apiCall } from "../utils/apiUtils";
 
-export const forgotPassword = async (email: string) => {
+export const forgotPassword = async (email: string, csrfToken: string) => {
   const endpoint = "/users/forgot-password";
   await apiCall(endpoint, {
     method: "POST",
@@ -8,11 +8,27 @@ export const forgotPassword = async (email: string) => {
     body: JSON.stringify({ email }),
     headers: {
       "Content-Type": "application/json",
+      "x-csrf-token": csrfToken,
     },
   });
 };
 
-export const resetPassword = async (token: string, password: string) => {
+export const getAuthTypeByEmail = async (email: string): Promise<string> => {
+  const endpoint = "/users/auth-type/email";
+  const response = await apiCall<{ auth_type: string }>(endpoint, {
+    method: "POST",
+    body: JSON.stringify({ email }),
+    headers: { "Content-Type": "application/json" },
+  });
+
+  return response.data.auth_type;
+};
+
+export const resetPassword = async (
+  token: string,
+  password: string,
+  csrfToken: string
+) => {
   const endpoint = `/users/reset-password/${token}`;
   await apiCall(endpoint, {
     method: "POST",
@@ -20,6 +36,7 @@ export const resetPassword = async (token: string, password: string) => {
     body: JSON.stringify({ password }),
     headers: {
       "Content-Type": "application/json",
+      "x-csrf-token": csrfToken,
     },
   });
 };

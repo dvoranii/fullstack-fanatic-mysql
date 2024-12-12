@@ -563,6 +563,36 @@ router.get(
 );
 
 router.post(
+  "/auth-type/email",
+  async (req: Request, res: Response): Promise<void> => {
+    const { email } = req.body;
+
+    if (!email) {
+      res.status(400).json({ message: "Email is required." });
+      return;
+    }
+
+    try {
+      const connection = await connectionPromise;
+      const [rows] = await connection.execute<RowDataPacket[]>(
+        "SELECT auth_type FROM users WHERE email = ?",
+        [email]
+      );
+
+      if (rows.length === 0) {
+        res.status(404).json({ message: "User not found" });
+        return;
+      }
+
+      res.status(200).json({ auth_type: rows[0].auth_type });
+    } catch (error) {
+      console.error("Error checking auth type by email:", error);
+      res.status(500).json({ message: "Failed to fetch auth type." });
+    }
+  }
+);
+
+router.post(
   "/forgot-password",
   csrfProtection,
   async (req: Request, res: Response): Promise<void> => {

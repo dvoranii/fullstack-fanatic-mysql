@@ -9,28 +9,50 @@ import {
   Label,
   Input,
   SubmitButton,
+  ButtonWrapper,
 } from "./ForgotPassword.styled";
 import { PageWrapper } from "../../../PageWrapper.styled";
 import FormMessage from "../../../components/Form/Message";
+import { useCsrfToken } from "../../../hooks/useCsrfToken";
+import { getAuthTypeByEmail } from "../../../services/passwordService";
+import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 
 const ForgotPassword = () => {
+  const csrfToken = useCsrfToken();
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [messageType, setMessageType] = useState<"error" | "success">("error");
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setMessage(null);
+    setLoading(true);
+
     try {
-      await forgotPassword(email);
+      const authType = await getAuthTypeByEmail(email);
+
+      if (authType === "google") {
+        setMessage(
+          "This account is registered via Google Sign-In and cannot have its password changed."
+        );
+        setMessageType("error");
+        return;
+      }
+
+      await forgotPassword(email, csrfToken);
       setMessage("Password reset link has been sent to your email.");
       setMessageType("success");
+
       setTimeout(() => {
         navigate("/login");
       }, 3000);
     } catch (err) {
-      setMessage("Failed to send reset link. Please try again.");
+      setMessage("Failed to process request. Please try again.");
       setMessageType("error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,9 +69,16 @@ const ForgotPassword = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={loading}
             />
           </InputWrapper>
-          <SubmitButton type="submit">Send Reset Link</SubmitButton>
+          <ButtonWrapper>
+            {loading ? (
+              <LoadingSpinner />
+            ) : (
+              <SubmitButton type="submit">Send Reset Link</SubmitButton>
+            )}
+          </ButtonWrapper>
         </Form>
         {message && (
           <FormMessage

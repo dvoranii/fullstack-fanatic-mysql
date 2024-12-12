@@ -46,6 +46,11 @@ export const Input = styled.input`
   }
 `;
 
+export const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  position: relative;
+`;
 export const SubmitButton = styled.button`
   padding: 10px;
   background-color: #fca311;

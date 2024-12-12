@@ -12,8 +12,10 @@ import {
   SubmitButton,
 } from "./ResetPassword.styled";
 import FormMessage from "../../../components/Form/Message";
+import { useCsrfToken } from "../../../hooks/useCsrfToken";
 
 const ResetPassword = () => {
+  const csrfToken = useCsrfToken();
   const { token } = useParams<{ token: string }>();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -29,7 +31,7 @@ const ResetPassword = () => {
       return;
     }
     try {
-      await resetPassword(token!, password);
+      await resetPassword(token!, password, csrfToken);
       setMessage("Password successfully reset. Redirecting to login...");
       setMessageType("success");
       setTimeout(() => {
