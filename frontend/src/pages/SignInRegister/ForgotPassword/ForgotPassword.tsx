@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { forgotPassword } from "../../../services/passwordService";
+import { sanitizeInput } from "../../../utils/sanitizationUtils";
+import { validateField } from "../../../utils/validationUtils";
 import {
   ForgotPasswordWrapper,
   Title,
@@ -28,6 +30,20 @@ const ForgotPassword = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage(null);
+
+    const sanitizedEmail = sanitizeInput(email);
+
+    const validationError = validateField({
+      type: "email",
+      value: sanitizedEmail,
+    });
+
+    if (validationError) {
+      setMessage(validationError);
+      setMessageType("error");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -41,7 +57,7 @@ const ForgotPassword = () => {
         return;
       }
 
-      await forgotPassword(email, csrfToken);
+      await forgotPassword(sanitizedEmail, csrfToken);
       setMessage("Password reset link has been sent to your email.");
       setMessageType("success");
 
@@ -60,7 +76,7 @@ const ForgotPassword = () => {
     <PageWrapper>
       <ForgotPasswordWrapper>
         <Title>Forgot Password?</Title>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} noValidate>
           <InputWrapper>
             <Label htmlFor="email">Enter your registered email address:</Label>
             <Input

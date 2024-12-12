@@ -10,6 +10,5 @@ export const sanitizeInput = (value: unknown): string => {
     .replace(/'/g, "&#039;")
     .trim();
 
-  console.log("Sanitized Value:", sanitized); // Log the sanitized output
   return sanitized;
 };
