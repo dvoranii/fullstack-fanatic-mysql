@@ -5,7 +5,7 @@ import {
   LogoWrapper,
   ElipseWrapper,
   HeroTextWrapper,
-  HeroButtonWrapper,
+  HeroLinkWrapper,
   RightSideWrapperInner,
   TriangleArrowWrapper,
   TriangleArrow,
@@ -77,9 +77,9 @@ const Hero: React.FC = () => {
               <h2>Full&nbsp;Stack.&nbsp;Full&nbsp;Potential.</h2>
             </HeroTextWrapper>
 
-            <HeroButtonWrapper>
-              <button>Learn more</button>
-            </HeroButtonWrapper>
+            <HeroLinkWrapper>
+              <Link to="/plans-and-pricing">Learn more</Link>
+            </HeroLinkWrapper>
 
             <SocialButtonsWrapper>
               <SocialIconWrapper>

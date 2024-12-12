@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { colors } from "../../GlobalStyles";
 
 export const PlansAndPricingContainerOuter = styled.div`
   width: 100%;
@@ -110,6 +111,19 @@ export const PayPerPostTextWrapper = styled.div`
   ul {
     margin-inline-start: 36px;
     margin-top: 10px;
+
+    li {
+      a {
+        border-bottom: 1px solid black;
+        color: ${colors.primary};
+        transition: all 250ms ease;
+
+        &:hover {
+          color: ${colors.secondary};
+          border-bottom: 1px solid ${colors.secondary};
+        }
+      }
+    }
   }
 
   @media screen and (max-width: 987px) {

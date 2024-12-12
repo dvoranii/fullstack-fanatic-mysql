@@ -79,7 +79,7 @@ export const ProductsAndServicesWrapperInner = styled.div`
 `;
 
 export const CardWrapper = styled.div`
-  width: clamp(200px, 30vw, 400px);
+  width: clamp(200px, 50vw, 400px);
   position: relative;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
@@ -103,7 +103,7 @@ export const CardWrapper = styled.div`
   }
 
   @media screen and (max-width: 759px) {
-    width: 60vw;
+    width: 80vw;
   }
 
   @media screen and (max-width: 400px) {

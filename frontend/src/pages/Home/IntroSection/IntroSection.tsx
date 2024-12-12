@@ -3,11 +3,11 @@ import {
   ContentWrapper,
   Title,
   IntroText,
-  GetStartedButton,
+  GetStartedLink,
   LeftGraphic,
   CornerEllipse,
   SwirlyArrow,
-  ButtonWrapper,
+  LinkWrapper,
   BgSquaresAndTriangleImg,
   ImageWrapper,
 } from "./IntroSection.styled";
@@ -45,8 +45,8 @@ const IntroSection: React.FC = () => {
           demand. Dive into both web development and cybersecurity to become a
           versatile and in-demand professional.
         </IntroText>
-        <ButtonWrapper>
-          <GetStartedButton>Get Started</GetStartedButton>
+        <LinkWrapper>
+          <GetStartedLink to="/plans-and-pricing">Get Started</GetStartedLink>
           <SwirlyArrow
             src={SwirlyArrowImg}
             alt="Swirly Arrow"
@@ -54,7 +54,7 @@ const IntroSection: React.FC = () => {
             width="120"
             height="95"
           />
-        </ButtonWrapper>
+        </LinkWrapper>
       </ContentWrapper>
       <ImageWrapper>
         <CornerEllipse

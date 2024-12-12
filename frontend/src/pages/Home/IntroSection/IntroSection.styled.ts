@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { colors } from "../../../GlobalStyles";
+import { Link } from "react-router-dom";
 
 export const IntroSectionWrapper = styled.section`
   position: relative;
@@ -53,7 +54,7 @@ export const IntroText = styled.p`
   margin-bottom: 30px;
 `;
 
-export const GetStartedButton = styled.button`
+export const GetStartedLink = styled(Link)`
   font-family: "Anybody", sans-serif;
   text-transform: uppercase;
   font-weight: 700;
@@ -61,7 +62,6 @@ export const GetStartedButton = styled.button`
   color: ${colors.primary};
   padding: 16px 32px;
   font-size: clamp(1.2rem, 2vw, 1.8rem);
-  border: none;
   border-radius: 30px;
   cursor: pointer;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
@@ -128,7 +128,7 @@ export const SwirlyArrow = styled.img`
   }
 `;
 
-export const ButtonWrapper = styled.div`
+export const LinkWrapper = styled.div`
   position: relative;
   user-select: none;
 `;

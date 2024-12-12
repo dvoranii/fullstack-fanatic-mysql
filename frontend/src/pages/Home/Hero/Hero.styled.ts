@@ -177,20 +177,19 @@ export const HeroTextWrapper = styled.div`
   }
 `;
 
-export const HeroButtonWrapper = styled.div`
+export const HeroLinkWrapper = styled.div`
   width: 100%;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  button {
+  a {
     height: fit-content;
     margin-top: 2.4rem;
     padding: 16px 32px;
     font-size: 1.2rem;
     border-radius: 30px;
-    border: none;
     text-transform: uppercase;
     font-family: "ZenKakuGothicNewBold";
     background-color: ${colors.primary};

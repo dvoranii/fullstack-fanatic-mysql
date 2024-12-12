@@ -22,6 +22,7 @@ import SubscriptionCard from "./SubscriptionCard/SubscriptionCard";
 import SwirlyLineImg from "../../assets/images/swirly-line-bg.svg";
 import ConsultationImg from "../../assets/images/plansAndPricing/consultation-image.jpg";
 import ConsultationForm from "./ConsultationForm/ConsultationForm";
+import { Link } from "react-router-dom";
 
 const PlansAndPricing: React.FC = () => {
   const formRef = useRef<HTMLDivElement>(null);
@@ -131,13 +132,19 @@ const PlansAndPricing: React.FC = () => {
 
             <ul>
               <li>
-                <b>Tutorials:</b> Dive deep into our high-quality tutorials
-                starting from <b>$3</b> up to <b>$5</b>, providing you with
-                in-depth guides and expert knowledge.
+                <Link to="/tutorials">
+                  <b>Tutorials :</b>
+                </Link>
+                &nbsp;Dive deep into our high-quality tutorials starting from{" "}
+                <b>$3</b> up to <b>$5</b>, providing you with in-depth guides
+                and expert knowledge.
               </li>
               <li>
-                <b>Blogs:</b> Access premium articles for <b>as little as $2</b>
-                , featuring exclusive insights, tips, and industry updates.
+                <Link to="/blogs">
+                  <b>Blogs :</b>
+                </Link>
+                &nbsp;Access premium articles for <b>as little as $2</b>,
+                featuring exclusive insights, tips, and industry updates.
               </li>
             </ul>
             <p>
