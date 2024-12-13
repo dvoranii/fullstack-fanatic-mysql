@@ -1,6 +1,7 @@
 import { styled } from "styled-components";
 import { colors } from "../../../GlobalStyles";
 import elegantWhiteBg from "../../../assets/images/elegant-white-bg.jpg";
+import { Link } from "react-router-dom";
 
 export const CTAWrapperOuter = styled.div`
   height: 100%;
@@ -21,6 +22,13 @@ export const CTAWrapperOuter = styled.div`
       ${colors.white} 100%
     );
     pointer-events: none;
+  }
+
+  @media screen and (max-width: 1100px) {
+    border-bottom: 4px solid white;
+    &::after {
+      display: none;
+    }
   }
 `;
 export const CTAWrapperInner = styled.div`
@@ -99,7 +107,11 @@ export const ContentWrapper = styled.div`
   }
 
   @media screen and (max-width: 768px) {
+    padding: 80px 20px;
     min-width: 100%;
+  }
+  @media screen and (max-width: 468px) {
+    padding: 80px 10px;
   }
 `;
 
@@ -107,7 +119,7 @@ export const TextWrapper = styled.div`
   text-align: center;
 `;
 
-export const ButtonsWrapper = styled.div`
+export const LinksWrapper = styled.div`
   display: flex;
   gap: 2.4rem;
   padding-top: 1.2rem;
@@ -116,18 +128,20 @@ export const ButtonsWrapper = styled.div`
     gap: 1.2rem;
   }
 `;
-export const CTAButton = styled.button`
-  padding: 16px 32px;
+export const CTALink = styled(Link)`
+  position: relative;
+  padding: 8px 16px;
   background-color: ${colors.secondary};
   font-family: "Anybody";
   font-weight: bold;
   font-size: 1.8rem;
-  border: none;
+  text-decoration: none;
   border-radius: 30px;
   color: ${colors.primary};
   font-style: italic;
   margin-top: 1.2rem;
-  transition: all 600ms ease;
+  overflow: hidden;
+  transition: all 500ms ease;
 
   &:hover {
     background-color: white;
@@ -156,7 +170,8 @@ export const CTAButton = styled.button`
   }
 
   @media screen and (max-width: 525px) {
-    padding: 12px 24px;
+    padding: 4px 8px;
+    font-size: 1.4rem;
   }
 `;
 

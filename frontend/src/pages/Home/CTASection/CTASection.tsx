@@ -5,8 +5,8 @@ import {
   BrainImg,
   ContentWrapper,
   TextWrapper,
-  ButtonsWrapper,
-  CTAButton,
+  LinksWrapper,
+  CTALink,
   SubtextWrapper,
 } from "./CTASection.styled";
 import BrainGraphic from "../../../assets/images/brain sides-cuate.svg";
@@ -27,14 +27,15 @@ const CTASection: React.FC = () => {
               </h3>
             </SubtextWrapper>
           </TextWrapper>
-          <ButtonsWrapper>
-            <CTAButton>
+          <LinksWrapper>
+            <CTALink to="/contact">
               <span>Contact</span>
-            </CTAButton>
-            <CTAButton>
+            </CTALink>
+
+            <CTALink to="/register">
               <span>Sign Up!</span>
-            </CTAButton>
-          </ButtonsWrapper>
+            </CTALink>
+          </LinksWrapper>
         </ContentWrapper>
       </CTAWrapperInner>
     </CTAWrapperOuter>
