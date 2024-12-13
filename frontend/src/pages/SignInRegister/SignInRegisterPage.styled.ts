@@ -10,3 +10,7 @@ export const ToggleButton = styled.button`
   font-weight: bold;
   margin-top: 20px;
 `;
+
+export const RegisterWrapper = styled.div`
+  padding: 0 20px 0 20px;
+`;

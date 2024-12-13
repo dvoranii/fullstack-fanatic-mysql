@@ -1,5 +1,5 @@
+import { RegisterWrapper } from "./SignInRegisterPage.styled";
 import { Helmet } from "react-helmet-async";
-import { PageWrapper } from "../../PageWrapper.styled";
 import RegisterLoginForm from "../../components/RegisterForm/RegisterLoginForm";
 
 interface SignInRegisterPageProps {
@@ -17,9 +17,10 @@ const SignInRegisterPage: React.FC<SignInRegisterPageProps> = ({
           content="Sign in to or register for your Full Stack Fanatic user account."
         />
       </Helmet>
-      <PageWrapper>
+
+      <RegisterWrapper>
         <RegisterLoginForm defaultToLogin={defaultToLogin}></RegisterLoginForm>
-      </PageWrapper>
+      </RegisterWrapper>
     </>
   );
 };

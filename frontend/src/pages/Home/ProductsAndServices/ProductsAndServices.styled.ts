@@ -53,37 +53,60 @@ export const ProductsAndServiceTitle = styled.h2`
 export const ProductsAndServicesWrapperOuter = styled.section`
   position: relative;
   width: 100%;
-  padding: 80px 20px;
-  padding-top: 6.4rem;
+  padding: 0px 60px 80px 60px;
 
-  @media screen and (max-width: 768px) {
-    display: flex;
-    align-items: center;
+  .bg-squares {
+    user-select: none;
+    transform: scaleX(-1);
+  }
+
+  @media screen and (max-width: 400px) {
+    padding: 0px 20px 40px 20px;
   }
 `;
 export const ProductsAndServicesWrapperInner = styled.div`
-  max-width: 1400px;
+  max-width: 1800px;
   justify-content: center;
   margin: 0 auto;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(300px, 1fr));
   gap: 3.2rem;
 
-  @media screen and (max-width: 985px) {
-    gap: 1.4rem;
+  @media screen and (max-width: 1100px) {
+    gap: 2.4rem;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 5.4rem;
+
+    .consult-card {
+      grid-row: 2;
+      grid-column: span 2;
+      margin: 0 auto;
+      width: clamp(300px, 50vw, 450px);
+    }
   }
 
-  @media screen and (max-width: 768px) {
-    flex-direction: column;
-    height: fit-content;
-    gap: 6.4rem;
+  @media screen and (max-width: 860px) {
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: 1fr;
+
+    .consult-card {
+      grid-column: 1;
+      grid-row: 3;
+    }
+
+    .card {
+      width: clamp(350px, 60vw, 450px);
+      margin: 0 auto;
+    }
   }
 `;
 
 export const CardWrapper = styled.div`
-  width: clamp(200px, 50vw, 400px);
+  width: 100%;
   position: relative;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.25);
-  border-radius: 20px;
+  border-radius: 8px;
 
   .top-icon {
     user-select: none;
@@ -103,10 +126,6 @@ export const CardWrapper = styled.div`
     min-height: 450px;
   }
 
-  @media screen and (max-width: 759px) {
-    width: 80vw;
-  }
-
   @media screen and (max-width: 400px) {
     width: 80vw;
   }
@@ -117,6 +136,8 @@ export const Card = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow-wrap: break-word;
+  word-break: break-word;
 
   h3 {
     text-transform: uppercase;
@@ -125,6 +146,7 @@ export const Card = styled.div`
     letter-spacing: 1px;
     padding-bottom: 1.2rem;
     border-bottom: 1px solid grey;
+    font-size: 1.6rem;
   }
 `;
 
@@ -185,14 +207,18 @@ export const CardImagesWrapper = styled.div`
 export const ProductsAndServicesBottomImgWrapper = styled.div`
   width: 100%;
   display: flex;
-  padding-top: 4.2rem;
-  padding-bottom: 2.4rem;
 
   img {
     width: 100%;
     height: auto;
+    z-index: 99;
   }
 
+  @media screen and (max-width: 915px) {
+    width: 150%;
+    display: flex;
+    margin-left: -200px;
+  }
   @media screen and (max-width: 768px) {
     padding-top: 0;
     width: 156%;
@@ -219,3 +245,20 @@ export const CardLink = styled(Link)`
     color: ${colors.white};
   }
 `;
+
+export const BgSquaresAndTriangleImg = styled.img``;
+
+// export const BannerBottom = styled.div`
+//   width: 100%;
+//   height: 100px;
+//   display: grid;
+//   grid-template-columns: 1fr 1.35fr;
+//   z-index: -1;
+// `;
+
+// export const LeftSide = styled.div``;
+// export const RightSide = styled.div`
+//   width: 100%;
+//   height: 100%;
+//   background-color: ${colors.primary};
+// `;

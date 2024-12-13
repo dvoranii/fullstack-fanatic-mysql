@@ -39,6 +39,10 @@ export const Form = styled.form`
   flex-direction: column;
   padding: 20px 60px;
   width: 100%;
+
+  @media screen and (max-width: 475px) {
+    padding: 20px 020px;
+  }
 `;
 
 export const RegisterFormWrapperInner = styled.div`

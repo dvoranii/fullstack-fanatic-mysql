@@ -270,7 +270,7 @@ export const TriangleArrowThird = styled(TriangleArrow)`
 
 export const SocialButtonsWrapper = styled.div`
   display: flex;
-  gap: 10px;
+  gap: 28px;
   width: 100%;
   justify-content: center;
   align-items: center;

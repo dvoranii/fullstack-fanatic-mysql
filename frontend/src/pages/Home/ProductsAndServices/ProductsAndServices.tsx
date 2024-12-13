@@ -9,6 +9,10 @@ import {
   ProductsAndServiceTitle,
   ProductsAndServicesBottomImgWrapper,
   CardLink,
+  BgSquaresAndTriangleImg,
+  // BannerBottom,
+  // LeftSide,
+  // RightSide,
 } from "./ProductsAndServices.styled";
 import TutorialIcon from "../../../assets/images/tutorial-icon-home.svg";
 import BlogIcon from "../../../assets/images/blog-icon-home.svg";
@@ -17,6 +21,7 @@ import RatingsCardImage from "../../../assets/images/ratings-card-image.svg";
 import BlogsCardImage from "../../../assets/images/blogs-card-image.svg";
 import ConsultCardImage from "../../../assets/images/consult-card-image.svg";
 import ProductsAndServicesBottomImg from "../../../assets/images/products-and-services-bottom-img.svg";
+import BgSquaresAndTriangle from "../../../assets/images/SquaresAndTriangles.svg";
 
 const ProductsAndServices: React.FC = () => {
   return (
@@ -25,8 +30,15 @@ const ProductsAndServices: React.FC = () => {
         <ProductsAndServiceTitle>Products & Services</ProductsAndServiceTitle>
       </ProductsAndServiceTitleWrapper>
       <ProductsAndServicesWrapperOuter>
+        <BgSquaresAndTriangleImg
+          className="bg-squares"
+          src={BgSquaresAndTriangle}
+          alt=""
+          width="260"
+          height="auto"
+        />
         <ProductsAndServicesWrapperInner>
-          <CardWrapper>
+          <CardWrapper className="card">
             <Card>
               <h3>Tutorials</h3>
               <CardList>
@@ -72,7 +84,7 @@ const ProductsAndServices: React.FC = () => {
               height="78"
             />
           </CardWrapper>
-          <CardWrapper>
+          <CardWrapper className="card">
             <Card>
               <h3>Blog Posts</h3>
               <CardList>
@@ -117,7 +129,7 @@ const ProductsAndServices: React.FC = () => {
               height="73"
             />
           </CardWrapper>
-          <CardWrapper>
+          <CardWrapper className="card consult-card">
             <Card>
               <h3>Consultations</h3>
               <CardList>
@@ -173,6 +185,10 @@ const ProductsAndServices: React.FC = () => {
           height="1080"
         />
       </ProductsAndServicesBottomImgWrapper>
+      {/* <BannerBottom>
+        <LeftSide></LeftSide>
+        <RightSide></RightSide>
+      </BannerBottom> */}
     </>
   );
 };
