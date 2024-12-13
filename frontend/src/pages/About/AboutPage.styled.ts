@@ -124,7 +124,7 @@ export const CoreTenetsWrapper = styled.div`
     url(${HexagonalBg});
   background-size: cover;
   background-repeat: no-repeat;
-  padding: 2.4rem 1.2rem 8.4rem 1.2rem;
+  padding: 2.4rem 0rem 8.4rem 0rem;
   position: relative;
 
   .elipse-solid {
@@ -142,8 +142,8 @@ export const CoreTenetsWrapper = styled.div`
     padding-bottom: 1.2rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.25);
     width: fit-content;
-    margin: 0 auto 2.4rem auto;
     font-family: "Anybody", sans-serif;
+    margin: 0 auto 2.4rem auto;
   }
 
   ol {
@@ -158,6 +158,25 @@ export const CoreTenetsWrapper = styled.div`
       font-weight: 100;
       margin-top: 0.5rem;
     }
+  }
+
+  @media screen and (max-width: 1035px) {
+    h3 {
+      br {
+        display: none;
+      }
+    }
+  }
+`;
+
+export const SubtitleWrapper = styled.div`
+  width: 70%;
+  padding: 0 20px;
+  margin: 0 auto 2.4rem auto;
+  /* background-color: ${colors.secondary}; */
+
+  @media screen and (max-width: 937px) {
+    width: 90%;
   }
 `;
 

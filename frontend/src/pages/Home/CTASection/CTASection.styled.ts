@@ -49,6 +49,7 @@ export const ImgWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
   background-image: linear-gradient(
       to bottom,
       rgba(255, 255, 255, 1) 0%,

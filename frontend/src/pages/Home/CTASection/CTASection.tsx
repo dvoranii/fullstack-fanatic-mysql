@@ -10,14 +10,35 @@ import {
   SubtextWrapper,
 } from "./CTASection.styled";
 import BrainGraphic from "../../../assets/images/brain sides-cuate.svg";
+import { useEffect, useState } from "react";
 
 const CTASection: React.FC = () => {
+  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 1100);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth > 1100);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <CTAWrapperOuter>
       <CTAWrapperInner>
-        <ImgWrapper>
-          <BrainImg src={BrainGraphic}></BrainImg>
-        </ImgWrapper>
+        {isLargeScreen && (
+          <ImgWrapper>
+            <picture>
+              <source srcSet={BrainGraphic} media="(min-width: 1100px)" />
+              <BrainImg
+                src={BrainGraphic}
+                loading="lazy"
+                alt="brain image"
+              ></BrainImg>
+            </picture>
+          </ImgWrapper>
+        )}
         <ContentWrapper>
           <TextWrapper>
             <h2>Think Smarter. Build Better.</h2>

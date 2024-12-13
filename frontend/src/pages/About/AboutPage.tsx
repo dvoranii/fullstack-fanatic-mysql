@@ -12,6 +12,7 @@ import {
   LinkWrapper,
   ImgWrapper,
   AboutPageWrapper,
+  SubtitleWrapper,
 } from "./AboutPage.styled";
 import Title from "../../components/Title/Title";
 import AboutImage from "../../assets/images/Amico-images/About-us-page-amico.svg";
@@ -67,11 +68,14 @@ const AboutPage: React.FC = () => {
           </ImgWrapper>
         </AboutIntroWrapperOuter>
         <CoreTenetsWrapper>
-          <h3>
-            At Full Stack Fanatic, we strive to live up to a set of core tenets,
-            <br></br>
-            and hopefully help you do the same:
-          </h3>
+          <SubtitleWrapper>
+            <h3>
+              At Full Stack Fanatic, we strive to live up to a set of core
+              <br></br>
+              tenets, and hopefully help you do the same
+            </h3>
+          </SubtitleWrapper>
+
           <CoreTenetsWrapperInner>
             <TenetListSection>
               <ListSectionTitleWrapper>
