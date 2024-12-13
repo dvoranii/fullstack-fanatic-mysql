@@ -81,6 +81,13 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
     fetchFollowData();
   }, [profile.id]);
 
+  const truncateText = (text: string, maxLength: number): string => {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + "...";
+    }
+    return text;
+  };
+
   return (
     <>
       <BannerWrapperOuter>
@@ -202,7 +209,9 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
                   <>
                     {comments.slice(0, 5).map((comment) => (
                       <CommentItem key={comment.id}>
-                        <CommentText>{comment.content}</CommentText>
+                        <CommentText>
+                          {truncateText(comment.content, 50)}
+                        </CommentText>
                         {comment.content_type === "tutorial" ? (
                           <CommentLink
                             href={`/tutorial/${comment.content_id}/comments/${comment.id}`}

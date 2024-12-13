@@ -25,8 +25,8 @@ const isBlogPremium = (id: string | undefined) => {
 };
 
 interface ProtectedRouteProps {
-  component: ComponentType<any>;
-  props?: Record<string, any>;
+  component: ComponentType<Record<string, unknown>>;
+  props?: Record<string, unknown>;
   purchasedItemIds?: number[];
 }
 
@@ -49,6 +49,18 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   if (!profile && isMyAccountRoute) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (location.pathname === "/my-subscription-cart") {
+    if (!profile) {
+      return <Navigate to="/register" replace />;
+    }
+
+    return (
+      <Suspense fallback={<LoadingSpinner />}>
+        <Component {...props} />
+      </Suspense>
+    );
   }
 
   if (isTutorialRoute) {

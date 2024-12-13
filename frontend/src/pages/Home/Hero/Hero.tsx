@@ -78,7 +78,7 @@ const Hero: React.FC = () => {
             </HeroTextWrapper>
 
             <HeroLinkWrapper>
-              <Link to="/plans-and-pricing">Learn more</Link>
+              <Link to="/about">Learn more</Link>
             </HeroLinkWrapper>
 
             <SocialButtonsWrapper>

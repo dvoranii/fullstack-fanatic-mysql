@@ -52,7 +52,8 @@ app.use(
     allowedHeaders: ["Authorization", "Content-Type", "x-csrf-token"],
   })
 );
-app.use((req, res, next) => {
+
+app.use((_req, res, next) => {
   res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
   next();
 });
@@ -64,13 +65,6 @@ app.use((req, res, next) => {
     express.json()(req, res, next);
   }
 });
-
-// const frontendPath = path.join(__dirname, "../../frontend/dist");
-// app.use(express.static(frontendPath));
-
-// app.get("*", (_req, res) => {
-//   res.sendFile(path.join(frontendPath, "index.html"));
-// });
 
 app.use(express.urlencoded({ extended: true }));
 

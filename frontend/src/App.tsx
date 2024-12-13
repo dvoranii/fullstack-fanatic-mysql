@@ -5,6 +5,7 @@ import { GlobalStyles } from "./GlobalStyles";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { UserProvider } from "./context/UserContext";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
+import { useInactivityTimer } from "./hooks/useInactivityTimer";
 
 // Lazy load components
 const NavBar = React.lazy(() => import("./components/NavBar/NavBar"));
@@ -16,6 +17,12 @@ const ScrollToTop = React.lazy(
 
 const clientId = import.meta.env.VITE_CLIENT_ID;
 
+// Child Component to Invoke the Hook
+const InactivityHandler: React.FC = () => {
+  useInactivityTimer(); // Hook runs inside Router context
+  return null; // Render nothing, just runs the effect
+};
+
 const App: React.FC = () => {
   return (
     <>
@@ -24,6 +31,7 @@ const App: React.FC = () => {
         <GoogleOAuthProvider clientId={clientId}>
           <UserProvider>
             <Router>
+              <InactivityHandler />
               <Suspense fallback={<LoadingSpinner />}>
                 <ScrollToTop />
                 <NavBar />
