@@ -11,8 +11,13 @@ export const IntroSectionWrapper = styled.section`
   background-color: #fefefe;
   overflow: hidden;
   margin: 0 auto;
-  padding-top: 12.8rem;
-  padding-bottom: 12.8rem;
+  padding-top: 16.8rem;
+  padding-bottom: 16.8rem;
+
+  @media screen and (max-width: 768px) {
+    padding-top: 12.8rem;
+    padding-bottom: 6.8rem;
+  }
 `;
 
 export const ContentWrapper = styled.div`
@@ -112,10 +117,8 @@ export const LeftGraphic = styled.img`
     bottom: 2vh;
   }
 
-  @media screen and (max-width: 665px) {
-    width: 40vw;
-    left: 0px;
-    bottom: 10px;
+  @media screen and (max-width: 768px) {
+    display: none;
   }
 `;
 

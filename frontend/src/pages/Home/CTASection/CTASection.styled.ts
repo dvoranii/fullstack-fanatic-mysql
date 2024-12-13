@@ -57,9 +57,8 @@ export const ImgWrapper = styled.div`
     url(${elegantWhiteBg});
   background-size: cover;
   background-repeat: no-repeat;
+  transform: scaleX(-1);
 
-  img {
-  }
   @media screen and (max-width: 1100px) {
     display: none;
   }
@@ -70,6 +69,7 @@ export const BrainImg = styled.img`
   height: auto;
   width: clamp(250px, 50vw, 500px);
   padding: 20px;
+  transform: scaleX(-1);
 `;
 
 export const ContentWrapper = styled.div`

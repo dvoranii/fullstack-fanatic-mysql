@@ -106,7 +106,7 @@ export const CardWrapper = styled.div`
   margin: 0 auto;
   position: relative;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.25);
-  border-radius: 8px;
+  border-radius: 20px;
 
   .top-icon {
     user-select: none;
@@ -232,10 +232,10 @@ export const CardLink = styled(Link)`
   background-color: ${colors.secondary};
   color: ${colors.primary};
   text-decoration: none;
-  border-radius: 20px;
+  border-radius: 4px;
   width: fit-content;
-  margin: 20px auto;
-  margin-bottom: 20px;
+  margin: 40px auto;
+  margin-bottom: 40px;
   text-transform: uppercase;
   font-weight: 700;
   font-family: "Roboto";

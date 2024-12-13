@@ -124,9 +124,8 @@ export const CoreTenetsWrapper = styled.div`
     url(${HexagonalBg});
   background-size: cover;
   background-repeat: no-repeat;
-  padding-bottom: 8.4rem;
+  padding: 2.4rem 1.2rem 8.4rem 1.2rem;
   position: relative;
-  padding-top: 2.4rem;
 
   .elipse-solid {
     position: absolute;
@@ -137,15 +136,14 @@ export const CoreTenetsWrapper = styled.div`
   }
   h3 {
     text-align: center;
-    font-size: 1.6rem;
+    font-size: clamp(1.4rem, 2vw, 1.8rem);
     font-weight: bold;
     color: ${colors.primary};
-    padding-bottom: 2.4rem;
-    margin: 4.2rem auto;
+    padding-bottom: 1.2rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-    margin-bottom: 2.4rem;
+    width: fit-content;
+    margin: 0 auto 2.4rem auto;
     font-family: "Anybody", sans-serif;
-    width: clamp(250px, 70vw, 100%);
   }
 
   ol {

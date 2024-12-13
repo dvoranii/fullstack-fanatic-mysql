@@ -9,6 +9,10 @@ export const InfoSectionWrapper = styled.section`
     #ffffff 50%
   );
   padding-bottom: 12.8rem;
+
+  @media screen and (max-width: 1024px) {
+    padding-bottom: 6.8rem;
+  }
 `;
 export const InfoSectionWrapperInner = styled.div`
   display: flex;
