@@ -41,12 +41,12 @@ export const Card = styled.div`
   background-color: #fff;
   border-radius: 10px;
   padding: 40px;
-  width: clamp(200px, 20vw, 300px);
+  width: clamp(200px, 20vw, 400px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
   border-top-left-radius: 100px;
   position: relative;
-  min-height: 300px;
+  min-height: 400px;
 
   @media screen and (max-width: 1320px) {
     width: 25vw;
@@ -54,6 +54,7 @@ export const Card = styled.div`
 
   @media screen and (max-width: 1020px) {
     padding: 30px 15px;
+    min-height: 300px;
   }
 
   @media screen and (max-width: 860px) {
@@ -97,7 +98,7 @@ export const CardTitle = styled.h3`
 `;
 
 export const CardContent = styled.p`
-  font-size: clamp(1.2rem, 2vw, 1.4rem);
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
   line-height: 1.5;
   color: #555;
   margin-bottom: 15px;
@@ -163,7 +164,7 @@ export const CardImgWrapper = styled.div`
   position: absolute;
   width: clamp(130px, 15vw, 250px);
   right: -125px;
-  bottom: -180px;
+  bottom: -155px;
 
   img {
     width: 100%;

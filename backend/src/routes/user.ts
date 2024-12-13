@@ -95,15 +95,15 @@ router.post("/login", async (req: Request, res: Response): Promise<void> => {
     // Set refresh token in HttpOnly cookie
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // HTTPS only in production
-      sameSite: "strict", // CSRF protection
-      path: "/api/users/refresh-token", // Scope cookie to refresh-token endpoint
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/api/users/refresh-token",
     });
 
     res.status(200).json({
       message: "User logged in successfully",
       user: { id: user.id, username: user.username, name: user.name },
-      token: jwtToken, // Send access token in response
+      token: jwtToken,
     });
   } catch (err) {
     const error = err as Error;

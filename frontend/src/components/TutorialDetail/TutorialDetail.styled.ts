@@ -12,4 +12,10 @@ export const TutorialDetailWrapper = styled.div`
     padding-bottom: 1.2rem;
     user-select: none;
   }
+
+  @media screen and (max-width: 500px) {
+    h1 {
+      font-size: 1.4rem;
+    }
+  }
 `;

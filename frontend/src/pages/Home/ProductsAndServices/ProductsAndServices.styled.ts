@@ -70,7 +70,6 @@ export const ProductsAndServicesWrapperInner = styled.div`
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, minmax(300px, 1fr));
-  gap: 3.2rem;
 
   @media screen and (max-width: 1100px) {
     gap: 2.4rem;
@@ -96,14 +95,15 @@ export const ProductsAndServicesWrapperInner = styled.div`
     }
 
     .card {
-      width: clamp(350px, 60vw, 450px);
+      width: clamp(300px, 60vw, 450px);
       margin: 0 auto;
     }
   }
 `;
 
 export const CardWrapper = styled.div`
-  width: 100%;
+  width: 85%;
+  margin: 0 auto;
   position: relative;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
@@ -124,10 +124,6 @@ export const CardWrapper = styled.div`
 
   @media screen and (max-width: 1100px) {
     min-height: 450px;
-  }
-
-  @media screen and (max-width: 400px) {
-    width: 80vw;
   }
 `;
 export const Card = styled.div`
@@ -207,6 +203,7 @@ export const CardImagesWrapper = styled.div`
 export const ProductsAndServicesBottomImgWrapper = styled.div`
   width: 100%;
   display: flex;
+  margin-bottom: -2%;
 
   img {
     width: 100%;
@@ -223,6 +220,10 @@ export const ProductsAndServicesBottomImgWrapper = styled.div`
     padding-top: 0;
     width: 156%;
     margin-left: -120px;
+  }
+  @media screen and (max-width: 568px) {
+    width: 196%;
+    margin-left: -220px;
   }
 `;
 
@@ -247,18 +248,3 @@ export const CardLink = styled(Link)`
 `;
 
 export const BgSquaresAndTriangleImg = styled.img``;
-
-// export const BannerBottom = styled.div`
-//   width: 100%;
-//   height: 100px;
-//   display: grid;
-//   grid-template-columns: 1fr 1.35fr;
-//   z-index: -1;
-// `;
-
-// export const LeftSide = styled.div``;
-// export const RightSide = styled.div`
-//   width: 100%;
-//   height: 100%;
-//   background-color: ${colors.primary};
-// `;

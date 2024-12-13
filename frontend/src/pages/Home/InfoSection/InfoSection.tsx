@@ -39,7 +39,7 @@ const InfoSection: React.FC = () => {
         <Card>
           <CardTitle>Apply</CardTitle>
           <CardContent>
-            Apply your knowledge with hands-on projects.
+            Apply your knowledge with real-world hands-on projects.
           </CardContent>
           <CardLinkWrapper>
             <CardLink href="/tutorials">See more</CardLink>

@@ -8,6 +8,10 @@ export const CommentSectionTitle = styled.h3`
 export const CommentSectionWrapperOuter = styled.div`
   display: flex;
   flex-direction: column;
+  @media screen and (max-width: 768px) {
+    border: 1px solid #888;
+    padding: 20px;
+  }
 `;
 
 export const CommentSectionWrapperInner = styled.ul`
@@ -20,6 +24,10 @@ export const CommentSectionWrapperInner = styled.ul`
   max-height: 600px;
   overflow-y: auto;
   overflow-x: auto;
+  @media screen and (max-width: 768px) {
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
 `;
 
 export const FormWrapper = styled.form`
@@ -92,6 +100,14 @@ export const ProfilePictureWrapper = styled.div`
   padding-right: 20px;
   img {
     margin-top: -30px;
+  }
+
+  @media screen and (max-width: 400px) {
+    padding-right: 0;
+    img {
+      transform: scale(0.7);
+      padding-right: 0;
+    }
   }
 `;
 

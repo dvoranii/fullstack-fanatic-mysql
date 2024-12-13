@@ -4,7 +4,7 @@ import Hero from "./Hero/Hero";
 import IntroSection from "./IntroSection/IntroSection";
 import InfoSection from "./InfoSection/InfoSection";
 import ProductsAndServices from "./ProductsAndServices/ProductsAndServices";
-// import CTASection from "./CTASection/CTASection";
+import CTASection from "./CTASection/CTASection";
 
 const HomePage: React.FC = () => {
   return (
@@ -21,7 +21,7 @@ const HomePage: React.FC = () => {
         <IntroSection />
         <InfoSection />
         <ProductsAndServices />
-        {/* <CTASection /> */}
+        <CTASection />
       </HomePageWrapper>
     </>
   );

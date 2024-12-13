@@ -10,9 +10,6 @@ import {
   ProductsAndServicesBottomImgWrapper,
   CardLink,
   BgSquaresAndTriangleImg,
-  // BannerBottom,
-  // LeftSide,
-  // RightSide,
 } from "./ProductsAndServices.styled";
 import TutorialIcon from "../../../assets/images/tutorial-icon-home.svg";
 import BlogIcon from "../../../assets/images/blog-icon-home.svg";
@@ -185,10 +182,6 @@ const ProductsAndServices: React.FC = () => {
           height="1080"
         />
       </ProductsAndServicesBottomImgWrapper>
-      {/* <BannerBottom>
-        <LeftSide></LeftSide>
-        <RightSide></RightSide>
-      </BannerBottom> */}
     </>
   );
 };

@@ -6,6 +6,7 @@ import AlataRegular from "./assets/fonts/Alata-Regular.ttf";
 import AnybodyMedium from "./assets/fonts/Anybody-Medium.ttf";
 import AnybodySemiBold from "./assets/fonts/Anybody-SemiBold.ttf";
 import AnybodyBold from "./assets/fonts/Anybody-Bold.ttf";
+import AbelRegular from "./assets/fonts/Abel-Regular.ttf";
 
 export const colors = {
   primary: "#14213D",
@@ -66,6 +67,13 @@ export const GlobalStyles = createGlobalStyle`
     font-family: "Anybody";
     src: url(${AnybodyBold}) format("truetype");
     font-weight: 700;
+    font-style:normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Abel";
+    src: url(${AbelRegular}) format("truetype");
+    font-weight: 400;
     font-style:normal;
     font-display: swap;
   }
