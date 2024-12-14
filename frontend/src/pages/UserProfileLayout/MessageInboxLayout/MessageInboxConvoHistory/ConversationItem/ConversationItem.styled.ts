@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const ConversationWrapper = styled.div`
   border: 1px solid grey;
   border-radius: 4px;
-  margin-top: 10px;
   padding: 10px;
   transition: all 150ms ease;
   position: relative;
@@ -20,7 +19,8 @@ export const ConversationWrapper = styled.div`
   @media screen and (max-width: 981px) {
     display: flex;
     flex-direction: column;
-    width: 25%;
+    min-width: 120px;
+    max-width: 120px;
 
     height: 120px;
   }

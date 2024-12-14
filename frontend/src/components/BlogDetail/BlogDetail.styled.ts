@@ -14,4 +14,8 @@ export const BlogDetailWrapper = styled.div`
     padding-bottom: 1.2rem;
     user-select: none;
   }
+
+  @media screen and (max-width: 400px) {
+    max-width: 100vw;
+  }
 `;

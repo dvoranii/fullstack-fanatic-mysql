@@ -37,7 +37,7 @@ export const BlogItem = styled.div`
 
   @media screen and (max-width: 768px) {
     flex-direction: column;
-    width: 93vw;
+    width: 90vw;
     margin: 0 auto;
   }
 `;
@@ -58,12 +58,15 @@ export const BlogContent = styled(Link)`
     margin: 0;
     font-size: 1rem;
     color: #666;
-    max-width: 80%;
+    padding-right: 100px;
   }
 
   @media screen and (max-width: 768px) {
     h2 {
       padding-top: 1.2rem;
+    }
+    p {
+      padding-right: 0;
     }
   }
 `;

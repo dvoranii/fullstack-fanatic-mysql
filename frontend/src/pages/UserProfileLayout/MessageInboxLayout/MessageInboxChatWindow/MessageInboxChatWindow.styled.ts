@@ -17,7 +17,7 @@ export const ChatWindowContainerOuter = styled.div`
     padding: 0px;
     width: 94%;
     margin: 0 auto;
-    height: 55vh;
+    height: 77vh;
     gap: 10px;
   }
 `;

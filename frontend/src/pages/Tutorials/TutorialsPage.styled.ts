@@ -71,6 +71,7 @@ export const TutorialList = styled.div`
 
   @media (max-width: 570px) {
     grid-template-columns: 1fr;
+    max-width: 100vw;
   }
 `;
 
@@ -89,7 +90,7 @@ export const TutorialItemWrapper = styled.div`
     height: clamp(320px, 28vw, 350px);
   }
   @media screen and (max-width: 570px) {
-    width: clamp(250px, 22vw, 300px);
+    width: clamp(90%, 22vw, 300px);
     height: clamp(350px, 30vw, 400px);
   }
 `;
