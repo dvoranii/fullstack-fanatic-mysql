@@ -17,6 +17,7 @@ import { PageWrapper } from "../../../PageWrapper.styled";
 import { formatTimeAgo } from "../../../utils/timeUtils";
 import { UserContext } from "../../../context/UserContext";
 import TitleBanner from "../../../components/TitleBanner/TitleBanner";
+import { truncateText } from "../../../utils/textUtils";
 
 const BATCH_SIZE = 5;
 
@@ -80,7 +81,9 @@ export const CommentHistory: React.FC = () => {
             {comments.map((comment, index) => (
               <CommentItem key={`${comment.id}-${index}`}>
                 <CommentTextWrapper>
-                  <CommentText>{comment.content}</CommentText>
+                  <CommentText>
+                    {truncateText(comment.content, 100)}
+                  </CommentText>
                   <CommentTimeCreation>
                     {formatTimeAgo(comment.created_at)}
                   </CommentTimeCreation>

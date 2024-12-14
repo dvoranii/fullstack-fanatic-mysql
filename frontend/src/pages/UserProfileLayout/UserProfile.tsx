@@ -42,6 +42,7 @@ import { UserContext } from "../../context/UserContext";
 
 import MessageModalButton from "../../components/MessageModalButton/MessageModalButton";
 import FavoritesSection from "./FavoritesSection/FavoritesSection";
+import { truncateText } from "../../utils/textUtils";
 
 const BASE_URL = import.meta.env.VITE_API_URL.replace("/api", "");
 
@@ -80,13 +81,6 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
 
     fetchFollowData();
   }, [profile.id]);
-
-  const truncateText = (text: string, maxLength: number): string => {
-    if (text.length > maxLength) {
-      return text.slice(0, maxLength) + "...";
-    }
-    return text;
-  };
 
   return (
     <>
