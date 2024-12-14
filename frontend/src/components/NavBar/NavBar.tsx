@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useUser from "../../hooks/useUser";
 import {
   Nav,
@@ -31,6 +31,18 @@ const NavBar: React.FC = () => {
   const toggleMobileNav = () => {
     setOpen(!open);
   };
+
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   return (
     <Nav>

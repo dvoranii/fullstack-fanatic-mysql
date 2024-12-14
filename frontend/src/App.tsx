@@ -17,10 +17,9 @@ const ScrollToTop = React.lazy(
 
 const clientId = import.meta.env.VITE_CLIENT_ID;
 
-// Child Component to Invoke the Hook
 const InactivityHandler: React.FC = () => {
-  useInactivityTimer(); // Hook runs inside Router context
-  return null; // Render nothing, just runs the effect
+  useInactivityTimer();
+  return null;
 };
 
 const App: React.FC = () => {

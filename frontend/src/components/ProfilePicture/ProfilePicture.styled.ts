@@ -11,4 +11,5 @@ export const StyledProfilePicture = styled.img<{
   border: ${(props) => props.border};
   background-color: ${(props) => props.bg};
   object-fit: cover;
+  user-select: none;
 `;

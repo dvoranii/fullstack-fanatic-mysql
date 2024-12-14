@@ -116,7 +116,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   p, ul, li {
-  font-size: clamp(1.2rem, 1.5vw, 1.2rem);
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
   line-height: 1.6;
 }
 

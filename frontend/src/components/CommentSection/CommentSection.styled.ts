@@ -114,4 +114,8 @@ export const ProfilePictureWrapper = styled.div`
 export const RepliesWrapper = styled.div`
   margin-left: 2rem;
   margin-top: 0.5rem;
+
+  @media screen and (max-width: 758px) {
+    margin-left: 0;
+  }
 `;

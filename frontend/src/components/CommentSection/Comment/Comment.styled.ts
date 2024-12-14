@@ -39,7 +39,16 @@ export const ProfilePictureWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   margin-right: 1rem;
+  max-width: 60px;
+
+  @media screen and (max-width: 768px) {
+    img {
+      width: 40px;
+      height: 40px;
+    }
+  }
 `;
 
 export const Username = styled.p`
@@ -55,6 +64,7 @@ export const CommentItem = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  min-width: 240px;
 `;
 
 export const CommentContentWrapper = styled.div`
@@ -78,6 +88,13 @@ export const LikesWrapper = styled.div`
     width: 25px;
     cursor: pointer;
     margin-right: 0.5rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    img {
+      width: 20px;
+      margin-right: 0.2rem;
+    }
   }
 `;
 
@@ -121,6 +138,12 @@ export const FormButton = styled.button<{
   img {
     margin-top: 1.2rem;
     width: 25px;
+  }
+
+  @media screen and (max-width: 768px) {
+    img {
+      width: 20px;
+    }
   }
 `;
 

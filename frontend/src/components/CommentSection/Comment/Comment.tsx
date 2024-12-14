@@ -125,7 +125,7 @@ const Comment: React.FC<CommentProps> = ({
                   alt="like icon"
                   onClick={handleLikeClick}
                 />
-                {likes}
+                <span>{likes}</span>
               </LikesWrapper>
             </>
           )}
