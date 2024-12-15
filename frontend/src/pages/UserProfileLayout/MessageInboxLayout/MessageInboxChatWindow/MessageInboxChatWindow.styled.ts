@@ -38,6 +38,7 @@ export const TextInputWrapper = styled.div`
   max-width: 750px;
   margin: 0 auto;
   width: 95%;
+  user-select: none;
 `;
 
 export const ChatInput = styled.textarea`

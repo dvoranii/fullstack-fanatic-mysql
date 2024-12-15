@@ -105,13 +105,16 @@ export const TutorialThumbnail = styled(Link)`
   flex-direction: column;
   align-items: center;
   user-select: none;
+  padding: 10px;
 
   &:hover {
     background: #f5f5f5;
   }
 
   h2 {
-    font-family: "ZenKakuGothicNewMedium";
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.25px;
     margin-top: 0;
     padding: 12px;
     text-align: center;
@@ -122,7 +125,8 @@ export const TutorialThumbnail = styled(Link)`
   }
 
   img {
-    width: 150px;
+    width: 130px;
+    padding-top: 1.2rem;
     height: auto;
   }
 `;
@@ -132,12 +136,13 @@ export const ThumbnailBannerWrapper = styled.div`
   justify-content: space-between;
   padding: 12px;
   user-select: none;
+  background-color: #ecececec;
 `;
 
 export const StarIcon = styled.img`
-  width: 30px;
-  height: 30px;
-  margin-right: 2px;
+  width: 32px;
+  height: auto;
+  padding: 4px;
 `;
 
 export const DifficultyStarsWrapper = styled.div`

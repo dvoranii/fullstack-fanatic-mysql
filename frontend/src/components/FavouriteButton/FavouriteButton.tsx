@@ -9,10 +9,13 @@ const FavouriteButton: React.FC<FavouriteButtonProps> = ({
   altText,
   isDisabled = false,
 }) => {
+  const titleText = isFavourited ? "Unfavorite" : "Favorite";
+
   return (
     <FavouriteButtonImg
       src={isFavourited ? FavouriteIconImgFilled : FavouriteIconImg}
       alt={altText}
+      title={titleText}
       onClick={isDisabled ? undefined : onClick}
       isDisabled={isDisabled}
     />

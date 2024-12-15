@@ -42,13 +42,18 @@ export const SearchBarReadFilterWrapper = styled.div`
 
 export const ConversationItemWrapper = styled.div`
   width: 100%;
-  overflow-x: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+
   @media screen and (max-width: 981px) {
-    display: flex;
+    flex-direction: row;
     gap: 10px;
     overflow-x: scroll;
     max-width: 67vw;
     border: 1px solid grey;
+    border-radius: 8px;
     padding: 10px;
     margin-top: 1.2rem;
   }
