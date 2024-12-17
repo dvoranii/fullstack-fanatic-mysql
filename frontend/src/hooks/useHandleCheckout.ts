@@ -1,4 +1,3 @@
-import { loadStripe } from "@stripe/stripe-js";
 import {
   createCheckoutPaymentSession,
   createCheckoutSubscriptionSession,
@@ -8,22 +7,27 @@ import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { useCsrfToken } from "./useCsrfToken";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-
 const useHandleCheckout = () => {
   const csrfToken = useCsrfToken();
   const { clearCart, removeSubscriptionFromCart, profile } =
     useContext(UserContext) || {};
 
+  const getStripeInstance = async () => {
+    const { loadStripe } = await import("@stripe/stripe-js");
+    const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+
+    if (!stripe) {
+      throw new Error("Failed to load Stripe instance.");
+    }
+
+    return stripe;
+  };
+
   const handleCheckout = async (cartItems: CartItem[]) => {
     try {
       const { data } = await createCheckoutPaymentSession(cartItems, csrfToken);
 
-      const stripe = await stripePromise;
-
-      if (!stripe || !data?.id) {
-        throw new Error("Stripe or session ID not found");
-      }
+      const stripe = await getStripeInstance();
 
       const { error } = await stripe.redirectToCheckout({
         sessionId: data.id,
@@ -51,11 +55,7 @@ const useHandleCheckout = () => {
         profile?.display_name
       );
 
-      const stripe = await stripePromise;
-
-      if (!stripe || !data?.id) {
-        throw new Error("Stripe or session ID not found");
-      }
+      const stripe = await getStripeInstance();
 
       const { error } = await stripe.redirectToCheckout({
         sessionId: data.id,

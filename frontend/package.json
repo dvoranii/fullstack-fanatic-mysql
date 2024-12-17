@@ -38,6 +38,7 @@
     "terser": "^5.37.0",
     "typescript": "^5.5.4",
     "vite": "^5.3.4",
-    "vite-plugin-css-injected-by-js": "^3.5.2"
+    "vite-plugin-css-injected-by-js": "^3.5.2",
+    "vite-plugin-pwa": "^0.21.1"
   }
 }
