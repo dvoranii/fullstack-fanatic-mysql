@@ -26,6 +26,7 @@ export const SentMessageWrapper = styled.div.withConfig({
   }
 
   @media screen and (max-width: 451px) {
+    padding: 8px 16px;
     img {
       display: none;
     }
@@ -35,9 +36,9 @@ export const SentMessageWrapper = styled.div.withConfig({
 export const SenderName = styled.strong`
   font-weight: bold;
   color: #fff;
-  font-family: "Alata";
+  font-family: "Roboto", sans-serif;
   letter-spacing: 0.5px;
-  border-bottom: 2px solid white;
+
   width: fit-content;
 `;
 
@@ -58,7 +59,7 @@ export const MessageTimestamp = styled.p.withConfig({
   shouldForwardProp: (prop) => prop !== "issender",
 })<SentMessageWrapperProps>`
   font-size: 0.8rem;
-  color: #ddd;
+  color: #222;
   margin-top: 5px;
   font-style: italic;
   text-align: ${({ issender }) => (issender ? "right" : "left")};

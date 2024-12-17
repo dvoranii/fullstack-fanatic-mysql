@@ -1,12 +1,11 @@
 import styled from "styled-components";
 
 interface AddToCartWrapperProps {
-  marginLeft?: string;
-  marginBottom?: string;
+  margin?: string;
 }
 
 export const AddToCartWrapper = styled.div.withConfig({
-  shouldForwardProp: (prop) => !["marginLeft", "marginBottom"].includes(prop),
+  shouldForwardProp: (prop) => !["margin"].includes(prop),
 })<AddToCartWrapperProps>`
   user-select: none;
 
@@ -18,9 +17,8 @@ export const AddToCartWrapper = styled.div.withConfig({
   }
 
   img {
-    width: 35px;
-    margin-left: ${(props) => props.marginLeft || "0px"};
-    margin-bottom: ${(props) => props.marginBottom || "0px"};
+    width: clamp(20px, 10vw, 35px);
+    margin: ${(props) => props.margin || "0px"};
     transition: all 150ms ease;
 
     &:hover {

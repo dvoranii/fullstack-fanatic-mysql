@@ -2,12 +2,13 @@ export interface UserPayload {
   userId: number;
   googleId: string;
   email: string;
-  displayName?: string;
-  profile_picture?: string;
+  display_name?: string;
+  profilePicture?: string;
   profession?: string;
   bio?: string;
   socialLinks?: { [key: string]: string };
   bannerImage?: string;
   isPremium: boolean;
   premiumLevel?: "starter" | "casual pro" | "premium";
+  stripeCustomerId?: string;
 }

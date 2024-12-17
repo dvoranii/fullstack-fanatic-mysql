@@ -31,7 +31,7 @@ export const authenticate = (
       userId: decoded.userId,
       googleId: decoded.googleId,
       email: decoded.email,
-      displayName: decoded.displayName,
+      display_name: decoded.display_name,
       profession: decoded.profession,
       bio: decoded.bio,
       socialLinks: decoded.socialLinks,

@@ -12,7 +12,7 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const useHandleCheckout = () => {
   const csrfToken = useCsrfToken();
-  const { clearCart, removeSubscriptionFromCart } =
+  const { clearCart, removeSubscriptionFromCart, profile } =
     useContext(UserContext) || {};
 
   const handleCheckout = async (cartItems: CartItem[]) => {
@@ -47,7 +47,8 @@ const useHandleCheckout = () => {
     try {
       const { data } = await createCheckoutSubscriptionSession(
         cartItems,
-        csrfToken
+        csrfToken,
+        profile?.display_name
       );
 
       const stripe = await stripePromise;

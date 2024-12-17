@@ -55,7 +55,7 @@ export const tutorialContent: TutorialContentItem[] = [
   },
   {
     id: 3,
-    title: "Javascript and Network Requests: A Comprehensive Breakdown",
+    title: "Javascript and Network Requests",
     created_at: "2024-10-10",
     steps: [
       {

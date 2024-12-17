@@ -11,4 +11,5 @@ export interface CartItem {
   accessLevel?: "free" | "premium";
   type: "tutorial" | "blog" | "subscription";
   isPurchased?: boolean;
+  priceId?: string;
 }

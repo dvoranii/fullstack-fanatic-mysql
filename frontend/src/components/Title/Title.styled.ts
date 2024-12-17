@@ -33,7 +33,7 @@ export const StyledTitle = styled.h1.withConfig({
   padding: 1rem;
   margin-top: 2.4rem;
   text-align: center;
-  color: ${({ textColor }) => textColor || "#222"};
+  color: ${({ textColor }) => textColor || `${colors.primary}`};
   font-family: "Anybody";
   font-size: 2.4rem;
   text-transform: uppercase;
@@ -42,6 +42,7 @@ export const StyledTitle = styled.h1.withConfig({
   width: fit-content;
   user-select: none;
   z-index: 1;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
 
   &::after {
     content: "";

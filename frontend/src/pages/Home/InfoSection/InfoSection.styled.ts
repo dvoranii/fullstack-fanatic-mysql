@@ -78,7 +78,7 @@ export const Card = styled.div`
 `;
 
 export const CardTitle = styled.h3`
-  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
   color: ${colors.primary};
   margin-bottom: 10px;
   font-family: "ZenGakuGothicMedium", sans-serif;
@@ -102,7 +102,7 @@ export const CardTitle = styled.h3`
 `;
 
 export const CardContent = styled.p`
-  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
   line-height: 1.5;
   color: #555;
   margin-bottom: 15px;

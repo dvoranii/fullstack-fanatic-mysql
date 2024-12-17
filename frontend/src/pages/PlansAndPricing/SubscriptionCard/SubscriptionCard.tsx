@@ -22,6 +22,7 @@ interface SubscriptionCardProps {
   highlighted?: boolean;
   children: React.ReactNode;
   className?: string;
+  priceId: string;
 }
 
 const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
@@ -32,6 +33,7 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
   highlighted,
   children,
   className,
+  priceId,
 }) => {
   const { profile, addSubscriptionToCart = () => {} } =
     useContext(UserContext) || {};
@@ -49,6 +51,7 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
         image: SubscriptionIcon,
         description: `${title} - ${frequency}`,
         type: "subscription",
+        priceId,
       };
 
       addSubscriptionToCart(subscriptionItem);

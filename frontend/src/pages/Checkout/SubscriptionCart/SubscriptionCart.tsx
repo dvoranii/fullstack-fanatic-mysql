@@ -13,11 +13,42 @@ import {
 import { UserContext } from "../../../context/UserContext";
 import { useContext } from "react";
 import useHandleCheckout from "../../../hooks/useHandleCheckout";
+import { useCsrfToken } from "../../../hooks/useCsrfToken";
+import { switchSubscriptionPlan } from "../../../services/checkoutService";
 
 const SubscriptionCart: React.FC = () => {
-  const { subscriptionItem, removeSubscriptionFromCart = () => {} } =
-    useContext(UserContext) || {};
+  const csrfToken = useCsrfToken();
+  const {
+    subscriptionItem,
+    removeSubscriptionFromCart = () => {},
+    profile,
+  } = useContext(UserContext) || {};
   const { handleSubscriptionCheckout } = useHandleCheckout();
+
+  const handleSwitchSubscription = async () => {
+    if (!subscriptionItem || !profile) return;
+
+    const newPlanPriceId = subscriptionItem.priceId || "";
+
+    try {
+      const response = await switchSubscriptionPlan(newPlanPriceId, csrfToken);
+      alert(response.data.message || "Subscription switched successfully!");
+      removeSubscriptionFromCart();
+    } catch (error) {
+      console.error("Error switching subscription:", error);
+      alert("Failed to switch subscription. Please try again.");
+    }
+  };
+
+  const handleProceedToCheckout = () => {
+    if (!subscriptionItem) return;
+
+    if (profile?.premiumLevel) {
+      handleSwitchSubscription();
+    } else {
+      handleSubscriptionCheckout([subscriptionItem]);
+    }
+  };
 
   return (
     <>
@@ -56,9 +87,7 @@ const SubscriptionCart: React.FC = () => {
             <OrderSummary>
               <h4>ORDER SUMMARY</h4>
               <p>Subtotal: ${subscriptionItem.price.toFixed(2)}</p>
-              <ProceedToCheckoutButton
-                onClick={() => handleSubscriptionCheckout([subscriptionItem])}
-              >
+              <ProceedToCheckoutButton onClick={handleProceedToCheckout}>
                 PROCEED TO CHECKOUT
               </ProceedToCheckoutButton>
             </OrderSummary>

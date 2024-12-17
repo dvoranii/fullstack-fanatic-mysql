@@ -235,8 +235,7 @@ const TutorialsPage: React.FC = () => {
                             alreadyInCart={alreadyInCart}
                             isAccessible={hasAccess && tutorial.isPremium}
                             onAddToCart={addItemToCart}
-                            marginBottom="5px"
-                            marginLeft="10px"
+                            margin="10px"
                           />
                         )}
 

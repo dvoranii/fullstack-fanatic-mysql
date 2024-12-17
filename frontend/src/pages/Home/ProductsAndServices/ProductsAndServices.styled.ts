@@ -13,7 +13,8 @@ export const ProductsAndServiceTitle = styled.h2`
   padding: 1rem;
   margin-top: 6.4rem;
   text-align: center;
-  color: #222;
+  color: ${colors.primary};
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
   font-family: "Anybody";
   font-size: 2.4rem;
   text-transform: uppercase;
@@ -143,6 +144,8 @@ export const Card = styled.div`
     padding-bottom: 1.2rem;
     border-bottom: 1px solid grey;
     font-size: 1.6rem;
+    color: #222;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
   }
 `;
 

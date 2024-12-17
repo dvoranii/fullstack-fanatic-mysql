@@ -103,7 +103,7 @@ router.post("/login", async (req: Request, res: Response): Promise<void> => {
     res.status(200).json({
       message: "User logged in successfully",
       user: { id: user.id, username: user.username, name: user.name },
-      token: jwtToken,
+      token: jwtToken, // Send access token in response
     });
   } catch (err) {
     const error = err as Error;

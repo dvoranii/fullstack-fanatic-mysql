@@ -8,7 +8,7 @@ export const FooterWrapperOuter = styled.footer`
   color: #fff;
   width: 100%;
   min-height: 100px;
-  padding: 20px 0;
+  padding: 60px 20px;
   user-select: none;
   background-image: linear-gradient(
       rgba(255, 175, 43, 1),
@@ -20,6 +20,10 @@ export const FooterWrapperOuter = styled.footer`
   background-repeat: no-repeat;
   padding-bottom: 3.2rem;
   position: relative;
+
+  @media screen and (max-width: 1100px) {
+    padding: 40px 0;
+  }
 `;
 
 export const FooterWrapperInner = styled.div`
@@ -69,7 +73,7 @@ export const FooterNavWrapper = styled.div`
     font-family: "Roboto";
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     display: none;
   }
 `;

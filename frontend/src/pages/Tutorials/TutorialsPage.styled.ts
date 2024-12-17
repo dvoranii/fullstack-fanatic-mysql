@@ -7,6 +7,7 @@ export const TutorialListOuter = styled.div`
   margin: 0 auto;
   position: relative;
   user-select: none;
+  padding-top: 4.8rem;
 
   .bg-squares-and-triangles {
     position: absolute;
@@ -122,11 +123,12 @@ export const TutorialThumbnail = styled(Link)`
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
+    color: ${colors.primary};
   }
 
   img {
-    width: 130px;
-    padding-top: 1.2rem;
+    width: 128px;
+
     height: auto;
   }
 `;
@@ -245,6 +247,15 @@ export const CardFace = styled.div.withConfig({
   padding: ${({ back }) => (back ? "16px" : "0")};
   align-items: ${({ back }) => (back ? "center" : "initial")};
   justify-content: ${({ back }) => (back ? "center" : "space-between")};
+
+  h3 {
+    text-align: center;
+    font-size: clamp(1.2rem, 2vw, 1.4rem);
+  }
+
+  p {
+    font-size: large(1rem, 1.2vw, 1.2rem);
+  }
 `;
 
 export const BottomIconsWrapper = styled.div`

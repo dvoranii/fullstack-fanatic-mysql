@@ -74,6 +74,7 @@ const PlansAndPricing: React.FC = () => {
               frequency="Month"
               buttonLabel="SUBSCRIBE"
               className="first-card"
+              priceId="price_1QWNa3Lg43ij91cK9fevMMvV"
             >
               <li>
                 <strong>Cheap:</strong> Only $5 for access to all premium basic
@@ -95,6 +96,7 @@ const PlansAndPricing: React.FC = () => {
               buttonLabel="SUBSCRIBE"
               highlighted
               className="premium"
+              priceId="price_1QAEHFLg43ij91cKJ9Ofrpt5"
             >
               <li>
                 <strong>Best Value:</strong> Save more with our yearly
@@ -115,6 +117,7 @@ const PlansAndPricing: React.FC = () => {
               frequency="Month"
               buttonLabel="SUBSCRIBE"
               className="third-card"
+              priceId="price_1QAEHFLg43ij91cKjwxB2FCZ"
             >
               <li>
                 <strong>Unlimited Access:</strong> Get access to all tutorials.
