@@ -41,6 +41,7 @@ export const BannerUploadWrapper = styled.div`
 `;
 
 export const ProfileBanner = styled.div<{ banner_image: string }>`
+  background-color: lightblue;
   padding: 20px 0;
   border-bottom-left-radius: 40px;
   border-bottom-right-radius: 40px;

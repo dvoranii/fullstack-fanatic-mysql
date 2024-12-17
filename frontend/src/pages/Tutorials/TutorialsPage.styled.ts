@@ -13,6 +13,7 @@ export const TutorialListOuter = styled.div`
     position: absolute;
     right: -25%;
     width: 20vw;
+    height: auto;
   }
 
   .swirly-1 {

@@ -46,7 +46,7 @@ const UserAccountsPage: React.FC = () => {
       formData.append("bannerimage", bannerImage);
       try {
         const data: ImageUploadResponse = await uploadImage(
-          "/api/profile/upload-banner",
+          "/profile/upload-banner",
           formData,
           csrfToken
         );

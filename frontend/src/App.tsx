@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { HelmetProvider } from "react-helmet-async";
+import { HelmetProvider, Helmet } from "react-helmet-async";
 import { BrowserRouter as Router } from "react-router-dom";
 import { GlobalStyles } from "./GlobalStyles";
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -26,6 +26,10 @@ const App: React.FC = () => {
   return (
     <>
       <HelmetProvider>
+        <Helmet>
+          <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+          <title>Full Stack Fanatic</title>
+        </Helmet>
         <GlobalStyles />
         <GoogleOAuthProvider clientId={clientId}>
           <UserProvider>

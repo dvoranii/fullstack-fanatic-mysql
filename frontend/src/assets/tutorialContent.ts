@@ -128,7 +128,7 @@ export const tutorialContent: TutorialContentItem[] = [
   },
   {
     id: 6,
-    title: "DNS 101: Let's deply and configure an app!",
+    title: "DNS 101: Let's deploy and configure an app!",
     created_at: "2024-10-13",
     steps: [
       {

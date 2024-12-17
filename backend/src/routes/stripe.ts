@@ -208,7 +208,7 @@ interface StripeCustomerIdRow {
 
         const subscriptions = await stripe.subscriptions.list({
           customer: stripeCustomerId,
-          // status: "active",
+          status: "active",
         });
 
         console.log(subscriptions);

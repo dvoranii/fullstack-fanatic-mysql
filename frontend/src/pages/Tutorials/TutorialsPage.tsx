@@ -133,6 +133,12 @@ const TutorialsPage: React.FC = () => {
       <Helmet>
         <title>Tutorials - Full Stack Fanatic</title>
         <meta name="description" content="Full Stack Fanatic tutorials page." />
+        <link
+          rel="preload"
+          href={SquaresAndTriangles}
+          as="image"
+          type="image/svg+xml"
+        />
       </Helmet>
       <Title textContent="Tutorials" pseudoRight="-3px" pseudoWidth="120px" />
 
@@ -145,6 +151,10 @@ const TutorialsPage: React.FC = () => {
           src={SquaresAndTriangles}
           alt="Squares and Triangles"
           className="bg-squares-and-triangles"
+          width="181"
+          height="106"
+          loading="eager"
+          fetchPriority="high"
         />
 
         <div className="block-1" />
