@@ -9,6 +9,7 @@ import { CommentType } from "../types/Comment/Comment";
 import { UserContextType } from "../types/User/UserContextType";
 import { CartItem } from "../types/CartItem";
 import { useCsrfToken } from "../hooks/useCsrfToken";
+import { getUserProfile } from "../services/profileService";
 
 export const UserContext = createContext<UserContextType | undefined>(
   undefined
@@ -40,6 +41,15 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       return storedSubscriptionItem ? JSON.parse(storedSubscriptionItem) : null;
     }
   );
+
+  const fetchProfile = async () => {
+    try {
+      const userProfile = await getUserProfile();
+      setProfile(userProfile);
+    } catch (error) {
+      console.error("Failed to fetch user profile:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -166,6 +176,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       value={{
         profile,
         setProfile,
+        fetchProfile,
         favouriteTutorials,
         setFavouriteTutorials,
         favouriteBlogs,

@@ -34,7 +34,9 @@ export async function apiCall<T>(
   }
 
   if (!response.ok) {
-    throw new Error(`Request failed with status ${status}: ${data.message}`);
+    const errorMessage =
+      data.message || data.error || `Request failed with status ${status}`;
+    throw new Error(errorMessage);
   }
 
   return { status, data };

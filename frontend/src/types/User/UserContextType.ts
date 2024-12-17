@@ -9,6 +9,7 @@ import { PurchasedItem } from "../PurchasedItem";
 export interface UserContextType {
   profile: User | null;
   setProfile: (profile: User | null) => void;
+  fetchProfile: () => Promise<void>;
   favouriteTutorials: Tutorial[];
   setFavouriteTutorials: Dispatch<SetStateAction<Tutorial[]>>;
   favouriteBlogs: Blog[];

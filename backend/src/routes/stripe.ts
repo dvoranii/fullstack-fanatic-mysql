@@ -259,7 +259,9 @@ interface StripeCustomerIdRow {
           [updatedPremiumLevel, userId]
         );
 
-        res.status(200).json({ message: "Subscription updated successfully." });
+        res.status(200).json({
+          message: `Successfully switched to the ${newPlan.name} subscription.`,
+        });
       } catch (error) {
         console.error("Error switching subscription:", error);
         res.status(500).json({ error: "Failed to switch subscription" });

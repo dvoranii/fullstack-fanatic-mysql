@@ -11,10 +11,11 @@ import {
   CartItemImgWrapper,
 } from "./SubscriptionCart.styled";
 import { UserContext } from "../../../context/UserContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import useHandleCheckout from "../../../hooks/useHandleCheckout";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
 import { switchSubscriptionPlan } from "../../../services/checkoutService";
+import SubscriptionChangeModal from "./SubscriptionChangeModal/SubscriptionChangeModal";
 
 const SubscriptionCart: React.FC = () => {
   const csrfToken = useCsrfToken();
@@ -22,8 +23,12 @@ const SubscriptionCart: React.FC = () => {
     subscriptionItem,
     removeSubscriptionFromCart = () => {},
     profile,
+    fetchProfile,
   } = useContext(UserContext) || {};
   const { handleSubscriptionCheckout } = useHandleCheckout();
+
+  const [modalMessage, setModalMessage] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSwitchSubscription = async () => {
     if (!subscriptionItem || !profile) return;
@@ -32,11 +37,20 @@ const SubscriptionCart: React.FC = () => {
 
     try {
       const response = await switchSubscriptionPlan(newPlanPriceId, csrfToken);
-      alert(response.data.message || "Subscription switched successfully!");
+      setModalMessage(response.data.message);
+      setIsModalOpen(true);
+      await fetchProfile?.();
       removeSubscriptionFromCart();
-    } catch (error) {
-      console.error("Error switching subscription:", error);
-      alert("Failed to switch subscription. Please try again.");
+    } catch (error: unknown) {
+      let errorMessage =
+        "An unexpected error occurred while switching subscriptions.";
+
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      setModalMessage(errorMessage);
+      setIsModalOpen(true);
     }
   };
 
@@ -52,6 +66,13 @@ const SubscriptionCart: React.FC = () => {
 
   return (
     <>
+      {isModalOpen && modalMessage && (
+        <SubscriptionChangeModal
+          message={modalMessage}
+          onClose={() => setIsModalOpen(false)}
+          isOpen={isModalOpen}
+        />
+      )}
       <ViewCartTitleBanner>
         <h1>Subscription Checkout</h1>
       </ViewCartTitleBanner>
