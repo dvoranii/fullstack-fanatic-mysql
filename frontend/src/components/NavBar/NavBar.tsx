@@ -20,9 +20,9 @@ import BurgerMenu from "./BurgerMenu/BurgerMenu";
 import LoginButton from "./LoginButton/LoginButton";
 import NotificationButton from "./Notifications/Notifications";
 import ShoppingCart from "./ShoppingCart/ShoppingCart";
-import NetworkIcon from "../../assets/images/networking-icon.png";
-import ShoppingCartIcon from "../../assets/images/shopping-cart-icon.png";
-import UserProfileIcon from "../../assets/images/profile-icon-black.png";
+import NetworkIcon from "../../assets/images/nav/networking-icon.png";
+import ShoppingCartIcon from "../../assets/images/nav/shopping-cart-icon.png";
+import UserProfileIcon from "../../assets/images/nav/profile-icon-black.png";
 
 const NavBar: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -90,7 +90,7 @@ const NavBar: React.FC = () => {
                   src={NetworkIcon}
                   alt="network page"
                   title="Network"
-                  height="54"
+                  height="50"
                   width="50"
                 />
               </NetworkPageLink>

@@ -5,7 +5,7 @@ import React, {
   useRef,
   useCallback,
 } from "react";
-import ProfileIconBlack from "../../../assets/images/profile-icon-black.png";
+import ProfileIconBlack from "../../../assets/images/nav/profile-icon-black.png";
 import {
   ProfileName,
   ProfileProfession,

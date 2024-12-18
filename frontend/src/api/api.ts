@@ -5,13 +5,14 @@ import { apiCall } from "../utils/apiUtils";
 
 export const registerUser = async (
   requestBody: AuthRequestBody,
-  csrfToken: string
+  csrfToken: string,
+  recaptchaToken: string
 ) => {
   const endpoint = `/users/register`;
   const { status, data } = await apiCall<User>(endpoint, {
     method: "POST",
-    credentials: "include", // Ensures cookies are sent with the request
-    body: JSON.stringify(requestBody),
+    credentials: "include",
+    body: JSON.stringify({ ...requestBody, recaptchaToken }),
     headers: {
       "Content-Type": "application/json",
       "x-csrf-token": csrfToken,
@@ -32,13 +33,14 @@ interface LoginResponse {
 
 export const loginUser = async (
   requestBody: LoginRequestBody,
-  csrfToken: string
+  csrfToken: string,
+  recaptchaToken: string
 ): Promise<LoginResponse> => {
   const endpoint = `/users/login`;
   const { data } = await apiCall<LoginResponse>(endpoint, {
     method: "POST",
     credentials: "include",
-    body: JSON.stringify(requestBody),
+    body: JSON.stringify({ ...requestBody, recaptchaToken }),
     headers: {
       "Content-Type": "application/json",
       "x-csrf-token": csrfToken,
@@ -50,7 +52,11 @@ export const loginUser = async (
   return data;
 };
 
-export const googleRegister = async (token: string, csrfToken: string) => {
+export const googleRegister = async (
+  token: string,
+  csrfToken: string,
+  recaptchaToken: string
+) => {
   const endpoint = `/users/google-register`;
 
   const { status, data } = await apiCall<{
@@ -64,7 +70,7 @@ export const googleRegister = async (token: string, csrfToken: string) => {
   }>(endpoint, {
     method: "POST",
     credentials: "include",
-    body: JSON.stringify({ token }),
+    body: JSON.stringify({ token, recaptchaToken }),
     headers: {
       "Content-Type": "application/json",
       "x-csrf-token": csrfToken,
@@ -86,7 +92,11 @@ export const googleRegister = async (token: string, csrfToken: string) => {
   };
 };
 
-export const googleLogin = async (token: string, csrfToken: string) => {
+export const googleLogin = async (
+  token: string,
+  csrfToken: string,
+  recaptchaToken: string
+) => {
   const endpoint = `/users/google-login`;
 
   const { status, data } = await apiCall<{
@@ -95,7 +105,7 @@ export const googleLogin = async (token: string, csrfToken: string) => {
   }>(endpoint, {
     method: "POST",
     credentials: "include",
-    body: JSON.stringify({ token }),
+    body: JSON.stringify({ token, recaptchaToken }),
     headers: {
       "Content-Type": "application/json",
       "x-csrf-token": csrfToken,

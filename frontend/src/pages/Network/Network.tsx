@@ -9,7 +9,7 @@ import {
   FilterOptionWrapper,
 } from "./Network.styled";
 import SearchBar from "../../components/SearchBar/SearchBar";
-import NetworkIcon from "../../assets/images/networking-icon.png";
+import NetworkIcon from "../../assets/images/networking-image.png";
 import TitleBanner from "../../components/TitleBanner/TitleBanner";
 import { searchUsers } from "../../services/networkService";
 import { User } from "../../types/User/User";
@@ -158,7 +158,12 @@ export const NetworkPage: React.FC = () => {
                 professionals
               </h3>
               <NetworkIconWrapper>
-                <img src={NetworkIcon} alt="Network Image" />
+                <img
+                  src={NetworkIcon}
+                  alt="Network Image"
+                  width="128"
+                  height="128"
+                />
               </NetworkIconWrapper>
             </NetworkDefaultContent>
           )}

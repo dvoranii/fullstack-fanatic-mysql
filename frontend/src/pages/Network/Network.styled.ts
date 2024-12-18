@@ -24,7 +24,8 @@ export const NetworkDefaultContent = styled.div`
 export const NetworkIconWrapper = styled.div`
   user-select: none;
   img {
-    width: clamp(100px, 10vw, 150px);
+    width: clamp(80px, 10vw, 128px);
+    height: auto;
     padding-top: 2.4rem;
   }
 `;

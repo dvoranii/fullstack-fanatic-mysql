@@ -6,7 +6,7 @@ import {
   useMemo,
   memo,
 } from "react";
-import cartIcon from "../../../assets/images/shopping-cart-icon.png";
+import cartIcon from "../../../assets/images/nav/shopping-cart-icon.png";
 import { NavIconWrapper, NavIconImg } from "../../NavBar/NavBar.styled";
 import {
   ShoppingCartItem,

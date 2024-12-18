@@ -103,7 +103,7 @@ export const LogoWrapper = styled.div`
   user-select: none;
 
   .orange-logo {
-    width: clamp(150px, 30vw, 400px);
+    width: clamp(150px, 30vw, 500px);
     height: auto;
   }
 `;

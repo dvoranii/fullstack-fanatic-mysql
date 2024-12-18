@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TokenResponse } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
@@ -11,9 +11,12 @@ import {
 import { validateField, ValidationRule } from "../utils/validationUtils";
 import { fetchUserProfileFavouritesAndComments } from "../utils/userUtils";
 import { useCsrfToken } from "./useCsrfToken";
+import useReCaptcha from "./useReCaptcha";
 
 export const useAuthForm = (defaultToLogin = false) => {
   const csrfToken = useCsrfToken();
+  const { getReCaptchaToken, loadReCaptchaScript, removeReCaptchaScript } =
+    useReCaptcha();
   const [isLogin, setIsLogin] = useState(defaultToLogin);
   const [error, setError] = useState<string | null>(null);
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
@@ -25,6 +28,14 @@ export const useAuthForm = (defaultToLogin = false) => {
     setPurchasedItems,
   } = useUser();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    loadReCaptchaScript();
+
+    return () => {
+      removeReCaptchaScript();
+    };
+  }, [loadReCaptchaScript, removeReCaptchaScript]);
 
   const toggleForm = () => {
     setIsLogin(!isLogin);
@@ -38,9 +49,11 @@ export const useAuthForm = (defaultToLogin = false) => {
 
   const handleGoogleRegister = async (codeResponse: TokenResponse) => {
     try {
+      const recaptchaToken = await getReCaptchaToken("google_regoster");
       const response = await googleRegister(
         codeResponse.access_token,
-        csrfToken
+        csrfToken,
+        recaptchaToken
       );
 
       if (response.status === 409) {
@@ -66,7 +79,8 @@ export const useAuthForm = (defaultToLogin = false) => {
 
   const handleGoogleLogin = async (codeResponse: TokenResponse) => {
     try {
-      await googleLogin(codeResponse.access_token, csrfToken);
+      const recaptchaToken = await getReCaptchaToken("google_login");
+      await googleLogin(codeResponse.access_token, csrfToken, recaptchaToken);
 
       await fetchUserProfileFavouritesAndComments(
         setProfile,
@@ -118,7 +132,14 @@ export const useAuthForm = (defaultToLogin = false) => {
     }
 
     try {
-      await registerUser({ email, password, name: username }, csrfToken);
+      const recaptchaToken = await getReCaptchaToken("register");
+
+      await registerUser(
+        { email, password, name: username },
+        csrfToken,
+        recaptchaToken
+      );
+
       await fetchUserProfileFavouritesAndComments(
         setProfile,
         setFavouriteTutorials,
@@ -167,7 +188,12 @@ export const useAuthForm = (defaultToLogin = false) => {
     }
 
     try {
-      const { token } = await loginUser({ username, password }, csrfToken);
+      const recaptchaToken = await getReCaptchaToken("login");
+      const { token } = await loginUser(
+        { username, password },
+        csrfToken,
+        recaptchaToken
+      );
 
       localStorage.setItem("accessToken", token);
 

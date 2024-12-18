@@ -21,19 +21,30 @@ dotenv.config();
 const router = express.Router();
 
 router.post("/register", async (req: Request, res: Response): Promise<void> => {
-  const { email, name, password } = req.body;
+  const { email, name, password, recaptchaToken } = req.body;
 
-  const defaultProfilePicture = "/assets/images/profile-icon.png";
+  if (!recaptchaToken) {
+    res.status(400).json({ error: "ReCAPTCHA token is required." });
+    return;
+  }
 
   try {
+    const isRecaptchaValid = await verifyRecaptchaToken(recaptchaToken);
+    if (!isRecaptchaValid) {
+      res.status(400).json({ error: "ReCAPTCHA verification failed." });
+      return;
+    }
+
+    const defaultProfilePicture = "/assets/images/profile-icon.png";
+
     const connection = await connectionPromise;
+
     const [existingUserByEmail] = await connection.execute<RowDataPacket[]>(
       "SELECT * FROM users WHERE email = ?",
       [email]
     );
 
     if (existingUserByEmail.length > 0) {
-      console.log("User already exists");
       res.status(409).json({ message: "User with this email already exists" });
       return;
     }
@@ -44,7 +55,6 @@ router.post("/register", async (req: Request, res: Response): Promise<void> => {
     );
 
     if (existingUserByName.length > 0) {
-      console.log("Username already exists");
       res.status(409).json({ message: "Username already taken" });
       return;
     }
@@ -61,15 +71,28 @@ router.post("/register", async (req: Request, res: Response): Promise<void> => {
       .json({ message: "User created successfully", userId: results.insertId });
   } catch (err) {
     const error = err as Error;
-    console.error("Error inserting user:", error.message);
-    res.status(500).json({ error: error.message });
+    console.error("Error registering user:", error.message);
+    res
+      .status(500)
+      .json({ error: "Registration failed", details: error.message });
   }
 });
 
 router.post("/login", async (req: Request, res: Response): Promise<void> => {
-  const { username, password } = req.body;
+  const { username, password, recaptchaToken } = req.body;
+
+  if (!recaptchaToken) {
+    res.status(400).json({ error: "ReCAPTCHA token is required." });
+    return;
+  }
 
   try {
+    const isRecaptchaValid = await verifyRecaptchaToken(recaptchaToken);
+    if (!isRecaptchaValid) {
+      res.status(400).json({ error: "ReCAPTCHA verification failed." });
+      return;
+    }
+
     const connection = await connectionPromise;
     const [results] = await connection.execute<RowDataPacket[]>(
       "SELECT * FROM users WHERE name = ? AND auth_type = 'manual'",
@@ -152,14 +175,25 @@ router.post(
   "/google-register",
   csrfProtection,
   async (req: Request, res: Response): Promise<void> => {
-    const { token } = req.body;
+    const { token, recaptchaToken } = req.body;
 
     if (!token) {
       res.status(400).json({ error: "Token is required" });
       return;
     }
 
+    if (!recaptchaToken) {
+      res.status(400).json({ error: "ReCAPTCHA token is required." });
+      return;
+    }
+
     try {
+      const isRecaptchaValid = await verifyRecaptchaToken(recaptchaToken);
+      if (!isRecaptchaValid) {
+        res.status(400).json({ error: "ReCAPTCHA verification failed." });
+        return;
+      }
+
       const googleUserInfoResponse = await fetch(
         `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`,
         {
@@ -230,14 +264,23 @@ router.post(
   "/google-login",
   csrfProtection,
   async (req: Request, res: Response): Promise<void> => {
-    const { token } = req.body;
+    const { token, recaptchaToken } = req.body;
 
     if (!token) {
       res.status(400).json({ error: "Token is required" });
       return;
     }
+    if (!recaptchaToken) {
+      res.status(400).json({ error: "ReCAPTCHA token is required." });
+      return;
+    }
 
     try {
+      const isRecaptchaValid = await verifyRecaptchaToken(recaptchaToken);
+      if (!isRecaptchaValid) {
+        res.status(400).json({ error: "ReCAPTCHA verification failed." });
+        return;
+      }
       const googleUserInfoResponse = await fetch(
         `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`,
         {

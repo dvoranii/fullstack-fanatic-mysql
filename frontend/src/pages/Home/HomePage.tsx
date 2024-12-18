@@ -15,6 +15,11 @@ const HomePage: React.FC = () => {
           name="description"
           content="Stay ahead in today's competitive job market with Fullstack Fanatic. Our platform offers real-world tutorials, hands-on projects, and a personalized learning journey to help you master the skills employers demand."
         />
+        <link
+          rel="preload"
+          href="/src/assets/images/fsf-logo-notext-large.png"
+          as="image"
+        />
       </Helmet>
       <HomePageWrapper>
         <Hero />

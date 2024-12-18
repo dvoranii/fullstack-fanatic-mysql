@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useRef } from "react";
 
 interface Grecaptcha {
   execute(siteKey: string, options: { action: string }): Promise<string>;
@@ -13,9 +13,11 @@ declare global {
 const SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
 const useReCaptcha = () => {
+  const isScriptLoaded = useRef(false);
+
   const loadReCaptchaScript = (): Promise<void> => {
     return new Promise<void>((resolve, reject) => {
-      if (document.querySelector(`script[src*="recaptcha/api.js"]`)) {
+      if (isScriptLoaded.current) {
         resolve();
         return;
       }
@@ -25,7 +27,10 @@ const useReCaptcha = () => {
       script.async = true;
       script.defer = true;
 
-      script.onload = () => resolve();
+      script.onload = () => {
+        isScriptLoaded.current = true;
+        resolve();
+      };
       script.onerror = () => reject("Failed to load ReCAPTCHA script");
 
       document.body.appendChild(script);
@@ -44,32 +49,18 @@ const useReCaptcha = () => {
     }
 
     delete window.grecaptcha;
+    isScriptLoaded.current = false;
   };
-
-  useEffect(() => {
-    if (!SITE_KEY) {
-      console.error("ReCAPTCHA site key is missing.");
-      return;
-    }
-
-    loadReCaptchaScript().catch((error) => {
-      console.error(error);
-    });
-
-    return () => {
-      removeReCaptchaScript();
-    };
-  }, []);
 
   const getReCaptchaToken = async (action: string): Promise<string> => {
     if (!window.grecaptcha) {
-      throw new Error("ReCAPTCHA is not initialized.");
+      await loadReCaptchaScript();
     }
 
-    return await window.grecaptcha.execute(SITE_KEY, { action });
+    return await window.grecaptcha!.execute(SITE_KEY, { action });
   };
 
-  return { getReCaptchaToken };
+  return { getReCaptchaToken, loadReCaptchaScript, removeReCaptchaScript };
 };
 
 export default useReCaptcha;

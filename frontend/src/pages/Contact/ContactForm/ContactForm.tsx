@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FormWrapper,
   InputField,
@@ -16,7 +16,8 @@ import useReCaptcha from "../../../hooks/useReCaptcha";
 import { sanitizeInput } from "../../../utils/sanitizationUtils";
 
 const ContactForm: React.FC = () => {
-  const { getReCaptchaToken } = useReCaptcha();
+  const { getReCaptchaToken, loadReCaptchaScript, removeReCaptchaScript } =
+    useReCaptcha();
   const csrfToken = useCsrfToken();
   const [formData, setFormData] = useState({
     fullName: "",
@@ -32,6 +33,14 @@ const ContactForm: React.FC = () => {
 
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    loadReCaptchaScript();
+
+    return () => {
+      removeReCaptchaScript();
+    };
+  }, [loadReCaptchaScript]);
 
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

@@ -185,7 +185,7 @@ export const NetworkPageLink = styled(NavLink)`
   align-items: center;
   img {
     width: 30px;
-    height: auto;
+    height: 30px;
     margin: 10px;
   }
 `;

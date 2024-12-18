@@ -7,7 +7,7 @@ import {
   memo,
 } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import NotificationBell from "../../../assets/images/notification-bell.png";
+import NotificationBell from "../../../assets/images/nav/notification-bell.png";
 import { NotificationContentWrapper } from "./Notifications.styled";
 import { NavIconWrapper, NavIconImg } from "../../NavBar/NavBar.styled";
 import Dropdown from "../../Dropdown/Dropdown";

@@ -15,7 +15,7 @@ import {
   SocialButtonsWrapper,
   SocialIconWrapper,
 } from "./Hero.styled";
-import FSFLogo from "../../../assets/images/fsf-logo-notext-large.png";
+import FSFLogo from "../../../assets/images/fsf-logo-notext-large.webp";
 import FSFLogoWhite from "../../../assets/images/fsf-logo-white-hires.png";
 import ElipseBG from "../../../assets/images/Ellipse-bg.svg";
 import GithubLogo from "../../../assets/images/socials/github-icon.png";
@@ -41,8 +41,8 @@ const Hero: React.FC = () => {
               src={FSFLogo}
               alt="logo"
               className="orange-logo"
-              width="400"
-              height="400"
+              width="500"
+              height="500"
               loading="lazy"
             />
           </LogoWrapper>
