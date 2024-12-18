@@ -68,20 +68,26 @@ import NotFound from "../pages/NotFound/NotFound";
 import PrivacyPolicy from "../pages/PrivacyPolicy/PrivacyPolicy";
 import TermsAndConditions from "../pages/TermsAndConditions/TermsAndConditions";
 
-import usePurchasedItems from "../hooks/usePurchasedItems";
+// import usePurchasedItems from "../hooks/usePurchasedItems";
 
 const preloadMyAccountPage = () =>
   import("../pages/UserProfileLayout/UserAccountPage/UserAccountPage");
 
 const Navigation: React.FC = () => {
-  const { profile } = useContext(UserContext) || {};
-  const purchasedItemIds = usePurchasedItems(profile?.id);
+  const { profile, purchasedItems } = useContext(UserContext) || {};
+  // const purchasedItemIds = usePurchasedItems(profile?.id);
 
   useEffect(() => {
     if (profile?.id) {
       preloadMyAccountPage();
     }
   }, [profile]);
+
+  const purchasedItemIds = purchasedItems
+    ? purchasedItems.map((p) => p.product_id)
+    : [];
+
+  console.log(purchasedItems);
 
   return (
     <Suspense fallback={<LoadingOverlay />}>

@@ -27,15 +27,13 @@ const isBlogPremium = (id: string | undefined) => {
 interface ProtectedRouteProps {
   component: ComponentType<Record<string, unknown>>;
   props?: Record<string, unknown>;
-  purchasedItemIds?: number[];
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   component: Component,
   props = {},
-  purchasedItemIds,
 }) => {
-  const { profile, loading } = useContext(UserContext) || {};
+  const { profile, loading, purchasedItems } = useContext(UserContext) || {};
   const { id } = useParams();
   const location = useLocation();
 
@@ -79,7 +77,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       return <Navigate to="/register" replace />;
     }
 
-    const purchasedTutorial = purchasedItemIds?.includes(tutorialId);
+    const purchasedTutorial = purchasedItems?.some(
+      (item) =>
+        item.product_id === tutorialId && item.product_type === "tutorial"
+    );
 
     if (purchasedTutorial) {
       return (
@@ -124,7 +125,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       );
     }
 
-    if (purchasedItemIds?.includes(blogId) || !isPremium) {
+    const purchasedBlog = purchasedItems?.some(
+      (item) => item.product_id === blogId && item.product_type === "blog"
+    );
+
+    if (purchasedBlog || !isPremium) {
       return (
         <Suspense fallback={<LoadingSpinner />}>
           <Component {...props} />
@@ -136,14 +141,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       return <Navigate to="/register" replace />;
     }
 
-    if (
-      isPremium &&
-      !purchasedItemIds?.includes(blogId) &&
-      !profile?.isPremium
-    ) {
+    if (isPremium && !purchasedBlog && !profile?.isPremium) {
       return <Navigate to="/plans-and-pricing" replace />;
     }
-
     return (
       <Suspense fallback={<LoadingSpinner />}>
         <Component {...props} />
@@ -153,11 +153,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   return (
     <Suspense fallback={<LoadingSpinner />}>
-      <Component
-        {...props}
-        purchasedItemIds={purchasedItemIds}
-        userId={id ? Number(id) : profile?.id}
-      />
+      <Component {...props} userId={id ? Number(id) : profile?.id} />
     </Suspense>
   );
 };

@@ -153,8 +153,7 @@ const TutorialsPage: React.FC = () => {
           className="bg-squares-and-triangles"
           width="181"
           height="106"
-          loading="eager"
-          fetchPriority="high"
+          loading="lazy"
         />
 
         <div className="block-1" />
