@@ -13,7 +13,6 @@ import { useCsrfToken } from "../../../hooks/useCsrfToken";
 
 const UserAccountsPage: React.FC = () => {
   const csrfToken = useCsrfToken();
-  const [bannerImage, setBannerImage] = useState<File | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { profile, setProfile, comments } = useContext(UserContext) || {};
   const [unreadInboxCount, setUnreadInboxCount] = useState(0);
@@ -33,17 +32,13 @@ const UserAccountsPage: React.FC = () => {
 
   if (!profile) return <p>No user logged in</p>;
 
-  const handleBannerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBannerChangeAndUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
-      setBannerImage(file);
-    }
-  };
-
-  const handleBannerUpload = async () => {
-    if (bannerImage) {
       const formData = new FormData();
-      formData.append("bannerimage", bannerImage);
+      formData.append("bannerimage", file);
 
       try {
         const data: ImageUploadResponse = await uploadBannerImage(
@@ -84,8 +79,7 @@ const UserAccountsPage: React.FC = () => {
         isEditable={true}
         isOwnProfile={true}
         onEditProfileClick={() => setIsModalOpen(true)}
-        onBannerChange={handleBannerChange}
-        onBannerUpload={handleBannerUpload}
+        onBannerChange={handleBannerChangeAndUpload}
       >
         <InboxWrapper>
           <a href="/my-account/inbox">

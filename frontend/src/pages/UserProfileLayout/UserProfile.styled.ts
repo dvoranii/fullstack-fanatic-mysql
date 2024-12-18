@@ -32,11 +32,22 @@ export const BannerUploadWrapper = styled.div`
   right: 0;
   top: 0;
   padding: 20px;
+  user-select: none;
 
   &:hover,
   input:hover,
   button:hover {
     cursor: pointer;
+  }
+
+  label > img {
+    border-radius: 50%;
+    box-sizing: 4px 4px 8px rgba(0, 0, 0, 1);
+    transition: all 250ms ease;
+    &:hover {
+      cursor: pointer;
+      filter: brightness(1.25);
+    }
   }
 `;
 

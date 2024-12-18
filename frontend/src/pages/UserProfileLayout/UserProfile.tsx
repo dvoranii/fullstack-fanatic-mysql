@@ -39,10 +39,10 @@ import {
   fetchFollowingState,
 } from "../../services/followService";
 import { UserContext } from "../../context/UserContext";
-
 import MessageModalButton from "../../components/MessageModalButton/MessageModalButton";
 import FavoritesSection from "./FavoritesSection/FavoritesSection";
 import { truncateText } from "../../utils/textUtils";
+import EditIcon from "../../assets/images/account/edit.webp";
 
 const BASE_URL = import.meta.env.VITE_API_URL.replace("/api", "");
 
@@ -54,7 +54,6 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
   publicUserId,
   onEditProfileClick,
   onBannerChange,
-  onBannerUpload,
   children,
 }) => {
   const userContext = useContext(UserContext);
@@ -104,8 +103,16 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
         </BannerWrapperInner>
         {isEditable && (
           <BannerUploadWrapper>
-            <input type="file" accept="image/*" onChange={onBannerChange} />
-            <button onClick={onBannerUpload}>Upload Banner</button>
+            <label htmlFor="banner-file-upload">
+              <img src={EditIcon} alt="Edit banner" height="48" width="48" />
+            </label>
+            <input
+              id="banner-file-upload"
+              type="file"
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={onBannerChange}
+            />
           </BannerUploadWrapper>
         )}
       </BannerWrapperOuter>
