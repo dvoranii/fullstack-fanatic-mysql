@@ -20,4 +20,14 @@ export const ModalContent = styled.div`
   width: 400px;
   text-align: center;
   position: relative;
+
+  img {
+    width: 32px;
+    height: auto;
+    padding-top: 0.4rem;
+  }
+
+  @media screen and (max-width: 412px) {
+    width: 80vw;
+  }
 `;

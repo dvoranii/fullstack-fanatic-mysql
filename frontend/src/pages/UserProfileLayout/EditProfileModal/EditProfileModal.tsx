@@ -46,8 +46,6 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const [newProfilePicturePreview, setNewProfilePicturePreview] = useState<
     string | null
   >(null);
-  const [updateMessage, setUpdateMessage] = useState<string | null>(null);
-  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
 
   const [isChanged, setIsChanged] = useState({
     displayName: false,
@@ -56,6 +54,10 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     socialLinks: false,
     profilePicture: false,
   });
+
+  const [updateMessage, setUpdateMessage] = useState<string | null>(null);
+  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     setDisplayName(profile.display_name || profile.name || "");
@@ -141,10 +143,12 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
 
       setProfile(updatedProfile);
       setUpdateMessage("Profile updated successfully!");
+      setSuccess(true);
       setUpdateModalOpen(true);
     } catch (error) {
       console.error("Error updating profile:", error);
       setUpdateMessage("There was an error updating your profile.");
+      setSuccess(false);
       setUpdateModalOpen(true);
     }
   };
@@ -158,8 +162,6 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const handleUpdateModalClose = () => {
     setUpdateModalOpen(false);
     setUpdateMessage(null);
-    // If desired, you can also close the EditProfileModal here:
-    closeModal();
   };
 
   return (
@@ -168,6 +170,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
         isOpen={isUpdateModalOpen}
         onClose={handleUpdateModalClose}
         message={updateMessage}
+        success={success}
       />
 
       <ModalOverlay>

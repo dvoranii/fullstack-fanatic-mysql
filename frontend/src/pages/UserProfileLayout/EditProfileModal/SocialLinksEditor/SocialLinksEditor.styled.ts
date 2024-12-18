@@ -32,4 +32,8 @@ export const SocialMenuDropdown = styled.select`
   &:hover {
     cursor: pointer;
   }
+
+  @media screen and (max-width: 375px) {
+    margin-top: 0.4rem;
+  }
 `;

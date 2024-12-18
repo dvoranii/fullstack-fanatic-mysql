@@ -10,7 +10,7 @@ export const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Ensures the modal is above other content */
+  z-index: 1000;
 `;
 
 export const ModalContent = styled.div`
@@ -45,6 +45,14 @@ export const ModalForm = styled.form`
 export const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
+
+  @media screen and (max-width: 375px) {
+    img {
+      width: 50px;
+      height: auto;
+    }
+  }
 `;
 
 export const Label = styled.label`
@@ -86,6 +94,9 @@ export const MaxCharCountText = styled.p`
   font-size: 12px;
   text-align: right;
   margin-top: 4px;
+  position: absolute;
+  right: 0;
+  bottom: -20px;
 `;
 
 export const ProfileImage = styled.img`
@@ -93,4 +104,7 @@ export const ProfileImage = styled.img`
   height: 100px;
   object-fit: cover;
   margin-top: 1.2rem;
+  @media screen and (max-width: 375px) {
+    margin-top: 0.4rem;
+  }
 `;
