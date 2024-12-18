@@ -1,6 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { colors } from "../../../GlobalStyles";
-import WaveEffectBG from "../../../assets/images/wave-effect-bg.jpg";
+import WaveEffectBG from "../../../assets/images/wave-effect-bg.webp";
 
 export const HeroWrapper = styled.section`
   height: 100vh;
@@ -103,6 +103,8 @@ export const LogoWrapper = styled.div`
   user-select: none;
 
   .orange-logo {
+    display: inline-block;
+    padding: 25px;
     width: clamp(150px, 30vw, 500px);
     height: auto;
   }

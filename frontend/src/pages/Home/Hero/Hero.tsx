@@ -43,7 +43,6 @@ const Hero: React.FC = () => {
               className="orange-logo"
               width="500"
               height="500"
-              loading="lazy"
             />
           </LogoWrapper>
 

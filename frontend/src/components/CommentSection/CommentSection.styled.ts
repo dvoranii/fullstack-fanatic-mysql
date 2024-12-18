@@ -98,6 +98,7 @@ export const CommentTextareaWrapper = styled.div`
 
 export const ProfilePictureWrapper = styled.div`
   padding-right: 20px;
+  user-select: none;
   img {
     margin-top: -30px;
   }

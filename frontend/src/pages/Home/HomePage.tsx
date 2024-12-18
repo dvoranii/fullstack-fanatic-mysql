@@ -1,10 +1,15 @@
+import { Suspense } from "react";
 import { Helmet } from "react-helmet-async";
 import { HomePageWrapper } from "./HomePage.styled";
 import Hero from "./Hero/Hero";
-import IntroSection from "./IntroSection/IntroSection";
-import InfoSection from "./InfoSection/InfoSection";
-import ProductsAndServices from "./ProductsAndServices/ProductsAndServices";
-import CTASection from "./CTASection/CTASection";
+import React from "react";
+
+const IntroSection = React.lazy(() => import("./IntroSection/IntroSection"));
+const InfoSection = React.lazy(() => import("./InfoSection/InfoSection"));
+const ProductsAndServices = React.lazy(
+  () => import("./ProductsAndServices/ProductsAndServices")
+);
+const CTASection = React.lazy(() => import("./CTASection/CTASection"));
 
 const HomePage: React.FC = () => {
   return (
@@ -17,16 +22,23 @@ const HomePage: React.FC = () => {
         />
         <link
           rel="preload"
-          href="/src/assets/images/fsf-logo-notext-large.png"
+          href="/src/assets/images/wave-effect-bg.webp"
+          as="image"
+        />
+        <link
+          rel="preload"
+          href="/src/assets/images/fsf-logo-notext-large.webp"
           as="image"
         />
       </Helmet>
       <HomePageWrapper>
         <Hero />
-        <IntroSection />
-        <InfoSection />
-        <ProductsAndServices />
-        <CTASection />
+        <Suspense fallback={<div>Loading...</div>}>
+          <IntroSection />
+          <InfoSection />
+          <ProductsAndServices />
+          <CTASection />
+        </Suspense>
       </HomePageWrapper>
     </>
   );
