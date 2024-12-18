@@ -335,6 +335,7 @@ export const PremiumBadge = styled.div<{ level: string }>`
   user-select: none;
 
   p {
+    padding: 0 8px;
     color: white;
     text-shadow: 1px 1px 0 black, -1px 1px 0 black, 1px -1px 0 black,
       -1px -1px 0 black;

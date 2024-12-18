@@ -1,7 +1,7 @@
 import { ImageUploadResponse } from "../types/ImageUploadResponse";
 import { apiCall } from "../utils/apiUtils";
 
-export const uploadImage = async (
+const uploadImage = async (
   endpoint: string,
   formData: FormData,
   csrfToken: string
@@ -16,4 +16,18 @@ export const uploadImage = async (
   });
 
   return data;
+};
+
+export const uploadBannerImage = async (
+  formData: FormData,
+  csrfToken: string
+) => {
+  return uploadImage("/profile/upload-banner", formData, csrfToken);
+};
+
+export const uploadProfilePicture = async (
+  formData: FormData,
+  csrfToken: string
+) => {
+  return uploadImage("/profile/upload-profile-picture", formData, csrfToken);
 };

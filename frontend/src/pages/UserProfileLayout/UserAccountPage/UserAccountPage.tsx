@@ -4,7 +4,7 @@ import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../../context/UserContext";
 import UserProfilePage from "../UserProfile";
 import EditProfileModal from "../EditProfileModal/EditProfileModal";
-import { uploadImage } from "../../../services/imageUploadService";
+import { uploadBannerImage } from "../../../services/imageUploadService";
 import { ImageUploadResponse } from "../../../types/ImageUploadResponse";
 import InboxIcon from "../../../assets/images/account/inbox.png";
 import { getUnreadConversationsCount } from "../../../services/conversationService";
@@ -44,9 +44,9 @@ const UserAccountsPage: React.FC = () => {
     if (bannerImage) {
       const formData = new FormData();
       formData.append("bannerimage", bannerImage);
+
       try {
-        const data: ImageUploadResponse = await uploadImage(
-          "/profile/upload-banner",
+        const data: ImageUploadResponse = await uploadBannerImage(
           formData,
           csrfToken
         );

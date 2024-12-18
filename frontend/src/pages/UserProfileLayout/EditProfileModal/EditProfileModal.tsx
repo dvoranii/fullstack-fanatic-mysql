@@ -14,11 +14,16 @@ import {
 import SocialLinksEditor from "./SocialLinksEditor/SocialLinksEditor";
 import { useState, useEffect } from "react";
 import { EditProfileModalProps } from "../../../types/EditProfileProps";
-import { handleTokenExpiration } from "../../../services/tokenService";
-import { uploadImage } from "../../../services/imageUploadService";
 import { getAvatarUrl } from "../../../utils/imageUtils";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
-import { updateUserProfile } from "../../../services/profileService";
+import { handleProfileUpdate } from "../../../utils/profileUtils";
+import ProfileUpdateModal from "./ProfileUpdateModal/ProfileUpdateModal";
+
+const MAX_LENGTHS = {
+  displayName: 30,
+  profession: 50,
+  bio: 250,
+};
 
 const EditProfileModal: React.FC<EditProfileModalProps> = ({
   profile,
@@ -41,10 +46,8 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const [newProfilePicturePreview, setNewProfilePicturePreview] = useState<
     string | null
   >(null);
-
-  const maxDisplayNameCharCount = 30;
-  const maxProfessionCharCount = 50;
-  const maxBioCharCount = 250;
+  const [updateMessage, setUpdateMessage] = useState<string | null>(null);
+  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
 
   const [isChanged, setIsChanged] = useState({
     displayName: false,
@@ -62,186 +65,198 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     setProfilePicturePreview(profile.profile_picture || null);
   }, [profile]);
 
-  const handleDisplayNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDisplayName(e.target.value);
-    setIsChanged((prev) => ({ ...prev, displayName: true }));
+  const createChangeHandler =
+    <T extends HTMLInputElement | HTMLTextAreaElement>(
+      setter: React.Dispatch<React.SetStateAction<string>>,
+      changedKey: keyof typeof isChanged
+    ) =>
+    (e: React.ChangeEvent<T>) => {
+      setter(e.target.value);
+      setIsChanged((prev) => ({ ...prev, [changedKey]: true }));
+    };
+
+  const readImageFile = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (e) => reject(e);
+      reader.readAsDataURL(file);
+    });
   };
 
-  const handleProfessionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setProfession(e.target.value);
-    setIsChanged((prev) => ({ ...prev, profession: true }));
-  };
-
-  const handleBioChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setBio(e.target.value);
-    setIsChanged((prev) => ({ ...prev, bio: true }));
-  };
+  const handleDisplayNameChange = createChangeHandler<HTMLInputElement>(
+    setDisplayName,
+    "displayName"
+  );
+  const handleProfessionChange = createChangeHandler<HTMLInputElement>(
+    setProfession,
+    "profession"
+  );
+  const handleBioChange = createChangeHandler<HTMLTextAreaElement>(
+    setBio,
+    "bio"
+  );
 
   const handleSocialLinksChange = (updatedLinks: { [key: string]: string }) => {
     setSocialLinks(updatedLinks);
     setIsChanged((prev) => ({ ...prev, socialLinks: true }));
   };
 
-  const handleProfilePictureChange = (
+  const markSocialLinksChanged = () => {
+    setIsChanged((prev) => ({ ...prev, socialLinks: true }));
+  };
+
+  const handleProfilePictureChange = async (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const file = e?.target.files?.[0];
+    const file = e.target.files?.[0];
     if (!file) return;
 
     setProfilePicture(file);
     setIsChanged((prev) => ({ ...prev, profilePicture: true }));
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      setNewProfilePicturePreview(reader.result as string);
-    };
-    reader.readAsDataURL(file);
+    const preview = await readImageFile(file);
+    setNewProfilePicturePreview(preview);
   };
 
-  const markSocialLinksChanged = () => {
-    setIsChanged((prev) => ({ ...prev, socialLinks: true }));
-  };
-
-  const handleProfileUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmitProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const token = await handleTokenExpiration();
-      if (!token) throw new Error("User not authenticated");
+      const updatedProfile = await handleProfileUpdate({
+        profile,
+        displayName,
+        profession,
+        bio,
+        socialLinks,
+        profilePicture,
+        isChanged,
+        csrfToken,
+      });
 
-      let profilePicturePath = profile.profile_picture;
-
-      if (isChanged.profilePicture && profilePicture) {
-        const profilePictureData = new FormData();
-        profilePictureData.append("profile_picture", profilePicture);
-
-        const data = await uploadImage(
-          "/api/profile/upload-profile-picture",
-          profilePictureData,
-          csrfToken
-        );
-
-        if (!data.imagePath)
-          throw new Error("Failed to upload profile picture");
-
-        profilePicturePath = data.imagePath;
-
-        setProfilePicturePreview(profilePicturePath);
+      if (isChanged.profilePicture && updatedProfile.profile_picture) {
+        setProfilePicturePreview(updatedProfile.profile_picture);
         setNewProfilePicturePreview(null);
       }
 
-      const profileData = new FormData();
-
-      if (isChanged.displayName)
-        profileData.append("display_name", displayName);
-      if (isChanged.profession) profileData.append("profession", profession);
-      if (isChanged.bio) profileData.append("bio", bio);
-      if (isChanged.socialLinks) {
-        profileData.append("social_links", JSON.stringify(socialLinks));
-      }
-      if (profilePicturePath) {
-        profileData.append("profile_picture", profilePicturePath);
-      }
-
-      const updatedProfile = await updateUserProfile(
-        profileData,
-        token,
-        csrfToken
-      );
       setProfile(updatedProfile);
-      alert("Profile updated successfully!");
-      closeModal();
+      setUpdateMessage("Profile updated successfully!");
+      setUpdateModalOpen(true);
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("There was an error updating your profile.");
+      setUpdateMessage("There was an error updating your profile.");
+      setUpdateModalOpen(true);
     }
   };
 
-  return (
-    <ModalOverlay>
-      <ModalContent>
-        <CloseButton onClick={closeModal}>&times;</CloseButton>
-        <ModalForm onSubmit={handleProfileUpdate}>
-          <FormGroup>
-            <Label>Profile Picture:</Label>
-            <Input
-              type="file"
-              accept="image/*"
-              onChange={handleProfilePictureChange}
-            />
-            {newProfilePicturePreview ? (
-              <ProfileImage
-                src={newProfilePicturePreview}
-                alt="New Profile Preview"
-              />
-            ) : (
-              profilePicturePreview && (
-                <ProfileImage
-                  src={getAvatarUrl(profilePicturePreview)}
-                  alt="Profile Preview"
-                />
-              )
-            )}
-          </FormGroup>
-          <FormGroup>
-            <Label>Display Name:</Label>
-            <Input
-              type="text"
-              value={displayName}
-              onChange={handleDisplayNameChange}
-              maxLength={maxDisplayNameCharCount}
-            />
-            <MaxCharCountText
-              style={{
-                color:
-                  displayName.length >= maxDisplayNameCharCount
-                    ? "red"
-                    : "black",
-              }}
-            >
-              {maxDisplayNameCharCount - displayName.length}
-            </MaxCharCountText>
-          </FormGroup>
-          <FormGroup>
-            <Label>Profession:</Label>
-            <Input
-              type="text"
-              value={profession}
-              onChange={handleProfessionChange}
-              maxLength={maxProfessionCharCount}
-            />
-            <MaxCharCountText
-              style={{
-                color: profession.length >= maxBioCharCount ? "red" : "black",
-              }}
-            >
-              {maxProfessionCharCount - profession.length}
-            </MaxCharCountText>
-          </FormGroup>
-          <FormGroup>
-            <Label>Bio:</Label>
-            <TextArea
-              value={bio}
-              onChange={handleBioChange}
-              maxLength={maxBioCharCount}
-              placeholder="Enter your bio"
-            />
-            <MaxCharCountText
-              style={{ color: bio.length >= maxBioCharCount ? "red" : "black" }}
-            >
-              {maxBioCharCount - bio.length}
-            </MaxCharCountText>
-          </FormGroup>
+  const {
+    displayName: maxDisplayNameCharCount,
+    profession: maxProfessionCharCount,
+    bio: maxBioCharCount,
+  } = MAX_LENGTHS;
 
-          <SocialLinksEditor
-            socialLinks={socialLinks}
-            setSocialLinks={handleSocialLinksChange}
-            markSocialLinksChanged={markSocialLinksChanged}
-          />
-          <SaveButton type="submit">Save Changes</SaveButton>
-        </ModalForm>
-      </ModalContent>
-    </ModalOverlay>
+  const handleUpdateModalClose = () => {
+    setUpdateModalOpen(false);
+    setUpdateMessage(null);
+    // If desired, you can also close the EditProfileModal here:
+    closeModal();
+  };
+
+  return (
+    <>
+      <ProfileUpdateModal
+        isOpen={isUpdateModalOpen}
+        onClose={handleUpdateModalClose}
+        message={updateMessage}
+      />
+
+      <ModalOverlay>
+        <ModalContent>
+          <CloseButton onClick={closeModal}>&times;</CloseButton>
+          <ModalForm onSubmit={onSubmitProfile}>
+            <FormGroup>
+              <Label>Profile Picture:</Label>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={handleProfilePictureChange}
+              />
+              {newProfilePicturePreview ? (
+                <ProfileImage
+                  src={newProfilePicturePreview}
+                  alt="New Profile Preview"
+                />
+              ) : (
+                profilePicturePreview && (
+                  <ProfileImage
+                    src={getAvatarUrl(profilePicturePreview)}
+                    alt="Profile Preview"
+                  />
+                )
+              )}
+            </FormGroup>
+            <FormGroup>
+              <Label>Display Name:</Label>
+              <Input
+                type="text"
+                value={displayName}
+                onChange={handleDisplayNameChange}
+                maxLength={maxDisplayNameCharCount}
+              />
+              <MaxCharCountText
+                style={{
+                  color:
+                    displayName.length >= maxDisplayNameCharCount
+                      ? "red"
+                      : "black",
+                }}
+              >
+                {maxDisplayNameCharCount - displayName.length}
+              </MaxCharCountText>
+            </FormGroup>
+            <FormGroup>
+              <Label>Profession:</Label>
+              <Input
+                type="text"
+                value={profession}
+                onChange={handleProfessionChange}
+                maxLength={maxProfessionCharCount}
+              />
+              <MaxCharCountText
+                style={{
+                  color: profession.length >= maxBioCharCount ? "red" : "black",
+                }}
+              >
+                {maxProfessionCharCount - profession.length}
+              </MaxCharCountText>
+            </FormGroup>
+            <FormGroup>
+              <Label>Bio:</Label>
+              <TextArea
+                value={bio}
+                onChange={handleBioChange}
+                maxLength={maxBioCharCount}
+                placeholder="Enter your bio"
+              />
+              <MaxCharCountText
+                style={{
+                  color: bio.length >= maxBioCharCount ? "red" : "black",
+                }}
+              >
+                {maxBioCharCount - bio.length}
+              </MaxCharCountText>
+            </FormGroup>
+
+            <SocialLinksEditor
+              socialLinks={socialLinks}
+              setSocialLinks={handleSocialLinksChange}
+              markSocialLinksChanged={markSocialLinksChanged}
+            />
+            <SaveButton type="submit">Save Changes</SaveButton>
+          </ModalForm>
+        </ModalContent>
+      </ModalOverlay>
+    </>
   );
 };
 
