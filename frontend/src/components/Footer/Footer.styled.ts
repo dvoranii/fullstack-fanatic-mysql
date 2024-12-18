@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { colors } from "../../GlobalStyles";
-import waveEffectBg from "../../assets/images/wave-effect-bg.webp";
+import waveEffectBg from "/assets/images/wave-effect-bg.webp";
 
 export const FooterWrapperOuter = styled.footer`
   background-color: ${colors.secondary};

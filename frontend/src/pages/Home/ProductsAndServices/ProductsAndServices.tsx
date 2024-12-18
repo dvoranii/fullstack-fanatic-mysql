@@ -18,7 +18,7 @@ import RatingsCardImage from "../../../assets/images/ratings-card-image.svg";
 import BlogsCardImage from "../../../assets/images/blogs-card-image.svg";
 import ConsultCardImage from "../../../assets/images/consult-card-image.svg";
 import ProductsAndServicesBottomImg from "../../../assets/images/products-and-services-bottom-img.svg";
-import BgSquaresAndTriangle from "../../../assets/images/SquaresAndTriangles.svg";
+import BgSquaresAndTriangle from "/assets/images/bg-images/SquaresAndTriangles.svg";
 
 const ProductsAndServices: React.FC = () => {
   return (

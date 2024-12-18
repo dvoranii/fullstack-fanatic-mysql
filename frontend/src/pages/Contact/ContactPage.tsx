@@ -1,9 +1,9 @@
 import { Helmet } from "react-helmet-async";
 import { ContactPageWrapper, ImgWrapper } from "./ContactPage.styled";
 import Title from "../../components/Title/Title";
-import ElipseBgWhite from "../../assets/images/Ellipse-bg-white.svg";
+import ElipseBgWhite from "/assets/images/bg-images/Ellipse-bg-white.svg";
 import ContactForm from "./ContactForm/ContactForm";
-import OrangeTriangle from "../../assets/images/orange-triangle.svg";
+import OrangeTriangle from "/assets/images/bg-images/orange-triangle.svg";
 
 const ContactPage: React.FC = () => {
   return (

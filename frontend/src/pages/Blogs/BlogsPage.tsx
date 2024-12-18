@@ -20,7 +20,7 @@ import { blogContent } from "../../assets/blogContent";
 import PremiumLockImg from "../../assets/images/lock.png";
 import PremiumUnlockImg from "../../assets/images/unlocked.png";
 import SearchBar from "../../components/SearchBar/SearchBar";
-import SquaresAndTriangles from "../../assets/images/SquaresAndTriangles.svg";
+import SquaresAndTriangles from "/assets/images/bg-images/SquaresAndTriangles.svg";
 import AddToCartButton from "../../components/AddToCartButton/AddToCartButton";
 import { CartItem } from "../../types/CartItem";
 import { mapBlogToCartItem } from "../../utils/cartUtils";

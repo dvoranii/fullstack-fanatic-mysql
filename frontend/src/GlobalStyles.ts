@@ -1,12 +1,12 @@
 import { createGlobalStyle } from "styled-components";
-import ZenKakuGothicNewRegular from "./assets/fonts/ZenKakuGothicNew-Regular.woff2";
-import ZenKakuGothicNewMedium from "./assets/fonts/ZenKakuGothicNew-Medium.woff2";
-import ZenKakuGothicNewBold from "./assets/fonts/ZenKakuGothicNew-Bold.woff2";
-import AlataRegular from "./assets/fonts/Alata-Regular.woff2";
-import AnybodyMedium from "./assets/fonts/Anybody-Medium.woff2";
-import AnybodySemiBold from "./assets/fonts/Anybody-SemiBold.woff2";
-import AnybodyBold from "./assets/fonts/Anybody-Bold.woff2";
-import AbelRegular from "./assets/fonts/Abel-Regular.woff2";
+import ZenKakuGothicNewRegular from "/assets/fonts/ZenKakuGothicNew-Regular.woff2";
+import ZenKakuGothicNewMedium from "/assets/fonts/ZenKakuGothicNew-Medium.woff2";
+import ZenKakuGothicNewBold from "/assets/fonts/ZenKakuGothicNew-Bold.woff2";
+import AlataRegular from "/assets/fonts/Alata-Regular.woff2";
+import AnybodyMedium from "/assets/fonts/Anybody-Medium.woff2";
+import AnybodySemiBold from "/assets/fonts/Anybody-SemiBold.woff2";
+import AnybodyBold from "/assets/fonts/Anybody-Bold.woff2";
+import AbelRegular from "/assets/fonts/Abel-Regular.woff2";
 
 export const colors = {
   primary: "#14213D",

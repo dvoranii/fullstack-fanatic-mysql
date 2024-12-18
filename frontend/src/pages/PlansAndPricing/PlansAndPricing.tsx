@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import {
   PlansAndPricingContainerOuter,
@@ -16,14 +17,15 @@ import {
   ConsultationImgWrapper,
   ConsultFormTitleWrapper,
 } from "./PlansAndPricing.styled";
+
 import Title from "../../components/Title/Title";
-import BGSwoosh from "../../assets/images/plansAndPricing/Ellipse7.svg";
-import SquaresAndTriangles from "../../assets/images/SquaresAndTriangles.svg";
 import SubscriptionCard from "./SubscriptionCard/SubscriptionCard";
-import SwirlyLineImg from "../../assets/images/swirly-line-bg.svg";
-import ConsultationImg from "../../assets/images/plansAndPricing/consultation-image.jpg";
 import ConsultationForm from "./ConsultationForm/ConsultationForm";
-import { Link } from "react-router-dom";
+
+import BGSwoosh from "/assets/images/bg-images/Ellipse7.svg";
+import SquaresAndTriangles from "/assets/images/bg-images/SquaresAndTriangles.svg";
+import SwirlyLineImg from "/assets/images/bg-images/swirly-line-bg.svg";
+import ConsultationImg from "../../assets/images/plansAndPricing/consultation-image.jpg";
 
 const PlansAndPricing: React.FC = () => {
   const formRef = useRef<HTMLDivElement>(null);

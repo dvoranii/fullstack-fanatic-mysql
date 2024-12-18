@@ -7,13 +7,13 @@ import { UserProvider } from "./context/UserContext";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 import { useInactivityTimer } from "./hooks/useInactivityTimer";
 
-// Lazy load components
 const NavBar = React.lazy(() => import("./components/NavBar/NavBar"));
 const Navigation = React.lazy(() => import("./components/Navigation"));
-const Footer = React.lazy(() => import("./components/Footer/Footer"));
 const ScrollToTop = React.lazy(
   () => import("./components/ScrollToTop/ScrollToTop")
 );
+
+import LazyFooterWrapper from "./components/LazyFooter/LazyFooter";
 
 const clientId = import.meta.env.VITE_CLIENT_ID;
 
@@ -24,28 +24,27 @@ const InactivityHandler: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <>
-      <HelmetProvider>
-        <Helmet>
-          <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-          <title>Full Stack Fanatic</title>
-        </Helmet>
-        <GlobalStyles />
-        <GoogleOAuthProvider clientId={clientId}>
-          <UserProvider>
-            <Router>
-              <InactivityHandler />
-              <Suspense fallback={<LoadingSpinner />}>
-                <ScrollToTop />
-                <NavBar />
-                <Navigation />
-                <Footer />
-              </Suspense>
-            </Router>
-          </UserProvider>
-        </GoogleOAuthProvider>
-      </HelmetProvider>
-    </>
+    <HelmetProvider>
+      <Helmet>
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <title>Full Stack Fanatic</title>
+      </Helmet>
+      <GlobalStyles />
+      <GoogleOAuthProvider clientId={clientId}>
+        <UserProvider>
+          <Router>
+            <InactivityHandler />
+            <Suspense fallback={<LoadingSpinner />}>
+              <ScrollToTop />
+              <NavBar />
+              <Navigation />
+              {/* The footer will be lazy-loaded here */}
+              <LazyFooterWrapper />
+            </Suspense>
+          </Router>
+        </UserProvider>
+      </GoogleOAuthProvider>
+    </HelmetProvider>
   );
 };
 

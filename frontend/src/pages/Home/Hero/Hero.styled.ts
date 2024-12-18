@@ -1,6 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { colors } from "../../../GlobalStyles";
-import WaveEffectBG from "../../../assets/images/wave-effect-bg.webp";
+import WaveEffectBG from "/assets/images/wave-effect-bg.webp";
 
 export const HeroWrapper = styled.section`
   height: 100vh;

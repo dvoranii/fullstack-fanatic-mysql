@@ -22,12 +22,12 @@ const HomePage: React.FC = () => {
         />
         <link
           rel="preload"
-          href="/src/assets/images/wave-effect-bg.webp"
+          href="/assets/images/wave-effect-bg.webp"
           as="image"
         />
         <link
           rel="preload"
-          href="/src/assets/images/fsf-logo-notext-large.webp"
+          href="/assets/images/fsf-logo-notext-large.webp"
           as="image"
         />
       </Helmet>
