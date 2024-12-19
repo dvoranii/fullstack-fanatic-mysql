@@ -15,13 +15,14 @@ import {
   SocialButtonsWrapper,
   SocialIconWrapper,
 } from "./Hero.styled";
+
 import FSFLogo from "/assets/images/fsf-logo-notext-large.webp";
-import FSFLogoWhite from "../../../assets/images/fsf-logo-white-hires.png";
+import FSFLogoWhite from "/assets/images/fsf-logo-white-hires.png";
 import ElipseBG from "/assets/images/bg-images/Ellipse-bg.svg";
-import GithubLogo from "../../../assets/images/socials/github-icon.png";
-import CodepenLogo from "../../../assets/images/socials/codepen.png";
-import LinkedinLogo from "../../../assets/images/socials/linkedin-icon-black.png";
-import FsfLogoDarkblue from "../../../assets/images/fsf-logo-darkblue.png";
+import GithubLogo from "/assets/images/socials/github-icon.png";
+import CodepenLogo from "/assets/images/socials/codepen.png";
+import LinkedinLogo from "/assets/images/socials/linkedin-icon-black.png";
+import FsfLogoDarkblue from "/assets/images/fsf-logo-darkblue.png";
 
 const Hero: React.FC = () => {
   return (

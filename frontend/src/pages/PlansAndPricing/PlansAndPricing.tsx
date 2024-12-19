@@ -25,7 +25,7 @@ import ConsultationForm from "./ConsultationForm/ConsultationForm";
 import BGSwoosh from "/assets/images/bg-images/Ellipse7.svg";
 import SquaresAndTriangles from "/assets/images/bg-images/SquaresAndTriangles.svg";
 import SwirlyLineImg from "/assets/images/bg-images/swirly-line-bg.svg";
-import ConsultationImg from "../../assets/images/plansAndPricing/consultation-image.jpg";
+import ConsultationImg from "/assets/images/plansAndPricing/consultation-image.jpg";
 
 const PlansAndPricing: React.FC = () => {
   const formRef = useRef<HTMLDivElement>(null);

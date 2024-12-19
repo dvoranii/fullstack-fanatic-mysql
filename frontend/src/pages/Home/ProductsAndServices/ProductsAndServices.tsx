@@ -9,15 +9,15 @@ import {
   ProductsAndServiceTitle,
   ProductsAndServicesBottomImgWrapper,
   CardLink,
-  BgSquaresAndTriangleImg,
+  BgSquaresAndTrianglesWrapper,
 } from "./ProductsAndServices.styled";
-import TutorialIcon from "../../../assets/images/tutorial-icon-home.svg";
-import BlogIcon from "../../../assets/images/blog-icon-home.svg";
-import ConsultIcon from "../../../assets/images/consult-icon-home.svg";
-import RatingsCardImage from "../../../assets/images/ratings-card-image.svg";
-import BlogsCardImage from "../../../assets/images/blogs-card-image.svg";
-import ConsultCardImage from "../../../assets/images/consult-card-image.svg";
-import ProductsAndServicesBottomImg from "../../../assets/images/products-and-services-bottom-img.svg";
+import TutorialIcon from "/assets/images/home/tutorial-icon-home.svg";
+import BlogIcon from "/assets/images/home/blog-icon-home.svg";
+import ConsultIcon from "/assets/images/home/consult-icon-home.svg";
+import RatingsCardImage from "/assets/images/home/ratings-card-image.svg";
+import BlogsCardImage from "/assets/images/home/blogs-card-image.svg";
+import ConsultCardImage from "/assets/images/home/consult-card-image.svg";
+import ProductsAndServicesBottomImg from "/assets/images/home/products-and-services-bottom-img.svg";
 import BgSquaresAndTriangle from "/assets/images/bg-images/SquaresAndTriangles.svg";
 
 const ProductsAndServices: React.FC = () => {
@@ -27,13 +27,16 @@ const ProductsAndServices: React.FC = () => {
         <ProductsAndServiceTitle>Products & Services</ProductsAndServiceTitle>
       </ProductsAndServiceTitleWrapper>
       <ProductsAndServicesWrapperOuter>
-        <BgSquaresAndTriangleImg
-          className="bg-squares"
-          src={BgSquaresAndTriangle}
-          alt=""
-          width="260"
-          height="auto"
-        />
+        <BgSquaresAndTrianglesWrapper>
+          <img
+            className="bg-squares"
+            src={BgSquaresAndTriangle}
+            alt=""
+            width="260"
+            height="auto"
+          />
+        </BgSquaresAndTrianglesWrapper>
+
         <ProductsAndServicesWrapperInner>
           <CardWrapper className="card">
             <Card>

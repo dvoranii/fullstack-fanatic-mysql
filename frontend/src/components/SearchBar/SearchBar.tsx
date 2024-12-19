@@ -5,7 +5,7 @@ import {
   SearchIconImg,
   SearchInputWrapper,
 } from "./SearchBar.styled";
-import SearchIcon from "../../assets/images/search-icon.png";
+import SearchIcon from "/assets/images/search-icon.png";
 import { useState, useMemo } from "react";
 import { debounce } from "../../utils/debounce";
 

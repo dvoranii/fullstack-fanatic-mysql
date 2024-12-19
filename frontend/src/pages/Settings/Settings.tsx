@@ -16,7 +16,7 @@ import {
 } from "./Settings.styled";
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import { UserContext } from "../../context/UserContext";
-import EditIcon from "../../assets/images/account/edit-icon.png";
+import EditIcon from "/assets/images/account/edit-icon.png";
 import HelpIcon from "../../assets/images/help-icon.png";
 import { getUserAuthType } from "../../services/userService";
 import ChangePasswordForm from "./ChangePasswordForm/ChangePasswordForm";

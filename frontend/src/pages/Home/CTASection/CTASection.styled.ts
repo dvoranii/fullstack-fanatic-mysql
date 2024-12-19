@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import { colors } from "../../../GlobalStyles";
-import elegantWhiteBg from "../../../assets/images/elegant-white-bg.jpg";
+import elegantWhiteBg from "/assets/images/elegant-white-bg.jpg";
 import { Link } from "react-router-dom";
 
 export const CTAWrapperOuter = styled.div`

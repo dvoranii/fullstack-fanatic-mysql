@@ -17,10 +17,11 @@ import {
   createOrGetConversation,
 } from "../../../services/conversationService";
 import { sendMessage } from "../../../services/messageService";
-import CloseIcon from "../../../assets/images/close-icon.png";
 import { UserContext } from "../../../context/UserContext";
 import { getAvatarUrl } from "../../../utils/imageUtils";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
+
+import CloseIcon from "/assets/images/close-icon.png";
 interface MessageUserModalProps {
   isOpen: boolean;
   onClose: () => void;

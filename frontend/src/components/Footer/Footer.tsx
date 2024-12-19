@@ -17,12 +17,12 @@ import {
   Column2Wrapper,
 } from "./Footer.styled";
 
-import logo from "../../assets/images/fsf-logo-darkblue.png";
-import githubIcon from "../../assets/images/socials/github-icon.png";
-import facebookIcon from "../../assets/images/socials/facebook.png";
-import codepenIcon from "../../assets/images/socials/codepen.png";
-import tiktokIcon from "../../assets/images/socials/tiktok-icon.png";
-import Seperator from "../../assets/images/seperator.png";
+import logo from "/assets/images/fsf-logo-darkblue.png";
+import githubIcon from "/assets/images/socials/github-icon.png";
+import facebookIcon from "/assets/images/socials/facebook.png";
+import codepenIcon from "/assets/images/socials/codepen.png";
+import tiktokIcon from "/assets/images/socials/tiktok-icon.png";
+import Seperator from "/assets/images/seperator.png";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();

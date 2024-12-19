@@ -1,12 +1,12 @@
-import tutorial_1_thumbnail from "./images/tutorials/deployment-thumbnail.png";
-import tutorial_2_thumbnail from "./images/tutorials/csrf-thumbnail.png";
-import tutorial_3_thumbnail from "./images/tutorials/network-request.png";
-import tutorial_4_thumbnail from "./images/tutorials/webappsecurity-thumbnail.png";
-import tutorial_5_thumbnail from "./images/tutorials/forms-thumbnail.png";
-import tutorial_6_thumbnail from "./images/tutorials/dns-thumbnail.png";
-import tutorial_7_thumbnail from "./images/tutorials/frontend-thumbnail.png";
-import tutorial_8_thumbnail from "./images/tutorials/web-performance-thumbnail.png";
-import tutorial_9_thumbnail from "./images/tutorials/responsive-design-thumbnail.png";
+import tutorial_1_thumbnail from "/assets/images/tutorials/deployment-thumbnail.png";
+import tutorial_2_thumbnail from "/assets/images/tutorials/csrf-thumbnail.png";
+import tutorial_3_thumbnail from "/assets/images/tutorials/network-request.png";
+import tutorial_4_thumbnail from "/assets/images/tutorials/webappsecurity-thumbnail.png";
+import tutorial_5_thumbnail from "/assets/images/tutorials/forms-thumbnail.png";
+import tutorial_6_thumbnail from "/assets/images/tutorials/dns-thumbnail.png";
+import tutorial_7_thumbnail from "/assets/images/tutorials/frontend-thumbnail.png";
+import tutorial_8_thumbnail from "/assets/images/tutorials/web-performance-thumbnail.png";
+import tutorial_9_thumbnail from "/assets/images/tutorials/responsive-design-thumbnail.png";
 import { TutorialContentItem } from "../types/Tutorial/Tutorial";
 
 export const tutorialContent: TutorialContentItem[] = [

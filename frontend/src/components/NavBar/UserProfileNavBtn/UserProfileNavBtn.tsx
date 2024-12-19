@@ -5,7 +5,7 @@ import React, {
   useRef,
   useCallback,
 } from "react";
-import ProfileIconBlack from "../../../assets/images/nav/profile-icon-black.png";
+
 import {
   ProfileName,
   ProfileProfession,
@@ -27,7 +27,9 @@ import { useAuthUtils } from "../../../utils/useAuthUtils";
 import Dropdown from "../../Dropdown/Dropdown";
 import NotificationBadge from "../../NotificationBadge/NotificationBadge";
 import { getUnreadConversationsCount } from "../../../services/conversationService";
-import UnderConstructionIcon from "../../../assets/images/under-construction.png";
+
+import ProfileIconBlack from "/assets/images/nav/profile-icon-black.png";
+import UnderConstructionIcon from "/assets/images/under-construction.png";
 
 const UserProfileNavBtn: React.FC = () => {
   const isMounted = useRef(true);

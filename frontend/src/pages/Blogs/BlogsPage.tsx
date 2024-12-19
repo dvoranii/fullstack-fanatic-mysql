@@ -17,8 +17,8 @@ import {
 import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
 import { UserContext } from "../../context/UserContext";
 import { blogContent } from "../../assets/blogContent";
-import PremiumLockImg from "../../assets/images/lock.png";
-import PremiumUnlockImg from "../../assets/images/unlocked.png";
+import PremiumLockImg from "/assets/images/lock.png";
+import PremiumUnlockImg from "/assets/images/unlocked.png";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import SquaresAndTriangles from "/assets/images/bg-images/SquaresAndTriangles.svg";
 import AddToCartButton from "../../components/AddToCartButton/AddToCartButton";

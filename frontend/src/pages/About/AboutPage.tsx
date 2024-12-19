@@ -15,7 +15,7 @@ import {
   SubtitleWrapper,
 } from "./AboutPage.styled";
 import Title from "../../components/Title/Title";
-import AboutImage from "../../assets/images/Amico-images/About-us-page-amico.svg";
+import AboutImage from "/assets/images/Amico-images/About-us-page-amico.svg";
 import { Link } from "react-router-dom";
 import ElipseImg from "/assets/images/bg-images/Ellipse-bg.svg";
 import ElipseImgSolid from "/assets/images/bg-images/Ellipse-bg-solid.svg";

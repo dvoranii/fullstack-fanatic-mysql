@@ -9,7 +9,7 @@ import {
   CTALink,
   SubtextWrapper,
 } from "./CTASection.styled";
-import BrainGraphic from "../../../assets/images/brain sides-cuate.svg";
+import BrainGraphic from "/assets/images/home/brain sides-cuate.svg";
 import { useEffect, useState } from "react";
 
 const CTASection: React.FC = () => {

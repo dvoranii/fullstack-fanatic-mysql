@@ -1,6 +1,6 @@
 import React from "react";
 import { WarningBarWrapper } from "./WarningBar.styled";
-import UnderContructionIcon from "../../assets/images/under-construction.png";
+import UnderContructionIcon from "/assets/images/under-construction.png";
 
 const WarningBar: React.FC = () => {
   return (

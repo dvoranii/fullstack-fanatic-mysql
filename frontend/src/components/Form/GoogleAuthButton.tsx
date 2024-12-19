@@ -1,5 +1,5 @@
 import React from "react";
-import googleIcon from "../../assets/images/google-signin-icon.png";
+import googleIcon from "/assets/images/google-signin-icon.png";
 import { GoogleSignInButton } from "./styles/GoogleAuthButton.styled";
 
 interface GoogleAuthButtonProps {

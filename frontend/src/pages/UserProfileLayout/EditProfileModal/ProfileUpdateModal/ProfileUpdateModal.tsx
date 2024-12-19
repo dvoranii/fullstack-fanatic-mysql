@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { ModalOverlay, ModalContent } from "./ProfileUpdateModal.styled";
-import EditProfileCheckmark from "../../../../assets/images/edit-profile-checkmark.png";
-import EditProfileFailed from "../../../../assets/images/edit-profile-failed.png";
+
+import EditProfileCheckmark from "/assets/images/edit-profile-checkmark.png";
+import EditProfileFailed from "/assets/images/edit-profile-failed.png";
 
 interface ProfileUpdateModalProps {
   isOpen: boolean;

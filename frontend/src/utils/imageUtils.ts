@@ -1,4 +1,4 @@
-import ProfileIcon from "../assets/images/profile-icon.png";
+import ProfileIcon from "/assets/images/profile-icon.png";
 
 const BASE_URL = "http://localhost:5000";
 

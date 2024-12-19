@@ -9,9 +9,9 @@ import {
   CardLinkWrapper,
 } from "./InfoSection.styled";
 
-import MasterImage from "../../../assets/images/Amico-images/master-amico.svg";
-import ApplyImage from "../../../assets/images/Amico-images/apply-amico.svg";
-import CustomizeImage from "../../../assets/images/Amico-images/customization-amico.svg";
+import MasterImage from "/assets/images/Amico-images/master-amico.svg";
+import ApplyImage from "/assets/images/Amico-images/apply-amico.svg";
+import CustomizeImage from "/assets/images/Amico-images/customization-amico.svg";
 
 const InfoSection: React.FC = () => {
   return (

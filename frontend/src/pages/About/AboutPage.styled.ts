@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { colors } from "../../GlobalStyles";
-import HexagonalBg from "../../assets/images/hexagonal-line-bg.jpg";
+import HexagonalBg from "/assets/images/hexagonal-line-bg.jpg";
 
 interface ListSectionTitleWrapperProps {
   offset?: string;

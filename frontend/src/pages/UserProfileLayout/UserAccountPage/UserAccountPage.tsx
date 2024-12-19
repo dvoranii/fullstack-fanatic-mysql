@@ -6,7 +6,7 @@ import UserProfilePage from "../UserProfile";
 import EditProfileModal from "../EditProfileModal/EditProfileModal";
 import { uploadBannerImage } from "../../../services/imageUploadService";
 import { ImageUploadResponse } from "../../../types/ImageUploadResponse";
-import InboxIcon from "../../../assets/images/account/inbox.png";
+import InboxIcon from "/assets/images/account/inbox.png";
 import { getUnreadConversationsCount } from "../../../services/conversationService";
 import NotificationBadge from "../../../components/NotificationBadge/NotificationBadge";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";

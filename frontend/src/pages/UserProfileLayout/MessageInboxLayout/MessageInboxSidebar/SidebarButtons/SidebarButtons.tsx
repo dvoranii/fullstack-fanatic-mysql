@@ -2,8 +2,8 @@ import { useContext } from "react";
 import { UserContext } from "../../../../../context/UserContext";
 import { IconBGWrapper, IconBG, IconImg } from "./SidebarButtons.styled";
 import ProfilePicture from "../../../../../components/ProfilePicture/ProfilePicture";
-import SettingsGear from "../../../../../assets/images/settings-gear.png";
-import HomeIcon from "../../../../../assets/images/home-icon.png";
+import SettingsGear from "/assets/images/settings-gear.png";
+import HomeIcon from "/assets/images/home/home-icon.png";
 import { NavLink } from "react-router-dom";
 
 const SidebarButton: React.FC = () => {

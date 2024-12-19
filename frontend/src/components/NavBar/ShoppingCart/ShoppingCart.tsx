@@ -6,7 +6,6 @@ import {
   useMemo,
   memo,
 } from "react";
-import cartIcon from "../../../assets/images/nav/shopping-cart-icon.png";
 import { NavIconWrapper, NavIconImg } from "../../NavBar/NavBar.styled";
 import {
   ShoppingCartItem,
@@ -22,6 +21,8 @@ import Dropdown from "../../Dropdown/Dropdown";
 import { UserContext } from "../../../context/UserContext";
 import useHandleCheckout from "../../../hooks/useHandleCheckout";
 import useClickOutside from "../../../hooks/useClickOutside";
+
+import cartIcon from "/assets/images/nav/shopping-cart-icon.png";
 
 const ShoppingCart: React.FC = () => {
   const [isCartVisible, setIsCartVisible] = useState(false);

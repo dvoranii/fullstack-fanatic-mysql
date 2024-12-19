@@ -11,7 +11,7 @@ import {
   BgSquaresAndTriangleImg,
   ImageWrapper,
 } from "./IntroSection.styled";
-import PersonGraphic from "../../../assets/images/Amico-images/Coding-workshop-amico.svg";
+import PersonGraphic from "/assets/images/Amico-images/Coding-workshop-amico.svg";
 import CornerEllipseImg from "/assets/images/bg-images/Ellipse-bg-solid.svg";
 import SwirlyArrowImg from "/assets/images/bg-images/swirly-arrow-3.svg";
 import BgSquaresAndTriangle from "/assets/images/bg-images/SquaresAndTriangles.svg";

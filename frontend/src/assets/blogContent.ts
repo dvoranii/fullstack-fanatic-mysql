@@ -1,12 +1,12 @@
 import { BlogContentItem } from "../types/Blog/Blog";
-import blog_thumbnail_1 from "../assets/images/blogs/React-icon.svg.png";
-import blog_thumbnail_2 from "../assets/images/blogs/node-logo.png";
-import blog_thumbnail_3 from "../assets/images/blogs/css-logo.png";
-import blog_thumbnail_4 from "../assets/images/blogs/Typescript-logo.png";
-import blog_thumbnail_5 from "../assets/images/blogs/GraphQL_Logo.png";
-import blog_thumbnail_6 from "../assets/images/blogs/kubernetes-logo.png";
-import blog_thumbnail_7 from "../assets/images/blogs/WebAssembly_Logo.svg";
-import blog_thumbnail_8 from "../assets/images/blogs/aws-logo.webp";
+import blog_thumbnail_1 from "/assets/images/blogs/React-icon.svg.png";
+import blog_thumbnail_2 from "/assets/images/blogs/node-logo.png";
+import blog_thumbnail_3 from "/assets/images/blogs/css-logo.png";
+import blog_thumbnail_4 from "/assets/images/blogs/Typescript-logo.png";
+import blog_thumbnail_5 from "/assets/images/blogs/GraphQL_Logo.png";
+import blog_thumbnail_6 from "/assets/images/blogs/kubernetes-logo.png";
+import blog_thumbnail_7 from "/assets/images/blogs/WebAssembly_Logo.svg";
+import blog_thumbnail_8 from "/assets/images/blogs/aws-logo.webp";
 
 export const blogContent: BlogContentItem[] = [
   {

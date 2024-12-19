@@ -7,7 +7,6 @@ import {
   memo,
 } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import NotificationBell from "../../../assets/images/nav/notification-bell.png";
 import { NotificationContentWrapper } from "./Notifications.styled";
 import { NavIconWrapper, NavIconImg } from "../../NavBar/NavBar.styled";
 import Dropdown from "../../Dropdown/Dropdown";
@@ -23,6 +22,8 @@ import { UserContext } from "../../../context/UserContext";
 import { UserContextType } from "../../../types/User/UserContextType";
 import { useNotifications } from "../../../hooks/useNotifications";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
+
+import NotificationBell from "/assets/images/nav/notification-bell.png";
 
 const Notifications: React.FC = () => {
   const csrfToken = useCsrfToken();

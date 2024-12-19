@@ -42,8 +42,8 @@ import { UserContext } from "../../context/UserContext";
 import MessageModalButton from "../../components/MessageModalButton/MessageModalButton";
 import FavoritesSection from "./FavoritesSection/FavoritesSection";
 import { truncateText } from "../../utils/textUtils";
-import EditIcon from "../../assets/images/account/edit.webp";
-import SettingsIcon from "../../assets/images/settings-gear.png";
+import EditIcon from "/assets/images/account/edit.webp";
+import SettingsIcon from "/assets/images/settings-gear.png";
 
 const BASE_URL = import.meta.env.VITE_API_URL.replace("/api", "");
 

@@ -250,4 +250,6 @@ export const CardLink = styled(Link)`
   }
 `;
 
-export const BgSquaresAndTriangleImg = styled.img``;
+export const BgSquaresAndTrianglesWrapper = styled.div`
+  user-select: none;
+`;

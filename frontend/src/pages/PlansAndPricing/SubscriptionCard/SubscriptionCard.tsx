@@ -9,11 +9,13 @@ import {
   MedalWrapper,
   CardFeatures,
 } from "./SubscriptionCard.styled";
-import GoldenMedalImg from "../../../assets/images/plansAndPricing/golden-medal.svg";
+
 import { UserContext } from "../../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { CartItem } from "../../../types/CartItem";
-import SubscriptionIcon from "../../../assets/images/plansAndPricing/subscription-icon.png";
+
+import GoldenMedalImg from "/assets/images/plansAndPricing/golden-medal.svg";
+import SubscriptionIcon from "/assets/images/plansAndPricing/subscription-icon.png";
 interface SubscriptionCardProps {
   title: string;
   price: string;

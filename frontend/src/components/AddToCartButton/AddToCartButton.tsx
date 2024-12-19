@@ -1,6 +1,6 @@
 import React from "react";
 import { CartItem } from "../../types/CartItem";
-import AddToCartIcon from "../../assets/images/add-to-cart-icon.png";
+import AddToCartIcon from "/assets/images/add-to-cart-icon.png";
 import { AddToCartWrapper } from "./AddToCartButton.styled";
 
 interface AddToCartButtonProps {

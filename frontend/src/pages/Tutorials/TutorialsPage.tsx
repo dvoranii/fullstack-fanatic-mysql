@@ -18,14 +18,14 @@ import {
   TutorialListOuter,
 } from "./TutorialsPage.styled";
 import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
-import BeginnerStarImg from "../../assets/images/tutorials/1-beginner-star.png";
-import IntermediateStarImg from "../../assets/images/tutorials/2-intermediate-stars.png";
-import AdvancedStarImg from "../../assets/images/tutorials/3-advanced-stars.png";
+import BeginnerStarImg from "/assets/images/tutorials/1-beginner-star.png";
+import IntermediateStarImg from "/assets/images/tutorials/2-intermediate-stars.png";
+import AdvancedStarImg from "/assets/images/tutorials/3-advanced-stars.png";
 import { UserContext } from "../../context/UserContext";
 import { tutorialContent } from "../../assets/tutorialContent";
-import PremiumLockImg from "../../assets/images/lock.png";
-import FlipIconFront from "../../assets/images/tutorials/flip-icon.png";
-import FlipIconBack from "../../assets/images/tutorials/flip-icon-backside.png";
+import PremiumLockImg from "/assets/images/lock.png";
+import FlipIconFront from "/assets/images/tutorials/flip-icon.png";
+import FlipIconBack from "/assets/images/tutorials/flip-icon-backside.png";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import SquaresAndTriangles from "/assets/images/bg-images/SquaresAndTriangles.svg";
 import SwirlyLineImg from "/assets/images/bg-images/swirly-line-bg.svg";
@@ -283,7 +283,6 @@ const TutorialsPage: React.FC = () => {
         currentPage={currentPage}
         onPageChange={(page) => setCurrentPage(page)}
       />
-      <div>&nbsp;</div>
     </>
   );
 };

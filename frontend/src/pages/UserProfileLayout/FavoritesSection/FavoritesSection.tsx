@@ -13,14 +13,16 @@ import {
   EmptyMessage,
   TopButtonsWrapper,
 } from "./FavoritesSection.styled";
-import TutorialIcon from "../../../assets/images/tutorial-icon.png";
-import BlogIcon from "../../../assets/images/blog-icon.png";
+
 import { Tutorial } from "../../../types/Tutorial/Tutorial";
 import { Blog } from "../../../types/Blog/Blog";
 import { PurchasedItem } from "../../../types/PurchasedItem";
-import BackIcon from "../../../assets/images/back-icon.png";
 import { UserContext } from "../../../context/UserContext";
 import { getPublicUserFavourites } from "../../../services/favouritesService";
+
+import TutorialIcon from "/assets/images/tutorial-icon.png";
+import BlogIcon from "/assets/images/blog-icon.png";
+import BackIcon from "/assets/images/back-icon.png";
 
 const BASE_URL = import.meta.env.VITE_CLIENT_URL;
 

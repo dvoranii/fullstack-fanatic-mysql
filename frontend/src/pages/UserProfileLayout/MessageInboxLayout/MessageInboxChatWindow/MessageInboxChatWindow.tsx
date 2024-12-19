@@ -33,7 +33,6 @@ import {
   createOrGetConversation,
   fetchConversationById,
 } from "../../../../services/conversationService";
-import PlusIcon from "../../../../assets/images/account/plus-icon.png";
 import NewChatDropdown from "../NewChatDropdown/NewChatDropdown";
 import useClickOutside from "../../../../hooks/useClickOutside";
 import { User } from "../../../../types/User/User";
@@ -41,6 +40,7 @@ import { useCsrfToken } from "../../../../hooks/useCsrfToken";
 import { useWebSocketMessages } from "../../../../hooks/useWebSocketMessages";
 import Picker, { EmojiClickData } from "emoji-picker-react";
 
+import PlusIcon from "/assets/images/account/plus-icon.png";
 interface MessageInboxChatWindowProps {
   conversationId: number | null;
   receiverName: string;

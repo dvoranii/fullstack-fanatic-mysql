@@ -1,5 +1,6 @@
-import FavouriteIconImg from "../../assets/images/bookmark.png";
-import FavouriteIconImgFilled from "../../assets/images/bookmark(filled).png";
+import FavouriteIconImg from "/assets/images/bookmark.png";
+import FavouriteIconImgFilled from "/assets/images/bookmark(filled).png";
+
 import { FavouriteButtonImg } from "./FavouriteButton.styled";
 import { FavouriteButtonProps } from "../../types/FavouritesButtonProps";
 

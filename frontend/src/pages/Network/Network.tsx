@@ -9,7 +9,7 @@ import {
   FilterOptionWrapper,
 } from "./Network.styled";
 import SearchBar from "../../components/SearchBar/SearchBar";
-import NetworkIcon from "../../assets/images/networking-image.png";
+import NetworkIcon from "/assets/images/networking-image.png";
 import TitleBanner from "../../components/TitleBanner/TitleBanner";
 import { searchUsers } from "../../services/networkService";
 import { User } from "../../types/User/User";

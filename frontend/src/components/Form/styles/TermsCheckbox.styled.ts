@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import checkIcon from "../../../assets/images/check-icon.png";
+import checkIcon from "/assets/images/check-icon.png";
 import { colors } from "../../../GlobalStyles";
 
 export const TermsWrapper = styled.div`
