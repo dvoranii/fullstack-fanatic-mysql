@@ -17,7 +17,7 @@ const LazySection: React.FC<LazyLoadProps> = ({
   rootMargin = "100px",
   threshold = 0.1,
   className,
-  componentProps,
+  componentProps = {},
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);

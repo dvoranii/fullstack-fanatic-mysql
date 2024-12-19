@@ -39,6 +39,7 @@ const ContactPage: React.FC = () => {
           />
         </ImgWrapper>
       </ContactPageWrapper>
+      <div style={{ height: "0" }}>&nbsp;</div>
     </>
   );
 };

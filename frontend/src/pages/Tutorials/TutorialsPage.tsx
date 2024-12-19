@@ -283,6 +283,7 @@ const TutorialsPage: React.FC = () => {
         currentPage={currentPage}
         onPageChange={(page) => setCurrentPage(page)}
       />
+      <div>&nbsp;</div>
     </>
   );
 };

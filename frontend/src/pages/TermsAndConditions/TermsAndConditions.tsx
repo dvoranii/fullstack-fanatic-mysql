@@ -80,6 +80,7 @@ const TermsAndConditions = () => {
           </Section>
         </TermsContainer>
       </PageWrapper>
+      <div>&nbsp;</div>
     </>
   );
 };

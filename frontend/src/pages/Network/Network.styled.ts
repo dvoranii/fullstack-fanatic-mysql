@@ -3,6 +3,12 @@ import { colors } from "../../GlobalStyles";
 
 export const SearchBarWrapper = styled.div`
   margin-top: 40px;
+
+  @media screen and (max-width: 768px) {
+    .network-search {
+      padding-left: 20px;
+    }
+  }
 `;
 
 export const UserListWrapper = styled.div``;
@@ -41,4 +47,8 @@ export const FilterOption = styled.span.withConfig({
 export const FilterOptionWrapper = styled.div`
   padding-left: 120px;
   padding-top: 0.4rem;
+
+  @media screen and (max-width: 768px) {
+    padding-left: 20px;
+  }
 `;

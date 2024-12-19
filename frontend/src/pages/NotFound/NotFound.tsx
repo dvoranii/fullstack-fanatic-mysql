@@ -16,6 +16,7 @@ const NotFound: React.FC = () => {
         <p>Looks like the page you are trying to reach doesn't exist.</p>
         <Link to="/">Go back to Home</Link>
       </NotFoundWrapper>
+      <div>&nbsp;</div>
     </>
   );
 };

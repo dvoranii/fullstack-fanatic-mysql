@@ -95,6 +95,7 @@ const FollowersList: React.FC<FollowersListProps> = ({ userId }) => {
           hideButtons={!loggedInUser || loggedInUser.id !== userId}
         />
       </PageWrapper>
+      <div style={{ height: "0" }}>&nbsp;</div>
     </>
   );
 };

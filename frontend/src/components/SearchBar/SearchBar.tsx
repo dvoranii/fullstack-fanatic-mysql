@@ -14,12 +14,14 @@ interface SearchBarProps {
   paddingLeft?: string;
   onSearchChange?: (value: string) => void;
   onChange?: (value: string) => void;
+  className?: string;
 }
 const SearchBar: React.FC<SearchBarProps> = ({
   width,
   paddingLeft,
   onSearchChange,
   onChange,
+  className,
 }) => {
   const [inputValue, setInputValue] = useState("");
 
@@ -51,7 +53,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <SearchBarWrapperOuter style={{ paddingLeft }}>
+    <SearchBarWrapperOuter style={{ paddingLeft }} className={className}>
       <SearchBarWrapperInner style={{ width }}>
         <SearchIconWrapper onClick={handleSearch}>
           <SearchIconImg src={SearchIcon} />

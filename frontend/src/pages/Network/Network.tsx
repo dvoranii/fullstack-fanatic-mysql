@@ -116,7 +116,7 @@ export const NetworkPage: React.FC = () => {
       </Helmet>
       <TitleBanner textContent="Network" />
       <SearchBarWrapper>
-        <SearchBar onSearchChange={handleSearch} />
+        <SearchBar onSearchChange={handleSearch} className="network-search" />
         <FilterOptionWrapper>
           <span>Search by:</span>
           <FilterOption
@@ -167,8 +167,10 @@ export const NetworkPage: React.FC = () => {
               </NetworkIconWrapper>
             </NetworkDefaultContent>
           )}
+          <div style={{ height: "0px" }}>&nbsp;</div>
         </UserListWrapper>
       </PageWrapper>
+      <div style={{ height: "0px" }}>&nbsp;</div>
     </>
   );
 };

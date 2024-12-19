@@ -168,6 +168,7 @@ const Settings = () => {
           </Section>
         </Content>
       </SettingsContainer>
+      <div style={{ height: "0" }}>&nbsp;</div>
     </>
   );
 };

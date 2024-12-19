@@ -70,6 +70,7 @@ const PrivacyPolicy = () => {
           </Section>
         </PrivacyPolicyContainer>
       </PageWrapper>
+      <div>&nbsp;</div>
     </>
   );
 };

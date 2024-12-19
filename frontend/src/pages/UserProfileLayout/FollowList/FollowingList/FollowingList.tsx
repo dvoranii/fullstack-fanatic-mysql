@@ -68,6 +68,7 @@ const FollowingList: React.FC<FollowingListProps> = ({ userId }) => {
           hideButtons={!loggedInUser || loggedInUser.id !== effectiveUserId}
         />
       </PageWrapper>
+      <div style={{ height: "0" }}>&nbsp;</div>
     </>
   );
 };
