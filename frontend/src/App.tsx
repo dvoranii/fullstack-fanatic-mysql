@@ -13,7 +13,7 @@ const ScrollToTop = React.lazy(
   () => import("./components/ScrollToTop/ScrollToTop")
 );
 
-import LazyFooterWrapper from "./components/LazyFooter/LazyFooter";
+import LazySection from "./components/LazyLoad/LazySection/LazySection";
 
 const clientId = import.meta.env.VITE_CLIENT_ID;
 
@@ -38,8 +38,10 @@ const App: React.FC = () => {
               <ScrollToTop />
               <NavBar />
               <Navigation />
-              {/* The footer will be lazy-loaded here */}
-              <LazyFooterWrapper />
+              <LazySection
+                importFunc={() => import("./components/Footer/Footer")}
+                fallback={<LoadingSpinner />}
+              />
             </Suspense>
           </Router>
         </UserProvider>

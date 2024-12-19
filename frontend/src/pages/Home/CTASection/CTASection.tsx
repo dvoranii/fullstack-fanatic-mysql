@@ -35,6 +35,8 @@ const CTASection: React.FC = () => {
                 src={BrainGraphic}
                 loading="lazy"
                 alt="brain image"
+                height="450"
+                width="450"
               ></BrainImg>
             </picture>
           </ImgWrapper>

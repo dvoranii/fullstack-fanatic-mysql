@@ -68,7 +68,7 @@ export const ImgWrapper = styled.div`
 export const BrainImg = styled.img`
   max-width: 100%;
   height: auto;
-  width: clamp(250px, 50vw, 500px);
+  width: clamp(250px, 50vw, 450px);
   padding: 20px;
   transform: scaleX(-1);
 `;

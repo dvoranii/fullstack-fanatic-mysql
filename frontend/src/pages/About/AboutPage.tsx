@@ -30,13 +30,22 @@ const AboutPage: React.FC = () => {
           name="description"
           content="Empowering and educating IT specialists with unique and unconventional tactics by leveraging insider knowledge to fast-track success while fostering the mastery of core fundamentals through hands-on development and study."
         />
+        <link rel="preload" href={AboutImage} as="image" />
+        <link rel="preload" href={ElipseImg} as="image" />
+        <link rel="preload" href={ElipseImgSolid} as="image" />
+        <link rel="preload" href={BgSquaresAndTriangle} as="image" />
       </Helmet>
       <AboutPageWrapper>
         <Title textContent="About" />
         <AboutIntroWrapperOuter>
           <AboutIntroWrapper>
             <AboutImageWrapper>
-              <img src={AboutImage} alt="about image" />
+              <img
+                src={AboutImage}
+                alt="about image"
+                width="368"
+                height="368"
+              />
             </AboutImageWrapper>
 
             <MissionStatementWrapper>

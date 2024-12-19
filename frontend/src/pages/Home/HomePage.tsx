@@ -1,15 +1,9 @@
-import { Suspense } from "react";
+import React from "react";
 import { Helmet } from "react-helmet-async";
 import { HomePageWrapper } from "./HomePage.styled";
 import Hero from "./Hero/Hero";
-import React from "react";
-
-const IntroSection = React.lazy(() => import("./IntroSection/IntroSection"));
-const InfoSection = React.lazy(() => import("./InfoSection/InfoSection"));
-const ProductsAndServices = React.lazy(
-  () => import("./ProductsAndServices/ProductsAndServices")
-);
-const CTASection = React.lazy(() => import("./CTASection/CTASection"));
+import LazySection from "../../components/LazyLoad/LazySection/LazySection";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 const HomePage: React.FC = () => {
   return (
@@ -33,12 +27,35 @@ const HomePage: React.FC = () => {
       </Helmet>
       <HomePageWrapper>
         <Hero />
-        <Suspense fallback={<div>Loading...</div>}>
-          <IntroSection />
-          <InfoSection />
-          <ProductsAndServices />
-          <CTASection />
-        </Suspense>
+
+        <LazySection
+          importFunc={() => import("./IntroSection/IntroSection")}
+          fallback={<LoadingSpinner />}
+          rootMargin="100px"
+          threshold={0.1}
+          className="intro-section"
+        />
+        <LazySection
+          importFunc={() => import("./InfoSection/InfoSection")}
+          fallback={<LoadingSpinner />}
+          rootMargin="100px"
+          threshold={0.1}
+          className="info-section"
+        />
+        <LazySection
+          importFunc={() => import("./ProductsAndServices/ProductsAndServices")}
+          fallback={<LoadingSpinner />}
+          rootMargin="100px"
+          threshold={0.1}
+          className="products-section"
+        />
+        <LazySection
+          importFunc={() => import("./CTASection/CTASection")}
+          fallback={<LoadingSpinner />}
+          rootMargin="100px"
+          threshold={0.1}
+          className="cta-section"
+        />
       </HomePageWrapper>
     </>
   );
