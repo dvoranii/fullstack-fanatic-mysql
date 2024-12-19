@@ -191,14 +191,17 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
       <AccountActivityTitle>Account Activity</AccountActivityTitle>
 
       <AccountActivityWrapperOuter>
-        <Link to="/my-account/settings">
-          <img
-            src={SettingsIcon}
-            alt="settings gear"
-            title="Settings"
-            className="settings-gear"
-          />
-        </Link>
+        {isOwnProfile && (
+          <Link to="/my-account/settings">
+            <img
+              src={SettingsIcon}
+              alt="settings gear"
+              title="Settings"
+              className="settings-gear"
+            />
+          </Link>
+        )}
+
         <UserAccountContainer>
           <AccountActivity>
             <Section className="favorites-section">
