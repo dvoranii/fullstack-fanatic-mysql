@@ -15,6 +15,22 @@ export const UserAccountContainer = styled.div`
 
 export const AccountActivityWrapperOuter = styled.div`
   background-color: #eee;
+  position: relative;
+
+  img.settings-gear {
+    max-width: 45px;
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    background-color: ${colors.primary};
+    padding: 6px;
+    border-radius: 50%;
+    transition: all 250ms ease;
+
+    &:hover {
+      filter: brightness(1.25);
+    }
+  }
 `;
 
 export const BannerWrapperOuter = styled.div`
@@ -109,7 +125,6 @@ export const ProfileInfoColumn1 = styled.div`
   grid-column: 1;
   place-items: center;
   text-align: center;
-
   width: 100%;
 
   @media screen and (max-width: 768px) {
@@ -202,9 +217,9 @@ export const AccountActivity = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-
-  gap: 8.2rem;
-  margin-top: 40px;
+  gap: 4.2rem;
+  margin-top: 4.2rem;
+  padding: 24px;
 
   @media screen and (max-width: 1130px) {
     gap: 2.4rem;
@@ -291,8 +306,10 @@ export const ViewMoreCommentsLink = styled(Link)`
 `;
 
 export const SocialSectionWrapperOuter = styled.div`
+  width: 100%;
   user-select: none;
   padding-left: 20px;
+
   a {
     text-decoration: underline;
     color: blue;

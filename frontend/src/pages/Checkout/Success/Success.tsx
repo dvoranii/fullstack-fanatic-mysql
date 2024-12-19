@@ -22,6 +22,7 @@ const CheckoutSuccess = () => {
         <h1>Thank you for your purchase!</h1>
         <p>Your order has been successfully completed.</p>
       </SuccessWrapper>
+      <div style={{ height: "0" }}>&nbsp;</div>
     </>
   );
 };

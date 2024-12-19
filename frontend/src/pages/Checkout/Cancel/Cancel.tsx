@@ -15,6 +15,7 @@ const CheckoutCancel: React.FC = () => {
           <p>Your transaction was not completed. Please try again later.</p>
         </CheckoutResultPageWrapper>
       </PageWrapper>
+      <div style={{ height: "0" }}>&nbsp;</div>
     </>
   );
 };

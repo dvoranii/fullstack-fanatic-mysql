@@ -2,6 +2,23 @@
 import styled from "styled-components";
 import { colors } from "../../../GlobalStyles";
 
+export const SubscriptionCartWrapper = styled.div`
+  max-width: 80vw;
+  margin: 0 auto;
+  padding: 6.4rem 1.2rem 6.4rem 1.2rem;
+
+  @media screen and (max-width: 913px) {
+    padding: 4.8rem 1.2rem 4.8rem 1.2rem;
+  }
+  @media screen and (max-width: 768px) {
+    padding: 3.2rem 1.2rem 3.2rem 1.2rem;
+  }
+
+  @media screen and (max-width: 400px) {
+    max-width: 90vw;
+  }
+`;
+
 export const ViewCartTitleBanner = styled.div`
   width: 100%;
   background-color: ${colors.secondary};
@@ -15,6 +32,13 @@ export const ViewCartTitleBanner = styled.div`
     margin: 0;
     text-transform: uppercase;
   }
+
+  @media screen and (max-width: 768px) {
+    h1 {
+      font-size: clamp(1.4rem, 3vw, 1.8rem);
+      text-align: center;
+    }
+  }
 `;
 
 export const CartPageWrapperInner = styled.div`
@@ -23,16 +47,35 @@ export const CartPageWrapperInner = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   margin: 20px 0;
+
+  .mobile-divider {
+    width: 100%;
+    display: none;
+  }
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    gap: 3.2rem;
+
+    .mobile-divider {
+      display: block;
+    }
+  }
 `;
 
 export const CartItemsWrapper = styled.div`
   flex: 0 0 65%;
-  max-width: 65%;
+  width: 65%;
   padding: 20px;
   background-color: ${colors.white};
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   position: relative;
+
+  @media screen and (max-width: 768px) {
+    max-width: 100%;
+    width: 100%;
+  }
 `;
 
 export const CartItem = styled.div`
@@ -41,16 +84,16 @@ export const CartItem = styled.div`
   margin-bottom: 20px;
   border-bottom: 1px solid ${colors.secondary};
   padding-bottom: 20px;
-
-  img {
-    width: 100px;
-    height: auto;
-    margin-right: 20px;
-  }
 `;
 
 export const CartItemImgWrapper = styled.div`
   user-select: none;
+
+  img {
+    width: clamp(70px, 6vw, 100px);
+    height: auto;
+    margin-right: 20px;
+  }
 `;
 
 export const CartItemDetails = styled.div`
@@ -105,6 +148,11 @@ export const OrderSummary = styled.div`
     margin-bottom: 10px;
     font-size: 1rem;
     color: ${colors.black};
+  }
+
+  @media screen and (max-width: 768px) {
+    max-width: 100%;
+    width: 100%;
   }
 `;
 

@@ -119,6 +119,7 @@ const MessageInboxLayout: React.FC = () => {
           </RightContainer>
         </LayoutContainer>
       </MessageInboxPageWrapper>
+      <div style={{ height: "0" }}>&nbsp;</div>
     </div>
   );
 };

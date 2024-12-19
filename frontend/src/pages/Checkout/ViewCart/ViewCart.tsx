@@ -61,6 +61,7 @@ const ViewCart: React.FC = () => {
           </ProceedToCheckoutButton>
         </OrderSummary>
       </CartPageWrapperInner>
+      <div style={{ height: "0" }}>&nbsp;</div>
     </>
   );
 };

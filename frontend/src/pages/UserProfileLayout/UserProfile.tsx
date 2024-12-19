@@ -43,6 +43,7 @@ import MessageModalButton from "../../components/MessageModalButton/MessageModal
 import FavoritesSection from "./FavoritesSection/FavoritesSection";
 import { truncateText } from "../../utils/textUtils";
 import EditIcon from "../../assets/images/account/edit.webp";
+import SettingsIcon from "../../assets/images/settings-gear.png";
 
 const BASE_URL = import.meta.env.VITE_API_URL.replace("/api", "");
 
@@ -190,6 +191,14 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
       <AccountActivityTitle>Account Activity</AccountActivityTitle>
 
       <AccountActivityWrapperOuter>
+        <Link to="/my-account/settings">
+          <img
+            src={SettingsIcon}
+            alt="settings gear"
+            title="Settings"
+            className="settings-gear"
+          />
+        </Link>
         <UserAccountContainer>
           <AccountActivity>
             <Section className="favorites-section">

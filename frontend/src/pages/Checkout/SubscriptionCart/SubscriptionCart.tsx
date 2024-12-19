@@ -1,5 +1,5 @@
-import { PageWrapper } from "../../../PageWrapper.styled";
 import {
+  SubscriptionCartWrapper,
   ViewCartTitleBanner,
   CartItemsWrapper,
   CartItem,
@@ -76,7 +76,7 @@ const SubscriptionCart: React.FC = () => {
       <ViewCartTitleBanner>
         <h1>Subscription Checkout</h1>
       </ViewCartTitleBanner>
-      <PageWrapper>
+      <SubscriptionCartWrapper>
         <CartPageWrapperInner>
           <CartItemsWrapper>
             {subscriptionItem ? (
@@ -104,6 +104,7 @@ const SubscriptionCart: React.FC = () => {
               <p>Your subscription cart is empty</p>
             )}
           </CartItemsWrapper>
+          <hr className="mobile-divider"></hr>
           {subscriptionItem && (
             <OrderSummary>
               <h4>ORDER SUMMARY</h4>
@@ -114,7 +115,8 @@ const SubscriptionCart: React.FC = () => {
             </OrderSummary>
           )}
         </CartPageWrapperInner>
-      </PageWrapper>
+      </SubscriptionCartWrapper>
+      <div style={{ height: "0" }}>&nbsp;</div>
     </>
   );
 };

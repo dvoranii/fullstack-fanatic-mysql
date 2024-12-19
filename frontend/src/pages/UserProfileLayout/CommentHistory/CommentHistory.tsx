@@ -107,6 +107,7 @@ export const CommentHistory: React.FC = () => {
           </InfiniteScroll>
         </CommentHistoryWrapper>
       </PageWrapper>
+      <div style={{ height: "0" }}>&nbsp;</div>
     </>
   );
 };

@@ -5,13 +5,17 @@ export const UserListWrapper = styled.div`
   ul {
     list-style: none;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+
     li {
       user-select: none;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 20px;
-      margin: 10px 0;
+      /* margin: 10px 0; */
       background-color: white;
       border: 1px solid #ddd;
       border-radius: 10px;
@@ -21,6 +25,12 @@ export const UserListWrapper = styled.div`
 
   p {
     color: ${colors.primary};
+  }
+
+  @media screen and (max-width: 768px) {
+    ul > li {
+      flex-direction: column;
+    }
   }
 `;
 
@@ -32,6 +42,7 @@ export const EmptyMessage = styled.p`
 `;
 
 export const FollowButtonsWrapper = styled.div`
+  display: flex;
   button {
     margin: 10px;
     padding: 4px;
@@ -49,6 +60,14 @@ export const FollowButtonsWrapper = styled.div`
     background: ${colors.secondary};
     color: ${colors.primary};
   }
+
+  @media screen and (max-width: 768px) {
+    padding-top: 1.2rem;
+  }
+
+  /* @media screen and (max-width: 475px) {
+    flex-direction: row;
+  } */
 `;
 
 export const UserInfoWrapper = styled.div`
