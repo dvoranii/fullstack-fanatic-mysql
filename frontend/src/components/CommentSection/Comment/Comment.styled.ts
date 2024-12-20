@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import discardIcon from "../../../assets/images/discard-icon.png";
+import discardIcon from "/assets/images/discard-icon.png";
 import { colors } from "../../../GlobalStyles";
 
 interface CommentWrapperProps {

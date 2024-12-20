@@ -1,9 +1,5 @@
 import styled from "styled-components";
 
-export const PlansAndPricingContainerOuter = styled.div`
-  width: 100%;
-`;
-
 export const ConsultationSectionWrapperInner = styled.div`
   font-family: "Roboto";
   width: 75%;

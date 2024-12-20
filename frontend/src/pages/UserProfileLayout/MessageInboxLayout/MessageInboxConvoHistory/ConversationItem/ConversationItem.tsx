@@ -7,7 +7,7 @@ import {
   DeleteConvoButtonWrapper,
 } from "./ConversationItem.styled";
 import ProfilePicture from "../../../../../components/ProfilePicture/ProfilePicture";
-import DiscardIcon from "../../../../../assets/images/discard-icon.png";
+import DiscardIcon from "/assets/images/discard-icon.png";
 import { Conversation } from "../../../../../types/Conversations";
 
 interface ConversationItemProps {

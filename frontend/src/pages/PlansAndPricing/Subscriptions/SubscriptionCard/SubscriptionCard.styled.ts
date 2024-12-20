@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { colors } from "../../../GlobalStyles";
+import { colors } from "../../../../GlobalStyles";
 
 interface CardWrapperProps {
   highlighted?: boolean;

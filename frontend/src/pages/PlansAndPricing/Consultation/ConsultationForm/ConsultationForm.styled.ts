@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { colors } from "../../../GlobalStyles";
+import { colors } from "../../../../GlobalStyles";
 
 export const FormComponentContainer = styled.div`
   position: relative;

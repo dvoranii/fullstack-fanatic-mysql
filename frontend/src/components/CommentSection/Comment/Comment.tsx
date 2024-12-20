@@ -14,15 +14,17 @@ import {
 } from "./Comment.styled";
 import ProfilePicture from "../../ProfilePicture/ProfilePicture";
 import { CommentProps } from "../../../types/Comment/CommentProps";
-import like1 from "../../../assets/images/like-1.png";
-import like2 from "../../../assets/images/like-2.png";
+
 import { UserContext } from "../../../context/UserContext";
 import { toggleLike } from "../../../services/commentService";
 import { Link, useNavigate } from "react-router-dom";
-import EditIcon from "../../../assets/images/edit-icon.png";
-import DeleteIcon from "../../../assets/images/discard-icon.png";
-import ReplyIcon from "../../../assets/images/reply-icon.png";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
+
+import like1 from "/assets/images/like-1.png";
+import like2 from "/assets/images/like-2.png";
+import EditIcon from "/assets/images/edit-icon.png";
+import DeleteIcon from "/assets/images/discard-icon.png";
+import ReplyIcon from "/assets/images/reply-icon.png";
 
 const Comment: React.FC<CommentProps> = ({
   comment,

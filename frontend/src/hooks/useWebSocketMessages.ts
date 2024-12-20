@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 import { Message } from "../types/Message";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = import.meta.env.VITE_API_URL.replace("/api", "");
 
 export const useWebSocketMessages = (
   onNewMessage: (message: Message) => void

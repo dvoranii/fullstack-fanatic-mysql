@@ -9,13 +9,13 @@ import {
   SubmitBtnWrapper,
   FormComponentContainer,
 } from "./ConsultationForm.styled";
-import FormMessage from "../../../components/Form/Message";
-import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
-import { submitConsultationForm } from "../../../services/consultFormService";
-import { validateField } from "../../../utils/validationUtils";
-import { useCsrfToken } from "../../../hooks/useCsrfToken";
-import useReCaptcha from "../../../hooks/useReCaptcha";
-import { sanitizeInput } from "../../../utils/sanitizationUtils";
+import FormMessage from "../../../../components/Form/Message";
+import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
+import { submitConsultationForm } from "../../../../services/consultFormService";
+import { validateField } from "../../../../utils/validationUtils";
+import { useCsrfToken } from "../../../../hooks/useCsrfToken";
+import useReCaptcha from "../../../../hooks/useReCaptcha";
+import { sanitizeInput } from "../../../../utils/sanitizationUtils";
 
 import SwooshBG from "/assets/images/plansAndPricing/pink-swoosh.png";
 

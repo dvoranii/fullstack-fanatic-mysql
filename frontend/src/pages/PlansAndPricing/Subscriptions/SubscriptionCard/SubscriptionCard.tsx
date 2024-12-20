@@ -10,9 +10,9 @@ import {
   CardFeatures,
 } from "./SubscriptionCard.styled";
 
-import { UserContext } from "../../../context/UserContext";
+import { UserContext } from "../../../../context/UserContext";
 import { useNavigate } from "react-router-dom";
-import { CartItem } from "../../../types/CartItem";
+import { CartItem } from "../../../../types/CartItem";
 
 import GoldenMedalImg from "/assets/images/plansAndPricing/golden-medal.svg";
 import SubscriptionIcon from "/assets/images/plansAndPricing/subscription-icon.png";

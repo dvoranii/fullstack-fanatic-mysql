@@ -1,6 +1,6 @@
 import ProfileIcon from "/assets/images/profile-icon.png";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = import.meta.env.VITE_API_URL.replace("/api", "");
 
 export const handleImageError = (
   event: React.SyntheticEvent<HTMLImageElement, Event>
@@ -9,6 +9,7 @@ export const handleImageError = (
 };
 
 export const getAvatarUrl = (profilePictureUrl: string | null) => {
+  console.log(profilePictureUrl);
   if (!profilePictureUrl) {
     return "";
   }

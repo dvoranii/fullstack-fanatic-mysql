@@ -3,6 +3,7 @@
 
 # Ignore .env files from all directories
 **/.env
+**/.env.*
 
 # Ignore build/dist folders
 
