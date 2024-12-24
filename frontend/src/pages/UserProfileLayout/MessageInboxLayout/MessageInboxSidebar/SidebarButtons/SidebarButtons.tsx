@@ -14,7 +14,7 @@ const SidebarButton: React.FC = () => {
       <IconBG>
         <NavLink to="/my-account">
           <ProfilePicture
-            src={profilePic || ""}
+            src={profilePic || "/assets/images/profile-icon.png"}
             alt="Profile picture"
             width="50px"
             border="3px solid #14213d"

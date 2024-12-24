@@ -39,6 +39,8 @@ import { User } from "../../../../types/User/User";
 import { useCsrfToken } from "../../../../hooks/useCsrfToken";
 import { useWebSocketMessages } from "../../../../hooks/useWebSocketMessages";
 
+const BASE_URL = import.meta.env.VITE_API_URL.replace("/api", "");
+
 interface MessageInboxChatWindowProps {
   conversationId: number | null;
   receiverName: string;
@@ -186,7 +188,15 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
     [conversationId, scrollToBottom]
   );
 
-  useWebSocketMessages(onNewMessageHandler);
+  // useWebSocketMessages(onNewMessageHandler);
+  const normalizedUserId: number | null = loggedInUserId ?? null;
+
+  useWebSocketMessages(
+    onNewMessageHandler,
+    conversationId,
+    normalizedUserId,
+    BASE_URL
+  );
 
   useEffect(() => {
     const determineReceiver = async () => {
