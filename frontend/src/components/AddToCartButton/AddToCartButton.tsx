@@ -1,6 +1,6 @@
 import React from "react";
 import { CartItem } from "../../types/CartItem";
-import AddToCartIcon from "/assets/images/add-to-cart-icon.png";
+
 import { AddToCartWrapper } from "./AddToCartButton.styled";
 
 interface AddToCartButtonProps {
@@ -36,7 +36,11 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
           cursor: isDisabled ? "not-allowed" : "pointer",
         }}
       >
-        <img src={AddToCartIcon} alt="Add to cart" title={buttonTitle} />
+        <img
+          src="/assets/images/add-to-cart-icon.png"
+          alt="Add to cart"
+          title={buttonTitle}
+        />
       </button>
     </AddToCartWrapper>
   );

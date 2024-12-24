@@ -42,8 +42,6 @@ import { UserContext } from "../../context/UserContext";
 import MessageModalButton from "../../components/MessageModalButton/MessageModalButton";
 import FavoritesSection from "./FavoritesSection/FavoritesSection";
 import { truncateText } from "../../utils/textUtils";
-import EditIcon from "/assets/images/account/edit.webp";
-import SettingsIcon from "/assets/images/settings-gear.png";
 
 const BASE_URL = import.meta.env.VITE_API_URL.replace("/api", "");
 
@@ -105,7 +103,12 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
         {isEditable && (
           <BannerUploadWrapper>
             <label htmlFor="banner-file-upload">
-              <img src={EditIcon} alt="Edit banner" height="48" width="48" />
+              <img
+                src="/assets/images/account/edit.webp"
+                alt="Edit banner"
+                height="48"
+                width="48"
+              />
             </label>
             <input
               id="banner-file-upload"
@@ -194,7 +197,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
         {isOwnProfile && (
           <Link to="/my-account/settings">
             <img
-              src={SettingsIcon}
+              src="/assets/images/settings-gear.png"
               alt="settings gear"
               title="Settings"
               className="settings-gear"
@@ -257,6 +260,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
           </AccountActivity>
         </UserAccountContainer>
       </AccountActivityWrapperOuter>
+      <div style={{ height: "0" }}>&nbsp;</div>
     </>
   );
 };

@@ -15,11 +15,7 @@ import {
   SubtitleWrapper,
 } from "./AboutPage.styled";
 import Title from "../../components/Title/Title";
-import AboutImage from "/assets/images/Amico-images/About-us-page-amico.svg";
 import { Link } from "react-router-dom";
-import ElipseImg from "/assets/images/bg-images/Ellipse-bg.svg";
-import ElipseImgSolid from "/assets/images/bg-images/Ellipse-bg-solid.svg";
-import BgSquaresAndTriangle from "/assets/images/bg-images/SquaresAndTriangles.svg";
 
 const AboutPage: React.FC = () => {
   return (
@@ -30,10 +26,26 @@ const AboutPage: React.FC = () => {
           name="description"
           content="Empowering and educating IT specialists with unique and unconventional tactics by leveraging insider knowledge to fast-track success while fostering the mastery of core fundamentals through hands-on development and study."
         />
-        <link rel="preload" href={AboutImage} as="image" />
-        <link rel="preload" href={ElipseImg} as="image" />
-        <link rel="preload" href={ElipseImgSolid} as="image" />
-        <link rel="preload" href={BgSquaresAndTriangle} as="image" />
+        <link
+          rel="preload"
+          href="/assets/images/Amico-images/About-us-page-amico.svg"
+          as="image"
+        />
+        <link
+          rel="preload"
+          href="/assets/images/bg-images/Ellipse-bg.svg"
+          as="image"
+        />
+        <link
+          rel="preload"
+          href="/assets/images/bg-images/Ellipse-bg-solid.svg"
+          as="image"
+        />
+        <link
+          rel="preload"
+          href="/assets/images/bg-images/SquaresAndTriangles.svg"
+          as="image"
+        />
       </Helmet>
       <AboutPageWrapper>
         <Title textContent="About" />
@@ -41,7 +53,7 @@ const AboutPage: React.FC = () => {
           <AboutIntroWrapper>
             <AboutImageWrapper>
               <img
-                src={AboutImage}
+                src="/assets/images/Amico-images/About-us-page-amico.svg"
                 alt="about image"
                 width="368"
                 height="368"
@@ -63,14 +75,14 @@ const AboutPage: React.FC = () => {
           </AboutIntroWrapper>
           <ImgWrapper>
             <img
-              src={ElipseImg}
+              src="/assets/images/bg-images/Ellipse-bg.svg"
               className="elipse"
               alt="elipse background image"
             />
           </ImgWrapper>
           <ImgWrapper>
             <img
-              src={BgSquaresAndTriangle}
+              src="/assets/images/bg-images/SquaresAndTriangles.svg"
               className="squares-triangle"
               alt="squares and triangles background image"
             />
@@ -194,7 +206,7 @@ const AboutPage: React.FC = () => {
             </TenetListSection>
           </CoreTenetsWrapperInner>
           <img
-            src={ElipseImgSolid}
+            src="/assets/images/bg-images/Ellipse-bg-solid.svg"
             className="elipse-solid"
             alt="elipse background image"
           />

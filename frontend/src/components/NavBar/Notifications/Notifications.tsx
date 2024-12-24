@@ -23,8 +23,6 @@ import { UserContextType } from "../../../types/User/UserContextType";
 import { useNotifications } from "../../../hooks/useNotifications";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
 
-import NotificationBell from "/assets/images/nav/notification-bell.png";
-
 const Notifications: React.FC = () => {
   const csrfToken = useCsrfToken();
   const [isDropdownVisible, setDropdownVisible] = useState(false);
@@ -125,7 +123,7 @@ const Notifications: React.FC = () => {
     <div ref={containerRef}>
       <NavIconWrapper>
         <NavIconImg
-          src={NotificationBell}
+          src="/assets/images/nav/notification-bell.png"
           onClick={handleDropdownToggle}
           alt="Notifications"
           title="Notifications"

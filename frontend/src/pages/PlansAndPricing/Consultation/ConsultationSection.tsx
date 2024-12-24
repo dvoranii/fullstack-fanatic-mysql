@@ -9,8 +9,6 @@ import {
   ScrollButton,
 } from "./ConsultationSection.styled";
 import Title from "../../../components/Title/Title";
-import ConsultationImg from "/assets/images/plansAndPricing/consultation-image.jpg";
-import SquaresAndTriangles from "/assets/images/bg-images/SquaresAndTriangles.svg";
 import ConsultationForm from "./ConsultationForm/ConsultationForm";
 
 const ConsultationSection: React.FC = () => {
@@ -22,7 +20,7 @@ const ConsultationSection: React.FC = () => {
   return (
     <ConsultationSectionWrapperOuter>
       <img
-        src={SquaresAndTriangles}
+        src="/assets/images/bg-images/SquaresAndTriangles.svg"
         alt=""
         className="bg-squares-and-triangles"
         aria-hidden="true"
@@ -58,7 +56,7 @@ const ConsultationSection: React.FC = () => {
           </ConsultationTextWrapper>
           <ConsultationImgWrapper>
             <img
-              src={ConsultationImg}
+              src="/assets/images/plansAndPricing/consultation-image.jpg"
               alt="Consultation Graphic"
               title="Consultation"
             />

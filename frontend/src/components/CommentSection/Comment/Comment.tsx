@@ -20,12 +20,6 @@ import { toggleLike } from "../../../services/commentService";
 import { Link, useNavigate } from "react-router-dom";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
 
-import like1 from "/assets/images/like-1.png";
-import like2 from "/assets/images/like-2.png";
-import EditIcon from "/assets/images/edit-icon.png";
-import DeleteIcon from "/assets/images/discard-icon.png";
-import ReplyIcon from "/assets/images/reply-icon.png";
-
 const Comment: React.FC<CommentProps> = ({
   comment,
   isLiked: initialIsLiked,
@@ -123,7 +117,11 @@ const Comment: React.FC<CommentProps> = ({
               <p>{comment.content}</p>
               <LikesWrapper>
                 <img
-                  src={isLiked ? like2 : like1}
+                  src={
+                    isLiked
+                      ? "/assets/images/like-2.png"
+                      : "/assets/images/like-1.png"
+                  }
                   alt="like icon"
                   onClick={handleLikeClick}
                 />
@@ -137,17 +135,29 @@ const Comment: React.FC<CommentProps> = ({
           {!isEditing && isCommentOwner && (
             <>
               <FormButton onClick={onEdit}>
-                <img src={EditIcon} alt="Edit" title="Edit" />
+                <img
+                  src="/assets/images/edit-icon.png"
+                  alt="Edit"
+                  title="Edit"
+                />
               </FormButton>
               <FormButton onClick={onDelete}>
-                <img src={DeleteIcon} alt="Delete" title="Delete" />
+                <img
+                  src="/assets/images/discard-icon.png"
+                  alt="Delete"
+                  title="Delete"
+                />
               </FormButton>
             </>
           )}
 
           {!isEditing && !isCommentOwner && !showReplyForm && profile && (
             <FormButton onClick={() => setShowReplyForm(true)}>
-              <img src={ReplyIcon} alt="Reply" title="Reply" />
+              <img
+                src="/assets/images/reply-icon.png"
+                alt="Reply"
+                title="Reply"
+              />
             </FormButton>
           )}
 

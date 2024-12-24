@@ -6,7 +6,6 @@ import UserProfilePage from "../UserProfile";
 import EditProfileModal from "../EditProfileModal/EditProfileModal";
 import { uploadBannerImage } from "../../../services/imageUploadService";
 import { ImageUploadResponse } from "../../../types/ImageUploadResponse";
-import InboxIcon from "/assets/images/account/inbox.png";
 import { getUnreadConversationsCount } from "../../../services/conversationService";
 import NotificationBadge from "../../../components/NotificationBadge/NotificationBadge";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
@@ -84,7 +83,12 @@ const UserAccountsPage: React.FC = () => {
         <InboxWrapper>
           <a href="/my-account/inbox">
             <InboxImgWrapper>
-              <img src={InboxIcon} alt="Inbox Icon" />
+              <img
+                src="/assets/images/account/inbox.png"
+                alt="Inbox Icon"
+                width="25"
+                height="25"
+              />
             </InboxImgWrapper>
             Inbox
           </a>

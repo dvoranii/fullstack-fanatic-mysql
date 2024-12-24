@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import checkIcon from "/assets/images/check-icon.png";
 import { colors } from "../../../GlobalStyles";
 
 export const TermsWrapper = styled.div`
@@ -61,7 +60,7 @@ export const TermsWrapper = styled.div`
     transform: translate(-50%, -50%);
     width: 30px;
     height: 30px;
-    background-image: url(${checkIcon});
+    background-image: url("/assets/images/check-icon.png");
     background-size: contain;
     background-repeat: no-repeat;
     pointer-events: none;

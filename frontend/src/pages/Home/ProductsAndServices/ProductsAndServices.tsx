@@ -11,14 +11,6 @@ import {
   CardLink,
   BgSquaresAndTrianglesWrapper,
 } from "./ProductsAndServices.styled";
-import TutorialIcon from "/assets/images/home/tutorial-icon-home.svg";
-import BlogIcon from "/assets/images/home/blog-icon-home.svg";
-import ConsultIcon from "/assets/images/home/consult-icon-home.svg";
-import RatingsCardImage from "/assets/images/home/ratings-card-image.svg";
-import BlogsCardImage from "/assets/images/home/blogs-card-image.svg";
-import ConsultCardImage from "/assets/images/home/consult-card-image.svg";
-import ProductsAndServicesBottomImg from "/assets/images/home/products-and-services-bottom-img.svg";
-import BgSquaresAndTriangle from "/assets/images/bg-images/SquaresAndTriangles.svg";
 
 const ProductsAndServices: React.FC = () => {
   return (
@@ -30,7 +22,7 @@ const ProductsAndServices: React.FC = () => {
         <BgSquaresAndTrianglesWrapper>
           <img
             className="bg-squares"
-            src={BgSquaresAndTriangle}
+            src="/assets/images/bg-images/SquaresAndTriangles.svg"
             alt=""
             width="260"
             height="auto"
@@ -64,7 +56,7 @@ const ProductsAndServices: React.FC = () => {
               </CardList>
               <CardImagesWrapper>
                 <img
-                  src={RatingsCardImage}
+                  src="/assets/images/home/ratings-card-image.svg"
                   className="ratings-img"
                   alt="ratings stars image"
                   loading="lazy"
@@ -76,7 +68,7 @@ const ProductsAndServices: React.FC = () => {
               <CardLink to="/tutorials">View Tutorials</CardLink>
             </Card>
             <img
-              src={TutorialIcon}
+              src="/assets/images/home/tutorial-icon-home.svg"
               className="top-icon"
               alt="tutorial card icon"
               loading="lazy"
@@ -110,7 +102,7 @@ const ProductsAndServices: React.FC = () => {
               </CardList>
               <CardImagesWrapper>
                 <img
-                  src={BlogsCardImage}
+                  src="/assets/images/home/blogs-card-image.svg"
                   className="blogs-img"
                   alt="Blogs Card Image"
                   loading="lazy"
@@ -121,7 +113,7 @@ const ProductsAndServices: React.FC = () => {
               <CardLink to="/blogs">View Blogs</CardLink>
             </Card>
             <img
-              src={BlogIcon}
+              src="/assets/images/home/blog-icon-home.svg"
               className="top-icon"
               alt="Blog card Icon"
               loading="lazy"
@@ -155,7 +147,7 @@ const ProductsAndServices: React.FC = () => {
               </CardList>
               <CardImagesWrapper>
                 <img
-                  src={ConsultCardImage}
+                  src="/assets/images/home/consult-card-image.svg"
                   alt="Consultation Image"
                   width="360"
                   height="128"
@@ -166,7 +158,7 @@ const ProductsAndServices: React.FC = () => {
               </CardLink>
             </Card>
             <img
-              src={ConsultIcon}
+              src="/assets/images/home/consult-icon-home.svg"
               className="top-icon consult-icon"
               alt="Consultation Icon"
               loading="lazy"
@@ -178,7 +170,7 @@ const ProductsAndServices: React.FC = () => {
       </ProductsAndServicesWrapperOuter>
       <ProductsAndServicesBottomImgWrapper>
         <img
-          src={ProductsAndServicesBottomImg}
+          src="/assets/images/home/products-and-services-bottom-img.svg"
           alt="Products and Services banner image"
           loading="lazy"
           width="1920"

@@ -22,8 +22,6 @@ import { UserContext } from "../../../context/UserContext";
 import useHandleCheckout from "../../../hooks/useHandleCheckout";
 import useClickOutside from "../../../hooks/useClickOutside";
 
-import cartIcon from "/assets/images/nav/shopping-cart-icon.png";
-
 const ShoppingCart: React.FC = () => {
   const [isCartVisible, setIsCartVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -93,7 +91,7 @@ const ShoppingCart: React.FC = () => {
     <div ref={containerRef}>
       <NavIconWrapper>
         <NavIconImg
-          src={cartIcon}
+          src="/assets/images/nav/shopping-cart-icon.png"
           alt="Cart"
           title="Shopping Cart"
           onClick={toggleCartVisibility}

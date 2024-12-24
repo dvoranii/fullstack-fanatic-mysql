@@ -20,10 +20,6 @@ import { PurchasedItem } from "../../../types/PurchasedItem";
 import { UserContext } from "../../../context/UserContext";
 import { getPublicUserFavourites } from "../../../services/favouritesService";
 
-import TutorialIcon from "/assets/images/tutorial-icon.png";
-import BlogIcon from "/assets/images/blog-icon.png";
-import BackIcon from "/assets/images/back-icon.png";
-
 const BASE_URL = import.meta.env.VITE_CLIENT_URL;
 
 interface FavoritesSectionProps {
@@ -180,7 +176,7 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
           <FavouritesContent>
             <FavWrapper>
               <FavouriteIcon>
-                <img src={TutorialIcon} alt="Tutorials" />
+                <img src="/assets/images/tutorial-icon.png" alt="Tutorials" />
               </FavouriteIcon>
               <p>Tutorials</p>
               <ViewAllButton onClick={() => handleViewClick("tutorials")}>
@@ -190,7 +186,7 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
 
             <FavWrapper>
               <FavouriteIcon>
-                <img src={BlogIcon} alt="Blogs" />
+                <img src="/assets/images/blog-icon.png" alt="Blogs" />
               </FavouriteIcon>
               <p>Blogs</p>
               <ViewAllButton onClick={() => handleViewClick("blogs")}>
@@ -203,7 +199,7 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
         <>
           <TopButtonsWrapper>
             <BackButton onClick={handleBackClick}>
-              <img src={BackIcon} alt="" />
+              <img src="/assets/images/back-icon.png" alt="" />
               <span>Back</span>
             </BackButton>
             <ViewHeader>

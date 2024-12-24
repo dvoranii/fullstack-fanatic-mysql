@@ -38,9 +38,7 @@ import useClickOutside from "../../../../hooks/useClickOutside";
 import { User } from "../../../../types/User/User";
 import { useCsrfToken } from "../../../../hooks/useCsrfToken";
 import { useWebSocketMessages } from "../../../../hooks/useWebSocketMessages";
-import Picker, { EmojiClickData } from "emoji-picker-react";
 
-import PlusIcon from "/assets/images/account/plus-icon.png";
 interface MessageInboxChatWindowProps {
   conversationId: number | null;
   receiverName: string;
@@ -57,7 +55,6 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   const csrfToken = useCsrfToken();
   const { profile } = useContext(UserContext) || {};
   const loggedInUserId = profile?.id;
-  const [newMessage, setNewMessage] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -65,10 +62,33 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
   const [receiverId, setReceiverId] = useState<number | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const emojiPickerRef = useRef<HTMLDivElement>(null);
 
+  const [newMessage, setNewMessage] = useState<string>("");
   const [isDropdownVisible, setDropdownVisible] = useState(false);
+
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
+  const [Picker, setPicker] = useState<React.ComponentType<{
+    onEmojiClick: (emojiObject: EmojiClickData) => void;
+  }> | null>(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+  type EmojiClickData = import("emoji-picker-react").EmojiClickData;
+
+  const handleShowEmojiPicker = async () => {
+    if (!Picker) {
+      try {
+        const { default: PickerComponent } = await import("emoji-picker-react");
+        setPicker(() => PickerComponent);
+      } catch (error) {
+        console.error("Failed to load emoji picker:", error);
+      }
+    }
+    setShowEmojiPicker((prev) => !prev);
+  };
+
+  const handleEmojiClick = (emojiObject: EmojiClickData) => {
+    setNewMessage((prevMessage) => prevMessage + emojiObject.emoji);
+  };
 
   useClickOutside(containerRef, () => setDropdownVisible(false));
   useClickOutside(emojiPickerRef, () => setShowEmojiPicker(false));
@@ -118,10 +138,6 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
     }
   };
 
-  const handleEmojiClick = (emojiObject: EmojiClickData) => {
-    setNewMessage((prevMessage) => prevMessage + emojiObject.emoji);
-  };
-
   const fetchOlderMessages = async () => {
     if (!conversationId) return;
     try {
@@ -144,14 +160,14 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
     }
   };
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTo(
-        0,
-        chatContainerRef.current.scrollHeight
-      );
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
     }
-  };
+  }, []);
 
   useEffect(() => {
     setMessages([]);
@@ -167,7 +183,7 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
         scrollToBottom();
       }
     },
-    [conversationId]
+    [conversationId, scrollToBottom]
   );
 
   useWebSocketMessages(onNewMessageHandler);
@@ -205,6 +221,10 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
       subject: "",
       content: newMessage,
       sent_at: String(new Date()),
+      sender_picture: "",
+      sender_name: "",
+      receiver_picture: "",
+      receiver_name: "",
     };
 
     setMessages((prevMessages) => [...prevMessages, tempMessage]);
@@ -230,7 +250,8 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
         <NewChatBarWrapperOuter>
           <NewChatBarWrapperInner ref={containerRef}>
             <NewChatBar onClick={toggleDropdown}>
-              New Chat <img src={PlusIcon} alt="" />
+              New Chat{" "}
+              <img src="/assets/images/account/plus-icon.png" alt="plus icon" />
             </NewChatBar>
             <NewChatDropdown
               isVisible={isDropdownVisible}
@@ -274,12 +295,10 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
           placeholder="Type your message..."
         />
         <ButtonsWrapper>
-          <EmojiPickerButton
-            onClick={() => setShowEmojiPicker((prev) => !prev)}
-          >
+          <EmojiPickerButton onClick={handleShowEmojiPicker}>
             😀
           </EmojiPickerButton>
-          {showEmojiPicker && (
+          {showEmojiPicker && Picker && (
             <PickerWrapper ref={emojiPickerRef}>
               <Picker onEmojiClick={handleEmojiClick} />
             </PickerWrapper>

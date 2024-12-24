@@ -21,9 +21,6 @@ import { getUserAuthType } from "../../services/userService";
 import ChangePasswordForm from "./ChangePasswordForm/ChangePasswordForm";
 import WarningBar from "../../components/WarningBar/WarningBar";
 
-import EditIcon from "/assets/images/account/edit-icon.png";
-import HelpIcon from "/assets/images/help-icon.png";
-
 const Settings = () => {
   const { profile } = useContext(UserContext) || {};
   const [authType, setAuthType] = useState<string | null>(null);
@@ -88,7 +85,7 @@ const Settings = () => {
                 <b>Current email:</b>
                 {profile?.email}
                 <div className="help-icon">
-                  <img src={HelpIcon} alt="Help Icon" />
+                  <img src="/assets/images/help-icon.png" alt="Help Icon" />
                   <span className="tooltip">
                     Users signed up via Google accounts cannot change their
                     emails
@@ -99,20 +96,20 @@ const Settings = () => {
               <SettingItem>
                 <b>Current email:</b> {profile?.email}
                 <button className="edit-btn">
-                  <img src={EditIcon} alt="Edit" />
+                  <img src="/assets/images/account/edit-icon.png" alt="Edit" />
                 </button>
               </SettingItem>
             )}
             <SettingItem>
               <b>Timezone:</b> Eastern Standard (EST)
               <button className="edit-btn">
-                <img src={EditIcon} alt="" />
+                <img src="/assets/images/account/edit-icon.png" alt="" />
               </button>
             </SettingItem>
             <SettingItem>
               <b>Currency:</b> Canadian Dollar ($ CAD)
               <button className="edit-btn">
-                <img src={EditIcon} alt="" />
+                <img src="/assets/images/account/edit-icon.png" alt="" />
               </button>
             </SettingItem>
             <SettingItem>
@@ -138,7 +135,10 @@ const Settings = () => {
                       className="edit-btn"
                       onClick={() => setIsChangingPassword(true)}
                     >
-                      <img src={EditIcon} alt="Change Password" />
+                      <img
+                        src="/assets/images/account/edit-icon.png"
+                        alt="Change Password"
+                      />
                     </button>
                   </PasswordContainer>
                 ) : (

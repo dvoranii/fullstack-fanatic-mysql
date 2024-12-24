@@ -9,7 +9,6 @@ import {
   CTALink,
   SubtextWrapper,
 } from "./CTASection.styled";
-import BrainGraphic from "/assets/images/home/brain sides-cuate.svg";
 import { useEffect, useState } from "react";
 
 const CTASection: React.FC = () => {
@@ -30,9 +29,12 @@ const CTASection: React.FC = () => {
         {isLargeScreen && (
           <ImgWrapper>
             <picture>
-              <source srcSet={BrainGraphic} media="(min-width: 1100px)" />
+              <source
+                srcSet="/assets/images/home/brain sides-cuate.svg"
+                media="(min-width: 1100px)"
+              />
               <BrainImg
-                src={BrainGraphic}
+                src="/assets/images/home/brain sides-cuate.svg"
                 loading="lazy"
                 alt="brain image"
                 height="450"

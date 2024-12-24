@@ -16,21 +16,13 @@ import {
   SocialIconWrapper,
 } from "./Hero.styled";
 
-import FSFLogo from "/assets/images/fsf-logo-notext-large.webp";
-import FSFLogoWhite from "/assets/images/fsf-logo-white-hires.png";
-import ElipseBG from "/assets/images/bg-images/Ellipse-bg.svg";
-import GithubLogo from "/assets/images/socials/github-icon.png";
-import CodepenLogo from "/assets/images/socials/codepen.png";
-import LinkedinLogo from "/assets/images/socials/linkedin-icon-black.png";
-import FsfLogoDarkblue from "/assets/images/fsf-logo-darkblue.png";
-
 const Hero: React.FC = () => {
   return (
     <>
       <HeroWrapper>
         <LeftSideWrapper>
           <img
-            src={FsfLogoDarkblue}
+            src="/assets/images/fsf-logo-darkblue.png"
             className="fsf-darkblue"
             alt="logo"
             loading="lazy"
@@ -39,7 +31,7 @@ const Hero: React.FC = () => {
           />
           <LogoWrapper>
             <img
-              src={FSFLogo}
+              src="/assets/images/fsf-logo-notext-large.webp"
               alt="logo"
               className="orange-logo"
               width="500"
@@ -54,7 +46,7 @@ const Hero: React.FC = () => {
 
           <ElipseWrapper>
             <img
-              src={ElipseBG}
+              src="/assets/images/bg-images/Ellipse-bg.svg"
               alt="elipse bg image"
               width="250"
               height="193"
@@ -64,7 +56,7 @@ const Hero: React.FC = () => {
         <RightSideWrapper>
           <RightSideWrapperInner>
             <img
-              src={FSFLogoWhite}
+              src="/assets/images/fsf-logo-white-hires.png"
               alt="logo"
               className="white-logo"
               loading="lazy"
@@ -85,7 +77,7 @@ const Hero: React.FC = () => {
               <SocialIconWrapper>
                 <Link to="#">
                   <img
-                    src={GithubLogo}
+                    src="/assets/images/socials/github-icon.png"
                     alt="github logo"
                     loading="lazy"
                     width="40"
@@ -96,7 +88,7 @@ const Hero: React.FC = () => {
               <SocialIconWrapper>
                 <Link to="#">
                   <img
-                    src={CodepenLogo}
+                    src="/assets/images/socials/codepen.png"
                     alt="codepen logo"
                     loading="lazy"
                     width="40"
@@ -107,7 +99,7 @@ const Hero: React.FC = () => {
               <SocialIconWrapper>
                 <Link to="#">
                   <img
-                    src={LinkedinLogo}
+                    src="/assets/images/socials/linkedin-icon-black.png"
                     alt="linkedin logo"
                     loading="lazy"
                     width="40"

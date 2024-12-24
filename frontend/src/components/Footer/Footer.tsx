@@ -17,13 +17,6 @@ import {
   Column2Wrapper,
 } from "./Footer.styled";
 
-import logo from "/assets/images/fsf-logo-darkblue.png";
-import githubIcon from "/assets/images/socials/github-icon.png";
-import facebookIcon from "/assets/images/socials/facebook.png";
-import codepenIcon from "/assets/images/socials/codepen.png";
-import tiktokIcon from "/assets/images/socials/tiktok-icon.png";
-import Seperator from "/assets/images/seperator.png";
-
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
@@ -48,7 +41,7 @@ const Footer = () => {
           </CenteredSlogan>
           <img
             className="seperator"
-            src={Seperator}
+            src="/assets/images/seperator.png"
             alt="seperator"
             loading="lazy"
             width="220"
@@ -63,7 +56,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
               >
                 <SocialLinkIcon
-                  src={githubIcon}
+                  src="/assets/images/socials/github-icon.png"
                   alt="GitHub"
                   loading="lazy"
                   width="30"
@@ -79,7 +72,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
               >
                 <SocialLinkIcon
-                  src={facebookIcon}
+                  src="/assets/images/socials/facebook.png"
                   alt="Facebook"
                   loading="lazy"
                   width="30"
@@ -94,7 +87,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
               >
                 <SocialLinkIcon
-                  src={codepenIcon}
+                  src="/assets/images/socials/codepen.png"
                   alt="CodePen"
                   loading="lazy"
                   width="30"
@@ -109,7 +102,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
               >
                 <SocialLinkIcon
-                  src={tiktokIcon}
+                  src="/assets/images/socials/tiktok-icon.png"
                   alt="TikTok"
                   loading="lazy"
                   width="30"
@@ -136,7 +129,7 @@ const Footer = () => {
 
       <FooterLogoLink to="/">
         <FooterLogo
-          src={logo}
+          src="/assets/images/fsf-logo-darkblue.png"
           alt="Company Logo"
           loading="lazy"
           width="70"

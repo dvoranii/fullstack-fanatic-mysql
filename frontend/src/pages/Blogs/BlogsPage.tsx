@@ -17,10 +17,7 @@ import {
 import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
 import { UserContext } from "../../context/UserContext";
 import { blogContent } from "../../assets/blogContent";
-import PremiumLockImg from "/assets/images/lock.png";
-import PremiumUnlockImg from "/assets/images/unlocked.png";
 import SearchBar from "../../components/SearchBar/SearchBar";
-import SquaresAndTriangles from "/assets/images/bg-images/SquaresAndTriangles.svg";
 import AddToCartButton from "../../components/AddToCartButton/AddToCartButton";
 import { CartItem } from "../../types/CartItem";
 import { mapBlogToCartItem } from "../../utils/cartUtils";
@@ -85,7 +82,7 @@ const BlogsPage: React.FC = () => {
             onChange={(value) => setSearchText(value)}
           />
           <img
-            src={SquaresAndTriangles}
+            src="/assets/images/bg-images/SquaresAndTriangles.svg"
             className="squares-and-triangles"
             alt=""
           />
@@ -142,9 +139,9 @@ const BlogsPage: React.FC = () => {
                     <PremiumBadge hasAccess={hasAccess}>
                       <p>Premium</p>
                       {canAccessBlog(blog.id) ? (
-                        <img src={PremiumUnlockImg} alt="Unlocked" />
+                        <img src="/assets/images/unlocked.png" alt="Unlocked" />
                       ) : (
-                        <img src={PremiumLockImg} alt="Locked" />
+                        <img src="/assets/images/lock.png" alt="Locked" />
                       )}
                     </PremiumBadge>
                   )}

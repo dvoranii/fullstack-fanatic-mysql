@@ -180,13 +180,23 @@ router.get(
 
       const [conversations] = await connection.execute<RowDataPacket[]>(
         `
-      SELECT conversations.*, 
-             (SELECT MAX(sent_at) FROM messages WHERE messages.conversation_id = conversations.id) AS last_message_at 
-      FROM conversations 
-      WHERE (user1_id = ? AND is_deleted_user1 = 0) 
-         OR (user2_id = ? AND is_deleted_user2 = 0)
-      ORDER BY last_message_at DESC
-      `,
+        SELECT 
+          conversations.*, 
+          u1.name AS user1_name, 
+          u1.profile_picture AS user1_picture, 
+          u2.name AS user2_name, 
+          u2.profile_picture AS user2_picture, 
+          (SELECT MAX(sent_at) 
+           FROM messages 
+           WHERE messages.conversation_id = conversations.id) AS last_message_at 
+        FROM conversations 
+        LEFT JOIN users u1 ON conversations.user1_id = u1.id 
+        LEFT JOIN users u2 ON conversations.user2_id = u2.id 
+        WHERE 
+          (user1_id = ? AND is_deleted_user1 = 0) 
+          OR (user2_id = ? AND is_deleted_user2 = 0)
+        ORDER BY last_message_at DESC
+        `,
         [userId, userId]
       );
 

@@ -1,12 +1,4 @@
 import { BlogContentItem } from "../types/Blog/Blog";
-import blog_thumbnail_1 from "/assets/images/blogs/React-icon.svg.png";
-import blog_thumbnail_2 from "/assets/images/blogs/node-logo.png";
-import blog_thumbnail_3 from "/assets/images/blogs/css-logo.png";
-import blog_thumbnail_4 from "/assets/images/blogs/Typescript-logo.png";
-import blog_thumbnail_5 from "/assets/images/blogs/GraphQL_Logo.png";
-import blog_thumbnail_6 from "/assets/images/blogs/kubernetes-logo.png";
-import blog_thumbnail_7 from "/assets/images/blogs/WebAssembly_Logo.svg";
-import blog_thumbnail_8 from "/assets/images/blogs/aws-logo.webp";
 
 export const blogContent: BlogContentItem[] = [
   {
@@ -23,7 +15,7 @@ export const blogContent: BlogContentItem[] = [
         content: "Content for understanding JSX...",
       },
     ],
-    image: blog_thumbnail_1,
+    image: "/assets/images/blogs/React-icon.svg.png",
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
@@ -42,7 +34,7 @@ export const blogContent: BlogContentItem[] = [
         content: "Content for understanding Node.js architecture...",
       },
     ],
-    image: blog_thumbnail_2,
+    image: "/assets/images/blogs/node-logo.png",
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
@@ -61,7 +53,7 @@ export const blogContent: BlogContentItem[] = [
         content: "Content for advanced css techniques...",
       },
     ],
-    image: blog_thumbnail_3,
+    image: "/assets/images/blogs/css-logo.png",
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
@@ -73,14 +65,14 @@ export const blogContent: BlogContentItem[] = [
     steps: [
       {
         title: "Step 1: typescript step 1",
-        content: "Content forTS...",
+        content: "Content for TS...",
       },
       {
         title: "Step 2: typescript step 2",
         content: "Content for TS...",
       },
     ],
-    image: blog_thumbnail_4,
+    image: "/assets/images/blogs/Typescript-logo.png",
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
@@ -93,7 +85,7 @@ export const blogContent: BlogContentItem[] = [
       { title: "Step 1: Introduction to GraphQL", content: "..." },
       { title: "Step 2: Setting up a GraphQL Server", content: "..." },
     ],
-    image: blog_thumbnail_5,
+    image: "/assets/images/blogs/GraphQL_Logo.png",
     isPremium: true,
     availableForPurchase: true,
     price: 2.5,
@@ -107,7 +99,7 @@ export const blogContent: BlogContentItem[] = [
       { title: "Step 1: Understanding Microservices", content: "..." },
       { title: "Step 2: Deploying with Kubernetes", content: "..." },
     ],
-    image: blog_thumbnail_6,
+    image: "/assets/images/blogs/kubernetes-logo.png",
     isPremium: true,
     availableForPurchase: true,
     price: 2.5,
@@ -121,7 +113,7 @@ export const blogContent: BlogContentItem[] = [
       { title: "Step 1: What is WebAssembly?", content: "..." },
       { title: "Step 2: Using WebAssembly in Web Apps", content: "..." },
     ],
-    image: blog_thumbnail_7,
+    image: "/assets/images/blogs/WebAssembly_Logo.svg",
     isPremium: true,
     availableForPurchase: true,
     price: 2.5,
@@ -135,7 +127,7 @@ export const blogContent: BlogContentItem[] = [
       { title: "Step 1: Understanding Serverless", content: "..." },
       { title: "Step 2: Building with AWS Lambda", content: "..." },
     ],
-    image: blog_thumbnail_8,
+    image: "/assets/images/blogs/aws-logo.webp",
     isPremium: true,
     availableForPurchase: true,
     price: 2.5,

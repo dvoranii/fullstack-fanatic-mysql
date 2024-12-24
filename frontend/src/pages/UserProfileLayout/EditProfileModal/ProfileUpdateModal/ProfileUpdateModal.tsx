@@ -1,9 +1,6 @@
 import { useEffect } from "react";
 import { ModalOverlay, ModalContent } from "./ProfileUpdateModal.styled";
 
-import EditProfileCheckmark from "/assets/images/edit-profile-checkmark.png";
-import EditProfileFailed from "/assets/images/edit-profile-failed.png";
-
 interface ProfileUpdateModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -35,7 +32,7 @@ const ProfileUpdateModal: React.FC<ProfileUpdateModalProps> = ({
         {message && <p>{message}</p>}
         {success ? (
           <img
-            src={EditProfileCheckmark}
+            src="/assets/images/edit-profile-checkmark.png"
             alt="checkmark"
             loading="lazy"
             width="32px"
@@ -43,7 +40,7 @@ const ProfileUpdateModal: React.FC<ProfileUpdateModalProps> = ({
           />
         ) : (
           <img
-            src={EditProfileFailed}
+            src="/assets/images/edit-profile-failed.png"
             alt="failed"
             loading="lazy"
             width="32px"

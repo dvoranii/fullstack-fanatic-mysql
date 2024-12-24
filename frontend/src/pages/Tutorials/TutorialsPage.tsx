@@ -17,19 +17,13 @@ import {
   BottomIconsWrapper,
   TutorialListOuter,
 } from "./TutorialsPage.styled";
-import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
-import BeginnerStarImg from "/assets/images/tutorials/1-beginner-star.png";
-import IntermediateStarImg from "/assets/images/tutorials/2-intermediate-stars.png";
-import AdvancedStarImg from "/assets/images/tutorials/3-advanced-stars.png";
-import { UserContext } from "../../context/UserContext";
 import { tutorialContent } from "../../assets/tutorialContent";
-import PremiumLockImg from "/assets/images/lock.png";
-import FlipIconFront from "/assets/images/tutorials/flip-icon.png";
-import FlipIconBack from "/assets/images/tutorials/flip-icon-backside.png";
+import { UserContext } from "../../context/UserContext";
+
+import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
 import SearchBar from "../../components/SearchBar/SearchBar";
-import SquaresAndTriangles from "/assets/images/bg-images/SquaresAndTriangles.svg";
-import SwirlyLineImg from "/assets/images/bg-images/swirly-line-bg.svg";
 import AddToCartButton from "../../components/AddToCartButton/AddToCartButton";
+
 import { CartItem } from "../../types/CartItem";
 import { mapTutorialToCartItem } from "../../utils/cartUtils";
 
@@ -78,22 +72,22 @@ const TutorialsPage: React.FC = () => {
 
     switch (difficulty) {
       case "beginner":
-        starImg = BeginnerStarImg;
+        starImg = "/assets/images/tutorials/1-beginner-star.png";
         starCount = 1;
         titleText = "Beginner";
         break;
       case "intermediate":
-        starImg = IntermediateStarImg;
+        starImg = "/assets/images/tutorials/2-intermediate-stars.png";
         starCount = 2;
         titleText = "Intermediate";
         break;
       case "advanced":
-        starImg = AdvancedStarImg;
+        starImg = "/assets/images/tutorials/3-advanced-stars.png";
         starCount = 3;
         titleText = "Advanced";
         break;
       default:
-        starImg = BeginnerStarImg;
+        starImg = "/assets/images/tutorials/1-beginner-star.png";
         starCount = 1;
     }
 
@@ -135,7 +129,7 @@ const TutorialsPage: React.FC = () => {
         <meta name="description" content="Full Stack Fanatic tutorials page." />
         <link
           rel="preload"
-          href={SquaresAndTriangles}
+          href="/assets/images/bg-images/SquaresAndTriangles.svg"
           as="image"
           type="image/svg+xml"
         />
@@ -148,7 +142,7 @@ const TutorialsPage: React.FC = () => {
           onChange={(value) => setSearchText(value)}
         />
         <img
-          src={SquaresAndTriangles}
+          src="/assets/images/bg-images/SquaresAndTriangles.svg"
           alt="Squares and Triangles"
           className="bg-squares-and-triangles"
           width="181"
@@ -158,7 +152,14 @@ const TutorialsPage: React.FC = () => {
 
         <div className="block-1" />
         <div className="block-2" />
-        <img src={SwirlyLineImg} className="swirly-1" alt="" />
+        <img
+          src="/assets/images/bg-images/swirly-line-bg.svg"
+          className="swirly-1"
+          alt="swirly line"
+          loading="lazy"
+          width="240"
+          height="160"
+        />
         <TutorialList>
           {filteredTutorials.slice(startIdx, endIdx).map((tutorial) => {
             const alreadyInCart = isItemInCart(tutorial.id);
@@ -206,7 +207,7 @@ const TutorialsPage: React.FC = () => {
                           <img src={tutorial.image} alt={tutorial.title} />
                           <PremiumBanner>
                             <p>Premium</p>
-                            <img src={PremiumLockImg} alt="Lock" />
+                            <img src="/assets/images/lock.png" alt="Lock" />
                           </PremiumBanner>
                         </TutorialThumbnail>
                       </PremiumThumbnailWrapperOuter>
@@ -251,7 +252,11 @@ const TutorialsPage: React.FC = () => {
                       <FlipIconWrapper
                         onClick={() => handleFlip(String(tutorial.id))}
                       >
-                        <img src={FlipIconFront} alt="Flip" title="Read more" />
+                        <img
+                          src="/assets/images/tutorials/flip-icon.png"
+                          alt="Flip"
+                          title="Read more"
+                        />
                       </FlipIconWrapper>
                     </BottomIconsWrapper>
                   </CardFace>
@@ -264,7 +269,7 @@ const TutorialsPage: React.FC = () => {
                         onClick={() => handleFlip(String(tutorial.id))}
                       >
                         <img
-                          src={FlipIconBack}
+                          src="/assets/images/tutorials/flip-icon-backside.png"
                           alt="Flip"
                           title="View thumbnail"
                         />

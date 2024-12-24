@@ -5,7 +5,7 @@ import {
   SearchIconImg,
   SearchInputWrapper,
 } from "./SearchBar.styled";
-import SearchIcon from "/assets/images/search-icon.png";
+
 import { useState, useMemo } from "react";
 import { debounce } from "../../utils/debounce";
 
@@ -56,7 +56,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     <SearchBarWrapperOuter style={{ paddingLeft }} className={className}>
       <SearchBarWrapperInner style={{ width }}>
         <SearchIconWrapper onClick={handleSearch}>
-          <SearchIconImg src={SearchIcon} />
+          <SearchIconImg src="/assets/images/search-icon.png" />
         </SearchIconWrapper>
 
         <SearchInputWrapper>

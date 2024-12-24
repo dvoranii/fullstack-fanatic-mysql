@@ -1,6 +1,5 @@
 import styled, { keyframes } from "styled-components";
 import { colors } from "../../../GlobalStyles";
-import WaveEffectBG from "/assets/images/wave-effect-bg.webp";
 
 export const HeroWrapper = styled.section`
   height: 100vh;
@@ -22,7 +21,7 @@ export const LeftSideWrapper = styled.div`
       rgba(255, 255, 255, 0.75),
       rgba(255, 255, 255, 0.75)
     ),
-    url(${WaveEffectBG});
+    url("/assets/images/wave-effect-bg.webp");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;

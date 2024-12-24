@@ -6,4 +6,8 @@ export interface Message {
   subject: string;
   content: string;
   sent_at: string;
+  sender_picture: string;
+  sender_name: string;
+  receiver_picture: string;
+  receiver_name: string;
 }

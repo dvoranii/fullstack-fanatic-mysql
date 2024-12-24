@@ -7,24 +7,33 @@ import {
   DeleteConvoButtonWrapper,
 } from "./ConversationItem.styled";
 import ProfilePicture from "../../../../../components/ProfilePicture/ProfilePicture";
-import DiscardIcon from "/assets/images/discard-icon.png";
 import { Conversation } from "../../../../../types/Conversations";
 
 interface ConversationItemProps {
   conversation: Conversation;
-  userName: string;
-  userPicture: string;
+  loggedInUserId: number;
+  // userName: string;
+  // userPicture: string;
   onSelect: (conversationId: number) => void;
   onDelete: (conversationId: number) => void;
 }
 
 const ConversationItem: React.FC<ConversationItemProps> = ({
   conversation,
-  userName,
-  userPicture,
+  loggedInUserId,
+  // userName,
+  // userPicture,
   onSelect,
   onDelete,
 }) => {
+  const isUser1 = conversation.user1_id === loggedInUserId;
+  const otherUserName = isUser1
+    ? conversation.user2_name
+    : conversation.user1_name;
+  const otherUserPicture = isUser1
+    ? conversation.user2_picture
+    : conversation.user1_picture;
+
   const handleSelect = () => {
     onSelect(conversation.id);
   };
@@ -38,7 +47,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
     <ConversationWrapper onClick={handleSelect}>
       <ProfilePictureWrapper>
         <ProfilePicture
-          src={userPicture || ""}
+          src={otherUserPicture || "/assets/images/profile-icon.png"}
           alt="User Profile Picture"
           width="45px"
           border="2px solid #ccc"
@@ -47,13 +56,17 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
       </ProfilePictureWrapper>
 
       <ConversationDetailsWrapper>
-        <p>{userName || `User ${conversation.user2_id}`}</p>
+        <p>{otherUserName || "Unknown User"}</p>
         <SubjectPreview>{conversation.subject || "No subject"}</SubjectPreview>
       </ConversationDetailsWrapper>
 
       <DeleteConvoButtonWrapper>
         <button className="delete-button" onClick={handleDelete}>
-          <img src={DiscardIcon} alt="Delete Conversation" title="Delete" />
+          <img
+            src="/assets/images/discard-icon.png"
+            alt="Delete Conversation"
+            title="Delete"
+          />
         </button>
       </DeleteConvoButtonWrapper>
     </ConversationWrapper>

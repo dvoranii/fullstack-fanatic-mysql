@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import UserProfilePage from "../UserProfile";
 import { PublicProfile } from "../../../types/PublicProfileType";
 import { getUserPublicProfile } from "../../../services/profileService";
-import { getPublicUserFavourites } from "../../../services/favouritesService"; // Importing the new function
+import { getPublicUserFavourites } from "../../../services/favouritesService";
 import { UserContext } from "../../../context/UserContext";
 import { fetchUserComments } from "../../../services/commentService";
 import { Blog } from "../../../types/Blog/Blog";

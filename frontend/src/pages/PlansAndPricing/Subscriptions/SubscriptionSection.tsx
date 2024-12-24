@@ -5,10 +5,6 @@ import {
   CardsContainer,
 } from "./SubscriptionSection.styled";
 
-import SquaresAndTriangles from "/assets/images/bg-images/SquaresAndTriangles.svg";
-import BGSwoosh from "/assets/images/bg-images/Ellipse7.svg";
-import SwirlyLineImg from "/assets/images/bg-images/swirly-line-bg.svg";
-
 import SubscriptionCard from "./SubscriptionCard/SubscriptionCard";
 
 const SubscriptionSection: React.FC = () => {
@@ -16,12 +12,12 @@ const SubscriptionSection: React.FC = () => {
     <>
       <PageBGWrapper>
         <img
-          src={BGSwoosh}
+          src="/assets/images/bg-images/Ellipse7.svg"
           alt="decorative background swoosh"
           className="bg-swoosh"
         />
         <img
-          src={SquaresAndTriangles}
+          src="/assets/images/bg-images/SquaresAndTriangles.svg"
           alt="decorative background squares and triangles"
           className="bg-squares-and-triangles"
         />
@@ -95,7 +91,11 @@ const SubscriptionSection: React.FC = () => {
           </SubscriptionCard>
         </CardsContainer>
         <SwirlyImgBgWrapper>
-          <img src={SwirlyLineImg} className="swirly-1" alt="" />
+          <img
+            src="/assets/images/bg-images/swirly-line-bg.svg"
+            className="swirly-1"
+            alt="swirly line"
+          />
         </SwirlyImgBgWrapper>
       </PageBGWrapper>
     </>

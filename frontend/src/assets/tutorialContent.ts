@@ -1,12 +1,3 @@
-import tutorial_1_thumbnail from "/assets/images/tutorials/deployment-thumbnail.png";
-import tutorial_2_thumbnail from "/assets/images/tutorials/csrf-thumbnail.png";
-import tutorial_3_thumbnail from "/assets/images/tutorials/network-request.png";
-import tutorial_4_thumbnail from "/assets/images/tutorials/webappsecurity-thumbnail.png";
-import tutorial_5_thumbnail from "/assets/images/tutorials/forms-thumbnail.png";
-import tutorial_6_thumbnail from "/assets/images/tutorials/dns-thumbnail.png";
-import tutorial_7_thumbnail from "/assets/images/tutorials/frontend-thumbnail.png";
-import tutorial_8_thumbnail from "/assets/images/tutorials/web-performance-thumbnail.png";
-import tutorial_9_thumbnail from "/assets/images/tutorials/responsive-design-thumbnail.png";
 import { TutorialContentItem } from "../types/Tutorial/Tutorial";
 
 export const tutorialContent: TutorialContentItem[] = [
@@ -24,7 +15,7 @@ export const tutorialContent: TutorialContentItem[] = [
         content: "Content for deploying the application...",
       },
     ],
-    image: tutorial_1_thumbnail,
+    image: "/assets/images/tutorials/deployment-thumbnail.png",
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
@@ -45,7 +36,7 @@ export const tutorialContent: TutorialContentItem[] = [
         content: "Content for implementing tokens...",
       },
     ],
-    image: tutorial_2_thumbnail,
+    image: "/assets/images/tutorials/csrf-thumbnail.png",
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
@@ -64,10 +55,10 @@ export const tutorialContent: TutorialContentItem[] = [
       },
       {
         title: "Step 2: POST Request",
-        content: "Content forJS & Network requests...",
+        content: "Content for JS & Network requests...",
       },
     ],
-    image: tutorial_3_thumbnail,
+    image: "/assets/images/tutorials/network-request.png",
     isPremium: true,
     premiumLevel: "starter",
     availableForPurchase: true,
@@ -91,7 +82,7 @@ export const tutorialContent: TutorialContentItem[] = [
         content: "Content for web app security...",
       },
     ],
-    image: tutorial_4_thumbnail,
+    image: "/assets/images/tutorials/webappsecurity-thumbnail.png",
     isPremium: true,
     premiumLevel: "premium",
     availableForPurchase: true,
@@ -112,12 +103,11 @@ export const tutorialContent: TutorialContentItem[] = [
       },
       {
         title: "Step 2: Building our app",
-        content: "Content for Forms in Depth ...",
+        content: "Content for Forms in Depth...",
       },
     ],
-    image: tutorial_5_thumbnail,
+    image: "/assets/images/tutorials/forms-thumbnail.png",
     isPremium: true,
-
     premiumLevel: "casual pro",
     availableForPurchase: true,
     accessLevel: "premium",
@@ -140,7 +130,7 @@ export const tutorialContent: TutorialContentItem[] = [
         content: "Content for DNS 101...",
       },
     ],
-    image: tutorial_6_thumbnail,
+    image: "/assets/images/tutorials/dns-thumbnail.png",
     isPremium: true,
     premiumLevel: "starter",
     availableForPurchase: true,
@@ -164,7 +154,7 @@ export const tutorialContent: TutorialContentItem[] = [
         content: "Content for adding JavaScript to your project...",
       },
     ],
-    image: tutorial_7_thumbnail,
+    image: "/assets/images/tutorials/frontend-thumbnail.png",
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
@@ -186,7 +176,7 @@ export const tutorialContent: TutorialContentItem[] = [
         content: "Content for reducing load times on your site...",
       },
     ],
-    image: tutorial_8_thumbnail,
+    image: "/assets/images/tutorials/web-performance-thumbnail.png",
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
@@ -208,7 +198,7 @@ export const tutorialContent: TutorialContentItem[] = [
         content: "Content for reducing load times on your site...",
       },
     ],
-    image: tutorial_9_thumbnail,
+    image: "/assets/images/tutorials/responsive-design-thumbnail.png",
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",

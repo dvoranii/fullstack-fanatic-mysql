@@ -1,11 +1,4 @@
 import { SocialSectionWrapperInner } from "./SocialLinksDisplay.styled";
-import GithubIcon from "/assets/images/socials/github-icon.png";
-import IgIcon from "/assets/images/socials/ig-icon.png";
-import LinkedinIcon from "/assets/images/socials/linkedin-icon.png";
-import TiktokIcon from "/assets/images/socials/tiktok-icon.png";
-import XIcon from "/assets/images/socials/x-icon.png";
-import MetaIcon from "/assets/images/socials/meta-icon.png";
-import YouTubeIcon from "/assets/images/socials/youtube-icon.png";
 
 interface SocialLinksDisplayProps {
   socialLinks: { [key: string]: string };
@@ -15,13 +8,13 @@ const SocialLinksDisplay: React.FC<SocialLinksDisplayProps> = ({
   socialLinks,
 }) => {
   const icons: { [key: string]: string } = {
-    github: GithubIcon,
-    instagram: IgIcon,
-    facebook: MetaIcon,
-    linkedin: LinkedinIcon,
-    tiktok: TiktokIcon,
-    twitter: XIcon,
-    youtube: YouTubeIcon,
+    github: "/assets/images/socials/github-icon.png",
+    instagram: "/assets/images/socials/ig-icon.png",
+    facebook: "/assets/images/socials/meta-icon.png",
+    linkedin: "/assets/images/socials/linkedin-icon.png",
+    tiktok: "/assets/images/socials/tiktok-icon.png",
+    twitter: "/assets/images/socials/x-icon.png",
+    youtube: "/assets/images/socials/youtube-icon.png",
   };
 
   if (Object.keys(socialLinks).length === 0) {

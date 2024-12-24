@@ -1,9 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { ContactPageWrapper, ImgWrapper } from "./ContactPage.styled";
 import Title from "../../components/Title/Title";
-import ElipseBgWhite from "/assets/images/bg-images/Ellipse-bg-white.svg";
 import ContactForm from "./ContactForm/ContactForm";
-import OrangeTriangle from "/assets/images/bg-images/orange-triangle.svg";
 
 const ContactPage: React.FC = () => {
   return (
@@ -24,7 +22,7 @@ const ContactPage: React.FC = () => {
 
         <ImgWrapper>
           <img
-            src={ElipseBgWhite}
+            src="/assets/images/bg-images/Ellipse-bg-white.svg"
             alt="Elipse background image"
             className="elipse"
             loading="lazy"
@@ -32,7 +30,7 @@ const ContactPage: React.FC = () => {
         </ImgWrapper>
         <ImgWrapper>
           <img
-            src={OrangeTriangle}
+            src="/assets/images/bg-images/orange-triangle.svg"
             alt="Triangle background image"
             className="triangle"
             loading="lazy"

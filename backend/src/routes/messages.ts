@@ -101,13 +101,33 @@ router.get("/:conversationId", authenticate, async (req, res) => {
     if (isNaN(limit) || isNaN(offset)) {
       throw new Error("Invalid limit or offset value");
     }
+
     const connection = await connectionPromise;
 
-    const [messages] = await connection.execute<RowDataPacket[]>(
-      `SELECT * FROM messages WHERE conversation_id = ? ORDER BY sent_at DESC LIMIT ${limit} OFFSET ${offset}`,
-      [Number(conversationId)]
-    );
+    const query = `
+            SELECT 
+              m.id, 
+              m.conversation_id, 
+              m.sender_id, 
+              m.receiver_id, 
+              m.content, 
+              m.sent_at,
+              sender.name AS sender_name, 
+              sender.profile_picture AS sender_picture,
+              receiver.name AS receiver_name, 
+              receiver.profile_picture AS receiver_picture
+            FROM messages m
+            LEFT JOIN users AS sender ON m.sender_id = sender.id
+            LEFT JOIN users AS receiver ON m.receiver_id = receiver.id 
+            WHERE m.conversation_id = ?
+            ORDER BY m.sent_at DESC
+            LIMIT ${limit} OFFSET ${offset}
+         `;
 
+    // Execute the query
+    const [messages] = await connection.execute<RowDataPacket[]>(query, [
+      Number(conversationId),
+    ]);
     await connection.execute<ResultSetHeader>(
       `UPDATE conversations
        SET is_read_user1 = CASE WHEN user1_id = ? THEN TRUE ELSE is_read_user1 END,

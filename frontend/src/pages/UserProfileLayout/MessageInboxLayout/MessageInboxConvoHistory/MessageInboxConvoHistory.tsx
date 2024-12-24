@@ -15,22 +15,23 @@ import ConversationItem from "./ConversationItem/ConversationItem";
 import { useCsrfToken } from "../../../../hooks/useCsrfToken";
 
 interface MessageInboxConvoHistoryProps {
-  conversations: Conversation[];
-  setConversations: React.Dispatch<React.SetStateAction<Conversation[]>>;
+  // conversations: Conversation[];
+  // setConversations: React.Dispatch<React.SetStateAction<Conversation[]>>;
   onConversationSelect: (conversationId: number) => void;
   onConversationDelete: () => void;
 }
 
 const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
-  conversations,
-  setConversations,
+  // conversations,
+  // setConversations,
   onConversationSelect,
   onConversationDelete,
 }) => {
   const csrfToken = useCsrfToken();
   const { profile } = useContext(UserContext) || {};
   const loggedInUserId = profile?.id;
-  const { userNames, userPictures } = useConversations(loggedInUserId);
+  // const { userNames, userPictures } = useConversations(loggedInUserId);
+  const { conversations, setConversations } = useConversations(loggedInUserId);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedConversationId, setSelectedConversationId] = useState<
     number | null
@@ -64,11 +65,14 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
             (loggedInUserId === conversation.user2_id &&
               !conversation.is_read_user2);
 
+      const otherUserName =
+        loggedInUserId === conversation.user1_id
+          ? conversation.user2_name
+          : conversation.user1_name;
+
       const matchesSearchTerm =
         conversation.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (userNames[conversation.id] || "")
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase());
+        (otherUserName || "").toLowerCase().includes(searchTerm.toLowerCase());
 
       return matchesReadFilter && matchesSearchTerm;
     });
@@ -135,10 +139,7 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
             <ConversationItem
               key={conversation.id}
               conversation={conversation}
-              userName={
-                userNames[conversation.id] || `User ${conversation.user2_id}`
-              }
-              userPicture={userPictures[conversation.id] || ""}
+              loggedInUserId={loggedInUserId!} // Pass the logged-in user ID to determine the other user
               onSelect={onConversationSelect}
               onDelete={handleDeleteConversationClick}
             />

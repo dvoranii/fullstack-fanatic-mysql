@@ -1,6 +1,5 @@
 import { styled } from "styled-components";
 import { colors } from "../../../GlobalStyles";
-import elegantWhiteBg from "/assets/images/elegant-white-bg.jpg";
 import { Link } from "react-router-dom";
 
 export const CTAWrapperOuter = styled.div`
@@ -55,7 +54,7 @@ export const ImgWrapper = styled.div`
       rgba(255, 255, 255, 1) 0%,
       rgba(255, 255, 255, 0) 100%
     ),
-    url(${elegantWhiteBg});
+    url("/assets/images/elegant-white-bg.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   transform: scaleX(-1);
