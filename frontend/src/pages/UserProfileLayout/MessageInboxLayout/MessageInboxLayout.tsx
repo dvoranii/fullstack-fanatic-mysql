@@ -10,12 +10,9 @@ import MessageInboxChatWindow from "./MessageInboxChatWindow/MessageInboxChatWin
 import { useNotifications } from "../../../hooks/useNotifications";
 import {
   updateConversationReadStatus,
-  // fetchConversations,
   fetchConversationById,
 } from "../../../services/conversationService";
-// import { Conversation } from "../../../types/Conversations";
 import { UserContext } from "../../../context/UserContext";
-// import { getUserPublicProfile } from "../../../services/profileService";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
 
 const MessageInboxLayout: React.FC = () => {
@@ -23,7 +20,6 @@ const MessageInboxLayout: React.FC = () => {
   const [selectedConversationId, setSelectedConversationId] = useState<
     number | null
   >(null);
-  // const [conversations, setConversations] = useState<Conversation[]>([]);
   const [receiverName, setReceiverName] = useState<string>("");
 
   const { profile } = useContext(UserContext) || {};
@@ -31,22 +27,8 @@ const MessageInboxLayout: React.FC = () => {
 
   const { markNotificationAsReadById } = useNotifications();
 
-  // useEffect(() => {
-  //   const getConversations = async () => {
-  //     try {
-  //       const data = await fetchConversations();
-  //       setConversations(data);
-  //     } catch (error) {
-  //       console.error("Failed to fetch conversations:", error);
-  //     }
-  //   };
-
-  //   getConversations();
-  // }, []);
-
   const handleConversationSelect = async (conversationId: number) => {
     try {
-      // Mark notification as read
       await markNotificationAsReadById(conversationId);
     } catch (error) {
       console.error("Failed to mark notifications as read:", error);
@@ -55,11 +37,10 @@ const MessageInboxLayout: React.FC = () => {
     setSelectedConversationId(conversationId);
 
     try {
-      // Update conversation read status
       await updateConversationReadStatus(conversationId, csrfToken);
 
-      // Fetch the conversation details
       const conversation = await fetchConversationById(conversationId);
+      console.log(conversation);
       if (conversation) {
         const receiverName =
           loggedInUserId === conversation.user1_id
@@ -83,8 +64,6 @@ const MessageInboxLayout: React.FC = () => {
           <MessageInboxSidebar />
           <RightContainer>
             <MessageInboxConvoHistory
-              // conversations={conversations}
-              // setConversations={setConversations}
               onConversationSelect={handleConversationSelect}
               onConversationDelete={clearSelectedConversation}
             />

@@ -12,8 +12,6 @@ import { Conversation } from "../../../../../types/Conversations";
 interface ConversationItemProps {
   conversation: Conversation;
   loggedInUserId: number;
-  // userName: string;
-  // userPicture: string;
   onSelect: (conversationId: number) => void;
   onDelete: (conversationId: number) => void;
 }
@@ -21,8 +19,6 @@ interface ConversationItemProps {
 const ConversationItem: React.FC<ConversationItemProps> = ({
   conversation,
   loggedInUserId,
-  // userName,
-  // userPicture,
   onSelect,
   onDelete,
 }) => {

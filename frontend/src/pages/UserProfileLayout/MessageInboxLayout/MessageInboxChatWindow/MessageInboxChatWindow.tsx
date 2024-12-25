@@ -188,7 +188,6 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
     [conversationId, scrollToBottom]
   );
 
-  // useWebSocketMessages(onNewMessageHandler);
   const normalizedUserId: number | null = loggedInUserId ?? null;
 
   useWebSocketMessages(

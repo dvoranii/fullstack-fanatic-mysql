@@ -67,7 +67,16 @@ router.get(
       const connection = await connectionPromise;
 
       const [conversation] = await connection.execute<RowDataPacket[]>(
-        "SELECT * FROM conversations WHERE id = ?",
+        `
+        SELECT 
+          c.*, 
+          u1.name AS user1_name, 
+          u2.name AS user2_name
+        FROM conversations c
+        LEFT JOIN users u1 ON c.user1_id = u1.id
+        LEFT JOIN users u2 ON c.user2_id = u2.id
+        WHERE c.id = ?
+        `,
         [conversationId]
       );
 

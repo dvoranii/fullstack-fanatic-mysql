@@ -3,8 +3,6 @@ import { io, Socket } from "socket.io-client";
 import { Message } from "../types/Message";
 import { debounce } from "../utils/debounce";
 
-// const BASE_URL = import.meta.env.VITE_API_URL.replace("/api", "");
-
 let socketInstance: Socket | null = null;
 
 const getSocket = (baseUrl: string) => {
