@@ -9,22 +9,11 @@ import {
   BannerWrapperOuter,
   BannerWrapperInner,
   ProfileContentWrapper,
-  AccountActivity,
-  AccountActivityTitle,
-  Section,
-  SectionTitle,
   UserInfoSubtitle,
-  CommentHistory,
-  CommentItem,
-  CommentText,
-  CommentLink,
-  ViewMoreCommentsLink,
   SocialSectionWrapperOuter,
   BannerUploadWrapper,
-  UserAccountContainer,
   FollowsWrapper,
   PremiumBadge,
-  AccountActivityWrapperOuter,
   EditProfileLink,
   ProfileInfoColumn1,
   ProfileInfoColumn2,
@@ -40,8 +29,7 @@ import {
 } from "../../services/followService";
 import { UserContext } from "../../context/UserContext";
 import MessageModalButton from "../../components/MessageModalButton/MessageModalButton";
-import FavoritesSection from "./FavoritesSection/FavoritesSection";
-import { truncateText } from "../../utils/textUtils";
+import AccountActivity from "./AccountActivity/AccountActivity";
 
 const BASE_URL = import.meta.env.VITE_API_URL.replace("/api", "");
 
@@ -190,76 +178,13 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
           </SocialSectionWrapperOuter>
         </ProfileInfoColumn3>
       </ProfileContentWrapper>
+      <AccountActivity
+        isOwnProfile={isOwnProfile}
+        publicUserId={publicUserId}
+        profileId={profile.id}
+        comments={comments}
+      />
 
-      <AccountActivityTitle>Account Activity</AccountActivityTitle>
-
-      <AccountActivityWrapperOuter>
-        {isOwnProfile && (
-          <Link to="/my-account/settings">
-            <img
-              src="/assets/images/settings-gear.png"
-              alt="settings gear"
-              title="Settings"
-              className="settings-gear"
-            />
-          </Link>
-        )}
-
-        <UserAccountContainer>
-          <AccountActivity>
-            <Section className="favorites-section">
-              <SectionTitle>Favorites</SectionTitle>
-
-              <FavoritesSection
-                isOwnProfile={isOwnProfile}
-                publicUserId={publicUserId}
-              />
-            </Section>
-
-            <Section>
-              <SectionTitle>Comment History</SectionTitle>
-              <CommentHistory>
-                {comments.length === 0 ? (
-                  <p className="no-comments">No comments available</p>
-                ) : (
-                  <>
-                    {comments.slice(0, 5).map((comment) => (
-                      <CommentItem key={comment.id}>
-                        <CommentText>
-                          {truncateText(comment.content, 50)}
-                        </CommentText>
-                        {comment.content_type === "tutorial" ? (
-                          <CommentLink
-                            href={`/tutorial/${comment.content_id}/comments/${comment.id}`}
-                          >
-                            View&nbsp;in&nbsp;Tutorial
-                          </CommentLink>
-                        ) : (
-                          <CommentLink
-                            href={`/blog/${comment.content_id}/comments/${comment.id}`}
-                          >
-                            View&nbsp;in&nbsp;Blog
-                          </CommentLink>
-                        )}
-                      </CommentItem>
-                    ))}
-
-                    <ViewMoreCommentsLink
-                      to={
-                        isOwnProfile
-                          ? "/my-account/comment-history"
-                          : `/user/${profile.id}/comment-history`
-                      }
-                    >
-                      See All Comments
-                    </ViewMoreCommentsLink>
-                  </>
-                )}
-              </CommentHistory>
-            </Section>
-          </AccountActivity>
-        </UserAccountContainer>
-      </AccountActivityWrapperOuter>
       <div style={{ height: "0" }}>&nbsp;</div>
     </>
   );
