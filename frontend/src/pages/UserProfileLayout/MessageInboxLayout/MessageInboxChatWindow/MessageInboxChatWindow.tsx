@@ -259,7 +259,7 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
         <NewChatBarWrapperOuter>
           <NewChatBarWrapperInner ref={containerRef}>
             <NewChatBar onClick={toggleDropdown}>
-              New Chat{" "}
+              New Chat
               <img src="/assets/images/account/plus-icon.png" alt="plus icon" />
             </NewChatBar>
             <NewChatDropdown

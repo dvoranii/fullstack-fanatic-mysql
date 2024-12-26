@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 interface Grecaptcha {
   execute(siteKey: string, options: { action: string }): Promise<string>;
@@ -15,7 +15,7 @@ const SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 const useReCaptcha = () => {
   const isScriptLoaded = useRef(false);
 
-  const loadReCaptchaScript = (): Promise<void> => {
+  const loadReCaptchaScript = useCallback(() => {
     return new Promise<void>((resolve, reject) => {
       if (isScriptLoaded.current) {
         resolve();
@@ -35,9 +35,9 @@ const useReCaptcha = () => {
 
       document.body.appendChild(script);
     });
-  };
+  }, []);
 
-  const removeReCaptchaScript = () => {
+  const removeReCaptchaScript = useCallback(() => {
     const script = document.querySelector(`script[src*="recaptcha/api.js"]`);
     if (script) {
       script.parentNode?.removeChild(script);
@@ -50,7 +50,14 @@ const useReCaptcha = () => {
 
     delete window.grecaptcha;
     isScriptLoaded.current = false;
-  };
+  }, []);
+
+  useEffect(() => {
+    loadReCaptchaScript();
+    return () => {
+      removeReCaptchaScript();
+    };
+  }, [loadReCaptchaScript, removeReCaptchaScript]);
 
   const getReCaptchaToken = async (action: string): Promise<string> => {
     if (!window.grecaptcha) {

@@ -33,15 +33,28 @@ export const fetchReplies = async (
 ): Promise<{ comments: CommentType[]; hasMore: boolean }> => {
   const endpoint = `/comments/${contentType}/${contentId}?parentCommentId=${parentCommentId}&limit=${limit}&offset=${offset}&includeLikedStatus=true`;
 
-  const { data } = await apiCall<{
-    hasMore: boolean;
-    comments: CommentType[];
-  }>(endpoint);
+  try {
+    const { data } = await apiCall<{
+      hasMore: boolean;
+      comments: CommentType[];
+    }>(endpoint);
 
-  return {
-    comments: data.comments || [],
-    hasMore: data.hasMore,
-  };
+    const comments = data.comments.map((comment) => ({
+      ...comment,
+      likedByUser: comment.likedByUser ?? false,
+    }));
+
+    return {
+      comments: comments || [],
+      hasMore: data.hasMore,
+    };
+  } catch (error) {
+    console.error("Error fetching replies:", error);
+    return {
+      comments: [],
+      hasMore: false,
+    };
+  }
 };
 
 export const submitComment = async (

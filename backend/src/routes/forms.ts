@@ -6,18 +6,19 @@ import { verifyRecaptchaToken } from "../utils/recaptchaUtils";
 import { sanitizeAndValidate } from "../middleware/inputValidation";
 import { blacklist } from "../middleware/IPblacklist";
 import { body } from "express-validator";
+import { emailService } from "../services/emailService";
 
 const router = express.Router();
 
 (function () {
-  const { sendEmails } = require("../services/emailService");
+  // const { sendEmails } = require("../services/emailService");
 
   router.post(
     "/consultation",
     authenticate,
     csrfProtection,
     sanitizeAndValidate([
-      body("fullName").notEmpty().withMessage("Full Name is required."),
+      body("name").notEmpty().withMessage("Name is required."),
       body("email").notEmpty().isEmail().withMessage("Invalid email format."),
       body("message").notEmpty().withMessage("Message is required."),
     ]),
@@ -42,7 +43,7 @@ const router = express.Router();
       }
 
       try {
-        await sendEmails({
+        await emailService.sendEmails({
           to: email,
           subject: "New Consultation Form Submission",
           ownerMessage: `You have received a new consultation form submission.\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}`,
@@ -92,7 +93,7 @@ const router = express.Router();
       }
 
       try {
-        await sendEmails({
+        await emailService.sendEmails({
           to: email,
           subject: "New Contact Form Submission",
           ownerMessage: `You have received a new contact form submission.\n\nFull Name: ${fullName}\nEmail: ${email}\nMessage: ${message}`,

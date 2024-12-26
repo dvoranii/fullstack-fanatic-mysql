@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { googleLogout } from "@react-oauth/google";
 import useUser from "../hooks/useUser";
 import { logOutUser } from "../services/userService";
 
 export const useAuthUtils = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const {
     setProfile,
     setFavouriteTutorials,
@@ -15,6 +15,7 @@ export const useAuthUtils = () => {
   } = useUser();
 
   const logOut = async (
+    navigate: (path: string, options?: { replace?: boolean }) => void,
     e?: React.MouseEvent<HTMLButtonElement, MouseEvent> | null
   ) => {
     if (e && e.preventDefault) {

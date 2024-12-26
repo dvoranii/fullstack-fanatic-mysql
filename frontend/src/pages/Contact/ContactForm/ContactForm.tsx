@@ -40,7 +40,7 @@ const ContactForm: React.FC = () => {
     return () => {
       removeReCaptchaScript();
     };
-  }, [loadReCaptchaScript]);
+  }, [loadReCaptchaScript, removeReCaptchaScript]);
 
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

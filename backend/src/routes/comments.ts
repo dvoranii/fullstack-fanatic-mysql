@@ -87,8 +87,14 @@ router.get(
 
       if (parentCommentId) {
         const hasMoreReplies = commentsWithReplies.length > replyLimit;
-
         commentsWithReplies = commentsWithReplies.slice(0, replyLimit);
+
+        if (includeLikedStatus && userId) {
+          const likedCommentIds = await fetchCommentLikes(userId);
+          commentsWithReplies.forEach((comment) => {
+            comment.likedByUser = likedCommentIds.includes(comment.id);
+          });
+        }
 
         commentsWithReplies = await Promise.all(
           commentsWithReplies.map(async (comment) => {

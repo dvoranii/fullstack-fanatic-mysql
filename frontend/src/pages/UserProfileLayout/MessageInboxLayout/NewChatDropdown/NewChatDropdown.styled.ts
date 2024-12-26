@@ -9,6 +9,8 @@ export const NewChatDropdownWrapper = styled.div`
 
 export const UserItemsWrapper = styled.div`
   padding: 10px;
+  max-height: 120px;
+  overflow-y: scroll;
 `;
 
 export const UserItems = styled.div`

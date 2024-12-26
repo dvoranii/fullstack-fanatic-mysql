@@ -49,10 +49,20 @@ const Comment: React.FC<CommentProps> = ({
 
   const handleLikeClick = async () => {
     try {
+      setIsLiked(!isLiked);
+      setLikes((prevLikes) => (isLiked ? prevLikes - 1 : prevLikes + 1));
+
       const updatedLikes = await toggleLike(comment.id, csrfToken);
+
       setLikes(updatedLikes);
-      setIsLiked((prevIsLiked) => !prevIsLiked);
+
+      if (comment) {
+        comment.likes = updatedLikes;
+        comment.likedByUser = !isLiked;
+      }
     } catch (error) {
+      setIsLiked(isLiked);
+      setLikes((prevLikes) => (!isLiked ? prevLikes - 1 : prevLikes + 1));
       console.error("Failed to toggle like", error);
     }
   };

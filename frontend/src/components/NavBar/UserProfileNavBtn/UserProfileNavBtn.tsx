@@ -27,11 +27,13 @@ import { useAuthUtils } from "../../../utils/useAuthUtils";
 import Dropdown from "../../Dropdown/Dropdown";
 import NotificationBadge from "../../NotificationBadge/NotificationBadge";
 import { getUnreadConversationsCount } from "../../../services/conversationService";
+import { useNavigate } from "react-router-dom";
 
 import ProfileIconBlack from "/assets/images/nav/profile-icon-black.png";
 import UnderConstructionIcon from "/assets/images/under-construction.png";
 
 const UserProfileNavBtn: React.FC = () => {
+  const navigate = useNavigate();
   const isMounted = useRef(true);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -43,6 +45,10 @@ const UserProfileNavBtn: React.FC = () => {
     unreadNotificationCount = 0,
     setUnreadNotificationCount = () => {},
   } = useContext(UserContext) || {};
+
+  const handleLogout = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    logOut(navigate, e);
+  };
 
   useEffect(() => {
     return () => {
@@ -153,7 +159,7 @@ const UserProfileNavBtn: React.FC = () => {
             </DropdownItem>
           </UserProfiledropdownWrapper>
           <DropdownDivider />
-          <DropdownItemLogoutBtn onClick={logOut}>
+          <DropdownItemLogoutBtn onClick={handleLogout}>
             Log Out
           </DropdownItemLogoutBtn>
         </Dropdown>
