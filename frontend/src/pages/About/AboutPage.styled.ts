@@ -213,3 +213,30 @@ export const TenetListSection = styled.div``;
 export const TenetLisItemTitle = styled.p`
   font-weight: bold;
 `;
+
+export const CTABtnWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 3.2rem;
+  user-select: none;
+
+  a {
+    font-size: 1.4rem;
+    padding: 8px 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: ${colors.white};
+    font-family: "Alata", sans-serif;
+    border: 1px solid ${colors.primary};
+    background-color: ${colors.primary};
+    border-radius: 30px;
+    transition: all 250ms ease;
+
+    &:hover {
+      cursor: pointer;
+      background-color: ${colors.secondary};
+      color: ${colors.primary};
+    }
+  }
+`;

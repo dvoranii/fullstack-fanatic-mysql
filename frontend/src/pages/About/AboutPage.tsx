@@ -13,6 +13,7 @@ import {
   ImgWrapper,
   AboutPageWrapper,
   SubtitleWrapper,
+  CTABtnWrapper,
 } from "./AboutPage.styled";
 import Title from "../../components/Title/Title";
 import { Link } from "react-router-dom";
@@ -210,6 +211,9 @@ const AboutPage: React.FC = () => {
             className="elipse-solid"
             alt="elipse background image"
           />
+          <CTABtnWrapper>
+            <Link to="/plans-and-pricing">Get Started</Link>
+          </CTABtnWrapper>
         </CoreTenetsWrapper>
       </AboutPageWrapper>
     </>
