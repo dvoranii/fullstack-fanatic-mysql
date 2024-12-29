@@ -108,9 +108,10 @@ export const TutorialThumbnail = styled(Link)`
   align-items: center;
   user-select: none;
   padding: 10px;
+  transition: all 250ms ease;
 
   &:hover {
-    background: #f5f5f5;
+    filter: brightness(1.05);
   }
 
   h2 {
@@ -140,6 +141,7 @@ export const ThumbnailBannerWrapper = styled.div`
   padding: 12px;
   user-select: none;
   background-color: #ecececec;
+  cursor: auto;
 `;
 
 export const StarIcon = styled.img`

@@ -138,7 +138,7 @@ export const useWebSocketMessages = (
     };
   }, [baseUrl, handleRoomManagement, setupSocketListeners]);
 
-  const retryFailedMessage = async (message: Message) => {
+  const retryFailedMessage = useCallback(async (message: Message) => {
     const socket = socketRef.current;
     if (!socket || connectionStatus !== "connected") {
       retryQueueRef.current.push(message);
@@ -153,7 +153,7 @@ export const useWebSocketMessages = (
     } catch (error) {
       console.error("Failed to retry message:", error);
     }
-  };
+  }, []);
 
   const clearRetryQueue = () => {
     retryQueueRef.current = [];
@@ -168,7 +168,7 @@ export const useWebSocketMessages = (
         retryFailedMessage(message);
       });
     }
-  }, [connectionStatus]);
+  }, [connectionStatus, retryFailedMessage]);
 
   return {
     connectionStatus,

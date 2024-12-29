@@ -18,9 +18,11 @@ import {
   FormTitle,
   ForgotPasswordLink,
   ForgotPasswordLinkWrapper,
+  BtnWrapper,
 } from "./RegisterLoginForm.styled";
 import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 interface RegisterLoginFormProps {
   defaultToLogin?: boolean;
@@ -29,6 +31,8 @@ interface RegisterLoginFormProps {
 const RegisterLoginForm: React.FC<RegisterLoginFormProps> = ({
   defaultToLogin = false,
 }) => {
+  const [loading, setLoading] = useState(false);
+
   const {
     isLogin,
     error,
@@ -91,10 +95,28 @@ const RegisterLoginForm: React.FC<RegisterLoginFormProps> = ({
     handleGoogleLoginClick();
   };
 
+  const handleSubmitWithSpinner = async (
+    submitFn: (e: React.FormEvent<HTMLFormElement>) => Promise<void>,
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+    try {
+      await submitFn(e);
+    } catch (err) {
+      console.error("Submission error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <RegisterLoginFormOuter>
       <RegisterLoginFormWrapperInner $isLogin={isLogin}>
-        <Form onSubmit={handleRegisterSubmit} noValidate>
+        <Form
+          onSubmit={(e) => handleSubmitWithSpinner(handleRegisterSubmit, e)}
+          noValidate
+        >
           <RegisterFormWrapperInner>
             <RegisterFormTitleWrapper
               $isLogin={isLogin}
@@ -130,7 +152,10 @@ const RegisterLoginForm: React.FC<RegisterLoginFormProps> = ({
               isChecked={isTermsAccepted}
               onChange={setIsTermsAccepted}
             />
-            <SubmitButton text="Register" />
+            <BtnWrapper>
+              {loading ? <LoadingSpinner /> : <SubmitButton text="Register" />}
+            </BtnWrapper>
+
             <FormMessage message={error} type="error" />
             <Divider>OR</Divider>
             <GoogleAuthButton
@@ -145,7 +170,10 @@ const RegisterLoginForm: React.FC<RegisterLoginFormProps> = ({
             <FormTitle $isLogin={isLogin}>Login</FormTitle>
           </LoginFormTitleWrapper>
           <LoginFormWrapperInner>
-            <Form onSubmit={handleLoginSubmit}>
+            <Form
+              onSubmit={(e) => handleSubmitWithSpinner(handleLoginSubmit, e)}
+              noValidate
+            >
               <InputField
                 label="Username"
                 type="text"
@@ -158,7 +186,10 @@ const RegisterLoginForm: React.FC<RegisterLoginFormProps> = ({
                 id="login-password"
                 placeholder="*****"
               />
-              <SubmitButton text="Login" />
+              <BtnWrapper>
+                {loading ? <LoadingSpinner /> : <SubmitButton text="Login" />}
+              </BtnWrapper>
+
               <FormMessage message={error} type="error" />
               <ForgotPasswordLinkWrapper>
                 <ForgotPasswordLink to="/forgot-password">

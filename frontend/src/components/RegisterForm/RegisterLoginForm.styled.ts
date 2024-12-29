@@ -223,3 +223,10 @@ export const ForgotPasswordLink = styled(Link)`
     border-bottom: 1px solid ${colors.primary};
   }
 `;
+
+export const BtnWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;

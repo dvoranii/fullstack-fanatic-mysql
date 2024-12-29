@@ -85,6 +85,7 @@ export const SaveButton = styled.button`
   border-radius: 4px;
   font-size: 16px;
   cursor: pointer;
+  transition: all 250ms ease;
   &:hover {
     background-color: #0056b3;
   }
