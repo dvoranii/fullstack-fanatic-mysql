@@ -10,6 +10,7 @@ import critical from "rollup-plugin-critical";
 import { visualizer } from "rollup-plugin-visualizer";
 import { createHtmlPlugin } from "vite-plugin-html";
 import cssnano from "cssnano";
+import progress from "vite-plugin-progress";
 
 export default defineConfig({
   build: {
@@ -49,6 +50,7 @@ export default defineConfig({
   },
 
   plugins: [
+    progress() as PluginOption,
     react({
       babel: {
         plugins: [["babel-plugin-styled-components", { displayName: true }]],
