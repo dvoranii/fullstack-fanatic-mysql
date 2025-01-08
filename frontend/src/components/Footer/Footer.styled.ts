@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { colors } from "../../GlobalStyles";
-import waveEffectBg from "/assets/images/wave-effect-bg.webp";
 
 export const FooterWrapperOuter = styled.footer`
   background-color: ${colors.secondary};
@@ -14,7 +13,7 @@ export const FooterWrapperOuter = styled.footer`
       rgba(255, 175, 43, 1),
       rgba(255, 175, 43, 0.65)
     ),
-    url(${waveEffectBg});
+    url("https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/wave-effect-bg.webp");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;

@@ -9,7 +9,7 @@ interface ProfilePictureProps {
   bg?: string;
 }
 
-const BASE_URL = import.meta.env.VITE_API_URL.replace("/api", "");
+// const BASE_URL = import.meta.env.VITE_API_URL.replace("/api", "");
 
 const ProfilePicture = ({
   src,
@@ -18,9 +18,7 @@ const ProfilePicture = ({
   border,
   bg,
 }: ProfilePictureProps) => {
-  const imageUrl = src.includes("googleusercontent")
-    ? src
-    : `${BASE_URL}${src}`;
+  const imageUrl = src || "/assets/images/profile-icon.png";
 
   return (
     <StyledProfilePicture

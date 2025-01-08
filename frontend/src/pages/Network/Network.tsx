@@ -158,7 +158,7 @@ export const NetworkPage: React.FC = () => {
               </h3>
               <NetworkIconWrapper>
                 <img
-                  src="/assets/images/networking-image.png"
+                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/comment/networking-image.png"
                   alt="Network Image"
                   width="128"
                   height="128"

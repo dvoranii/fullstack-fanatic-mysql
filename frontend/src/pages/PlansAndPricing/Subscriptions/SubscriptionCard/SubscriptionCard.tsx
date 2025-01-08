@@ -13,8 +13,6 @@ import {
 import { UserContext } from "../../../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { CartItem } from "../../../../types/CartItem";
-
-import GoldenMedalImg from "/assets/images/plansAndPricing/golden-medal.svg";
 import SubscriptionIcon from "/assets/images/plansAndPricing/subscription-icon.png";
 interface SubscriptionCardProps {
   title: string;
@@ -65,7 +63,10 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
     <CardWrapper highlighted={highlighted} className={className}>
       {highlighted && (
         <MedalWrapper>
-          <img src={GoldenMedalImg} alt="Golden Medal" />
+          <img
+            src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/plansAndPricing/golden-medal.svg"
+            alt="Golden Medal"
+          />
         </MedalWrapper>
       )}
       <CardTitleWrapper>

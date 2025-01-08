@@ -1,5 +1,4 @@
 import React from "react";
-import googleIcon from "/assets/images/google-signin-icon.png";
 import { GoogleSignInButton } from "./styles/GoogleAuthButton.styled";
 
 interface GoogleAuthButtonProps {
@@ -12,7 +11,10 @@ const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({
   text,
 }) => (
   <GoogleSignInButton onClick={handleClick}>
-    <img src={googleIcon} alt="Google Icon" />
+    <img
+      src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/misc/google-signin-icon.png"
+      alt="Google Icon"
+    />
     <span>{text}</span>
   </GoogleSignInButton>
 );

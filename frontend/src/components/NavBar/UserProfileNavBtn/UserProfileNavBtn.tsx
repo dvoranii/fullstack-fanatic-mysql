@@ -28,9 +28,6 @@ import Dropdown from "../../Dropdown/Dropdown";
 import NotificationBadge from "../../NotificationBadge/NotificationBadge";
 import { getUnreadConversationsCount } from "../../../services/conversationService";
 
-import ProfileIconBlack from "/assets/images/nav/profile-icon-black.png";
-import UnderConstructionIcon from "/assets/images/under-construction.png";
-
 const UserProfileNavBtn: React.FC = () => {
   const isMounted = useRef(true);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -105,7 +102,7 @@ const UserProfileNavBtn: React.FC = () => {
     <div ref={containerRef}>
       <NavIconWrapper>
         <NavIconImg
-          src={ProfileIconBlack}
+          src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/nav/profile-icon-black.png"
           onClick={handleDropdownToggle}
           alt="Profile Icon"
           title="User Profile"
@@ -142,7 +139,7 @@ const UserProfileNavBtn: React.FC = () => {
               <SettingsWrapper>
                 <span>Settings</span>{" "}
                 <img
-                  src={UnderConstructionIcon}
+                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/misc/under-construction.png"
                   alt=""
                   title="Section under construction"
                 />

@@ -21,7 +21,7 @@ export const LeftSideWrapper = styled.div`
       rgba(255, 255, 255, 0.75),
       rgba(255, 255, 255, 0.75)
     ),
-    url("/assets/images/wave-effect-bg.webp");
+    url("https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/wave-effect-bg.webp");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;

@@ -89,7 +89,7 @@ const NavBar: React.FC = () => {
             <AccountBtnsWrapper>
               <NetworkPageLink to="/network">
                 <img
-                  src="/assets/images/nav/networking-icon.png"
+                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/comment/networking-image.png"
                   alt="network page"
                   title="Network"
                   height="50"
@@ -155,7 +155,7 @@ const NavBar: React.FC = () => {
             <AccountBtnsWrapper className="mobile-accounts-wrapper">
               <NetworkPageLink to="/network">
                 <img
-                  src="/assets/images/nav/networking-icon.png"
+                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/comment/networking-image.png"
                   alt="network page"
                   className="mobile-network-icon"
                   title="Network"
@@ -165,7 +165,7 @@ const NavBar: React.FC = () => {
               </NetworkPageLink>
               <ShoppingCartLink to="/my-cart">
                 <img
-                  src="/assets/images/nav/shopping-cart-icon.png"
+                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/nav/shopping-cart-icon.png"
                   alt="shopping cart icon"
                   width="25"
                   height="25"
@@ -173,7 +173,7 @@ const NavBar: React.FC = () => {
               </ShoppingCartLink>
               <UserProfileLink to="/my-account">
                 <img
-                  src="/assets/images/nav/profile-icon-black.png"
+                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/nav/profile-icon-black.png"
                   alt="profile icon"
                   width="25"
                   height="25"

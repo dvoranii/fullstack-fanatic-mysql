@@ -20,8 +20,7 @@ import {
   ForgotPasswordLinkWrapper,
   BtnWrapper,
 } from "./RegisterLoginForm.styled";
-import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 interface RegisterLoginFormProps {
@@ -45,16 +44,6 @@ const RegisterLoginForm: React.FC<RegisterLoginFormProps> = ({
     isTermsAccepted,
     setIsTermsAccepted,
   } = useAuthForm(defaultToLogin);
-
-  const location = useLocation();
-
-  useEffect(() => {
-    if (location.pathname === "/login" && !isLogin) {
-      toggleForm();
-    } else if (location.pathname === "/register" && isLogin) {
-      toggleForm();
-    }
-  }, [location, isLogin, toggleForm]);
 
   const handleGoogleRegisterClick = useGoogleLogin({
     onSuccess: handleGoogleRegister,

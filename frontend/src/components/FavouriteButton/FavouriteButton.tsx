@@ -1,6 +1,3 @@
-import FavouriteIconImg from "/assets/images/bookmark.png";
-import FavouriteIconImgFilled from "/assets/images/bookmark(filled).png";
-
 import { FavouriteButtonImg } from "./FavouriteButton.styled";
 import { FavouriteButtonProps } from "../../types/FavouritesButtonProps";
 
@@ -14,7 +11,11 @@ const FavouriteButton: React.FC<FavouriteButtonProps> = ({
 
   return (
     <FavouriteButtonImg
-      src={isFavourited ? FavouriteIconImgFilled : FavouriteIconImg}
+      src={
+        isFavourited
+          ? "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/misc/bookmark(filled).png"
+          : "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/misc/bookmark.png"
+      }
       alt={altText}
       title={titleText}
       onClick={isDisabled ? undefined : onClick}

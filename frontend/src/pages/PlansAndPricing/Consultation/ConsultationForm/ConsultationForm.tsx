@@ -17,8 +17,6 @@ import { useCsrfToken } from "../../../../hooks/useCsrfToken";
 import useReCaptcha from "../../../../hooks/useReCaptcha";
 import { sanitizeInput } from "../../../../utils/sanitizationUtils";
 
-import SwooshBG from "/assets/images/plansAndPricing/pink-swoosh.png";
-
 const ConsultationForm: React.FC<{
   formRef: React.RefObject<HTMLDivElement>;
 }> = ({ formRef }) => {
@@ -117,7 +115,11 @@ const ConsultationForm: React.FC<{
 
   return (
     <FormComponentContainer ref={formRef}>
-      <img src={SwooshBG} className="swoosh-bg" alt="" />
+      <img
+        src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/plansAndPricing/pink-swoosh.png"
+        className="swoosh-bg"
+        alt="background swoosh"
+      />
       <ConsultationFormWrapperOuter>
         <ConsultationFormWrapper>
           <form onSubmit={handleSubmit}>

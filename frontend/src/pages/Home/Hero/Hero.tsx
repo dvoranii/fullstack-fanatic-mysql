@@ -46,7 +46,7 @@ const Hero: React.FC = () => {
 
           <ElipseWrapper>
             <img
-              src="/assets/images/bg-images/Ellipse-bg.svg"
+              src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/Ellipse-bg.svg"
               alt="elipse bg image"
               width="250"
               height="193"
@@ -77,7 +77,7 @@ const Hero: React.FC = () => {
               <SocialIconWrapper>
                 <Link to="#">
                   <img
-                    src="/assets/images/socials/github-icon.png"
+                    src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/socials/github-icon.png"
                     alt="github logo"
                     loading="lazy"
                     width="40"
@@ -88,7 +88,7 @@ const Hero: React.FC = () => {
               <SocialIconWrapper>
                 <Link to="#">
                   <img
-                    src="/assets/images/socials/codepen.png"
+                    src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/socials/codepen.png"
                     alt="codepen logo"
                     loading="lazy"
                     width="40"
@@ -99,7 +99,7 @@ const Hero: React.FC = () => {
               <SocialIconWrapper>
                 <Link to="#">
                   <img
-                    src="/assets/images/socials/linkedin-icon-black.png"
+                    src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/socials/linkedin-icon-black.png"
                     alt="linkedin logo"
                     loading="lazy"
                     width="40"

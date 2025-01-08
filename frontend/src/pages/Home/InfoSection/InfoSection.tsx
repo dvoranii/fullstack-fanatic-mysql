@@ -24,7 +24,7 @@ const InfoSection: React.FC = () => {
           </CardLinkWrapper>
           <CardImgWrapper>
             <img
-              src="/assets/images/Amico-images/master-amico.svg"
+              src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/Amico-images/master-amico.svg"
               alt="Master Image"
               loading="lazy"
               width="250"
@@ -42,7 +42,7 @@ const InfoSection: React.FC = () => {
           </CardLinkWrapper>
           <CardImgWrapper>
             <img
-              src="/assets/images/Amico-images/apply-amico.svg"
+              src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/Amico-images/apply-amico.svg"
               alt="Apply Image"
               loading="lazy"
               width="250"
@@ -61,7 +61,7 @@ const InfoSection: React.FC = () => {
           </CardLinkWrapper>
           <CardImgWrapper className="card-3">
             <img
-              src="/assets/images/Amico-images/customization-amico.svg"
+              src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/Amico-images/customization-amico.svg"
               alt="Customize Image"
               loading="lazy"
               width="250"

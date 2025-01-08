@@ -12,12 +12,12 @@ const SubscriptionSection: React.FC = () => {
     <>
       <PageBGWrapper>
         <img
-          src="/assets/images/bg-images/Ellipse7.svg"
+          src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/Ellipse7.svg"
           alt="decorative background swoosh"
           className="bg-swoosh"
         />
         <img
-          src="/assets/images/bg-images/SquaresAndTriangles.svg"
+          src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/SquaresAndTriangles.svg"
           alt="decorative background squares and triangles"
           className="bg-squares-and-triangles"
         />
@@ -92,7 +92,7 @@ const SubscriptionSection: React.FC = () => {
         </CardsContainer>
         <SwirlyImgBgWrapper>
           <img
-            src="/assets/images/bg-images/swirly-line-bg.svg"
+            src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/swirly-line-bg.svg"
             className="swirly-1"
             alt="swirly line"
           />

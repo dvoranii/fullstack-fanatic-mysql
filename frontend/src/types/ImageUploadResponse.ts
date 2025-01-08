@@ -1,5 +1,5 @@
 export interface ImageUploadResponse {
   message: string;
-  imagePath?: string;
+  imageUrl?: string;
   profilePicturePath?: string;
 }

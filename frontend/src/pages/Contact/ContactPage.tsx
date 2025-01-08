@@ -22,7 +22,7 @@ const ContactPage: React.FC = () => {
 
         <ImgWrapper>
           <img
-            src="/assets/images/bg-images/Ellipse-bg-white.svg"
+            src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/Ellipse-bg-white.svg"
             alt="Elipse background image"
             className="elipse"
             loading="lazy"
@@ -30,7 +30,7 @@ const ContactPage: React.FC = () => {
         </ImgWrapper>
         <ImgWrapper>
           <img
-            src="/assets/images/bg-images/orange-triangle.svg"
+            src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/orange-triangle.svg"
             alt="Triangle background image"
             className="triangle"
             loading="lazy"

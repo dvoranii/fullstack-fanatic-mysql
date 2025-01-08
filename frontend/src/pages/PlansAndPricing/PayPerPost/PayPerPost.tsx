@@ -7,13 +7,15 @@ import {
 import Title from "../../../components/Title/Title";
 import { Link } from "react-router-dom";
 
-import SwirlyLineImg from "/assets/images/bg-images/swirly-line-bg.svg";
-
 const PayPerPost: React.FC = () => {
   return (
     <PayPerPostWrapper>
       <SwirlyImgBgWrapper>
-        <img src={SwirlyLineImg} className="swirly-2" alt="" />
+        <img
+          src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/swirly-line-bg.svg"
+          className="swirly-2"
+          alt=""
+        />
       </SwirlyImgBgWrapper>
 
       <Title textContent={"Pay per post"} className="pay-per-post-title" />

@@ -8,7 +8,7 @@ export interface UserPayload {
   bio?: string;
   socialLinks?: { [key: string]: string };
   bannerImage?: string;
-  isPremium: boolean;
+  isPremium?: boolean;
   premiumLevel?: "starter" | "casual pro" | "premium";
   stripeCustomerId?: string;
 }

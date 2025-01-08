@@ -43,7 +43,10 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
     <ConversationWrapper onClick={handleSelect}>
       <ProfilePictureWrapper>
         <ProfilePicture
-          src={otherUserPicture || "/assets/images/profile-icon.png"}
+          src={
+            otherUserPicture ||
+            "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/nav/profile-icon-black.png"
+          }
           alt="User Profile Picture"
           width="45px"
           border="2px solid #ccc"
@@ -59,7 +62,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
       <DeleteConvoButtonWrapper>
         <button className="delete-button" onClick={handleDelete}>
           <img
-            src="/assets/images/discard-icon.png"
+            src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/comment/discard-icon.png"
             alt="Delete Conversation"
             title="Delete"
           />

@@ -20,8 +20,8 @@ const ConsultationSection: React.FC = () => {
   return (
     <ConsultationSectionWrapperOuter>
       <img
-        src="/assets/images/bg-images/SquaresAndTriangles.svg"
-        alt=""
+        src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/SquaresAndTriangles.svg"
+        alt="squares and triangles"
         className="bg-squares-and-triangles"
         aria-hidden="true"
       />
@@ -56,7 +56,7 @@ const ConsultationSection: React.FC = () => {
           </ConsultationTextWrapper>
           <ConsultationImgWrapper>
             <img
-              src="/assets/images/plansAndPricing/consultation-image.jpg"
+              src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/plansAndPricing/consultation-image.jpg"
               alt="Consultation Graphic"
               title="Consultation"
             />

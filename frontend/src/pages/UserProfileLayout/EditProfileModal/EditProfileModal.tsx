@@ -114,11 +114,10 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setProfilePicture(file);
-    setIsChanged((prev) => ({ ...prev, profilePicture: true }));
-
     const preview = await readImageFile(file);
     setNewProfilePicturePreview(preview);
+    setIsChanged((prev) => ({ ...prev, profilePicture: true }));
+    setProfilePicture(file);
   };
 
   const onSubmitProfile = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -150,6 +149,11 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
       setUpdateMessage("There was an error updating your profile.");
       setSuccess(false);
       setUpdateModalOpen(true);
+
+      if (isChanged.profilePicture) {
+        setNewProfilePicturePreview(null);
+        setProfilePicturePreview(profile.profile_picture || null);
+      }
     }
   };
 

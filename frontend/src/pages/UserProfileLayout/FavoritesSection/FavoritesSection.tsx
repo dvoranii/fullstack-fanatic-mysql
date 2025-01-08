@@ -176,7 +176,10 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
           <FavouritesContent>
             <FavWrapper>
               <FavouriteIcon>
-                <img src="/assets/images/tutorial-icon.png" alt="Tutorials" />
+                <img
+                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/tutorial-icon.png"
+                  alt="Tutorials"
+                />
               </FavouriteIcon>
               <p>Tutorials</p>
               <ViewAllButton onClick={() => handleViewClick("tutorials")}>
@@ -186,7 +189,10 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
 
             <FavWrapper>
               <FavouriteIcon>
-                <img src="/assets/images/blog-icon.png" alt="Blogs" />
+                <img
+                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/blog-icon.png"
+                  alt="Blogs"
+                />
               </FavouriteIcon>
               <p>Blogs</p>
               <ViewAllButton onClick={() => handleViewClick("blogs")}>
@@ -199,7 +205,10 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
         <>
           <TopButtonsWrapper>
             <BackButton onClick={handleBackClick}>
-              <img src="/assets/images/back-icon.png" alt="" />
+              <img
+                src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/back-icon.png"
+                alt=""
+              />
               <span>Back</span>
             </BackButton>
             <ViewHeader>

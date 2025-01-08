@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { colors } from "../../GlobalStyles";
-import HexagonalBg from "/assets/images/hexagonal-line-bg.jpg";
 
 interface ListSectionTitleWrapperProps {
   offset?: string;
@@ -121,7 +120,7 @@ export const CoreTenetsWrapper = styled.div`
       rgba(245, 245, 245, 1),
       rgba(255, 255, 255, 0.88)
     ),
-    url(${HexagonalBg});
+    url("https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/hexagonal-line-bg.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   padding: 2.4rem 0rem 8.4rem 0rem;
@@ -173,7 +172,6 @@ export const SubtitleWrapper = styled.div`
   width: 70%;
   padding: 0 20px;
   margin: 0 auto 2.4rem auto;
-  /* background-color: ${colors.secondary}; */
 
   @media screen and (max-width: 937px) {
     width: 90%;

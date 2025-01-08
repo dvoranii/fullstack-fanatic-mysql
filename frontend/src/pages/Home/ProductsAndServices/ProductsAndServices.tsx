@@ -22,7 +22,7 @@ const ProductsAndServices: React.FC = () => {
         <BgSquaresAndTrianglesWrapper>
           <img
             className="bg-squares"
-            src="/assets/images/bg-images/SquaresAndTriangles.svg"
+            src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/SquaresAndTriangles.svg"
             alt=""
             width="260"
             height="auto"
@@ -56,7 +56,7 @@ const ProductsAndServices: React.FC = () => {
               </CardList>
               <CardImagesWrapper>
                 <img
-                  src="/assets/images/home/ratings-card-image.svg"
+                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/home/ratings-card-image.svg"
                   className="ratings-img"
                   alt="ratings stars image"
                   loading="lazy"
@@ -68,7 +68,7 @@ const ProductsAndServices: React.FC = () => {
               <CardLink to="/tutorials">View Tutorials</CardLink>
             </Card>
             <img
-              src="/assets/images/home/tutorial-icon-home.svg"
+              src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/home/tutorial-icon-home.svg"
               className="top-icon"
               alt="tutorial card icon"
               loading="lazy"
@@ -102,7 +102,7 @@ const ProductsAndServices: React.FC = () => {
               </CardList>
               <CardImagesWrapper>
                 <img
-                  src="/assets/images/home/blogs-card-image.svg"
+                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/home/blogs-card-image.svg"
                   className="blogs-img"
                   alt="Blogs Card Image"
                   loading="lazy"
@@ -113,7 +113,7 @@ const ProductsAndServices: React.FC = () => {
               <CardLink to="/blogs">View Blogs</CardLink>
             </Card>
             <img
-              src="/assets/images/home/blog-icon-home.svg"
+              src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/home/blog-icon-home.svg"
               className="top-icon"
               alt="Blog card Icon"
               loading="lazy"
@@ -147,7 +147,7 @@ const ProductsAndServices: React.FC = () => {
               </CardList>
               <CardImagesWrapper>
                 <img
-                  src="/assets/images/home/consult-card-image.svg"
+                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/home/consult-card-image.svg"
                   alt="Consultation Image"
                   width="360"
                   height="128"
@@ -158,7 +158,7 @@ const ProductsAndServices: React.FC = () => {
               </CardLink>
             </Card>
             <img
-              src="/assets/images/home/consult-icon-home.svg"
+              src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/home/consult-icon-home.svg"
               className="top-icon consult-icon"
               alt="Consultation Icon"
               loading="lazy"
@@ -170,7 +170,7 @@ const ProductsAndServices: React.FC = () => {
       </ProductsAndServicesWrapperOuter>
       <ProductsAndServicesBottomImgWrapper>
         <img
-          src="/assets/images/home/products-and-services-bottom-img.svg"
+          src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/Amico-images/products-and-services-bottom-img.svg"
           alt="Products and Services banner image"
           loading="lazy"
           width="1920"

@@ -60,7 +60,7 @@ export const TermsWrapper = styled.div`
     transform: translate(-50%, -50%);
     width: 30px;
     height: 30px;
-    background-image: url("/assets/images/check-icon.png");
+    background-image: url("https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/misc/check-icon.png");
     background-size: contain;
     background-repeat: no-repeat;
     pointer-events: none;

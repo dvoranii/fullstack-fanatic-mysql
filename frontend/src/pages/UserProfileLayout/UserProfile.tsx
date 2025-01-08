@@ -31,8 +31,6 @@ import { UserContext } from "../../context/UserContext";
 import MessageModalButton from "../../components/MessageModalButton/MessageModalButton";
 import AccountActivity from "./AccountActivity/AccountActivity";
 
-const BASE_URL = import.meta.env.VITE_API_URL.replace("/api", "");
-
 const UserProfilePage: React.FC<UserProfilePageProps> = ({
   profile,
   comments,
@@ -43,6 +41,8 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
   onBannerChange,
   children,
 }) => {
+  const [bannerImage, setBannerImage] = useState(profile.banner_image);
+  const [profilePicture, setProfilePicture] = useState(profile.profile_picture);
   const userContext = useContext(UserContext);
   const loggedInUser = userContext?.profile;
 
@@ -50,6 +50,11 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
   const [followersCount, setFollowersCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
+
+  useEffect(() => {
+    setBannerImage(profile.banner_image);
+    setProfilePicture(profile.profile_picture);
+  }, [profile.banner_image, profile.profile_picture]);
 
   useEffect(() => {
     const fetchFollowData = async () => {
@@ -72,14 +77,10 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
     <>
       <BannerWrapperOuter>
         <BannerWrapperInner>
-          <ProfileBanner
-            banner_image={
-              profile.banner_image ? `${BASE_URL}${profile.banner_image}` : ""
-            }
-          >
+          <ProfileBanner banner_image={bannerImage || ""}>
             <ProfilePictureWrapper>
               <ProfilePicture
-                src={profile.profile_picture || ""}
+                src={profilePicture || ""}
                 alt={`${profile.name}`}
                 width="150px"
                 border="4px solid white"
@@ -92,7 +93,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
           <BannerUploadWrapper>
             <label htmlFor="banner-file-upload">
               <img
-                src="/assets/images/account/edit.webp"
+                src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/edit.webp"
                 alt="Edit banner"
                 height="48"
                 width="48"

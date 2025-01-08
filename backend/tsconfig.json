@@ -17,6 +17,6 @@
     },
     "typeRoots": ["./node_modules/@types", "./types"]
   },
-  "include": ["src", "types"],
+  "include": ["src", "types", "src/types/express.d.ts"],
   "exclude": ["node_modules"]
 }

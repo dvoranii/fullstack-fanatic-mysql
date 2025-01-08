@@ -37,7 +37,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
         }}
       >
         <img
-          src="/assets/images/add-to-cart-icon.png"
+          src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/add-to-cart-icon.png"
           alt="Add to cart"
           title={buttonTitle}
         />

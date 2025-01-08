@@ -20,7 +20,6 @@ import { UserContext } from "../../../context/UserContext";
 import { getAvatarUrl } from "../../../utils/imageUtils";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
 
-import CloseIcon from "/assets/images/close-icon.png";
 interface MessageUserModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -134,7 +133,10 @@ const MessageUserModal: React.FC<MessageUserModalProps> = ({
         <AvatarContainer>
           <UserAvatar src={getAvatarUrl(userAvatarUrl)} alt="User Avatar" />
         </AvatarContainer>
-        <CloseBtn src={CloseIcon} onClick={onClose} />
+        <CloseBtn
+          src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/misc/close-icon.png"
+          onClick={onClose}
+        />
         <MessageForm>
           {!conversationExists && (
             <InputField

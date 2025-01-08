@@ -15,7 +15,8 @@ export const blogContent: BlogContentItem[] = [
         content: "Content for understanding JSX...",
       },
     ],
-    image: "/assets/images/blogs/React-icon.svg.png",
+    image:
+      "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/blogs/React-icon.svg.png",
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
@@ -34,7 +35,8 @@ export const blogContent: BlogContentItem[] = [
         content: "Content for understanding Node.js architecture...",
       },
     ],
-    image: "/assets/images/blogs/node-logo.png",
+    image:
+      "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/blogs/node-logo.png",
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
@@ -53,7 +55,8 @@ export const blogContent: BlogContentItem[] = [
         content: "Content for advanced css techniques...",
       },
     ],
-    image: "/assets/images/blogs/css-logo.png",
+    image:
+      "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/blogs/css-logo.png",
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
@@ -72,7 +75,8 @@ export const blogContent: BlogContentItem[] = [
         content: "Content for TS...",
       },
     ],
-    image: "/assets/images/blogs/Typescript-logo.png",
+    image:
+      "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/blogs/Typescript-logo.png",
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
@@ -85,7 +89,8 @@ export const blogContent: BlogContentItem[] = [
       { title: "Step 1: Introduction to GraphQL", content: "..." },
       { title: "Step 2: Setting up a GraphQL Server", content: "..." },
     ],
-    image: "/assets/images/blogs/GraphQL_Logo.png",
+    image:
+      "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/blogs/GraphQL_Logo.png",
     isPremium: true,
     availableForPurchase: true,
     price: 2.5,
@@ -99,7 +104,8 @@ export const blogContent: BlogContentItem[] = [
       { title: "Step 1: Understanding Microservices", content: "..." },
       { title: "Step 2: Deploying with Kubernetes", content: "..." },
     ],
-    image: "/assets/images/blogs/kubernetes-logo.png",
+    image:
+      "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/blogs/kubernetes-logo.png",
     isPremium: true,
     availableForPurchase: true,
     price: 2.5,
@@ -113,7 +119,8 @@ export const blogContent: BlogContentItem[] = [
       { title: "Step 1: What is WebAssembly?", content: "..." },
       { title: "Step 2: Using WebAssembly in Web Apps", content: "..." },
     ],
-    image: "/assets/images/blogs/WebAssembly_Logo.svg",
+    image:
+      "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/blogs/WebAssembly_Logo.svg",
     isPremium: true,
     availableForPurchase: true,
     price: 2.5,
@@ -127,7 +134,8 @@ export const blogContent: BlogContentItem[] = [
       { title: "Step 1: Understanding Serverless", content: "..." },
       { title: "Step 2: Building with AWS Lambda", content: "..." },
     ],
-    image: "/assets/images/blogs/aws-logo.webp",
+    image:
+      "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/blogs/aws-logo.webp",
     isPremium: true,
     availableForPurchase: true,
     price: 2.5,

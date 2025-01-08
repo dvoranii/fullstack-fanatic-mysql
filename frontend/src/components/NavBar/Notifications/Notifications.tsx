@@ -123,7 +123,7 @@ const Notifications: React.FC = () => {
     <div ref={containerRef}>
       <NavIconWrapper>
         <NavIconImg
-          src="/assets/images/nav/notification-bell.png"
+          src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/nav/notification-bell.png"
           onClick={handleDropdownToggle}
           alt="Notifications"
           title="Notifications"

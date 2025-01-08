@@ -27,7 +27,7 @@ export const registerUser = async (
 };
 
 interface LoginResponse {
-  token: string; // Access token
+  token: string;
   user: User;
 }
 

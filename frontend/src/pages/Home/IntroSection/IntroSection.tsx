@@ -16,13 +16,13 @@ const IntroSection: React.FC = () => {
   return (
     <IntroSectionWrapper>
       <BgSquaresAndTriangleImg
-        src="/assets/images/bg-images/SquaresAndTriangles.svg"
+        src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/SquaresAndTriangles.svg"
         alt=""
         width="260"
         height="153"
       />
       <LeftGraphic
-        src="/assets/images/Amico-images/Coding-workshop-amico.svg"
+        src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/Amico-images/Coding-workshop-amico.svg"
         alt="Person Graphic"
         loading="lazy"
         width="314"
@@ -44,7 +44,7 @@ const IntroSection: React.FC = () => {
         <LinkWrapper>
           <GetStartedLink to="/plans-and-pricing">Get Started</GetStartedLink>
           <SwirlyArrow
-            src="/assets/images/bg-images/swirly-arrow-3.svg"
+            src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/swirly-arrow-3.svg"
             alt="Swirly Arrow"
             loading="lazy"
             width="120"
@@ -54,7 +54,7 @@ const IntroSection: React.FC = () => {
       </ContentWrapper>
       <ImageWrapper>
         <CornerEllipse
-          src="/assets/images/bg-images/Ellipse-bg-solid.svg"
+          src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/Ellipse-bg-solid.svg"
           alt="Corner Ellipse"
           loading="lazy"
           width="235"

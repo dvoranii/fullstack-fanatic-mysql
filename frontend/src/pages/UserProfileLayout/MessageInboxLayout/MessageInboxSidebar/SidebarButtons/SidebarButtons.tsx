@@ -14,7 +14,10 @@ const SidebarButton: React.FC = () => {
       <IconBG>
         <NavLink to="/my-account">
           <ProfilePicture
-            src={profilePic || "/assets/images/profile-icon.png"}
+            src={
+              profilePic ||
+              "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/home/profile-icon.png"
+            }
             alt="Profile picture"
             width="50px"
             border="3px solid #14213d"
@@ -24,13 +27,16 @@ const SidebarButton: React.FC = () => {
 
       <IconBG>
         <NavLink to="/my-account/settings">
-          <IconImg src="/assets/images/settings-gear.png" />
+          <IconImg src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/settings-gear.png" />
         </NavLink>
       </IconBG>
 
       <IconBG>
         <NavLink to="/">
-          <IconImg src="/assets/images/home/home-icon.png" title="Home" />
+          <IconImg
+            src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/home/home-icon.png"
+            title="Home"
+          />
         </NavLink>
       </IconBG>
     </IconBGWrapper>

@@ -72,22 +72,26 @@ const TutorialsPage: React.FC = () => {
 
     switch (difficulty) {
       case "beginner":
-        starImg = "/assets/images/tutorials/1-beginner-star.png";
+        starImg =
+          "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/tutorials/1-beginner-star.png";
         starCount = 1;
         titleText = "Beginner";
         break;
       case "intermediate":
-        starImg = "/assets/images/tutorials/2-intermediate-stars.png";
+        starImg =
+          "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/tutorials/2-intermediate-stars.png";
         starCount = 2;
         titleText = "Intermediate";
         break;
       case "advanced":
-        starImg = "/assets/images/tutorials/3-advanced-stars.png";
+        starImg =
+          "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/tutorials/3-advanced-stars.png";
         starCount = 3;
         titleText = "Advanced";
         break;
       default:
-        starImg = "/assets/images/tutorials/1-beginner-star.png";
+        starImg =
+          "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/tutorials/1-beginner-star.png";
         starCount = 1;
     }
 
@@ -142,7 +146,7 @@ const TutorialsPage: React.FC = () => {
           onChange={(value) => setSearchText(value)}
         />
         <img
-          src="/assets/images/bg-images/SquaresAndTriangles.svg"
+          src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/SquaresAndTriangles.svg"
           alt="Squares and Triangles"
           className="bg-squares-and-triangles"
           width="181"
@@ -153,7 +157,7 @@ const TutorialsPage: React.FC = () => {
         <div className="block-1" />
         <div className="block-2" />
         <img
-          src="/assets/images/bg-images/swirly-line-bg.svg"
+          src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/swirly-line-bg.svg"
           className="swirly-1"
           alt="swirly line"
           loading="lazy"
@@ -207,7 +211,10 @@ const TutorialsPage: React.FC = () => {
                           <img src={tutorial.image} alt={tutorial.title} />
                           <PremiumBanner>
                             <p>Premium</p>
-                            <img src="/assets/images/lock.png" alt="Lock" />
+                            <img
+                              src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/misc/lock.png"
+                              alt="Lock"
+                            />
                           </PremiumBanner>
                         </TutorialThumbnail>
                       </PremiumThumbnailWrapperOuter>
@@ -253,7 +260,7 @@ const TutorialsPage: React.FC = () => {
                         onClick={() => handleFlip(String(tutorial.id))}
                       >
                         <img
-                          src="/assets/images/tutorials/flip-icon.png"
+                          src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/tutorials/flip-icon.png"
                           alt="Flip"
                           title="Read more"
                         />
@@ -269,7 +276,7 @@ const TutorialsPage: React.FC = () => {
                         onClick={() => handleFlip(String(tutorial.id))}
                       >
                         <img
-                          src="/assets/images/tutorials/flip-icon-backside.png"
+                          src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/tutorials/flip-icon-backside.png"
                           alt="Flip"
                           title="View thumbnail"
                         />

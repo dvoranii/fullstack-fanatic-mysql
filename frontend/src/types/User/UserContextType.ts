@@ -8,7 +8,7 @@ import { PurchasedItem } from "../PurchasedItem";
 
 export interface UserContextType {
   profile: User | null;
-  setProfile: (profile: User | null) => void;
+  setProfile: React.Dispatch<React.SetStateAction<User | null>>;
   fetchProfile: () => Promise<void>;
   favouriteTutorials: Tutorial[];
   setFavouriteTutorials: Dispatch<SetStateAction<Tutorial[]>>;

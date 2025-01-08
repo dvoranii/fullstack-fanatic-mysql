@@ -11,3 +11,5 @@
 
 # Ignore IDE and tool-related folders
 .VSCodeCounter/
+
+**/stats.html

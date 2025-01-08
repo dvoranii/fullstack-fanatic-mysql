@@ -30,11 +30,11 @@ const CTASection: React.FC = () => {
           <ImgWrapper>
             <picture>
               <source
-                srcSet="/assets/images/home/brain-sides-cuate.svg"
+                srcSet="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/Amico-images/brain-sides-cuate.svg"
                 media="(min-width: 1100px)"
               />
               <BrainImg
-                src="/assets/images/home/brain sides-cuate.svg"
+                src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/Amico-images/brain-sides-cuate.svg"
                 loading="lazy"
                 alt="brain image"
                 height="450"

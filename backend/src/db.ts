@@ -6,7 +6,7 @@ dotenv.config();
 const createConnection = async () => {
   const connection = await mysql.createConnection({
     host: "localhost",
-    user: "root",
+    user: process.env.NODE_ENV === "production" ? "dbuser" : "root",
     password: process.env.DB_PW,
     database: "tutorials_db",
   });

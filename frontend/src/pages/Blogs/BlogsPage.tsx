@@ -82,7 +82,7 @@ const BlogsPage: React.FC = () => {
             onChange={(value) => setSearchText(value)}
           />
           <img
-            src="/assets/images/bg-images/SquaresAndTriangles.svg"
+            src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/SquaresAndTriangles.svg"
             className="squares-and-triangles"
             alt=""
           />
@@ -139,9 +139,15 @@ const BlogsPage: React.FC = () => {
                     <PremiumBadge hasAccess={hasAccess}>
                       <p>Premium</p>
                       {canAccessBlog(blog.id) ? (
-                        <img src="/assets/images/unlocked.png" alt="Unlocked" />
+                        <img
+                          src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/misc/unlocked.png"
+                          alt="Unlocked"
+                        />
                       ) : (
-                        <img src="/assets/images/lock.png" alt="Locked" />
+                        <img
+                          src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/misc/lock.png"
+                          alt="Locked"
+                        />
                       )}
                     </PremiumBadge>
                   )}

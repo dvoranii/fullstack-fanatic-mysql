@@ -129,8 +129,8 @@ const Comment: React.FC<CommentProps> = ({
                 <img
                   src={
                     isLiked
-                      ? "/assets/images/like-2.png"
-                      : "/assets/images/like-1.png"
+                      ? "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/comment/like-2.png"
+                      : "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/comment/like-1.png"
                   }
                   alt="like icon"
                   onClick={handleLikeClick}
@@ -146,14 +146,14 @@ const Comment: React.FC<CommentProps> = ({
             <>
               <FormButton onClick={onEdit}>
                 <img
-                  src="/assets/images/edit-icon.png"
+                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/comment/edit-icon.png"
                   alt="Edit"
                   title="Edit"
                 />
               </FormButton>
               <FormButton onClick={onDelete}>
                 <img
-                  src="/assets/images/discard-icon.png"
+                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/comment/discard-icon.png"
                   alt="Delete"
                   title="Delete"
                 />
@@ -164,7 +164,7 @@ const Comment: React.FC<CommentProps> = ({
           {!isEditing && !isCommentOwner && !showReplyForm && profile && (
             <FormButton onClick={() => setShowReplyForm(true)}>
               <img
-                src="/assets/images/reply-icon.png"
+                src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/comment/reply-icon.png"
                 alt="Reply"
                 title="Reply"
               />

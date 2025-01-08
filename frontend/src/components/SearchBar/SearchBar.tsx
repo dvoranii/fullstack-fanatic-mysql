@@ -56,7 +56,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     <SearchBarWrapperOuter style={{ paddingLeft }} className={className}>
       <SearchBarWrapperInner style={{ width }}>
         <SearchIconWrapper onClick={handleSearch}>
-          <SearchIconImg src="/assets/images/search-icon.png" />
+          <SearchIconImg src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/misc/search-icon.png" />
         </SearchIconWrapper>
 
         <SearchInputWrapper>

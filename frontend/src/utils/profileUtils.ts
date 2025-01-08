@@ -30,9 +30,10 @@ export const handleProfileUpdate = async (
       profilePictureData,
       csrfToken
     );
-    if (!uploadResult.imagePath)
+
+    if (!uploadResult.imageUrl)
       throw new Error("Failed to upload profile picture");
-    profilePicturePath = uploadResult.imagePath;
+    profilePicturePath = uploadResult.imageUrl;
   }
 
   const profileData = new FormData();

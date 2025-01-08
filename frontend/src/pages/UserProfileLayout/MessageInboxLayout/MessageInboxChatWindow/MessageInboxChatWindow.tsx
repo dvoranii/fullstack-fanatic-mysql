@@ -260,7 +260,10 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
           <NewChatBarWrapperInner ref={containerRef}>
             <NewChatBar onClick={toggleDropdown}>
               New Chat
-              <img src="/assets/images/account/plus-icon.png" alt="plus icon" />
+              <img
+                src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/plus-icon.png"
+                alt="plus icon"
+              />
             </NewChatBar>
             <NewChatDropdown
               isVisible={isDropdownVisible}

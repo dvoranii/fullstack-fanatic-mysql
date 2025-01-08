@@ -8,6 +8,7 @@ export const CommentSectionTitle = styled.h3`
 export const CommentSectionWrapperOuter = styled.div`
   display: flex;
   flex-direction: column;
+  padding-bottom: 4.2rem;
   @media screen and (max-width: 768px) {
     border: 1px solid #888;
     padding: 20px;

@@ -1,13 +1,25 @@
 import express, { Request, Response } from "express";
-import path from "path";
 import connectionPromise from "../db";
 import { RowDataPacket } from "mysql2";
 import { authenticate } from "../middleware/authenticate";
 import { upload } from "../utils/storageConfig";
-import fs from "fs";
 import { csrfProtection } from "../middleware/csrf";
+import { s3 } from "../utils/storageConfig";
+import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 
 const router = express.Router();
+
+interface S3File extends Express.Multer.File {
+  location: string;
+}
+interface CustomMulterRequest extends Request {
+  file?: S3File;
+  user?: {
+    userId: number;
+    googleId: string;
+    email: string;
+  };
+}
 
 router.get(
   "/",
@@ -41,13 +53,14 @@ router.post(
   csrfProtection,
   upload.single("bannerimage"),
   async (req: Request, res: Response) => {
-    const userId = req.user?.userId;
+    const userId = (req as CustomMulterRequest).user?.userId;
 
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    const bannerImagePath = `/assets/images/user_${userId}/banners/${req.file.filename}`;
+    const file = req.file as S3File;
+    const bannerImageUrl: string = file.location;
     const connection = await connectionPromise;
 
     try {
@@ -56,22 +69,33 @@ router.post(
         [userId]
       );
 
-      const oldBannerPath = currentUser[0]?.banner_image
-        ? path.join(__dirname, `../../public${currentUser[0].banner_image}`)
+      const oldBannerImageUrl: string | null =
+        currentUser[0]?.banner_image || null;
+
+      const bucketName = process.env.BUCKET_NAME;
+      const oldBannerImageKey = oldBannerImageUrl
+        ? oldBannerImageUrl.split(
+            `https://${bucketName}.tor1.digitaloceanspaces.com/`
+          )[1]
         : null;
 
-      if (oldBannerPath && fs.existsSync(oldBannerPath)) {
-        fs.unlinkSync(oldBannerPath);
+      if (oldBannerImageKey) {
+        await s3.send(
+          new DeleteObjectCommand({
+            Bucket: process.env.BUCKET_NAME!,
+            Key: oldBannerImageKey,
+          })
+        );
       }
 
       await connection.execute(
         "UPDATE users SET banner_image = ? WHERE id = ?",
-        [bannerImagePath, userId]
+        [bannerImageUrl, userId]
       );
 
       res.status(200).json({
         message: "Profile banner updated successfully",
-        imagePath: bannerImagePath,
+        imageUrl: bannerImageUrl,
       });
     } catch (error) {
       console.error("Error updating profile banner: ", error);
@@ -86,13 +110,14 @@ router.post(
   csrfProtection,
   upload.single("profile_picture"),
   async (req: Request, res: Response) => {
-    const userId = req.user?.userId;
+    const userId = (req as CustomMulterRequest).user?.userId;
 
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    const profilePicturePath = `/assets/images/user_${userId}/profilePictures/${req.file.filename}`;
+    const file = req.file as S3File;
+    const profilePictureUrl: string = file.location;
     const connection = await connectionPromise;
 
     try {
@@ -101,22 +126,38 @@ router.post(
         [userId]
       );
 
-      const oldProfilePicturePath = currentUser[0]?.profile_picture
-        ? path.join(__dirname, `../../public${currentUser[0].profile_picture}`)
+      const oldProfilePictureUrl: string | null =
+        currentUser[0]?.profile_picture || null;
+
+      const extractKeyFromUrl = (url: string) => {
+        const bucketName = process.env.BUCKET_NAME;
+        const base = `https://${bucketName}.tor1.digitaloceanspaces.com/`;
+        return url.startsWith(base) ? url.replace(base, "") : null;
+      };
+
+      const oldProfilePictureKey = oldProfilePictureUrl
+        ? extractKeyFromUrl(oldProfilePictureUrl)
         : null;
 
-      if (oldProfilePicturePath && fs.existsSync(oldProfilePicturePath)) {
-        fs.unlinkSync(oldProfilePicturePath);
+      console.log("Old Profile Picture Key:", oldProfilePictureKey);
+      if (oldProfilePictureKey) {
+        await s3.send(
+          new DeleteObjectCommand({
+            Bucket: process.env.BUCKET_NAME!,
+            Key: oldProfilePictureKey,
+          })
+        );
       }
 
       await connection.execute(
         "UPDATE users SET profile_picture = ? WHERE id = ?",
-        [profilePicturePath, userId]
+        [profilePictureUrl, userId]
       );
 
+      console.log(profilePictureUrl);
       res.status(200).json({
         message: "Profile picture updated successfully",
-        imagePath: profilePicturePath,
+        imageUrl: profilePictureUrl,
       });
     } catch (error) {
       console.error("Error updating profile picture: ", error);
@@ -197,7 +238,6 @@ router.delete(
     try {
       const connection = await connectionPromise;
 
-      // Begin transaction
       await connection.beginTransaction();
 
       const [currentUser] = await connection.query<RowDataPacket[]>(

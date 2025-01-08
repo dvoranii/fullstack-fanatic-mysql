@@ -32,7 +32,7 @@ const ProfileUpdateModal: React.FC<ProfileUpdateModalProps> = ({
         {message && <p>{message}</p>}
         {success ? (
           <img
-            src="/assets/images/edit-profile-checkmark.png"
+            src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/edit-profile-checkmark.png"
             alt="checkmark"
             loading="lazy"
             width="32px"
@@ -40,7 +40,7 @@ const ProfileUpdateModal: React.FC<ProfileUpdateModalProps> = ({
           />
         ) : (
           <img
-            src="/assets/images/edit-profile-failed.png"
+            src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/edit-profile-failed.png"
             alt="failed"
             loading="lazy"
             width="32px"

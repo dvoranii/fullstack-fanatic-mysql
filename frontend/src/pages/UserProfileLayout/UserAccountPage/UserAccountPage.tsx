@@ -35,23 +35,43 @@ const UserAccountsPage: React.FC = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
-    if (file) {
+    if (file && setProfile) {
       const formData = new FormData();
       formData.append("bannerimage", file);
 
+      const newBannerUrl = URL.createObjectURL(file);
+      setProfile((prevProfile) => {
+        if (!prevProfile) return null;
+        return {
+          ...prevProfile,
+          banner_image: newBannerUrl,
+        };
+      });
+
       try {
-        const data: ImageUploadResponse = await uploadBannerImage(
+        const response: ImageUploadResponse = await uploadBannerImage(
           formData,
           csrfToken
         );
-        if (data.imagePath && setProfile) {
-          setProfile({
-            ...profile,
-            banner_image: data.imagePath,
+        if (response.imageUrl) {
+          setProfile((prevProfile) => {
+            if (!prevProfile) return null;
+            return {
+              ...prevProfile,
+              banner_image: response.imageUrl,
+            };
           });
         }
       } catch (error) {
-        console.error("Error uploading banner image: ", error);
+        console.error("Error uploading banner image:", error);
+        alert("Failed to upload banner image. Please try again.");
+        setProfile((prevProfile) => {
+          if (!prevProfile) return null;
+          return {
+            ...prevProfile,
+            banner_image: profile.banner_image,
+          };
+        });
       }
     }
   };
@@ -84,7 +104,7 @@ const UserAccountsPage: React.FC = () => {
           <a href="/my-account/inbox">
             <InboxImgWrapper>
               <img
-                src="/assets/images/account/inbox.png"
+                src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/inbox.png"
                 alt="Inbox Icon"
                 width="25"
                 height="25"

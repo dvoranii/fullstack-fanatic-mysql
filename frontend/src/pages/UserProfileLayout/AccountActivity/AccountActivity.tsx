@@ -40,7 +40,7 @@ const AccountActivity: React.FC<AccountActivityProps> = ({
         {isOwnProfile && (
           <Link to="/my-account/settings">
             <img
-              src="/assets/images/settings-gear.png"
+              src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/settings-gear.png"
               alt="settings gear"
               title="Settings"
               className="settings-gear"

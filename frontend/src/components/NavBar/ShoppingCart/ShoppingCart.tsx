@@ -91,7 +91,7 @@ const ShoppingCart: React.FC = () => {
     <div ref={containerRef}>
       <NavIconWrapper>
         <NavIconImg
-          src="/assets/images/nav/shopping-cart-icon.png"
+          src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/nav/shopping-cart-icon.png"
           alt="Cart"
           title="Shopping Cart"
           onClick={toggleCartVisibility}

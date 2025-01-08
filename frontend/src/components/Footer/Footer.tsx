@@ -41,7 +41,7 @@ const Footer = () => {
           </CenteredSlogan>
           <img
             className="seperator"
-            src="/assets/images/seperator.png"
+            src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/misc/seperator.png"
             alt="seperator"
             loading="lazy"
             width="220"
@@ -56,7 +56,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
               >
                 <SocialLinkIcon
-                  src="/assets/images/socials/github-icon.png"
+                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/socials/github-icon.png"
                   alt="GitHub"
                   loading="lazy"
                   width="30"
@@ -72,7 +72,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
               >
                 <SocialLinkIcon
-                  src="/assets/images/socials/facebook.png"
+                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/socials/facebook.png"
                   alt="Facebook"
                   loading="lazy"
                   width="30"
@@ -87,7 +87,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
               >
                 <SocialLinkIcon
-                  src="/assets/images/socials/codepen.png"
+                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/socials/codepen.png"
                   alt="CodePen"
                   loading="lazy"
                   width="30"
@@ -102,7 +102,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
               >
                 <SocialLinkIcon
-                  src="/assets/images/socials/tiktok-icon.png"
+                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/socials/tiktok-icon.png"
                   alt="TikTok"
                   loading="lazy"
                   width="30"

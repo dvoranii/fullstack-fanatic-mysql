@@ -54,7 +54,7 @@ const AboutPage: React.FC = () => {
           <AboutIntroWrapper>
             <AboutImageWrapper>
               <img
-                src="/assets/images/Amico-images/About-us-page-amico.svg"
+                src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/Amico-images/About-us-page-amico.svg"
                 alt="about image"
                 width="368"
                 height="368"
@@ -76,14 +76,14 @@ const AboutPage: React.FC = () => {
           </AboutIntroWrapper>
           <ImgWrapper>
             <img
-              src="/assets/images/bg-images/Ellipse-bg.svg"
+              src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/Ellipse-bg.svg"
               className="elipse"
               alt="elipse background image"
             />
           </ImgWrapper>
           <ImgWrapper>
             <img
-              src="/assets/images/bg-images/SquaresAndTriangles.svg"
+              src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/SquaresAndTriangles.svg"
               className="squares-triangle"
               alt="squares and triangles background image"
             />
@@ -207,7 +207,7 @@ const AboutPage: React.FC = () => {
             </TenetListSection>
           </CoreTenetsWrapperInner>
           <img
-            src="/assets/images/bg-images/Ellipse-bg-solid.svg"
+            src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/Ellipse-bg-solid.svg"
             className="elipse-solid"
             alt="elipse background image"
           />

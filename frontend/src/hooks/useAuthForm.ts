@@ -40,11 +40,6 @@ export const useAuthForm = (defaultToLogin = false) => {
   const toggleForm = () => {
     setIsLogin(!isLogin);
     setError(null);
-    if (!isLogin) {
-      navigate("/login");
-    } else {
-      navigate("/register");
-    }
   };
 
   const handleGoogleRegister = async (codeResponse: TokenResponse) => {

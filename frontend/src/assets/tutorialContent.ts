@@ -15,7 +15,8 @@ export const tutorialContent: TutorialContentItem[] = [
         content: "Content for deploying the application...",
       },
     ],
-    image: "/assets/images/tutorials/deployment-thumbnail.png",
+    image:
+      "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/tutorials/deployment-thumbnail.png",
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
@@ -36,7 +37,8 @@ export const tutorialContent: TutorialContentItem[] = [
         content: "Content for implementing tokens...",
       },
     ],
-    image: "/assets/images/tutorials/csrf-thumbnail.png",
+    image:
+      "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/tutorials/csrf-thumbnail.png",
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
@@ -58,7 +60,8 @@ export const tutorialContent: TutorialContentItem[] = [
         content: "Content for JS & Network requests...",
       },
     ],
-    image: "/assets/images/tutorials/network-request.png",
+    image:
+      "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/tutorials/network-request.png",
     isPremium: true,
     premiumLevel: "starter",
     availableForPurchase: true,
@@ -82,7 +85,8 @@ export const tutorialContent: TutorialContentItem[] = [
         content: "Content for web app security...",
       },
     ],
-    image: "/assets/images/tutorials/webappsecurity-thumbnail.png",
+    image:
+      "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/tutorials/webappsecurity-thumbnail.png",
     isPremium: true,
     premiumLevel: "premium",
     availableForPurchase: true,
@@ -106,7 +110,8 @@ export const tutorialContent: TutorialContentItem[] = [
         content: "Content for Forms in Depth...",
       },
     ],
-    image: "/assets/images/tutorials/forms-thumbnail.png",
+    image:
+      "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/tutorials/forms-thumbnail.png",
     isPremium: true,
     premiumLevel: "casual pro",
     availableForPurchase: true,
@@ -130,7 +135,8 @@ export const tutorialContent: TutorialContentItem[] = [
         content: "Content for DNS 101...",
       },
     ],
-    image: "/assets/images/tutorials/dns-thumbnail.png",
+    image:
+      "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/tutorials/dns-thumbnail.png",
     isPremium: true,
     premiumLevel: "starter",
     availableForPurchase: true,
@@ -154,7 +160,8 @@ export const tutorialContent: TutorialContentItem[] = [
         content: "Content for adding JavaScript to your project...",
       },
     ],
-    image: "/assets/images/tutorials/frontend-thumbnail.png",
+    image:
+      "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/tutorials/frontend-thumbnail.png",
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
@@ -176,7 +183,8 @@ export const tutorialContent: TutorialContentItem[] = [
         content: "Content for reducing load times on your site...",
       },
     ],
-    image: "/assets/images/tutorials/web-performance-thumbnail.png",
+    image:
+      "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/tutorials/web-performance-thumbnail.png",
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
@@ -198,7 +206,8 @@ export const tutorialContent: TutorialContentItem[] = [
         content: "Content for reducing load times on your site...",
       },
     ],
-    image: "/assets/images/tutorials/responsive-design-thumbnail.png",
+    image:
+      "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/tutorials/responsive-design-thumbnail.png",
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
