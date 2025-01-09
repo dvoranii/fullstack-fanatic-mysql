@@ -11,11 +11,8 @@ import { emailService } from "../services/emailService";
 const router = express.Router();
 
 (function () {
-  // const { sendEmails } = require("../services/emailService");
-
   router.post(
     "/consultation",
-    authenticate,
     csrfProtection,
     sanitizeAndValidate([
       body("name").notEmpty().withMessage("Name is required."),
@@ -63,8 +60,6 @@ const router = express.Router();
   router.post(
     "/contact",
     blacklist,
-    authenticate,
-    csrfProtection,
     csrfProtection,
     sanitizeAndValidate([
       body("fullName").notEmpty().withMessage("Full Name is required."),
