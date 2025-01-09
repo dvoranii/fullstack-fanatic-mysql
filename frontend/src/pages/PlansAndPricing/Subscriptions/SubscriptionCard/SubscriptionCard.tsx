@@ -13,7 +13,7 @@ import {
 import { UserContext } from "../../../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { CartItem } from "../../../../types/CartItem";
-import SubscriptionIcon from "/assets/images/plansAndPricing/subscription-icon.png";
+
 interface SubscriptionCardProps {
   title: string;
   price: string;
@@ -48,7 +48,8 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
         id: Math.floor(Math.random() * 10000),
         title,
         price: parseFloat(price.replace("$", "")),
-        image: SubscriptionIcon,
+        image:
+          "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/plansAndPricing/subscription-icon.png",
         description: `${title} - ${frequency}`,
         type: "subscription",
         priceId,
