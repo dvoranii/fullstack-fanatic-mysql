@@ -12,6 +12,6 @@
 # Ignore IDE and tool-related folders
 .VSCodeCounter/
 
-**/stats.html
+frontend/stats.html
 
 backend/ecosystem.config.js
