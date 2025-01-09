@@ -13,3 +13,5 @@
 .VSCodeCounter/
 
 **/stats.html
+
+backend/ecosystem.config.js
