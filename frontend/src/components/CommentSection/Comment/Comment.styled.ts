@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import discardIcon from "/assets/images/discard-icon.png";
 import { colors } from "../../../GlobalStyles";
 
 interface CommentWrapperProps {
@@ -158,7 +157,7 @@ export const TrashBinButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url(${discardIcon});
+  background-image: url("https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/comment/discard-icon.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 20px 20px;
