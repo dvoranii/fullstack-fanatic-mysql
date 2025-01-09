@@ -35,6 +35,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:4173",
   process.env.CLIENT_URL || "https://fullstackfanatic.com",
+  "https://staging.fullstackfanatic.com",
 ];
 
 app.use(
@@ -96,10 +97,11 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin:
-      process.env.NODE_ENV === "production"
-        ? process.env.CLIENT_URL || "https://fullstackfanatic.com"
-        : "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://fullstackfanatic.com",
+      "https://staging.fullstackfanatic.com",
+    ],
     methods: ["GET", "POST"],
     credentials: true,
   },
