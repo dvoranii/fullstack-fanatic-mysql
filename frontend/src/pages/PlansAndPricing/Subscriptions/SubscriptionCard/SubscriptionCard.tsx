@@ -13,6 +13,7 @@ import {
 import { UserContext } from "../../../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { CartItem } from "../../../../types/CartItem";
+
 interface SubscriptionCardProps {
   title: string;
   price: string;
