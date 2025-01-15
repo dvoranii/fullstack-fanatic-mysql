@@ -47,6 +47,8 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
     purchasedItems = [],
   } = useContext(UserContext) || {};
 
+  console.log(purchasedItems);
+
   useEffect(() => {
     if (!isOwnProfile && publicUserId) {
       const fetchPublicFavourites = async () => {
