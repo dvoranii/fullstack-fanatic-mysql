@@ -15,3 +15,7 @@
 frontend/stats.html
 
 backend/ecosystem.config.js
+
+/scripts
+
+.github/workflows/sync-staging.yml

@@ -1,4 +1,10 @@
-import { createContext, useState, useEffect, ReactNode } from "react";
+import {
+  createContext,
+  useState,
+  useEffect,
+  ReactNode,
+  useCallback,
+} from "react";
 import { User } from "../types/User/User";
 import { fetchUserProfileFavouritesAndComments } from "../utils/userUtils";
 import { addFavourite, removeFavourite } from "../services/favouritesService";
@@ -88,9 +94,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     );
   };
 
-  const clearCart = () => {
+  const clearCart = useCallback(() => {
     setCartItems([]);
-  };
+  }, []);
 
   const addSubscriptionToCart = (item: CartItem) => {
     setSubscriptionItem(item);
