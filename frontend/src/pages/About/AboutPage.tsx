@@ -94,7 +94,7 @@ const AboutPage: React.FC = () => {
             <h3>
               At Full Stack Fanatic, we strive to live up to a set of core
               <br></br>
-              tenets, and hopefully help you do the same
+              &nbsp;tenets, and hopefully help you do the same
             </h3>
           </SubtitleWrapper>
 
