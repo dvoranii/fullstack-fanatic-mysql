@@ -70,7 +70,7 @@ const AboutPage: React.FC = () => {
                 fundamentals through hands-on development and study.
               </p>
               <LinkWrapper>
-                <Link to="/plans-and-pricing">Join Us</Link>
+                <Link to="/plans-and-pricing">Join Us!</Link>
               </LinkWrapper>
             </MissionStatementWrapper>
           </AboutIntroWrapper>
