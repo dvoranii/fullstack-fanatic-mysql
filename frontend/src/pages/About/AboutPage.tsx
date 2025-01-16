@@ -133,7 +133,7 @@ const AboutPage: React.FC = () => {
                   <div>
                     Learning is better together. Fullstack Fanatic provides a
                     community where users can connect, collaborate, and support
-                    one another, creating a network of driven professionals who
+                    one another creating a network of driven professionals who
                     uplift each other.
                   </div>
                 </li>
