@@ -16,7 +16,8 @@
     "test": "echo \"No tests yet\""
   },
   "bin": {
-    "gitpush": "./scripts/gitpush.js"
+    "gitpush": "./scripts/gitpush.js",
+    "pr-merge": "./scripts/processPullRequest.js"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
