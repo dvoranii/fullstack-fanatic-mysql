@@ -108,7 +108,6 @@ interface StripeCustomerIdRow {
       try {
         const connection = await connectionPromise;
 
-        // Step 1: Retrieve the user's Stripe customer ID
         const [rows] = await connection.execute<RowDataPacket[]>(
           "SELECT stripe_customer_id FROM users WHERE id = ?",
           [req.user?.userId]
@@ -116,7 +115,6 @@ interface StripeCustomerIdRow {
 
         let stripeCustomerId = rows[0]?.stripe_customer_id || null;
 
-        // Step 2: Create a new customer if it doesn't exist
         if (!stripeCustomerId) {
           const customer = await stripe.customers.create({
             email: req.user?.email,
@@ -126,14 +124,11 @@ interface StripeCustomerIdRow {
 
           stripeCustomerId = customer.id;
 
-          // Update the database with the new Stripe customer ID
           await connection.execute(
             "UPDATE users SET stripe_customer_id = ? WHERE id = ?",
             [stripeCustomerId, req.user?.userId]
           );
         }
-
-        // Step 3: Prepare line items for the subscription
         const lineItems = cartItems.map((item: CartItem) => {
           if (!item.priceId) {
             throw new Error(`Price ID is missing for item: ${item.title}`);
@@ -151,11 +146,10 @@ interface StripeCustomerIdRow {
 
         const subscriptionType = subscriptionItem?.title || "";
 
-        // Step 4: Create the checkout session with the customer ID
         const session = await stripe.checkout.sessions.create({
           payment_method_types: ["card"],
           mode: "subscription",
-          customer: stripeCustomerId, // <-- Pass the customer ID here
+          customer: stripeCustomerId,
           line_items: lineItems,
           success_url: `${process.env.CLIENT_URL}/checkout/success`,
           cancel_url: `${process.env.CLIENT_URL}/checkout/cancel`,
@@ -180,10 +174,10 @@ interface StripeCustomerIdRow {
     authenticate,
     csrfProtection,
     async (req: Request, res: Response) => {
-      const { newPlanPriceId } = req.body;
+      const { newPlanPriceId, userName, email } = req.body;
       const userId = req.user?.userId;
 
-      console.log(newPlanPriceId);
+      console.log(userName, email);
 
       if (!newPlanPriceId) {
         return res
@@ -270,6 +264,70 @@ interface StripeCustomerIdRow {
   );
 
   router.post(
+    "/cancel-subscription",
+    authenticate,
+    csrfProtection,
+    async (req: Request, res: Response): Promise<void> => {
+      const userId = req.user?.userId;
+
+      if (!userId) {
+        res.status(400).json({ error: "User ID is required." });
+        return;
+      }
+
+      try {
+        const connection = await connectionPromise;
+        const [rows] = await connection.execute<RowDataPacket[]>(
+          "SELECT stripe_customer_id FROM users WHERE id = ?",
+          [userId]
+        );
+
+        const stripeCustomerId = rows[0]?.stripe_customer_id;
+
+        if (!stripeCustomerId) {
+          res.status(400).json({ error: "No Stripe customer ID found." });
+          return;
+        }
+
+        const subscriptions = await stripe.subscriptions.list({
+          customer: stripeCustomerId,
+          status: "active",
+        });
+
+        if (subscriptions.data.length === 0) {
+          res.status(400).json({ error: "No active subscription found." });
+          return;
+        }
+
+        const activeSubscription = subscriptions.data[0];
+
+        if (!activeSubscription.cancel_at_period_end) {
+          await stripe.subscriptions.update(activeSubscription.id, {
+            cancel_at_period_end: true,
+          });
+        }
+
+        const cancellationDate = new Date(
+          activeSubscription.current_period_end * 1000
+        );
+        await connection.execute(
+          "UPDATE users SET subscription_cancellation_date = ? WHERE id = ?",
+          [cancellationDate, userId]
+        );
+
+        res.status(200).json({
+          message: `Your subscription will be canceled at the end of the current billing period on ${cancellationDate.toLocaleDateString()}.`,
+        });
+      } catch (error) {
+        console.error("Error canceling subscription: ", error);
+        res.status(500).json({
+          error: "An error occurred while canceling the subscription.",
+        });
+      }
+    }
+  );
+
+  router.post(
     "/webhook",
     express.raw({ type: "application/json" }),
     async (req: Request, res: Response): Promise<void> => {
@@ -295,7 +353,6 @@ interface StripeCustomerIdRow {
         return;
       }
 
-      // Handle checkout.session.completed
       if (event.type === "checkout.session.completed") {
         const session = event.data.object as Stripe.Checkout.Session;
 
@@ -313,7 +370,6 @@ interface StripeCustomerIdRow {
           try {
             const connection = await connectionPromise;
 
-            // Step 1: Update the stripe_customer_id if it's not already in the database
             const [rows] = await connection.execute<RowDataPacket[]>(
               "SELECT stripe_customer_id FROM users WHERE id = ?",
               [userId]
@@ -329,7 +385,6 @@ interface StripeCustomerIdRow {
               console.log(`Updated Stripe customer ID for user ${userId}`);
             }
 
-            // Step 2: Finalize subscription purchase
             console.log(
               `Finalizing subscription for user ${userId}, customer ID: ${stripeCustomerId}`
             );
@@ -341,7 +396,6 @@ interface StripeCustomerIdRow {
           }
         }
 
-        // Handle one-off payments
         if (session.mode === "payment") {
           try {
             console.log("Processing one-off payment...");
@@ -351,6 +405,36 @@ interface StripeCustomerIdRow {
             res.status(500).send("Failed to process one-off payment webhook");
             return;
           }
+        }
+      }
+
+      if (event.type === "customer.subscription.deleted") {
+        const subscription = event.data.object as Stripe.Subscription;
+        const userId = subscription.metadata?.userId;
+
+        if (!userId) {
+          console.error("Missing userId in subscription metadata");
+          res.status(400).send("Missing user data");
+          return;
+        }
+
+        try {
+          const connection = await connectionPromise;
+
+          await connection.execute(
+            "UPDATE users SET premiumLevel = null, subscription_start_date = null WHERE id = ?",
+            [userId]
+          );
+          console.log(`Subscription canceled for user ${userId}`);
+          res.status(200).send("Subscription canceled and user updated.");
+        } catch (error) {
+          console.error(
+            "Error updating user on subscription cancellation:",
+            error
+          );
+          res
+            .status(500)
+            .send("Failed to update user on subscription cancellation");
         }
       }
 

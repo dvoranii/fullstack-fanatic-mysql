@@ -18,6 +18,7 @@ interface CustomMulterRequest extends Request {
     userId: number;
     googleId: string;
     email: string;
+    name: string;
   };
 }
 
@@ -30,7 +31,7 @@ router.get(
 
       const connection = await connectionPromise;
       const [user] = await connection.query<RowDataPacket[]>(
-        "SELECT id, email, name, display_name, profession, bio, social_links, profile_picture , banner_image, isPremium, premiumLevel FROM users WHERE id = ?",
+        "SELECT id, email, name, display_name, profession, bio, social_links, profile_picture , banner_image, isPremium, premiumLevel, subscription_cancellation_date FROM users WHERE id = ?",
         [userId]
       );
 

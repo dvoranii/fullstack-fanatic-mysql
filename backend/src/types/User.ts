@@ -3,6 +3,7 @@ export interface UserPayload {
   googleId: string;
   email: string;
   display_name?: string;
+  name: string;
   profilePicture?: string;
   profession?: string;
   bio?: string;
@@ -11,4 +12,5 @@ export interface UserPayload {
   isPremium?: boolean;
   premiumLevel?: "starter" | "casual pro" | "premium";
   stripeCustomerId?: string;
+  subscription_cancellation_date?: string | null;
 }
