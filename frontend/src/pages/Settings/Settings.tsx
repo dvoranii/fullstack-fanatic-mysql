@@ -96,20 +96,29 @@ const Settings = () => {
               <SettingItem>
                 <b>Current email:</b> {profile?.email}
                 <button className="edit-btn">
-                  <img src="/assets/images/account/edit-icon.png" alt="Edit" />
+                  <img
+                    src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/edit.webp"
+                    alt="Edit"
+                  />
                 </button>
               </SettingItem>
             )}
             <SettingItem>
               <b>Timezone:</b> Eastern Standard (EST)
               <button className="edit-btn">
-                <img src="/assets/images/account/edit-icon.png" alt="" />
+                <img
+                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/edit.webp"
+                  alt=""
+                />
               </button>
             </SettingItem>
             <SettingItem>
               <b>Currency:</b> Canadian Dollar ($ CAD)
               <button className="edit-btn">
-                <img src="/assets/images/account/edit-icon.png" alt="" />
+                <img
+                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/edit.webp"
+                  alt=""
+                />
               </button>
             </SettingItem>
             <SettingItem>
@@ -136,7 +145,7 @@ const Settings = () => {
                       onClick={() => setIsChangingPassword(true)}
                     >
                       <img
-                        src="/assets/images/account/edit-icon.png"
+                        src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/edit.webp"
                         alt="Change Password"
                       />
                     </button>
@@ -162,7 +171,9 @@ const Settings = () => {
               <LinkButton href="#">Billing Information</LinkButton>
             </SettingItem>
             <SettingItem>
-              <LinkButton href="#">Manage Subscription</LinkButton>
+              <LinkButton href="/my-account/settings/manage-subscriptions">
+                Manage Subscription
+              </LinkButton>
             </SettingItem>
             <SettingItem>
               <LinkButton href="#">Purchase History</LinkButton>

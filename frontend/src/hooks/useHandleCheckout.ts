@@ -52,8 +52,11 @@ const useHandleCheckout = () => {
       const { data } = await createCheckoutSubscriptionSession(
         cartItems,
         csrfToken,
+        profile?.email,
         profile?.display_name
       );
+
+      console.log(data);
 
       const stripe = await getStripeInstance();
 

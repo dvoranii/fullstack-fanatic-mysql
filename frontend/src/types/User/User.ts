@@ -13,4 +13,5 @@ export interface User {
   isPremium: boolean;
   premiumLevel?: "starter" | "casual pro" | "premium";
   refreshToken: string;
+  subscription_cancellation_date?: string | null;
 }
