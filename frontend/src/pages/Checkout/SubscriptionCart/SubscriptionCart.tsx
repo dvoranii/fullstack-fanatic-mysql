@@ -34,16 +34,9 @@ const SubscriptionCart: React.FC = () => {
     if (!subscriptionItem || !profile) return;
 
     const newPlanPriceId = subscriptionItem.priceId || "";
-    const userName = profile.name;
-    const email = profile.email;
 
     try {
-      const response = await switchSubscriptionPlan(
-        newPlanPriceId,
-        csrfToken,
-        userName,
-        email
-      );
+      const response = await switchSubscriptionPlan(newPlanPriceId, csrfToken);
       setModalMessage(response.data.message);
       setIsModalOpen(true);
       await fetchProfile?.();

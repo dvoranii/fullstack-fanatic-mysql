@@ -1,5 +1,5 @@
 export const planMapping = {
-  price_1QWNa3Lg43ij91cK9fevMMvV: {
+  price_1QCT2ZLg43ij91cKvrdh8tZJ: {
     name: "starter",
     duration: "monthly",
   },

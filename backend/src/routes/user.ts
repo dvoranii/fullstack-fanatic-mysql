@@ -66,9 +66,26 @@ router.post("/register", async (req: Request, res: Response): Promise<void> => {
       [email, name, hashedPassword, "manual", defaultProfilePicture]
     );
 
-    res
-      .status(201)
-      .json({ message: "User created successfully", userId: results.insertId });
+    const jwtToken = createJwtToken(results.insertId, email, name, null);
+    const refreshToken = createRefreshToken(
+      results.insertId,
+      email,
+      name,
+      null
+    );
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/api/users/refresh-token",
+    });
+
+    res.status(201).json({
+      message: "User created successfully",
+      userId: results.insertId,
+      token: jwtToken,
+    });
   } catch (err) {
     const error = err as Error;
     console.error("Error registering user:", error.message);
@@ -112,10 +129,20 @@ router.post("/login", async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const jwtToken = createJwtToken(user.id, user.name);
-    const refreshToken = createRefreshToken(user.id, user.name);
+    const jwtToken = createJwtToken(
+      user.id,
+      user.email,
+      user.name,
+      user.display_name
+    );
 
-    // Set refresh token in HttpOnly cookie
+    const refreshToken = createRefreshToken(
+      user.id,
+      user.email,
+      user.name,
+      user.display_name
+    );
+
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -125,8 +152,13 @@ router.post("/login", async (req: Request, res: Response): Promise<void> => {
 
     res.status(200).json({
       message: "User logged in successfully",
-      user: { id: user.id, username: user.username, name: user.name },
-      token: jwtToken, // Send access token in response
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        display_name: user.display_name || user.name,
+      },
+      token: jwtToken,
     });
   } catch (err) {
     const error = err as Error;
@@ -232,8 +264,20 @@ router.post(
         googleProfilePicture ?? null
       );
 
-      const jwtToken = createJwtToken(userId, email, googleId);
-      const refreshToken = createRefreshToken(userId, email, googleId);
+      const jwtToken = createJwtToken(
+        userId,
+        email || "",
+        name || "",
+        null,
+        googleId
+      );
+
+      const refreshToken = createRefreshToken(
+        userId,
+        email || "",
+        name || "",
+        null
+      );
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
@@ -305,10 +349,23 @@ router.post(
         return;
       }
 
-      const userId = existingUser[0].id;
+      const user = existingUser[0];
+      const userId = user.id;
 
-      const jwtToken = createJwtToken(userId, email, googleId);
-      const refreshToken = createRefreshToken(userId, email, googleId);
+      const jwtToken = createJwtToken(
+        userId,
+        email,
+        user.name,
+        user.display_name,
+        googleId
+      );
+      const refreshToken = createRefreshToken(
+        userId,
+        email,
+        user.name,
+        user.display_name,
+        googleId
+      );
 
       // Set refresh token in HttpOnly cookie
       res.cookie("refreshToken", refreshToken, {
@@ -324,8 +381,10 @@ router.post(
         user: {
           userId,
           email,
+          name: user.name,
+          display_name: user.display_name || user.name,
           googleId,
-          profile_picture: existingUser[0].profile_picture,
+          profile_picture: user.profile_picture,
         },
       });
     } catch (error) {
@@ -347,10 +406,26 @@ router.post(
 
     try {
       const payload = verifyRefreshToken(refreshToken);
+
+      const connection = await connectionPromise;
+      const [users] = await connection.execute<RowDataPacket[]>(
+        "SELECT id, email, name, display_name FROM users WHERE id = ?",
+        [payload.userId]
+      );
+
+      if (users.length === 0) {
+        res.status(401).json({ error: "User not found" });
+        return;
+      }
+
+      const user = users[0];
+
       const newJwtToken = createJwtToken(
-        payload.userId,
-        payload.email,
-        payload.googleId || undefined
+        user.id,
+        user.email,
+        user.name,
+        user.display_name,
+        payload.googleId ?? undefined
       );
 
       res.status(200).json({ token: newJwtToken });

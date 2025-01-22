@@ -32,11 +32,7 @@ export const authenticate = (
       googleId: decoded.googleId,
       email: decoded.email,
       display_name: decoded.display_name,
-      profession: decoded.profession,
-      bio: decoded.bio,
-      socialLinks: decoded.socialLinks,
-      bannerImage: decoded.bannerImage,
-      isPremium: decoded.isPremium,
+      name: decoded.name,
     };
 
     next();

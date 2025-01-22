@@ -17,7 +17,7 @@ import { EditProfileModalProps } from "../../../types/EditProfileProps";
 import { getAvatarUrl } from "../../../utils/imageUtils";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
 import { handleProfileUpdate } from "../../../utils/profileUtils";
-import ProfileUpdateModal from "./ProfileUpdateModal/ProfileUpdateModal";
+import SuccessConfirmationModal from "../../../components/SuccessConfirmationModal/SuccessConfirmationModal";
 
 const MAX_LENGTHS = {
   displayName: 30,
@@ -170,7 +170,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
 
   return (
     <>
-      <ProfileUpdateModal
+      <SuccessConfirmationModal
         isOpen={isUpdateModalOpen}
         onClose={handleUpdateModalClose}
         message={updateMessage}
