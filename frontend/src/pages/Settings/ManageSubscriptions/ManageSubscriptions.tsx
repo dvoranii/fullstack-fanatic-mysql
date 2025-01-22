@@ -109,7 +109,8 @@ const ManageSubscriptions: React.FC = () => {
           )}
         </PremiumText>
 
-        {profile?.subscription_cancellation_date === null ? (
+        {profile?.subscription_cancellation_date === null &&
+        Boolean(profile?.isPremium) ? (
           <CancelButton onClick={handleCancelSubscription}>
             Cancel Subscription
           </CancelButton>

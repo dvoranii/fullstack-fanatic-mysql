@@ -145,7 +145,7 @@ export const HeroTextWrapper = styled.div`
     font-size: clamp(2rem, 3vw, 3.6rem);
     text-transform: uppercase;
     color: ${colors.black};
-    font-weight: 500;
+    font-weight: 700;
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
   }
 

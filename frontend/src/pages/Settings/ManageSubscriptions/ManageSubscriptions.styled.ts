@@ -1,13 +1,9 @@
 import styled from "styled-components";
 
-interface PremiumTextProps {
-  isPremium: boolean;
-}
-
 export const SubscriptionPageWrapper = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1.8rem 0 12.8rem 0;
+  padding: 1.8rem 1.2rem 12.8rem 1.2rem;
 `;
 export const SubscriptionOptionDropdown = styled.div`
   display: flex;
@@ -30,7 +26,9 @@ export const CancelButton = styled.button`
   user-select: none;
 `;
 
-export const PremiumText = styled.p<PremiumTextProps>`
+export const PremiumText = styled.p.withConfig({
+  shouldForwardProp: (prop) => prop !== "isPremium",
+})<{ isPremium: boolean }>`
   font-size: 1rem;
   font-weight: bold;
   margin: 10px 0;
