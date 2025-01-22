@@ -22,6 +22,37 @@ interface StripeCustomerIdRow {
 }
 
 (function () {
+  const getOrCreateStripeCustomer = async (
+    userId: number,
+    email: string,
+    displayName: string | null
+  ): Promise<string> => {
+    const connection = await connectionPromise;
+
+    const [rows] = await connection.execute<RowDataPacket[]>(
+      "SELECT stripe_customer_id FROM users WHERE id = ?",
+      [userId]
+    );
+
+    let stripeCustomerId = rows[0]?.stripe_customer_id || null;
+
+    if (!stripeCustomerId) {
+      const customer = await stripe.customers.create({
+        email,
+        name: displayName,
+        metadata: { userId: String(userId) },
+      });
+
+      stripeCustomerId = customer.id;
+
+      await connection.execute(
+        "UPDATE users SET stripe_customer_id = ? WHERE id = ?",
+        [stripeCustomerId, userId]
+      );
+    }
+    return stripeCustomerId;
+  };
+
   const getStripePriceId = (item: CartItem): string | null => {
     if (item.type === "tutorial") {
       if (Number(item.price) === 5.0) {
@@ -46,6 +77,20 @@ interface StripeCustomerIdRow {
     csrfProtection,
     async (req: Request, res: Response): Promise<void> => {
       const { cartItems } = req.body;
+      const userId = req.user?.userId;
+      const email = req.user?.email;
+      const display_name =
+        req.user?.display_name || req.user?.name || "Anonymous";
+
+      if (!userId) {
+        res.status(400).json({ error: "User ID is required but not found." });
+        return;
+      }
+
+      if (!email) {
+        res.status(400).json({ error: "Email is required but not found." });
+        return;
+      }
 
       if (!cartItems || cartItems.length === 0) {
         res.status(400).json({ error: "No items in cart" });
@@ -53,6 +98,12 @@ interface StripeCustomerIdRow {
       }
 
       try {
+        const stripeCustomerId = await getOrCreateStripeCustomer(
+          userId,
+          email,
+          display_name
+        );
+
         const lineItems = cartItems.map((item: CartItem) => {
           const priceId = getStripePriceId(item);
           if (!priceId) {
@@ -98,7 +149,23 @@ interface StripeCustomerIdRow {
     authenticate,
     csrfProtection,
     async (req: Request, res: Response): Promise<void> => {
-      const { cartItems, display_name } = req.body;
+      const { cartItems } = req.body;
+      const userId = req.user?.userId || 0;
+      const email = req.user?.email || "";
+      const display_name =
+        req.user?.display_name || req.user?.name || "Anonymous";
+
+      console.log(req.user);
+
+      if (!userId) {
+        res.status(400).json({ error: "User ID is required but not found." });
+        return;
+      }
+
+      if (!email) {
+        res.status(400).json({ error: "Email is required but not found." });
+        return;
+      }
 
       if (!cartItems || cartItems.length === 0) {
         res.status(400).json({ error: "No items in cart" });
@@ -106,29 +173,12 @@ interface StripeCustomerIdRow {
       }
 
       try {
-        const connection = await connectionPromise;
-
-        const [rows] = await connection.execute<RowDataPacket[]>(
-          "SELECT stripe_customer_id FROM users WHERE id = ?",
-          [req.user?.userId]
+        let stripeCustomerId = await getOrCreateStripeCustomer(
+          userId,
+          email,
+          display_name
         );
 
-        let stripeCustomerId = rows[0]?.stripe_customer_id || null;
-
-        if (!stripeCustomerId) {
-          const customer = await stripe.customers.create({
-            email: req.user?.email,
-            name: display_name || req.user?.display_name || "Anonymous",
-            metadata: { userId: String(req.user?.userId) },
-          });
-
-          stripeCustomerId = customer.id;
-
-          await connection.execute(
-            "UPDATE users SET stripe_customer_id = ? WHERE id = ?",
-            [stripeCustomerId, req.user?.userId]
-          );
-        }
         const lineItems = cartItems.map((item: CartItem) => {
           if (!item.priceId) {
             throw new Error(`Price ID is missing for item: ${item.title}`);
@@ -173,44 +223,77 @@ interface StripeCustomerIdRow {
     "/switch-subscription",
     authenticate,
     csrfProtection,
-    async (req: Request, res: Response) => {
-      const { newPlanPriceId, userName, email } = req.body;
+    async (req: Request, res: Response): Promise<void> => {
+      const { newPlanPriceId } = req.body;
       const userId = req.user?.userId;
+      const email = req.user?.email;
+      const display_name =
+        req.user?.display_name || req.user?.name || "Anonymous";
 
-      console.log(userName, email);
+      // Guard clauses
+      if (!userId) {
+        res.status(400).json({ error: "User ID is required." });
+        return;
+      }
+
+      if (!email) {
+        res.status(400).json({ error: "Email is required." });
+        return;
+      }
 
       if (!newPlanPriceId) {
-        return res
-          .status(400)
-          .json({ error: "New plan price ID is required." });
+        res.status(400).json({ error: "New plan price ID is required." });
+        return;
+      }
+      const connection = await connectionPromise;
+      const [rows] = await connection.execute<RowDataPacket[]>(
+        "SELECT premiumLevel, stripe_customer_id FROM users WHERE id = ?",
+        [userId]
+      );
+
+      if (!rows[0]?.premiumLevel) {
+        res.status(400).json({
+          error:
+            "Cannot switch subscription - no active subscription found. Please purchase a subscription first.",
+        });
+        return;
+      }
+
+      let stripeCustomerId = rows[0]?.stripe_customer_id;
+      if (!stripeCustomerId) {
+        try {
+          stripeCustomerId = await getOrCreateStripeCustomer(
+            userId,
+            email,
+            display_name
+          );
+
+          await connection.execute(
+            "UPDATE users SET stripe_customer_id = ? WHERE id = ?",
+            [stripeCustomerId, userId]
+          );
+        } catch (error) {
+          console.error("Error creating Stripe customer:", error);
+          res.status(500).json({ error: "Failed to create Stripe customer." });
+          return;
+        }
       }
 
       try {
-        const connection = await connectionPromise;
-
-        const [rows] = await connection.execute<RowDataPacket[]>(
-          "SELECT stripe_customer_id FROM users WHERE id = ?",
-          [userId]
-        );
-
-        const stripeCustomerId = rows[0]?.stripe_customer_id;
-        if (!stripeCustomerId) {
-          return res
-            .status(404)
-            .json({ error: "Stripe customer ID not found" });
-        }
-
         const subscriptions = await stripe.subscriptions.list({
           customer: stripeCustomerId,
           status: "active",
         });
 
-        console.log(subscriptions);
-
         if (!subscriptions.data.length) {
-          return res
-            .status(400)
-            .json({ error: "No active subscription found for this user" });
+          console.error(
+            `User ${userId} has premiumLevel but no active Stripe subscription`
+          );
+          res.status(400).json({
+            error:
+              "There was an issue with your subscription. Please contact support.",
+          });
+          return;
         }
 
         const currentSubscription = subscriptions.data[0];
@@ -221,16 +304,18 @@ interface StripeCustomerIdRow {
         const newPlan = planMapping[newPlanPriceId as keyof typeof planMapping];
 
         if (!currentPlan || !newPlan) {
-          return res.status(400).json({ error: "Invalid plan selected" });
+          res.status(400).json({ error: "Invalid plan selected" });
+          return;
         }
 
         if (
           currentPlan.duration === "yearly" &&
           newPlan.duration === "monthly"
         ) {
-          return res.status(400).json({
+          res.status(400).json({
             error: "Cannot downgrade from a yearly plan to a monthly plan.",
           });
+          return;
         }
 
         await stripe.subscriptions.update(currentSubscription.id, {
@@ -256,9 +341,11 @@ interface StripeCustomerIdRow {
         res.status(200).json({
           message: `Successfully switched to the ${newPlan.name} subscription.`,
         });
+        return;
       } catch (error) {
         console.error("Error switching subscription:", error);
         res.status(500).json({ error: "Failed to switch subscription" });
+        return;
       }
     }
   );
@@ -310,6 +397,7 @@ interface StripeCustomerIdRow {
         const cancellationDate = new Date(
           activeSubscription.current_period_end * 1000
         );
+
         await connection.execute(
           "UPDATE users SET subscription_cancellation_date = ? WHERE id = ?",
           [cancellationDate, userId]

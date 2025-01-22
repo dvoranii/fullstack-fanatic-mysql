@@ -17,16 +17,14 @@ export async function createCheckoutPaymentSession(
 
 export async function createCheckoutSubscriptionSession(
   cartItems: CartItem[],
-  csrfToken: string,
-  email?: string,
-  display_name?: string
+  csrfToken: string
 ) {
   return apiCall<{ id: string }>(
     "/stripe/create-checkout-session-subscription",
     {
       method: "POST",
       credentials: "include",
-      body: JSON.stringify({ cartItems, email, display_name }),
+      body: JSON.stringify({ cartItems }),
       headers: {
         "x-csrf-token": csrfToken,
       },
@@ -36,14 +34,12 @@ export async function createCheckoutSubscriptionSession(
 
 export async function switchSubscriptionPlan(
   newPlanPriceId: string,
-  csrfToken: string,
-  userName: string,
-  email: string
+  csrfToken: string
 ) {
   return apiCall<{ message: string }>("/stripe/switch-subscription", {
     method: "POST",
     credentials: "include",
-    body: JSON.stringify({ newPlanPriceId, userName, email }),
+    body: JSON.stringify({ newPlanPriceId }),
     headers: {
       "x-csrf-token": csrfToken,
       "Content-Type": "application/json",

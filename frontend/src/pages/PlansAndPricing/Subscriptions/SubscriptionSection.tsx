@@ -28,14 +28,14 @@ const SubscriptionSection: React.FC = () => {
         <CardsContainer>
           <SubscriptionCard
             title="STARTER"
-            price="$5"
+            price="$7"
             frequency="Month"
             buttonLabel="SUBSCRIBE"
             className="first-card"
-            priceId="price_1QWNa3Lg43ij91cK9fevMMvV"
+            priceId="price_1QCT2ZLg43ij91cKvrdh8tZJ"
           >
             <li>
-              <strong>Cheap:</strong> Only $5 for access to all premium basic
+              <strong>Cheap:</strong> Only $7 for access to all premium basic
               content as well as access to all user features.
             </li>
             <li>

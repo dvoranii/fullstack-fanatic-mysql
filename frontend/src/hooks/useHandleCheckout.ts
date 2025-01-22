@@ -9,7 +9,7 @@ import { useCsrfToken } from "./useCsrfToken";
 
 const useHandleCheckout = () => {
   const csrfToken = useCsrfToken();
-  const { clearCart, removeSubscriptionFromCart, profile } =
+  const { clearCart, removeSubscriptionFromCart } =
     useContext(UserContext) || {};
 
   const getStripeInstance = async () => {
@@ -51,12 +51,8 @@ const useHandleCheckout = () => {
     try {
       const { data } = await createCheckoutSubscriptionSession(
         cartItems,
-        csrfToken,
-        profile?.email,
-        profile?.display_name
+        csrfToken
       );
-
-      console.log(data);
 
       const stripe = await getStripeInstance();
 

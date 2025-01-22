@@ -6,19 +6,26 @@ import {
   PremiumText,
 } from "./ManageSubscriptions.styled";
 import TitleBanner from "../../../components/TitleBanner/TitleBanner";
+
 import { UserContext } from "../../../context/UserContext";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
+import { cancelSubscription } from "../../../services/checkoutService";
+
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import DeleteConfirmationModal from "../../../components/DeleteConfirmationModal/DeleteConfirmationModal";
-import { cancelSubscription } from "../../../services/checkoutService";
+import SuccessConfirmationModal from "../../../components/SuccessConfirmationModal/SuccessConfirmationModal";
 
 const ManageSubscriptions: React.FC = () => {
   const csrfToken = useCsrfToken();
-  const { profile } = useContext(UserContext) || {};
+  const { profile, setProfile } = useContext(UserContext) || {};
   const [isLoading, setIsLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [cancellationDate, setCancellationDate] = useState<Date | null>(null);
+
+  const [showModal, setShowModal] = useState(false);
+  const [isSuccessModalOpen, setSuccessModalOpen] = useState(false);
+  const [successModalMessage, setSuccessModalMessage] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     if (profile?.subscription_cancellation_date) {
@@ -37,11 +44,25 @@ const ManageSubscriptions: React.FC = () => {
     try {
       await cancelSubscription(csrfToken);
 
-      setError(null);
-      alert("Your subscription has been successfully canceled.");
+      const now = new Date();
+
+      if (setProfile) {
+        setProfile((prevProfile) => {
+          if (!prevProfile) return null;
+          return {
+            ...prevProfile,
+            subscription_cancellation_date: now.toISOString(),
+          };
+        });
+      }
+      setCancellationDate(now);
+
+      setSuccessModalOpen(true);
+      setSuccessModalMessage(
+        "Your subscription has been successfully canceled."
+      );
     } catch (error) {
       console.error("Error canceling subscription:", error);
-      setError("An error occurred while canceling the subscription.");
     } finally {
       setIsLoading(false);
     }
@@ -53,6 +74,12 @@ const ManageSubscriptions: React.FC = () => {
 
   return (
     <>
+      <SuccessConfirmationModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setSuccessModalOpen(false)}
+        message={successModalMessage}
+        success={true}
+      />
       <TitleBanner textContent={"Manage Subscriptions"}></TitleBanner>
       <SubscriptionPageWrapper>
         <SubscriptionOptionDropdown>
@@ -89,7 +116,6 @@ const ManageSubscriptions: React.FC = () => {
         ) : null}
 
         {isLoading && <LoadingSpinner />}
-        {error && <div style={{ color: "red" }}>{error}</div>}
 
         {showModal && (
           <DeleteConfirmationModal

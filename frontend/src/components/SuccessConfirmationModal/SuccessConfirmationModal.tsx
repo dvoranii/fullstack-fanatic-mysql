@@ -1,14 +1,14 @@
 import { useEffect } from "react";
-import { ModalOverlay, ModalContent } from "./ProfileUpdateModal.styled";
+import { ModalOverlay, ModalContent } from "./SuccessConfirmationModal.styled";
 
-interface ProfileUpdateModalProps {
+interface SuccessConfirmationModalProps {
   isOpen: boolean;
   onClose: () => void;
   message: string | null;
   success: boolean;
 }
 
-const ProfileUpdateModal: React.FC<ProfileUpdateModalProps> = ({
+const SuccessConfirmationModal: React.FC<SuccessConfirmationModalProps> = ({
   isOpen,
   onClose,
   message,
@@ -52,4 +52,4 @@ const ProfileUpdateModal: React.FC<ProfileUpdateModalProps> = ({
   );
 };
 
-export default ProfileUpdateModal;
+export default SuccessConfirmationModal;
