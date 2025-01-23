@@ -67,6 +67,9 @@ const ResetPassword = lazy(
 const ManageSubscriptions = lazy(
   () => import("../pages/Settings/ManageSubscriptions/ManageSubscriptions")
 );
+const PurchaseHistory = lazy(
+  () => import("../pages/Settings/PurchaseHistory/PurchaseHistory")
+);
 
 import NotFound from "../pages/NotFound/NotFound";
 import PrivacyPolicy from "../pages/PrivacyPolicy/PrivacyPolicy";
@@ -210,6 +213,10 @@ const Navigation: React.FC = () => {
         <Route
           path="/my-account/settings/manage-subscriptions"
           element={<ProtectedRoute component={ManageSubscriptions} />}
+        />
+        <Route
+          path="/my-account/settings/purchase-history"
+          element={<ProtectedRoute component={PurchaseHistory} />}
         />
         <Route path="*" element={<NotFound />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />

@@ -155,8 +155,6 @@ interface StripeCustomerIdRow {
       const display_name =
         req.user?.display_name || req.user?.name || "Anonymous";
 
-      console.log(req.user);
-
       if (!userId) {
         res.status(400).json({ error: "User ID is required but not found." });
         return;

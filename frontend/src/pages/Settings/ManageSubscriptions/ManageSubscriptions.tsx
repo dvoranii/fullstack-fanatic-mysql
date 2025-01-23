@@ -83,8 +83,8 @@ const ManageSubscriptions: React.FC = () => {
       <TitleBanner textContent={"Manage Subscriptions"}></TitleBanner>
       <SubscriptionPageWrapper>
         <SubscriptionOptionDropdown>
-          <span>View:</span>
-          <select defaultValue="option1">
+          <label htmlFor="subscriptionType">View:</label>
+          <select defaultValue="option1" id="subscriptionType">
             <option value="option1">Current Subscription</option>
             <option value="option2">Past Subscriptions</option>
             <option value="option3">All Subscriptions</option>

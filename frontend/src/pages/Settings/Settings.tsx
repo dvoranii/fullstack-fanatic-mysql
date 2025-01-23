@@ -20,6 +20,7 @@ import { UserContext } from "../../context/UserContext";
 import { getUserAuthType } from "../../services/userService";
 import ChangePasswordForm from "./ChangePasswordForm/ChangePasswordForm";
 import WarningBar from "../../components/WarningBar/WarningBar";
+import TooltipComponent from "../../components/Tooltip/Tooltip";
 
 const Settings = () => {
   const { profile } = useContext(UserContext) || {};
@@ -85,11 +86,17 @@ const Settings = () => {
                 <b>Current email:</b>
                 {profile?.email}
                 <div className="help-icon">
-                  <img src="/assets/images/help-icon.png" alt="Help Icon" />
-                  <span className="tooltip">
-                    Users signed up via Google accounts cannot change their
-                    emails
-                  </span>
+                  <img
+                    src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/help-icon.png"
+                    alt="Help Icon"
+                  />
+                  <TooltipComponent
+                    left="-8px"
+                    top="-82px"
+                    message={
+                      "Users signed up via Google accounts cannot change their emails"
+                    }
+                  />
                 </div>
               </SettingItem>
             ) : (
@@ -168,15 +175,14 @@ const Settings = () => {
           <Section>
             <SectionHeader>Purchases & Subscriptions</SectionHeader>
             <SettingItem>
-              <LinkButton href="#">Billing Information</LinkButton>
-            </SettingItem>
-            <SettingItem>
               <LinkButton href="/my-account/settings/manage-subscriptions">
                 Manage Subscription
               </LinkButton>
             </SettingItem>
             <SettingItem>
-              <LinkButton href="#">Purchase History</LinkButton>
+              <LinkButton href="/my-account/settings/purchase-history">
+                Purchase History
+              </LinkButton>
             </SettingItem>
           </Section>
         </Content>
