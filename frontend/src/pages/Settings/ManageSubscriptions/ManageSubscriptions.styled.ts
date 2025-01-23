@@ -6,9 +6,7 @@ export const SubscriptionPageWrapper = styled.div`
   padding: 1.8rem 1.2rem 12.8rem 1.2rem;
 `;
 export const SubscriptionOptionDropdown = styled.div`
-  display: flex;
-
-  span {
+  label {
     font-weight: bold;
     letter-spacing: 0.2px;
   }
@@ -16,6 +14,7 @@ export const SubscriptionOptionDropdown = styled.div`
   select {
     margin-left: 0.5rem;
     cursor: pointer;
+    padding: 4px;
   }
 `;
 
