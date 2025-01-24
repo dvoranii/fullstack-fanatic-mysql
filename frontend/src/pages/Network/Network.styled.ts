@@ -1,6 +1,10 @@
 import { styled } from "styled-components";
 import { colors } from "../../GlobalStyles";
 
+export const NetworkWrapper = styled.div`
+  padding-bottom: 9.8rem;
+`;
+
 export const SearchBarWrapper = styled.div`
   margin-top: 40px;
 

@@ -295,6 +295,7 @@ const TutorialsPage: React.FC = () => {
         currentPage={currentPage}
         onPageChange={(page) => setCurrentPage(page)}
       />
+      <div style={{ height: "1px" }}>&nbsp;</div>
     </>
   );
 };

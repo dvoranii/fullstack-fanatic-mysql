@@ -41,7 +41,7 @@ const App: React.FC = () => {
               <LazySection
                 importFunc={() => import("./components/Footer/Footer")}
                 fallback={<LoadingSpinner />}
-                rootMargin="100px"
+                rootMargin="0px"
                 threshold={0}
                 componentProps={{}}
               />

@@ -8,7 +8,6 @@ export interface PageWrapperProps {
 export const PageWrapper = styled.div<PageWrapperProps>`
   max-width: ${(props) => props.maxWidth || "80vw"};
   margin: 0 auto;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   overflow-y: auto;

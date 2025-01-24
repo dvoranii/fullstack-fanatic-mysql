@@ -186,7 +186,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
         comments={comments}
       />
 
-      <div style={{ height: "0" }}>&nbsp;</div>
+      <div style={{ height: "1px" }}>&nbsp;</div>
     </>
   );
 };

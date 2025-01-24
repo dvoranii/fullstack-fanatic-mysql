@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect, Suspense } from "react";
-import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
+import { Suspense, useEffect, useRef, useState } from "react";
 import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
+import React from "react";
+import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
 
 interface LazyLoadProps<P = object> {
   importFunc: () => Promise<{ default: React.ComponentType<P> }>;
@@ -9,13 +10,15 @@ interface LazyLoadProps<P = object> {
   threshold?: number | number[];
   className?: string;
   componentProps?: P;
+  isVisible?: boolean;
+  onVisibilityChange?: (isVisible: boolean) => void;
 }
 
 const LazySection: React.FC<LazyLoadProps> = ({
   importFunc,
   fallback = <LoadingSpinner />,
-  rootMargin = "100px",
-  threshold = 0.1,
+  rootMargin = "0px",
+  threshold = 0,
   className,
   componentProps = {},
 }) => {
