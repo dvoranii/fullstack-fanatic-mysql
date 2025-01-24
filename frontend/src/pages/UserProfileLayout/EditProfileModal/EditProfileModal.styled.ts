@@ -70,6 +70,7 @@ export const Input = styled.input`
 `;
 
 export const TextArea = styled.textarea`
+  font-family: Arial, Helvetica, sans-serif;
   padding: 8px;
   font-size: 14px;
   border-radius: 4px;
