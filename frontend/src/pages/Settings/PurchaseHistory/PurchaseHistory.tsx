@@ -18,6 +18,10 @@ import { Link } from "react-router-dom";
 
 const BASE_URL = import.meta.env.VITE_CLIENT_URL;
 
+interface FilterFunction {
+  (item: PurchasedItem): boolean;
+}
+
 const PurchaseHistory: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
@@ -26,7 +30,6 @@ const PurchaseHistory: React.FC = () => {
   const formatPurchaseDate = (purchaseDate: Date | string) => {
     const date =
       purchaseDate instanceof Date ? purchaseDate : new Date(purchaseDate);
-
     const options = {
       month: "long",
       day: "numeric",
@@ -36,50 +39,43 @@ const PurchaseHistory: React.FC = () => {
     return date.toLocaleDateString("en-US", options);
   };
 
-  console.log(purchasedItems);
+  type AllowedFields = "product_name" | "price" | "product_id";
 
-  const filterPurchasedItems = (
-    searchText: string,
-    selectedOption: string,
-    purchasedItems: PurchasedItem[]
-  ) => {
-    return purchasedItems.filter((item: PurchasedItem) => {
-      switch (selectedOption) {
-        case "":
-          return item.product_name
-            .toLowerCase()
-            .includes(searchText.toLowerCase());
-        case "name":
-          return item.product_name
-            .toLowerCase()
-            .includes(searchText.toLowerCase());
-        case "price":
-          return item.price.toString().includes(searchText);
-        case "productId":
-          return item.product_id.toString().includes(searchText);
-        case "purchasedDate": {
-          const purchaseDate = new Date(item.purchase_date);
-          const formattedDate = formatPurchaseDate(purchaseDate);
-
-          return (
-            formattedDate.toLowerCase().includes(searchText.toLowerCase()) ||
-            purchaseDate
-              .toLocaleString("default", { month: "long" })
-              .toLowerCase()
-              .includes(searchText.toLowerCase()) ||
-            purchaseDate.getFullYear().toString().includes(searchText)
-          );
-        }
-        default:
-          return false;
+  const createFilterFunction = (
+    field: AllowedFields,
+    searchText: string
+  ): FilterFunction => {
+    return (item: PurchasedItem) => {
+      const itemValue = item[field];
+      if (typeof itemValue === "number") {
+        return itemValue.toString().includes(searchText);
+      } else {
+        return itemValue.toLowerCase().includes(searchText.toLowerCase());
       }
-    });
+    };
   };
 
-  const filteredPurchasedItems = filterPurchasedItems(
-    searchText,
-    selectedOption,
-    purchasedItems
+  const filterOptions: Record<string, FilterFunction> = {
+    "": createFilterFunction("product_name", searchText),
+    name: createFilterFunction("product_name", searchText),
+    price: createFilterFunction("price", searchText),
+    productId: createFilterFunction("product_id", searchText),
+    purchasedDate: (item) => {
+      const purchaseDate = new Date(item.purchase_date);
+      const formattedDate = formatPurchaseDate(purchaseDate);
+      return (
+        formattedDate.toLowerCase().includes(searchText.toLowerCase()) ||
+        purchaseDate
+          .toLocaleString("default", { month: "long" })
+          .toLowerCase()
+          .includes(searchText.toLowerCase()) ||
+        purchaseDate.getFullYear().toString().includes(searchText)
+      );
+    },
+  };
+
+  const filteredPurchasedItems = purchasedItems.filter(
+    (item) => filterOptions[selectedOption]?.(item) ?? false
   );
 
   return (
