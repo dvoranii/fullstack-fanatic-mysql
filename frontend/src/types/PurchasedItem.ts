@@ -7,5 +7,4 @@ export interface PurchasedItem {
   price: number;
   purchase_type: string;
   purchase_date: string;
-  access_expiry: Date | null;
 }
