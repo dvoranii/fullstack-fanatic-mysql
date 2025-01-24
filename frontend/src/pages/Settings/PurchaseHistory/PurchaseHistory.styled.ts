@@ -1,8 +1,10 @@
 import { styled } from "styled-components";
+import { colors } from "../../../GlobalStyles";
 
 export const PurchaseHistoryPageWrapper = styled.div`
   max-width: 1200px;
   margin: 0 auto;
+
   padding: 1.8rem 1.2rem 12.8rem 1.2rem;
 
   label {
@@ -32,8 +34,9 @@ export const PurchaseHistoryList = styled.ul`
   list-style: none;
 `;
 export const PurchaseHistoryItem = styled.li`
-  border: 1px solid black;
-  margin: 12px;
+  margin-top: 2.4rem;
+  background-color: #eee;
+  border-radius: 12px;
 
   p {
     span {
@@ -67,7 +70,6 @@ export const PurchaseHistorySortAndSearchWrapperOuter = styled.div`
   align-items: center;
   width: 100%;
   justify-content: space-between;
-  padding: 0 12px;
 
   .help-icon {
     position: relative;
@@ -86,4 +88,20 @@ export const PurchaseHistorySortAndSearchWrapperInner = styled.div`
   align-items: center;
 `;
 
-export const HelpIconWrapper = styled.div``;
+export const SeeMoreButtonWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 2.4rem;
+
+  button {
+    padding: 16px 32px;
+    font-family: "Anybody";
+    font-size: 1rem;
+    text-transform: uppercase;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: ${colors.white};
+  }
+`;

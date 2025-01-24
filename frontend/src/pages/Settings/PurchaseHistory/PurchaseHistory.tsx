@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContext";
 import {
   PurchaseHistoryPageWrapper,
@@ -9,6 +9,7 @@ import {
   PurchaseHistoryItemBanner,
   PurchaseHistorySortAndSearchWrapperOuter,
   PurchaseHistorySortAndSearchWrapperInner,
+  SeeMoreButtonWrapper,
 } from "./PurchaseHistory.styled";
 import { PurchasedItem } from "../../../types/PurchasedItem";
 import TitleBanner from "../../../components/TitleBanner/TitleBanner";
@@ -25,6 +26,7 @@ interface FilterFunction {
 const PurchaseHistory: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
+  const [visiblePurchases, setVisiblePurchases] = useState<number>(3);
   const purchasedItems = useContext(UserContext)?.purchasedItems || [];
 
   const formatPurchaseDate = (purchaseDate: Date | string) => {
@@ -78,6 +80,14 @@ const PurchaseHistory: React.FC = () => {
     (item) => filterOptions[selectedOption]?.(item) ?? false
   );
 
+  useEffect(() => {
+    setVisiblePurchases(3);
+  }, [searchText, selectedOption]);
+
+  const handleLoadMore = () => {
+    setVisiblePurchases((prev) => prev + 3);
+  };
+
   return (
     <>
       <TitleBanner textContent={"Purchase History"} />
@@ -120,41 +130,50 @@ const PurchaseHistory: React.FC = () => {
 
         <PurchaseHistoryListWrapper>
           <PurchaseHistoryList>
-            {filteredPurchasedItems.map((item: PurchasedItem) => {
-              const formattedDate = formatPurchaseDate(item.purchase_date);
-              return (
-                <PurchaseHistoryItem key={item.id}>
-                  <PurchaseHistoryItemBanner>
-                    <h3>{item.product_type}</h3>
-                    <Link
-                      to={`${BASE_URL}/${item.product_type}/${item.product_id}`}
-                    >
-                      View Product
-                    </Link>
-                  </PurchaseHistoryItemBanner>
-                  <PurchaseHistoryListItemsWrapper>
-                    <p>
-                      <span>Product Name:</span> {item.product_name}
-                    </p>
-                    <p>
-                      <span>Product ID:</span> {item.product_id}
-                    </p>
+            {filteredPurchasedItems
+              .slice(0, visiblePurchases)
+              .map((item: PurchasedItem) => {
+                const formattedDate = formatPurchaseDate(item.purchase_date);
+                return (
+                  <PurchaseHistoryItem key={item.id}>
+                    <PurchaseHistoryItemBanner>
+                      <h3>{item.product_type}</h3>
+                      <Link
+                        to={`${BASE_URL}/${item.product_type}/${item.product_id}`}
+                      >
+                        View Product
+                      </Link>
+                    </PurchaseHistoryItemBanner>
+                    <PurchaseHistoryListItemsWrapper>
+                      <p>
+                        <span>Product Name:</span> {item.product_name}
+                      </p>
+                      <p>
+                        <span>Product ID:</span> {item.product_id}
+                      </p>
 
-                    <p>
-                      <span>Price:</span> ${item.price}
-                    </p>
+                      <p>
+                        <span>Price:</span> ${item.price}
+                      </p>
 
-                    <hr />
-                    <p>
-                      <span>Purchase Date:</span> {formattedDate}
-                    </p>
-                  </PurchaseHistoryListItemsWrapper>
-                </PurchaseHistoryItem>
-              );
-            })}
+                      <hr />
+                      <p>
+                        <span>Purchase Date:</span> {formattedDate}
+                      </p>
+                    </PurchaseHistoryListItemsWrapper>
+                  </PurchaseHistoryItem>
+                );
+              })}
           </PurchaseHistoryList>
         </PurchaseHistoryListWrapper>
+
+        {visiblePurchases < filteredPurchasedItems.length && (
+          <SeeMoreButtonWrapper>
+            <button onClick={handleLoadMore}>Load More Purchases</button>
+          </SeeMoreButtonWrapper>
+        )}
       </PurchaseHistoryPageWrapper>
+      <div style={{ height: "1px" }}>&nbsp;</div>
     </>
   );
 };

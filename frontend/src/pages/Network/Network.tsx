@@ -7,6 +7,7 @@ import {
   NetworkIconWrapper,
   FilterOption,
   FilterOptionWrapper,
+  NetworkWrapper,
 } from "./Network.styled";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import TitleBanner from "../../components/TitleBanner/TitleBanner";
@@ -113,63 +114,64 @@ export const NetworkPage: React.FC = () => {
           content="Utilize our database of users to connect with real-world professionals."
         />
       </Helmet>
-      <TitleBanner textContent="Network" />
-      <SearchBarWrapper>
-        <SearchBar onSearchChange={handleSearch} className="network-search" />
-        <FilterOptionWrapper>
-          <span>Search by:</span>
-          <FilterOption
-            isActive={activeFilter === "name"}
-            onClick={() => handleFilterChange("name")}
-          >
-            User Name
-          </FilterOption>
-          &nbsp;&nbsp;|
-          <FilterOption
-            isActive={activeFilter === "profession"}
-            onClick={() => handleFilterChange("profession")}
-          >
-            User Profession
-          </FilterOption>
-        </FilterOptionWrapper>
-      </SearchBarWrapper>
+      <NetworkWrapper>
+        <TitleBanner textContent="Network" />
+        <SearchBarWrapper>
+          <SearchBar onSearchChange={handleSearch} className="network-search" />
+          <FilterOptionWrapper>
+            <span>Search by:</span>
+            <FilterOption
+              isActive={activeFilter === "name"}
+              onClick={() => handleFilterChange("name")}
+            >
+              User Name
+            </FilterOption>
+            &nbsp;&nbsp;|
+            <FilterOption
+              isActive={activeFilter === "profession"}
+              onClick={() => handleFilterChange("profession")}
+            >
+              User Profession
+            </FilterOption>
+          </FilterOptionWrapper>
+        </SearchBarWrapper>
 
-      <PageWrapper>
-        <UserListWrapper>
-          {isSearching ? (
-            <p>Loading...</p>
-          ) : users.length > 0 ? (
-            <UserList
-              users={users}
-              loggedInUserId={loggedInUser?.id}
-              isFollowing={isFollowing}
-              handleFollow={handleFollow}
-              handleUnfollow={handleUnfollow}
-              removeUserAfterUnfollow={false}
-              hideButtons={!loggedInUser}
-            />
-          ) : message ? (
-            <p>{message}</p>
-          ) : (
-            <NetworkDefaultContent>
-              <h3>
-                Utilize our database of users to connect with real-world
-                professionals
-              </h3>
-              <NetworkIconWrapper>
-                <img
-                  src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/comment/networking-image.png"
-                  alt="Network Image"
-                  width="128"
-                  height="128"
-                />
-              </NetworkIconWrapper>
-            </NetworkDefaultContent>
-          )}
-          <div style={{ height: "0px" }}>&nbsp;</div>
-        </UserListWrapper>
-      </PageWrapper>
-      <div style={{ height: "0px" }}>&nbsp;</div>
+        <PageWrapper>
+          <UserListWrapper>
+            {isSearching ? (
+              <p>Loading...</p>
+            ) : users.length > 0 ? (
+              <UserList
+                users={users}
+                loggedInUserId={loggedInUser?.id}
+                isFollowing={isFollowing}
+                handleFollow={handleFollow}
+                handleUnfollow={handleUnfollow}
+                removeUserAfterUnfollow={false}
+                hideButtons={!loggedInUser}
+              />
+            ) : message ? (
+              <p>{message}</p>
+            ) : (
+              <NetworkDefaultContent>
+                <h3>
+                  Utilize our database of users to connect with real-world
+                  professionals
+                </h3>
+                <NetworkIconWrapper>
+                  <img
+                    src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/comment/networking-image.png"
+                    alt="Network Image"
+                    width="128"
+                    height="128"
+                  />
+                </NetworkIconWrapper>
+              </NetworkDefaultContent>
+            )}
+          </UserListWrapper>
+        </PageWrapper>
+      </NetworkWrapper>
+      <div style={{ height: "1px" }}>&nbsp;</div>
     </>
   );
 };
