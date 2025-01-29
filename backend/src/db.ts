@@ -5,14 +5,17 @@ dotenv.config();
 
 const pool = mysql.createPool({
   host: "localhost",
-  user:
-    process.env.NODE_ENV === "production"
-      ? "dbuser"
-      : process.env.NODE_ENV === "staging"
-      ? "staging_user"
-      : "root",
+  user: process.env.NODE_ENV === "production"
+    ? "dbuser"
+    : process.env.NODE_ENV === "staging"
+    ? "staging_user"
+    : "root",
   password: process.env.DB_PW,
-  database: "tutorials_db",
+  database: process.env.NODE_ENV === "production"
+    ? "tutorials_db"
+    : process.env.NODE_ENV === "staging"
+    ? "staging_db"
+    : "tutorials_db", 
 
   waitForConnections: true,
   connectionLimit: 10,

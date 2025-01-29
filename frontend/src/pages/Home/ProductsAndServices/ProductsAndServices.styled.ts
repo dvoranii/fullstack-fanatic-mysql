@@ -242,7 +242,7 @@ export const CardLink = styled(Link)`
   margin-bottom: 40px;
   text-transform: uppercase;
   font-weight: 700;
-  font-family: "Roboto";
+  font-family: "Roboto", sans-serif;
   transition: all 250ms ease;
 
   &:hover {
