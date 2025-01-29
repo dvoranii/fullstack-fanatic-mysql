@@ -7,6 +7,7 @@ export const BannerWrapperOuter = styled.div`
 `;
 export const BannerWrapperInner = styled.div`
   width: 100%;
+  background-color:lightgrey;
 `;
 
 export const BannerUploadWrapper = styled.div`
@@ -85,6 +86,7 @@ export const ProfilePictureWrapper = styled.div`
   @media screen and (max-width: 768px) {
     img {
       grid-column: 2;
+      
     }
   }
 `;

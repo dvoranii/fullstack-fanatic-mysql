@@ -69,7 +69,7 @@ export const FooterNavWrapper = styled.div`
     border-bottom: 1px solid #14213d;
     width: fit-content;
     text-transform: uppercase;
-    font-family: "Roboto";
+    font-family: "Roboto", sans-serif;
   }
 
   @media (max-width: 1024px) {

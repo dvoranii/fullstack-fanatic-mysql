@@ -228,7 +228,6 @@ interface StripeCustomerIdRow {
       const display_name =
         req.user?.display_name || req.user?.name || "Anonymous";
 
-      // Guard clauses
       if (!userId) {
         res.status(400).json({ error: "User ID is required." });
         return;
