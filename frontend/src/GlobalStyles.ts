@@ -20,7 +20,7 @@ export const colors = {
 export const GlobalStyles = createGlobalStyle`
   @font-face {
     font-family: "ZenKakuGothicNewRegular";
-    src: url(${ZenKakuGothicNewRegular}) format("truetype");
+    src: url(${ZenKakuGothicNewRegular}) format("woff2");
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -28,14 +28,14 @@ export const GlobalStyles = createGlobalStyle`
 
   @font-face {
     font-family: "ZenKakuGothicNewMedium";
-    src: url(${ZenKakuGothicNewMedium}) format("truetype");
+    src: url(${ZenKakuGothicNewMedium}) format("woff2");
     font-weight: 500;
     font-style: normal;
     font-display: swap;
   }
   @font-face {
     font-family: "ZenKakuGothicNewBold";
-    src: url(${ZenKakuGothicNewBold}) format("truetype");
+    src: url(${ZenKakuGothicNewBold}) format("woff2");
     font-weight: 700;
     font-style: normal;
     font-display: swap;
@@ -43,7 +43,7 @@ export const GlobalStyles = createGlobalStyle`
 
   @font-face {
     font-family: "Alata";
-    src: url(${AlataRegular}) format("truetype");
+    src: url(${AlataRegular}) format("woff2");
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -51,28 +51,28 @@ export const GlobalStyles = createGlobalStyle`
 
   @font-face {
     font-family: "Anybody";
-    src: url(${AnybodyMedium}) format("truetype");
+    src: url(${AnybodyMedium}) format("woff2");
     font-weight: 400;
     font-style:normal;
     font-display: swap;
   }
   @font-face {
     font-family: "Anybody";
-    src: url(${AnybodySemiBold}) format("truetype");
+    src: url(${AnybodySemiBold}) format("woff2");
     font-weight: 500;
     font-style:normal;
     font-display: swap;
   }
   @font-face {
     font-family: "Anybody";
-    src: url(${AnybodyBold}) format("truetype");
+    src: url(${AnybodyBold}) format("woff2");
     font-weight: 700;
     font-style:normal;
     font-display: swap;
   }
   @font-face {
     font-family: "Abel";
-    src: url(${AbelRegular}) format("truetype");
+    src: url(${AbelRegular}) format("woff2");
     font-weight: 400;
     font-style:normal;
     font-display: swap;

@@ -1,8 +1,10 @@
 import { Helmet } from "react-helmet-async";
 import { HomePageWrapper } from "./HomePage.styled";
 import Hero from "./Hero/Hero";
-import LazySection from "../../components/LazyLoad/LazySection/LazySection";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import IntroSection from "./IntroSection/IntroSection";
+import InfoSection from "./InfoSection/InfoSection";
+import ProductsAndServices from "./ProductsAndServices/ProductsAndServices";
+import CTASection from "./CTASection/CTASection";
 
 const HomePage: React.FC = () => {
   return (
@@ -27,34 +29,10 @@ const HomePage: React.FC = () => {
       <HomePageWrapper>
         <Hero />
 
-        <LazySection
-          importFunc={() => import("./IntroSection/IntroSection")}
-          fallback={<LoadingSpinner />}
-          rootMargin="100px"
-          threshold={0.1}
-          className="intro-section"
-        />
-        <LazySection
-          importFunc={() => import("./InfoSection/InfoSection")}
-          fallback={<LoadingSpinner />}
-          rootMargin="100px"
-          threshold={0.1}
-          className="info-section"
-        />
-        <LazySection
-          importFunc={() => import("./ProductsAndServices/ProductsAndServices")}
-          fallback={<LoadingSpinner />}
-          rootMargin="100px"
-          threshold={0.1}
-          className="products-section"
-        />
-        <LazySection
-          importFunc={() => import("./CTASection/CTASection")}
-          fallback={<LoadingSpinner />}
-          rootMargin="100px"
-          threshold={0.1}
-          className="cta-section"
-        />
+        <IntroSection/>
+        <InfoSection/>
+        <ProductsAndServices/>
+        <CTASection/>
       </HomePageWrapper>
     </>
   );

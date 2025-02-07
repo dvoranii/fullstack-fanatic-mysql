@@ -15,4 +15,5 @@ export interface CommentType {
   replies?: CommentType[];
   has_replies?: boolean;
   hasMoreReplies?: boolean;
+  _scrollTarget?: boolean;
 }

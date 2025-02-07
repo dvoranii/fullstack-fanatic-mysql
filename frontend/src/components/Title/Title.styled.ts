@@ -34,11 +34,11 @@ export const StyledTitle = styled.h1.withConfig({
   margin-top: 2.4rem;
   text-align: center;
   color: ${({ textColor }) => textColor || `${colors.primary}`};
-  font-family: "Anybody";
+  font-family: "Anybody", sans-serif;
   font-size: 2.4rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  font-weight: ${({ fontWeight }) => fontWeight || 500};
+  font-weight: ${({ fontWeight }) => fontWeight || 700};
   width: fit-content;
   user-select: none;
   z-index: 1;

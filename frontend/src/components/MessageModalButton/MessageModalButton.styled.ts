@@ -99,3 +99,7 @@ export const StyledButton = styled.a`
     color: #fff;
   }
 `;
+
+export const BtnWrapper = styled.div`
+width: 100%;
+`;

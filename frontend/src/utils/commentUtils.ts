@@ -9,15 +9,19 @@ export const addReplyToComments = (
       return {
         ...comment,
         replies: [...(comment.replies || []), newReply],
+        has_replies: true,
+        hasMoreReplies: false
       };
-    } else if (comment.replies && comment.replies.length > 0) {
+    }
+    
+    if (comment.replies && comment.replies.length > 0) {
       return {
         ...comment,
         replies: addReplyToComments(comment.replies, newReply),
       };
-    } else {
-      return comment;
     }
+    
+    return comment;
   });
 };
 

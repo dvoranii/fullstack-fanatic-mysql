@@ -9,6 +9,7 @@ import { UserContext } from "../../../context/UserContext";
 import { fetchUserComments } from "../../../services/commentService";
 import { Blog } from "../../../types/Blog/Blog";
 import { Tutorial } from "../../../types/Tutorial/Tutorial";
+import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 
 const PublicUserPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -68,7 +69,7 @@ const PublicUserPage: React.FC = () => {
     fetchFavourites();
   }, [id]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <LoadingSpinner/>;
   if (error) return <p>{error}</p>;
   if (!profile) return <p>User profile not found</p>;
 

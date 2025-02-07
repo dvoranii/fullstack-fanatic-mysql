@@ -115,26 +115,69 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     }
   };
 
+  // 
+  const loadRepliesUntilTarget = async (
+    parentId: number,
+    targetId: number,
+    currentOffset: number = 0
+  ): Promise<boolean> => {
+    try {
+      const { comments: newReplies, hasMore } = await fetchReplies(
+        parentId,
+        contentType,
+        contentId,
+        REPLY_BATCH_SIZE,
+        currentOffset
+      );
+  
+      // Update state with new replies
+      setComments(prev => addRepliesToCommentTree(prev, parentId, newReplies));
+      setVisibleReplies(prev => ({
+        ...prev,
+        [parentId]: (prev[parentId] || 0) + newReplies.length
+      }));
+  
+      // Check if target exists in this batch
+      const found = newReplies.some(reply => reply.id === targetId);
+      
+      if (found) return true;
+      if (hasMore) return loadRepliesUntilTarget(parentId, targetId, currentOffset + REPLY_BATCH_SIZE);
+      
+      return false;
+    } catch (error) {
+      console.error("Reply loading failed:", error);
+      return false;
+    }
+  };
+  
+
   useEffect(() => {
     if (!numericCommentId) return;
 
     const loadReplyAndParent = async () => {
       try {
-        const [, parentComment] = await fetchReplyAndParent(
+        const { initialComment, parentChain, topLevelComment } = await fetchReplyAndParent(
           Number(numericCommentId)
         );
-
-        setParentCommentId(parentComment.id);
-
-        if (parentComment.id !== numericCommentId) {
-          await showMoreReplies(parentComment.id, () => {
-            waitForElementAndScroll(`comment-${numericCommentId}`, 10, 300);
-          });
+    
+        // Set parent chain ids for loading replies
+        for (let i = parentChain.length - 1; i >= 0; i--) {
+          const parentId = parentChain[i].id;
+          const nextParentId = parentChain[i - 1]?.id;
+          
+          if (nextParentId) {
+            await loadRepliesUntilTarget(parentId, nextParentId);
+          } else {
+            // Last parent in chain - load until target comment
+            await loadRepliesUntilTarget(parentId, numericCommentId);
+          }
         }
-
+    
+        setParentCommentId(topLevelComment.id);
         setLoadingParentAndReply(false);
+        waitForElementAndScroll(`comment-${numericCommentId}`, 10, 300);
       } catch (error) {
-        console.error("Failed to load reply and parent comments:", error);
+        console.error("Failed to load reply chain:", error);
       }
     };
 

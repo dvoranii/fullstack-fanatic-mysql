@@ -29,14 +29,20 @@ export const fetchReplies = async (
   contentType: string,
   contentId: number,
   limit: number,
-  offset: number
-): Promise<{ comments: CommentType[]; hasMore: boolean }> => {
+  offset: number,
+  // targetCommentId?: number 
+): Promise<{ comments: CommentType[]; hasMore: boolean; targetOffset?: number; targetFound?: boolean }> => {
+
+
   const endpoint = `/comments/${contentType}/${contentId}?parentCommentId=${parentCommentId}&limit=${limit}&offset=${offset}&includeLikedStatus=true`;
+  // const endpoint = `/comments/${contentType}/${contentId}?parentCommentId=${parentCommentId}&limit=${limit}&offset=${offset}&includeLikedStatus=true${targetCommentId ? `&targetCommentId=${targetCommentId}` : ''}`;
 
   try {
     const { data } = await apiCall<{
       hasMore: boolean;
       comments: CommentType[];
+      targetOffset?: number;
+      targetFound?: boolean;
     }>(endpoint);
 
     const comments = data.comments.map((comment) => ({
@@ -47,12 +53,15 @@ export const fetchReplies = async (
     return {
       comments: comments || [],
       hasMore: data.hasMore,
+      targetOffset: data.targetOffset,
+      targetFound: data.targetFound,
     };
   } catch (error) {
     console.error("Error fetching replies:", error);
     return {
       comments: [],
       hasMore: false,
+      targetFound: false,
     };
   }
 };
@@ -191,24 +200,29 @@ export const fetchUserComments = async (
 
 export const fetchReplyAndParent = async (
   id: number
-): Promise<CommentType[]> => {
+ ): Promise<{
+  initialComment: CommentType;
+  parentChain: CommentType[];
+  topLevelComment: CommentType;
+ }> => {
   let endpoint = `/comments/reply-and-parent`;
-
+ 
   if (id) {
     endpoint += `?id=${id}`;
   }
-
+ 
   try {
     const { data } = await apiCall<{
       initialComment: CommentType;
+      parentChain: CommentType[];
       topLevelComment: CommentType;
     }>(endpoint, {
       method: "GET",
     });
-
-    return [data.initialComment, data.topLevelComment];
+ 
+    return data;
   } catch (error) {
     console.error("Error fetching comments:", error);
     throw new Error("Failed to fetch comments");
   }
-};
+ };
