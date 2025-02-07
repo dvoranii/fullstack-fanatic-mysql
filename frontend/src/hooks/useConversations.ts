@@ -1,4 +1,4 @@
-// useConversations.ts (Custom Hook)
+
 import { useState, useEffect } from "react";
 import { fetchConversations } from "../services/conversationService";
 import { Conversation } from "../types/Conversations";

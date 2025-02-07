@@ -19,6 +19,7 @@ import { getUserIdFromToken } from "../utils/getUserIdFromToken";
 
 const router = express.Router();
 
+
 router.get(
   "/:contentType/:contentId",
   async (req: Request, res: Response): Promise<void> => {
@@ -68,8 +69,8 @@ router.get(
           contentType,
           contentId,
           parentCommentId,
-          replyLimit + 1,
-          offset,
+          replyLimit + 1, 
+          offset
         ];
       }
 
@@ -426,54 +427,52 @@ router.get(
   }
 );
 
-router.get(
-  "/reply-and-parent",
-  async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.query;
+// Backend modification:
+router.get("/reply-and-parent", async (req: Request, res: Response) => {
+  const { id } = req.query;
 
-    try {
-      const connection = await connectionPromise;
+  try {
+    const connection = await connectionPromise;
 
-      let commentsQuery = `
+    // Get initial comment
+    const [comments] = await connection.query<RowDataPacket[]>(`
       SELECT c.*, u.name as user_name, u.profile_picture, c.parent_comment_id
       FROM comments c
       JOIN users u ON c.user_id = u.id
       WHERE c.id = ?
-    `;
+    `, [Number(id)]);
 
-      const params: any[] = [Number(id)];
-
-      const [comments] = await connection.query<RowDataPacket[]>(
-        commentsQuery,
-        params
-      );
-
-      if (comments.length === 0) {
-        res.status(404).json({ message: "Comment not found" });
-        return;
-      }
-
-      const initialComment = comments[0];
-
-      if (initialComment.parent_comment_id === null) {
-        res.status(200).json({
-          initialComment,
-          topLevelComment: initialComment,
-        });
-        return;
-      }
-
-      const topLevelComment = await findTopLevelComment(Number(id), connection);
-
-      res.status(200).json({
-        initialComment,
-        topLevelComment,
-      });
-    } catch (err) {
-      console.error("Error fetching all comments:", err);
-      res.status(500).json({ error: (err as Error).message });
+    if (comments.length === 0) {
+      res.status(404).json({ message: "Comment not found" });
+      return;
     }
+
+    const initialComment = comments[0];
+    const parentChain = [];
+    let currentComment = initialComment;
+
+    // Build parent chain
+    while (currentComment.parent_comment_id) {
+      const [parentResult] = await connection.query<RowDataPacket[]>(`
+        SELECT c.*, u.name as user_name, u.profile_picture, c.parent_comment_id
+        FROM comments c
+        JOIN users u ON c.user_id = u.id
+        WHERE c.id = ?
+      `, [currentComment.parent_comment_id]);
+      
+      currentComment = parentResult[0];
+      parentChain.push(currentComment);
+    }
+
+    res.status(200).json({
+      initialComment,
+      parentChain,
+      topLevelComment: parentChain[parentChain.length - 1] || initialComment
+    });
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ error: (err as Error).message });
   }
-);
+});
 
 export default router;

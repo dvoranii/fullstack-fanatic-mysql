@@ -63,10 +63,12 @@ export const NetworkPage: React.FC = () => {
     setMessage("");
     try {
       const users = await searchUsers(query, activeFilter);
-      if (users.length === 0) {
+      const filteredUsers = users.filter(user => user.id !== loggedInUser?.id);
+      
+      if (filteredUsers.length === 0) {
         setMessage("No users found");
       }
-      setUsers(users);
+      setUsers(filteredUsers);
     } catch (error) {
       console.error("Error fetching users:", error);
       setMessage("An error occured while searching");

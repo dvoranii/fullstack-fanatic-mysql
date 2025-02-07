@@ -72,7 +72,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
     markAsRead(notification.id);
   }, [notification.id, markAsRead]);
 
-  // Memoize formatted time
+ 
   const formattedTime = useMemo(
     () => formatTimeAgo(notification.created_at),
     [notification.created_at]

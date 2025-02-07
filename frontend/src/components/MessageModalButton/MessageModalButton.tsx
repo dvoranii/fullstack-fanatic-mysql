@@ -5,6 +5,7 @@ import {
   ButtonIcon,
   ButtonText,
   CustomIcon,
+  BtnWrapper
 } from "./MessageModalButton.styled";
 import MessageUserModal from "../../pages/UserProfileLayout/MessageUserModal/MessageUserModal";
 
@@ -35,6 +36,7 @@ const MessageUserModalButton: React.FC<MessageModalButtonProps> = ({
 
   return (
     <>
+    <BtnWrapper>
       {variant === "publicUser" ? (
         <StyledButton onClick={handleOpenMessageModal}>
           <ButtonText>{text}</ButtonText>
@@ -45,7 +47,7 @@ const MessageUserModalButton: React.FC<MessageModalButtonProps> = ({
       ) : (
         <SimpleButton onClick={handleOpenMessageModal}>{text}</SimpleButton>
       )}
-
+</BtnWrapper>
       {isModalOpen && (
         <MessageUserModal
           isOpen={isModalOpen}

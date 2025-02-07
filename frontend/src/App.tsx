@@ -9,11 +9,10 @@ import { useInactivityTimer } from "./hooks/useInactivityTimer";
 
 const NavBar = React.lazy(() => import("./components/NavBar/NavBar"));
 const Navigation = React.lazy(() => import("./components/Navigation"));
+const Footer = React.lazy(() => import("./components/Footer/Footer"));
 const ScrollToTop = React.lazy(
   () => import("./components/ScrollToTop/ScrollToTop")
 );
-
-import LazySection from "./components/LazyLoad/LazySection/LazySection";
 
 const clientId = import.meta.env.VITE_CLIENT_ID;
 
@@ -38,13 +37,15 @@ const App: React.FC = () => {
               <ScrollToTop />
               <NavBar />
               <Navigation />
-              <LazySection
+              <Footer/>
+
+              {/* <LazySection
                 importFunc={() => import("./components/Footer/Footer")}
                 fallback={<LoadingSpinner />}
                 rootMargin="0px"
                 threshold={0}
                 componentProps={{}}
-              />
+              /> */}
             </Suspense>
           </Router>
         </UserProvider>

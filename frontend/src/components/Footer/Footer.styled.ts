@@ -115,7 +115,7 @@ export const CenteredSlogan = styled.div`
   font-size: clamp(1.4rem, 6vw, 2.8rem);
   text-align: center;
   color: #14213d;
-  font-family: "Anybody";
+  font-family: "Anybody", sans-serif;
   font-weight: bold;
   text-transform: uppercase;
   align-self: center;

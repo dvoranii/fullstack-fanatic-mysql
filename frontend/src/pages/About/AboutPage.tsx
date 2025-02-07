@@ -9,9 +9,8 @@ import {
 } from "./AboutPage.styled";
 import Title from "../../components/Title/Title";
 import { Link } from "react-router-dom";
-import LazySection from "../../components/LazyLoad/LazySection/LazySection";
 import { useState } from "react";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import CoreTenets from "./CoreTenets/CoreTenets";
 
 const AboutPage: React.FC = () => {
   const [coreTenetsVisible, setCoreTenetsVisible] = useState(false);
@@ -90,13 +89,8 @@ const AboutPage: React.FC = () => {
           />
         </ImgWrapper>
       </AboutIntroWrapperOuter>
-      <LazySection
-        importFunc={() => import("./CoreTenets/CoreTenets")}
-        fallback={<LoadingSpinner />}
-        rootMargin="0px"
-        isVisible={coreTenetsVisible}
-        onVisibilityChange={setVisible}
-      />
+      <CoreTenets/>
+    
     </>
   );
 };

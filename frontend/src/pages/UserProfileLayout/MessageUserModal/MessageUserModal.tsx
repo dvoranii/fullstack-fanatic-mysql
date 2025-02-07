@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import {
   ModalOverlay,
   ModalContent,
-  UserAvatar,
+  // UserAvatar,
   InputField,
   TextArea,
   SendButton,
@@ -17,8 +17,10 @@ import {
 } from "../../../services/conversationService";
 import { sendMessage } from "../../../services/messageService";
 import { UserContext } from "../../../context/UserContext";
-import { getAvatarUrl } from "../../../utils/imageUtils";
+// import { getAvatarUrl } from "../../../utils/imageUtils";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
+import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
+import ProfilePicture from "../../../components/ProfilePicture/ProfilePicture";
 
 interface MessageUserModalProps {
   isOpen: boolean;
@@ -123,7 +125,7 @@ const MessageUserModal: React.FC<MessageUserModalProps> = ({
   };
 
   if (!isOpen) return null;
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <LoadingSpinner/>;
   if (error) return <p>{error}</p>;
 
   return (
@@ -131,7 +133,7 @@ const MessageUserModal: React.FC<MessageUserModalProps> = ({
       <ModalOverlay onClick={onClose} />
       <ModalContent>
         <AvatarContainer>
-          <UserAvatar src={getAvatarUrl(userAvatarUrl)} alt="User Avatar" />
+        <ProfilePicture src={userAvatarUrl} alt="User Avatar" width="100%" border="" />
         </AvatarContainer>
         <CloseBtn
           src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/misc/close-icon.png"

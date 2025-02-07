@@ -34,6 +34,7 @@ const Hero: React.FC = () => {
               src="/assets/images/fsf-logo-notext-large.webp"
               alt="logo"
               className="orange-logo"
+              loading="lazy"
               width="500"
               height="500"
             />
@@ -49,6 +50,7 @@ const Hero: React.FC = () => {
               src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/Ellipse-bg.svg"
               alt="elipse bg image"
               width="250"
+              loading="lazy"
               height="193"
             />
           </ElipseWrapper>

@@ -2,7 +2,7 @@ import { handleImageError } from "../../utils/imageUtils";
 import { StyledProfilePicture } from "./ProfilePicture.styled";
 
 interface ProfilePictureProps {
-  src: string;
+  src: string | null;
   alt: string;
   width: string;
   border: string;
@@ -18,7 +18,7 @@ const ProfilePicture = ({
   border,
   bg,
 }: ProfilePictureProps) => {
-  const imageUrl = src || "/assets/images/profile-icon.png";
+  const imageUrl = src || "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/home/profile-icon.png";
 
   return (
     <StyledProfilePicture
