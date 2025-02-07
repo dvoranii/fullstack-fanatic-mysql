@@ -6,9 +6,8 @@ export const handleImageError = (
 };
 
 export const getAvatarUrl = (profilePictureUrl: string | null) => {
-  console.log(profilePictureUrl);
-  if (!profilePictureUrl || !profilePictureUrl.startsWith("https://fsf-assets.tor1.cdn.digitaloceanspaces.com")) {
+  if (!profilePictureUrl) {
     return "https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/home/profile-icon.png";
   }
-  return profilePictureUrl;
+  return profilePictureUrl; 
 };

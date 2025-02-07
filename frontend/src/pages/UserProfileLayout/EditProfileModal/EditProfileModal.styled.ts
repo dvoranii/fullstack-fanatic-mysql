@@ -110,3 +110,7 @@ export const ProfileImage = styled.img`
     margin-top: 0.4rem;
   }
 `;
+
+export const PreviewPictureWrapper = styled.div`
+  padding-top: 1.2rem;
+`;
