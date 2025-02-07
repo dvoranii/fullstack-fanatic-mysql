@@ -9,7 +9,7 @@ import {
   TextArea,
   SaveButton,
   MaxCharCountText,
-  ProfileImage,
+  PreviewPictureWrapper,
 } from "./EditProfileModal.styled";
 import SocialLinksEditor from "./SocialLinksEditor/SocialLinksEditor";
 import { useState, useEffect } from "react";
@@ -18,6 +18,8 @@ import { getAvatarUrl } from "../../../utils/imageUtils";
 import { useCsrfToken } from "../../../hooks/useCsrfToken";
 import { handleProfileUpdate } from "../../../utils/profileUtils";
 import SuccessConfirmationModal from "../../../components/SuccessConfirmationModal/SuccessConfirmationModal";
+import ProfilePicture from "../../../components/ProfilePicture/ProfilePicture";
+
 
 const MAX_LENGTHS = {
   displayName: 30,
@@ -34,6 +36,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const [displayName, setDisplayName] = useState(
     profile.display_name || profile.name || ""
   );
+
   const [profession, setProfession] = useState(profile.profession || "");
   const [bio, setBio] = useState(profile.bio || "");
   const [socialLinks, setSocialLinks] = useState<{ [key: string]: string }>(
@@ -188,19 +191,19 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                 accept="image/*"
                 onChange={handleProfilePictureChange}
               />
+              <PreviewPictureWrapper>
               {newProfilePicturePreview ? (
-                <ProfileImage
+                <ProfilePicture
                   src={newProfilePicturePreview}
-                  alt="New Profile Preview"
-                />
+                  alt="New Profile Preview" width={"70px"} border={""}                />
               ) : (
                 profilePicturePreview && (
-                  <ProfileImage
-                    src={getAvatarUrl(profilePicturePreview)}
-                    alt="Profile Preview"
-                  />
+                  <ProfilePicture
+                      src={getAvatarUrl(profilePicturePreview)}
+                      alt="Profile Preview" width={"70px"} border={""}                  />
                 )
               )}
+              </PreviewPictureWrapper>
             </FormGroup>
             <FormGroup>
               <Label>Display Name:</Label>
