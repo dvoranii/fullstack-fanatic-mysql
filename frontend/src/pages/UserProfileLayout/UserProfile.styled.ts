@@ -7,7 +7,7 @@ export const BannerWrapperOuter = styled.div`
 `;
 export const BannerWrapperInner = styled.div`
   width: 100%;
-  background-color:lightgrey;
+  background: linear-gradient(to bottom, lightgrey, transparent);
 `;
 
 export const BannerUploadWrapper = styled.div`
@@ -238,4 +238,10 @@ export const PremiumBadge = styled.div<{ level: string }>`
       -1px -1px 0 black;
     letter-spacing: 1px;
   }
+`;
+
+export const PremiumBadgeWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `;

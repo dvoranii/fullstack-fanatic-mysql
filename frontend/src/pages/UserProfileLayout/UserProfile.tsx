@@ -14,6 +14,7 @@ import {
   BannerUploadWrapper,
   FollowsWrapper,
   PremiumBadge,
+  PremiumBadgeWrapper,
   EditProfileLink,
   ProfileInfoColumn1,
   ProfileInfoColumn2,
@@ -96,8 +97,8 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
               <img
                 src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/edit.webp"
                 alt="Edit banner"
-                height="48"
-                width="48"
+                height="38"
+                width="38"
               />
             </label>
             <input
@@ -117,9 +118,11 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
           <UserProfession>{profile.profession}</UserProfession>
 
           {!!profile.isPremium && profile.premiumLevel && (
+            <PremiumBadgeWrapper>
             <PremiumBadge level={profile.premiumLevel}>
               <p>{profile.premiumLevel.toUpperCase()}</p>
             </PremiumBadge>
+            </PremiumBadgeWrapper>
           )}
 
           {isEditable && (

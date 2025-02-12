@@ -3,7 +3,7 @@ import {
   CoreTenetsWrapper,
   CoreTenetsWrapperInner,
   TenetListSection,
-  TenetLisItemTitle,
+  TenetListItemTitle,
   ListSectionTitleWrapper,
   SubtitleWrapper,
   CTABtnWrapper,
@@ -15,9 +15,8 @@ const CoreTenetsWrapperSection: React.FC = () => {
       <CoreTenetsWrapper>
         <SubtitleWrapper>
           <h3>
-            At Full Stack Fanatic, we strive to live up to a set of core
-            <br></br>
-            &nbsp;tenets, and hopefully help you do the same.
+            At <span>Full Stack Fanatic</span> we <i><u>strive</u></i> to live up to a set of <span>core
+            &nbsp;tenets</span> and hopefully, help you <span>do the same!</span>
           </h3>
         </SubtitleWrapper>
 
@@ -27,8 +26,8 @@ const CoreTenetsWrapperSection: React.FC = () => {
               <h4>What&nbsp;We're&nbsp;About</h4>
             </ListSectionTitleWrapper>
             <ol>
-              <li>
-                <TenetLisItemTitle>Absolute Transparency</TenetLisItemTitle>
+              <li style={{"fontWeight": "bold"}}>
+                <TenetListItemTitle>Absolute Transparency</TenetListItemTitle>
                 <div>
                   We are committed to exposing industry dark patterns and
                   advocating for ethical business practices. Our goal is not
@@ -37,9 +36,9 @@ const CoreTenetsWrapperSection: React.FC = () => {
                 </div>
               </li>
               <li>
-                <TenetLisItemTitle>
+                <TenetListItemTitle>
                   Affordability and Flexibility
-                </TenetLisItemTitle>
+                </TenetListItemTitle>
 
                 <div>
                   Quality education should be accessible to everyone. That’s why
@@ -49,9 +48,9 @@ const CoreTenetsWrapperSection: React.FC = () => {
                 </div>
               </li>
               <li>
-                <TenetLisItemTitle>
+                <TenetListItemTitle>
                   Fostering Collaboration and Networking
-                </TenetLisItemTitle>
+                </TenetListItemTitle>
 
                 <div>
                   Learning is better together. Fullstack Fanatic provides a
@@ -61,9 +60,9 @@ const CoreTenetsWrapperSection: React.FC = () => {
                 </div>
               </li>
               <li>
-                <TenetLisItemTitle>
+                <TenetListItemTitle>
                   Revealing Insider Hacks and Game-Changing Tips
-                </TenetLisItemTitle>
+                </TenetListItemTitle>
 
                 <div>
                   We equip you with resourceful, under-the-radar strategies to
@@ -80,9 +79,9 @@ const CoreTenetsWrapperSection: React.FC = () => {
             </ListSectionTitleWrapper>
             <ol>
               <li>
-                <TenetLisItemTitle>
+                <TenetListItemTitle>
                   Take Pride in Quality Work
-                </TenetLisItemTitle>
+                </TenetListItemTitle>
 
                 <div>
                   Strive for excellence in everything you create, delivering
@@ -92,9 +91,9 @@ const CoreTenetsWrapperSection: React.FC = () => {
                 </div>
               </li>
               <li>
-                <TenetLisItemTitle>
+                <TenetListItemTitle>
                   Cultivate Emotional Regulation and Resilience
-                </TenetLisItemTitle>
+                </TenetListItemTitle>
 
                 <div>
                   Programming and IT require patience and perseverance. Embrace
@@ -104,7 +103,7 @@ const CoreTenetsWrapperSection: React.FC = () => {
                 </div>
               </li>
               <li>
-                <TenetLisItemTitle>Adopt a Growth Mindset</TenetLisItemTitle>
+                <TenetListItemTitle>Adopt a Growth Mindset</TenetListItemTitle>
 
                 <div>
                   Continuously seek to improve, stay curious, and embrace
@@ -114,9 +113,9 @@ const CoreTenetsWrapperSection: React.FC = () => {
                 </div>
               </li>
               <li>
-                <TenetLisItemTitle>
+                <TenetListItemTitle>
                   Think Ethically and Act Purposefully
-                </TenetLisItemTitle>
+                </TenetListItemTitle>
 
                 <div>
                   Let your work reflect integrity and purpose. Whether you're

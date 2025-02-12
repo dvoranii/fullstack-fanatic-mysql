@@ -10,10 +10,11 @@ import {
   PurchaseHistorySortAndSearchWrapperOuter,
   PurchaseHistorySortAndSearchWrapperInner,
   SeeMoreButtonWrapper,
+  HelpIcon,
+  StyledSearchBar
 } from "./PurchaseHistory.styled";
 import { PurchasedItem } from "../../../types/PurchasedItem";
 import TitleBanner from "../../../components/TitleBanner/TitleBanner";
-import SearchBar from "../../../components/SearchBar/SearchBar";
 import TooltipComponent from "../../../components/Tooltip/Tooltip";
 import { Link } from "react-router-dom";
 
@@ -94,7 +95,7 @@ const PurchaseHistory: React.FC = () => {
       <PurchaseHistoryPageWrapper>
         <PurchaseHistorySortAndSearchWrapperOuter>
           <PurchaseHistorySortAndSearchWrapperInner>
-            <label htmlFor="purchasesSelect">Sort By:</label>
+            <label htmlFor="purchasesSelect">Sort&nbsp;By:</label>
             <select
               id="purchasesSelect"
               onChange={(e) => setSelectedOption(e.target.value)}
@@ -108,12 +109,11 @@ const PurchaseHistory: React.FC = () => {
               <option value="price">Price</option>
               <option value="purchasedDate">Date Purchased</option>
             </select>
-            <SearchBar
-              paddingLeft="12px"
+            <StyledSearchBar
               onChange={(value) => setSearchText(value)}
             />
           </PurchaseHistorySortAndSearchWrapperInner>
-          <div className="help-icon">
+          <HelpIcon>
             <img
               src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/help-icon.png"
               alt="Help Icon"
@@ -125,7 +125,7 @@ const PurchaseHistory: React.FC = () => {
                 "Looking for subscription purchase information? Please navigate to the Manage Subscriptions page."
               }
             />
-          </div>
+          </HelpIcon>
         </PurchaseHistorySortAndSearchWrapperOuter>
 
         <PurchaseHistoryListWrapper>

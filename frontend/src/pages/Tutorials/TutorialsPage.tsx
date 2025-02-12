@@ -1,6 +1,5 @@
 import { Helmet } from "react-helmet-async";
 import { useContext, useState, useEffect } from "react";
-import Title from "../../components/Title/Title";
 import Pagination from "../../components/Pagination/Pagination";
 import {
   TutorialList,
@@ -16,15 +15,17 @@ import {
   DifficultyStarsWrapper,
   BottomIconsWrapper,
   TutorialListOuter,
+  StyledSearchBar
 } from "./TutorialsPage.styled";
-import { tutorialContent } from "../../assets/tutorialContent";
-import { UserContext } from "../../context/UserContext";
-
-import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
-import SearchBar from "../../components/SearchBar/SearchBar";
-import AddToCartButton from "../../components/AddToCartButton/AddToCartButton";
 
 import { CartItem } from "../../types/CartItem";
+
+import Title from "../../components/Title/Title";
+import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
+import AddToCartButton from "../../components/AddToCartButton/AddToCartButton";
+
+import { tutorialContent } from "../../assets/tutorialContent";
+import { UserContext } from "../../context/UserContext";
 import { mapTutorialToCartItem } from "../../utils/cartUtils";
 
 const TutorialsPage: React.FC = () => {
@@ -141,8 +142,7 @@ const TutorialsPage: React.FC = () => {
       <Title textContent="Tutorials" pseudoRight="-3px" pseudoWidth="120px" />
 
       <TutorialListOuter>
-        <SearchBar
-          paddingLeft="60px"
+        <StyledSearchBar
           onChange={(value) => setSearchText(value)}
         />
         <img

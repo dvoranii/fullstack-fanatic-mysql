@@ -13,6 +13,11 @@ import {
   LinkButton,
   ChangePasswordFormWrapper,
   PasswordContainer,
+  SettingLabel,
+  SettingContent,
+  SettingText,
+  EditButton,
+  HelpIcon
 } from "./Settings.styled";
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import { UserContext } from "../../context/UserContext";
@@ -83,9 +88,10 @@ const Settings = () => {
             <SectionHeader>General</SectionHeader>
             {authType === "google" ? (
               <SettingItem>
-                <b>Current email:</b>
-                {profile?.email}
-                <div className="help-icon">
+                <SettingLabel>Current email:</SettingLabel>
+                <SettingContent>
+                <SettingText>{profile?.email}</SettingText>
+                <HelpIcon>
                   <img
                     src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/help-icon.png"
                     alt="Help Icon"
@@ -97,39 +103,49 @@ const Settings = () => {
                       "Users signed up via Google accounts cannot change their emails"
                     }
                   />
-                </div>
+                </HelpIcon>
+                </SettingContent>
               </SettingItem>
             ) : (
               <SettingItem>
-                <b>Current email:</b> {profile?.email}
-                <button className="edit-btn">
+                <SettingLabel>Current email:</SettingLabel>  
+                <SettingContent>  
+                <SettingText>{profile?.email}</SettingText>
+                <EditButton>
                   <img
                     src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/edit.webp"
                     alt="Edit"
                   />
-                </button>
+                </EditButton>
+                </SettingContent>
               </SettingItem>
             )}
             <SettingItem>
-              <b>Timezone:</b> Eastern Standard (EST)
-              <button className="edit-btn">
+              <SettingLabel>Timezone:</SettingLabel> 
+              <SettingContent>  
+              <SettingText>Eastern Standard (EST)</SettingText>
+              <EditButton>
                 <img
                   src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/edit.webp"
                   alt=""
                 />
-              </button>
+              </EditButton>
+              </SettingContent>  
             </SettingItem>
             <SettingItem>
-              <b>Currency:</b> Canadian Dollar ($ CAD)
-              <button className="edit-btn">
+              <SettingLabel>Currency:</SettingLabel> 
+              <SettingContent>  
+              <SettingText>Canadian Dollar ($ CAD)</SettingText>
+              <EditButton>
                 <img
                   src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/edit.webp"
                   alt=""
                 />
-              </button>
+              </EditButton>
+              </SettingContent>  
             </SettingItem>
             <SettingItem>
-              <b>Calendar:</b>
+              <SettingLabel>Calendar:</SettingLabel>
               <ViewButton>View</ViewButton>
             </SettingItem>
           </Section>
@@ -137,17 +153,21 @@ const Settings = () => {
           <Section>
             <SectionHeader>Privacy & Security</SectionHeader>
             <SettingItem>
-              <b>Block User:</b> <LinkButton href="#">Search</LinkButton>
+              <SettingLabel>Block User:</SettingLabel> 
+              <LinkButton href="#">Search</LinkButton>
             </SettingItem>
             <SettingItem>
-              <b>2FA:</b> <LinkButton href="#">Set up 2FA</LinkButton>
+              <SettingLabel>2FA:</SettingLabel> 
+              <LinkButton href="#">Set up 2FA</LinkButton>
             </SettingItem>
             {authType === "manual" && (
               <SettingItem>
                 {!isChangingPassword ? (
                   <PasswordContainer>
-                    <b>Password:</b> <span>Change Password</span>
-                    <button
+                    <SettingLabel>Password:</SettingLabel> 
+                    <SettingContent>
+                    <SettingText>Change Password</SettingText>
+                    <EditButton
                       className="edit-btn"
                       onClick={() => setIsChangingPassword(true)}
                     >
@@ -155,8 +175,10 @@ const Settings = () => {
                         src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/account/edit.webp"
                         alt="Change Password"
                       />
-                    </button>
+                    </EditButton>
+                    </SettingContent>
                   </PasswordContainer>
+      
                 ) : (
                   <ChangePasswordFormWrapper>
                     <ChangePasswordForm />
@@ -187,7 +209,7 @@ const Settings = () => {
           </Section>
         </Content>
       </SettingsContainer>
-      <div style={{ height: "0" }}>&nbsp;</div>
+
     </>
   );
 };

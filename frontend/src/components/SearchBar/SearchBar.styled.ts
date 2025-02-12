@@ -2,11 +2,11 @@ import styled from "styled-components";
 import { colors } from "../../GlobalStyles";
 
 interface SearchBarWrapperOuterProps {
-  paddingLeft?: string;
+  // paddingLeft?: string;
 }
 
 export const SearchBarWrapperOuter = styled.div<SearchBarWrapperOuterProps>`
-  padding-left: ${(props) => props.paddingLeft || "120px"};
+
 `;
 
 interface SearchBarWrapperInnerProps {

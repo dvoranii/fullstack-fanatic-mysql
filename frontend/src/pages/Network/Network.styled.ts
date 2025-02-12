@@ -1,5 +1,6 @@
 import { styled } from "styled-components";
 import { colors } from "../../GlobalStyles";
+import SearchBar from "../../components/SearchBar/SearchBar";
 
 export const NetworkWrapper = styled.div`
   padding-bottom: 9.8rem;
@@ -7,12 +8,6 @@ export const NetworkWrapper = styled.div`
 
 export const SearchBarWrapper = styled.div`
   margin-top: 40px;
-
-  @media screen and (max-width: 768px) {
-    .network-search {
-      padding-left: 20px;
-    }
-  }
 `;
 
 export const UserListWrapper = styled.div``;
@@ -52,6 +47,14 @@ export const FilterOptionWrapper = styled.div`
   padding-left: 120px;
   padding-top: 0.4rem;
 
+  @media screen and (max-width: 768px) {
+    padding-left: 20px;
+  }
+`;
+
+export const StyledSearchBar = styled(SearchBar)`
+  padding-left: 120px;
+  
   @media screen and (max-width: 768px) {
     padding-left: 20px;
   }
