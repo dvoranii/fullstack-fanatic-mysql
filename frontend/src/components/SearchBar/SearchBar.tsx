@@ -9,16 +9,14 @@ import {
 import { useState, useMemo } from "react";
 import { debounce } from "../../utils/debounce";
 
-interface SearchBarProps {
+export interface SearchBarProps {
   width?: string;
-  paddingLeft?: string;
   onSearchChange?: (value: string) => void;
   onChange?: (value: string) => void;
   className?: string;
 }
 const SearchBar: React.FC<SearchBarProps> = ({
   width,
-  paddingLeft,
   onSearchChange,
   onChange,
   className,
@@ -53,7 +51,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <SearchBarWrapperOuter style={{ paddingLeft }} className={className}>
+    <SearchBarWrapperOuter  className={className}>
       <SearchBarWrapperInner style={{ width }}>
         <SearchIconWrapper onClick={handleSearch}>
           <SearchIconImg src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/misc/search-icon.png" />

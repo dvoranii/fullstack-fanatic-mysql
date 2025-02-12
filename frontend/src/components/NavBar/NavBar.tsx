@@ -13,6 +13,7 @@ import {
   NetworkPageLink,
   ShoppingCartLink,
   UserProfileLink,
+  LogoutBtn
 } from "./NavBar.styled";
 
 import UserProfileNavBtn from "./UserProfileNavBtn/UserProfileNavBtn";
@@ -20,10 +21,12 @@ import BurgerMenu from "./BurgerMenu/BurgerMenu";
 import LoginButton from "./LoginButton/LoginButton";
 import NotificationButton from "./Notifications/Notifications";
 import ShoppingCart from "./ShoppingCart/ShoppingCart";
+import { useAuthUtils } from "../../utils/useAuthUtils";
 
 const NavBar: React.FC = () => {
   const [open, setOpen] = useState(false);
   const { profile } = useUser();
+  const { logOut } = useAuthUtils();
 
   const toggleMobileNav = () => {
     setOpen(!open);
@@ -150,8 +153,10 @@ const NavBar: React.FC = () => {
             Contact
           </NavLinkStyled>
         </NavItem>
+        {profile ? (
+          <>
         <NavItem>
-          {profile ? (
+
             <AccountBtnsWrapper className="mobile-accounts-wrapper">
               <NetworkPageLink to="/network">
                 <img
@@ -180,10 +185,15 @@ const NavBar: React.FC = () => {
                 />
               </UserProfileLink>
             </AccountBtnsWrapper>
-          ) : (
-            <LoginButton />
-          )}
         </NavItem>
+        <NavItem>
+          <LogoutBtn onClick={logOut}>Log Out</LogoutBtn>  
+        </NavItem>
+        </>)
+        : (
+          <LoginButton />
+        )}
+
       </MobileNavList>
     </Nav>
   );

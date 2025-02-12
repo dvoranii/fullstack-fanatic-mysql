@@ -8,8 +8,9 @@ import {
   FilterOption,
   FilterOptionWrapper,
   NetworkWrapper,
+  StyledSearchBar
 } from "./Network.styled";
-import SearchBar from "../../components/SearchBar/SearchBar";
+
 import TitleBanner from "../../components/TitleBanner/TitleBanner";
 import { searchUsers } from "../../services/networkService";
 import { User } from "../../types/User/User";
@@ -119,7 +120,7 @@ export const NetworkPage: React.FC = () => {
       <NetworkWrapper>
         <TitleBanner textContent="Network" />
         <SearchBarWrapper>
-          <SearchBar onSearchChange={handleSearch} className="network-search" />
+          <StyledSearchBar onSearchChange={handleSearch} />
           <FilterOptionWrapper>
             <span>Search by:</span>
             <FilterOption

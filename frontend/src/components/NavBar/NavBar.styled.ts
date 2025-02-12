@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { colors } from "../../GlobalStyles";
 
 interface NavLinkStyledProps {
   underlinewidth?: string;
@@ -69,7 +70,6 @@ export const MobileNavList = styled.ul<{ open: boolean }>`
 
   .mobile-accounts-wrapper {
     gap: 10px;
-    padding-top: 1.2rem;
   }
 
   @media (min-width: 989px) {
@@ -205,4 +205,16 @@ export const UserProfileLink = styled(Link)`
     width: 25px;
     height: auto;
   }
+`;
+
+export const LogoutBtn = styled.button`
+background: ${colors.primary};
+padding: 8px;
+border-radius: 60px;
+color: ${colors.white};
+font-family: 'Roboto', sans-serif;
+
+@media screen and (max-width: 988px) {
+  margin-top: 0.8rem;
+}
 `;

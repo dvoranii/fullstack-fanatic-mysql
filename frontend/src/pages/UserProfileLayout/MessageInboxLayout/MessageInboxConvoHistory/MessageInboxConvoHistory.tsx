@@ -15,22 +15,17 @@ import ConversationItem from "./ConversationItem/ConversationItem";
 import { useCsrfToken } from "../../../../hooks/useCsrfToken";
 
 interface MessageInboxConvoHistoryProps {
-  // conversations: Conversation[];
-  // setConversations: React.Dispatch<React.SetStateAction<Conversation[]>>;
   onConversationSelect: (conversationId: number) => void;
   onConversationDelete: () => void;
 }
 
 const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
-  // conversations,
-  // setConversations,
   onConversationSelect,
   onConversationDelete,
 }) => {
   const csrfToken = useCsrfToken();
   const { profile } = useContext(UserContext) || {};
   const loggedInUserId = profile?.id;
-  // const { userNames, userPictures } = useConversations(loggedInUserId);
   const { conversations, setConversations } = useConversations(loggedInUserId);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedConversationId, setSelectedConversationId] = useState<
@@ -51,6 +46,23 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
 
     setUnreadCount(unreadConversations.length);
   }, [conversations, loggedInUserId]);
+
+  const handleConversationSelect = (conversationId: number) => {
+    setConversations((prevConversations) =>
+      prevConversations.map((convo) => {
+        if (convo.id === conversationId) {
+          return {
+            ...convo,
+            is_read_user1: loggedInUserId === convo.user1_id ? true : convo.is_read_user1,
+            is_read_user2: loggedInUserId === convo.user2_id ? true : convo.is_read_user2
+          };
+        }
+        return convo;
+      })
+    );
+    
+    onConversationSelect(conversationId);
+  };
 
   const filteredConversations = (): Conversation[] => {
     return conversations.filter((conversation: Conversation) => {
@@ -112,7 +124,6 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
         <SearchBarReadFilterWrapper>
           <SearchBar
             width="100%"
-            paddingLeft="0"
             onChange={(value) => setSearchTerm(value)}
           />
           <ReadFilterWrapper>
@@ -140,7 +151,7 @@ const MessageInboxConvoHistory: React.FC<MessageInboxConvoHistoryProps> = ({
               key={conversation.id}
               conversation={conversation}
               loggedInUserId={loggedInUserId!} // Pass the logged-in user ID to determine the other user
-              onSelect={onConversationSelect}
+              onSelect={handleConversationSelect}
               onDelete={handleDeleteConversationClick}
             />
           ))}

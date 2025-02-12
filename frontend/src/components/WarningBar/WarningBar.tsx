@@ -1,9 +1,18 @@
-import React from "react";
-import { WarningBarWrapper } from "./WarningBar.styled";
+import React, { useState } from "react";
+import { WarningBarWrapper, WarningBarWrapperInner, CloseBtnWrapper } from "./WarningBar.styled";
 
 const WarningBar: React.FC = () => {
+
+  const [isVisible, setIsVisible] = useState(true);
+
+  const handleClose = () => {
+    setIsVisible(prev => !prev);
+  }
+
+
   return (
-    <WarningBarWrapper>
+    <WarningBarWrapper $isVisible={isVisible}>
+      <WarningBarWrapperInner>
       <img
         src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/misc/under-construction.png"
         alt="pylon image"
@@ -16,6 +25,12 @@ const WarningBar: React.FC = () => {
         src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/misc/under-construction.png"
         alt="pylon image"
       />
+      <CloseBtnWrapper $isVisible={isVisible}>
+      <button onClick={handleClose}>
+      {isVisible ? '✘' : '+'}
+      </button>
+      </CloseBtnWrapper>
+      </WarningBarWrapperInner>
     </WarningBarWrapper>
   );
 };

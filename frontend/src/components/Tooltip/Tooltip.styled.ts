@@ -38,8 +38,4 @@ export const Tooltip = styled.span`
     border-color: #333 transparent transparent transparent;
   }
 
-  .help-icon:hover & {
-    opacity: 1;
-    visibility: visible;
-  }
 `;

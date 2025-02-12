@@ -230,10 +230,10 @@ const MessageInboxChatWindow: React.FC<MessageInboxChatWindowProps> = ({
       subject: "",
       content: newMessage,
       sent_at: String(new Date()),
-      sender_picture: "",
-      sender_name: "",
+      sender_picture: profile?.profile_picture || "", 
+      sender_name: profile?.name || "",
       receiver_picture: "",
-      receiver_name: "",
+      receiver_name: receiverName,
     };
 
     setMessages((prevMessages) => [...prevMessages, tempMessage]);

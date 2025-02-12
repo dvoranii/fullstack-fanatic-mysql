@@ -30,13 +30,20 @@ export const CoreTenetsWrapper = styled.div`
   h3 {
     text-align: center;
     font-size: clamp(1.4rem, 2vw, 1.8rem);
-    font-weight: bold;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
     color: ${colors.primary};
-    padding-bottom: 1.2rem;
+    padding: 2.4rem 0 2.4rem 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.25);
     width: fit-content;
     font-family: "Anybody", sans-serif;
     margin: 0 auto 2.4rem auto;
+
+    span {
+    color: ${colors.secondary};
+    text-shadow: -1px -1px 0 ${colors.primary}, 1px -1px 0 ${colors.primary}, -1px 1px 0 ${colors.primary}, 1px 1px 0 ${colors.primary};
+    }
   }
 
   ol {
@@ -45,6 +52,7 @@ export const CoreTenetsWrapper = styled.div`
 
     li {
       padding-top: 1.2rem;
+      font-weight: bold;
     }
 
     div {
@@ -60,6 +68,7 @@ export const CoreTenetsWrapper = styled.div`
       }
     }
   }
+
 `;
 
 export const SubtitleWrapper = styled.div`
@@ -92,18 +101,20 @@ export const ListSectionTitleWrapper = styled.div<ListSectionTitleWrapperProps>`
   z-index: 1;
 
   h4 {
-    text-align: center;
+    font-family: "ZenKakuGothicNewMedium", Arial, Helvetica, sans-serif;
+    font-weight: 400;
     width: fit-content;
     position: relative;
     z-index: 2;
     font-size: clamp(1.4rem, 2vw, 1.8rem);
-    border-bottom: 2px solid ${colors.primary};
   }
 `;
 export const TenetListSection = styled.div``;
 
-export const TenetLisItemTitle = styled.p`
-  font-weight: bold;
+export const TenetListItemTitle = styled.p`
+  font-weight: 300;
+  border-bottom: 1px solid ${colors.primary};
+  width: fit-content;
 `;
 
 export const CTABtnWrapper = styled.div`

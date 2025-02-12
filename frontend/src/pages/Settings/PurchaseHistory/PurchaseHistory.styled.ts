@@ -1,5 +1,7 @@
 import { styled } from "styled-components";
 import { colors } from "../../../GlobalStyles";
+import { Tooltip } from "../../../components/Tooltip/Tooltip.styled";
+import SearchBar from "../../../components/SearchBar/SearchBar";
 
 export const PurchaseHistoryPageWrapper = styled.div`
   max-width: 1200px;
@@ -16,6 +18,12 @@ export const PurchaseHistoryPageWrapper = styled.div`
     cursor: pointer;
     padding: 0px 4px;
     height: 34px;
+  }
+
+  @media screen and (max-width: 396px) {
+   select {
+      margin-left: 0;
+   }
   }
 `;
 
@@ -86,6 +94,12 @@ export const PurchaseHistorySortAndSearchWrapperOuter = styled.div`
 export const PurchaseHistorySortAndSearchWrapperInner = styled.div`
   display: flex;
   align-items: center;
+
+  @media screen and (max-width: 396px) {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
 `;
 
 export const SeeMoreButtonWrapper = styled.div`
@@ -104,4 +118,32 @@ export const SeeMoreButtonWrapper = styled.div`
     border-radius: 4px;
     color: ${colors.white};
   }
+`;
+
+export const HelpIcon = styled.div`
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: default;
+
+  img {
+    width: 16px;
+  }
+
+  &:hover ${Tooltip} {
+    opacity: 1;
+    visibility: visible;
+  }
+
+    @media screen and (max-width: 520px) {
+    display:none;
+    }
+`;
+
+export const StyledSearchBar = styled(SearchBar)`
+padding-left: 12px;
+
+@media screen and (max-width: 396px) {
+  padding-left: 0;
+}
 `;

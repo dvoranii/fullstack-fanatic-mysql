@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { colors } from "../../GlobalStyles";
+import SearchBar from "../../components/SearchBar/SearchBar";
 
 interface PremiumBadgeProps {
   hasAccess: boolean;
@@ -199,4 +200,8 @@ export const PremiumBlogThumbnailWrapperOuter = styled.div`
   ${BlogImgWrapper} {
     cursor: not-allowed;
   }
+`;
+
+export const StyledSearchBar = styled(SearchBar)`
+padding-left: 0;
 `;

@@ -13,13 +13,16 @@ import {
   BlogPageWrapper,
   BottomButtonsWrapper,
   PremiumBlogThumbnailWrapperOuter,
+  StyledSearchBar
 } from "./BlogsPage.styled";
+
+import { CartItem } from "../../types/CartItem";
+
+import AddToCartButton from "../../components/AddToCartButton/AddToCartButton";
 import FavouriteButton from "../../components/FavouriteButton/FavouriteButton";
+
 import { UserContext } from "../../context/UserContext";
 import { blogContent } from "../../assets/blogContent";
-import SearchBar from "../../components/SearchBar/SearchBar";
-import AddToCartButton from "../../components/AddToCartButton/AddToCartButton";
-import { CartItem } from "../../types/CartItem";
 import { mapBlogToCartItem } from "../../utils/cartUtils";
 
 const BlogsPage: React.FC = () => {
@@ -77,8 +80,7 @@ const BlogsPage: React.FC = () => {
       <BlogPageWrapper>
         <Title textContent="Blogs" />
         <BlogList>
-          <SearchBar
-            paddingLeft="0"
+          <StyledSearchBar
             onChange={(value) => setSearchText(value)}
           />
           <img

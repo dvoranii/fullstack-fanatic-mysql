@@ -57,7 +57,7 @@ export const FavoritesDropdownWrapper = styled.div`
   user-select: none;
 
   select {
-    font-family: "Roboto";
+    font-family: "Roboto", sans-serif;
     transition: all 150ms ease;
     &:hover {
       cursor: pointer;

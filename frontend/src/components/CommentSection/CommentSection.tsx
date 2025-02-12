@@ -159,8 +159,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         const { initialComment, parentChain, topLevelComment } = await fetchReplyAndParent(
           Number(numericCommentId)
         );
-    
-        // Set parent chain ids for loading replies
+
         for (let i = parentChain.length - 1; i >= 0; i--) {
           const parentId = parentChain[i].id;
           const nextParentId = parentChain[i - 1]?.id;
@@ -168,13 +167,16 @@ const CommentSection: React.FC<CommentSectionProps> = ({
           if (nextParentId) {
             await loadRepliesUntilTarget(parentId, nextParentId);
           } else {
-            // Last parent in chain - load until target comment
             await loadRepliesUntilTarget(parentId, numericCommentId);
           }
         }
     
         setParentCommentId(topLevelComment.id);
         setLoadingParentAndReply(false);
+
+        setLoadingTargetComment(false);
+        setHasMore(true);
+        
         waitForElementAndScroll(`comment-${numericCommentId}`, 10, 300);
       } catch (error) {
         console.error("Failed to load reply chain:", error);

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { colors } from "../../GlobalStyles";
+import SearchBar from "../../components/SearchBar/SearchBar";
 
 export const TutorialListOuter = styled.div`
   max-width: 1400px;
@@ -265,4 +266,8 @@ export const BottomIconsWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+`;
+
+export const StyledSearchBar = styled(SearchBar)`
+padding-left: 60px;
 `;

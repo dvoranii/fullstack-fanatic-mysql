@@ -35,6 +35,10 @@ export const AboutIntroWrapperOuter = styled.div`
 
 export const ImgWrapper = styled.div`
   user-select: none;
+
+  .elipse {
+  bottom: -4px;
+  }
 `;
 export const AboutIntroWrapper = styled.div`
   display: flex;

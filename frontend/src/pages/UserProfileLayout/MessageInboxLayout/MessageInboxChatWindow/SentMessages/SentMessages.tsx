@@ -22,6 +22,8 @@ const SentMessages: React.FC<SentMessagesProps> = ({ messages }) => {
     return <p>No messages available</p>;
   }
 
+  console.log(messages);
+
   return (
     <>
       {messages.map((message) => {
