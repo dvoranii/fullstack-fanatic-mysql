@@ -1,4 +1,4 @@
-import connectionPromise from "../db";
+import connectionPromise from "../db/db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 export const fetchUserByColumn = async (column: string, value: string) => {

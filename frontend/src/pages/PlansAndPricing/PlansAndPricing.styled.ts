@@ -5,7 +5,7 @@ export const PlansAndPricingContainerOuter = styled.div`
 `;
 
 export const ConsultationSectionWrapperInner = styled.div`
-  font-family: "Roboto";
+  font-family: "Roboto", sans-serif;
   width: 75%;
   margin: 0 auto;
   padding: 4.2rem 1.2rem 4.2rem 1.2rem;
@@ -83,7 +83,7 @@ export const ConsultFormTitleWrapper = styled.div`
   display: flex;
 
   h2 {
-    font-family: "Anybody";
+    font-family: "Anybody", sans-serif;
     text-transform: uppercase;
   }
 

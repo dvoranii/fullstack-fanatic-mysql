@@ -32,7 +32,7 @@ export const InputField = styled.input`
   border: 2px solid ${colors.white};
   background-color: rgba(228, 172, 27, 0.5);
   width: 100%;
-  font-family: "Montserrat";
+  font-family: "Montserrat", sans-serif;
   &:focus {
     outline: none;
   }
@@ -50,7 +50,7 @@ export const TextArea = styled.textarea`
   border-radius: 4px;
   resize: none;
   height: 150px;
-  font-family: "Montserrat";
+  font-family: "Montserrat", sans-serif;
 
   &:focus {
     outline: none;

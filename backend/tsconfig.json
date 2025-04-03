@@ -4,7 +4,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -17,6 +17,6 @@
     },
     "typeRoots": ["./node_modules/@types", "./types"]
   },
-  "include": ["src", "types", "src/types/express.d.ts"],
+  "include": ["src", "types", "src/types/express.d.ts", "knexfile.ts"],
   "exclude": ["node_modules"]
 }

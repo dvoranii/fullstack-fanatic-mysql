@@ -15,5 +15,7 @@
 frontend/stats.html
 
 backend/ecosystem.config.js
+backend/src/config
+
 
 /scripts

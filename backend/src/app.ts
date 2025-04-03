@@ -16,6 +16,7 @@ import stripeRoutes from "./routes/stripe";
 import networkRoutes from "./routes/network";
 import purchasesRoutes from "./routes/purchases";
 import csrfRoutes from "./routes/csrf";
+import authRoutes from "./routes/auth";
 import { Server } from "socket.io";
 import http from "http";
 import cookieParser from "cookie-parser";
@@ -79,6 +80,7 @@ app.use("/api/stripe", stripeRoutes);
 app.use("/api/network", networkRoutes);
 app.use("/api/purchases", purchasesRoutes);
 app.use("/api/csrf", csrfRoutes);
+app.use("/api/auth", authRoutes);
 
 // Rate limited
 // app.use("/api/users", authRateLimiter, userRoutes);

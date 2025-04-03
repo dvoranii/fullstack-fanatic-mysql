@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import connectionPromise from "../db";
+import connectionPromise from "../db/db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { authenticate } from "../middleware/authenticate";
 import { csrfProtection } from "../middleware/csrf";

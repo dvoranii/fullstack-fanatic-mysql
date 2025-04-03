@@ -1,5 +1,4 @@
 import express from "express";
-import { authenticate } from "../middleware/authenticate";
 import { csrfProtection } from "../middleware/csrf";
 import { validateGenericForm } from "../utils/formValidation";
 import { verifyRecaptchaToken } from "../utils/recaptchaUtils";

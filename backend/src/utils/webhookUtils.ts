@@ -1,4 +1,4 @@
-import connectionPromise from "../db";
+import connectionPromise from "../db/db";
 
 interface SessionMetadata {
   userId?: string;

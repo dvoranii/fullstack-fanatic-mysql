@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import connectionPromise from "../db";
+import connectionPromise from "../db/db";
 import { RowDataPacket } from "mysql2";
 import { authenticate } from "../middleware/authenticate";
 import { upload } from "../utils/storageConfig";
