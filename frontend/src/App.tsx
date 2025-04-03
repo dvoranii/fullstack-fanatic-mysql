@@ -38,14 +38,6 @@ const App: React.FC = () => {
               <NavBar />
               <Navigation />
               <Footer/>
-
-              {/* <LazySection
-                importFunc={() => import("./components/Footer/Footer")}
-                fallback={<LoadingSpinner />}
-                rootMargin="0px"
-                threshold={0}
-                componentProps={{}}
-              /> */}
             </Suspense>
           </Router>
         </UserProvider>

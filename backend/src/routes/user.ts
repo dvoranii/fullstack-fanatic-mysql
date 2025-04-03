@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
-import connectionPromise from "../db";
+import connectionPromise from "../db/db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import dotenv from "dotenv";
 import { fetchUserByColumn, insertUser } from "../utils/userUtils";

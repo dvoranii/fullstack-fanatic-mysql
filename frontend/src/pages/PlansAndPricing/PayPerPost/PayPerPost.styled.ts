@@ -20,7 +20,7 @@ export const PayPerPostWrapper = styled.section`
 export const PayPerPostTextWrapper = styled.div`
   width: 75%;
   margin: 0 auto;
-  font-family: "Roboto";
+  font-family: "Roboto", sans-serif;
   padding: 0 1.2rem 4.2rem 1.2rem;
 
   p {

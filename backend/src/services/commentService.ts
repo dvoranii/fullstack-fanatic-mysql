@@ -1,5 +1,5 @@
 import { FieldPacket, ResultSetHeader, RowDataPacket } from "mysql2";
-import connectionPromise from "../db";
+import connectionPromise from "../db/db";
 import { Connection } from "mysql2/promise";
 
 export const insertComment = async (

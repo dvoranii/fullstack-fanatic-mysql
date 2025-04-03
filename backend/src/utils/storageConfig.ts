@@ -1,12 +1,9 @@
 import multer from "multer";
 import { S3Client } from "@aws-sdk/client-s3";
-// import AWS from "aws-sdk";
 import multerS3 from "multer-s3";
 import dotenv from "dotenv";
 
 dotenv.config();
-
-// const spacesEndpoint = new AWS.Endpoint(process.env.SPACES_ENDPOINT as string);
 
 export const s3 = new S3Client({
   region: "tor1",

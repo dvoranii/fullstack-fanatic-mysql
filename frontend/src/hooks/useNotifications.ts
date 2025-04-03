@@ -19,7 +19,6 @@ export const useNotifications = (type?: string) => {
   useEffect(() => {
     const loadNotifications = async () => {
       try {
-        // Fetch notifications
         const { notifications: fetchedNotifications } =
           await fetchNotifications(1);
         const filteredNotifications = type
@@ -29,7 +28,6 @@ export const useNotifications = (type?: string) => {
           : fetchedNotifications;
         setNotifications(filteredNotifications);
 
-        // Fetch unread count
         const count = await getUnreadNotificationsCount();
         setUnreadNotificationCount(count);
       } catch (error) {
@@ -42,22 +40,19 @@ export const useNotifications = (type?: string) => {
     loadNotifications();
   }, [type, setUnreadNotificationCount]);
 
-  // Mark notifications as read
+
   const markNotificationAsReadById = async (notificationId: number) => {
     try {
-      // Backend call to mark the notification as read using the markNotificationAsRead function from notificationsService
+  
       await markNotificationAsRead(notificationId, csrfToken);
 
-      // Update the UI state to reflect the changes locally
       setIsReadNotificationUIUpdate((prev) => ({
         ...prev,
         [notificationId]: true,
       }));
-
-      // Decrement the unread notification count in UserContext
+     
       setUnreadNotificationCount((prevCount) => Math.max(prevCount - 1, 0));
 
-      // Update the notifications state in the context for this specific notification
       setNotifications((prevNotifications) =>
         prevNotifications.map((notification) =>
           notification.id === notificationId

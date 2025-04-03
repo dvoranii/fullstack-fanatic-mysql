@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import connectionPromise from "../db";
+import connectionPromise from "../db/db";
 import { RowDataPacket, ResultSetHeader } from "mysql2/promise";
 import { Comment } from "../types/Comment";
 import { authenticate } from "../middleware/authenticate";
@@ -163,6 +163,7 @@ router.post(
       content: string;
       parent_comment_id?: number;
     };
+    
     const { userId } = req.user!;
 
     try {
@@ -427,14 +428,13 @@ router.get(
   }
 );
 
-// Backend modification:
+
 router.get("/reply-and-parent", async (req: Request, res: Response) => {
   const { id } = req.query;
 
   try {
     const connection = await connectionPromise;
 
-    // Get initial comment
     const [comments] = await connection.query<RowDataPacket[]>(`
       SELECT c.*, u.name as user_name, u.profile_picture, c.parent_comment_id
       FROM comments c

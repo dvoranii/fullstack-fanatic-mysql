@@ -52,7 +52,7 @@ export const Title = styled.h2`
 `;
 
 export const IntroText = styled.p`
-  font-family: "Montserrat";
+  font-family: "Montserrat", sans-serif;
   font-size: clamp(1rem, 2vw, 1.2rem);
   line-height: 1.5;
   color: #555;

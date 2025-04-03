@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import connectionPromise from "../db";
+import connectionPromise from "../db/db";
 
 export const updateUserSubscription = async (
   session: Stripe.Checkout.Session

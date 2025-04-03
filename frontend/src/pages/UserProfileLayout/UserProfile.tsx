@@ -57,7 +57,6 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
     setProfilePicture(profile.profile_picture);
   }, [profile.banner_image, profile.profile_picture]);
 
-  console.log(profile.banner_image);
   useEffect(() => {
     const fetchFollowData = async () => {
       try {

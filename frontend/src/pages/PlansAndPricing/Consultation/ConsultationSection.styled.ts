@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const ConsultationSectionWrapperInner = styled.div`
-  font-family: "Roboto";
+  font-family: "Roboto", sans-serif;
   width: 75%;
   margin: 0 auto;
   padding: 4.2rem 1.2rem 4.2rem 1.2rem;

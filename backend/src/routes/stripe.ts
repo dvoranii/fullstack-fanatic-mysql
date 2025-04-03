@@ -8,10 +8,11 @@ import {
   handleSubscriptionPurchase,
   handleOneOffPayments,
 } from "../utils/webhookUtils";
-const { stripe, STRIPE_WEBHOOK_SECRET } = require("../utils/stripeClient");
-import connectionPromise from "../db";
+import { stripe, STRIPE_WEBHOOK_SECRET } from "../utils/stripeClient";
+import connectionPromise from "../db/db";
 import { RowDataPacket } from "mysql2";
 import { planMapping } from "../config/planMapping";
+import { priceMapping } from "../config/priceMapping";
 
 dotenv.config();
 
@@ -54,22 +55,12 @@ interface StripeCustomerIdRow {
   };
 
   const getStripePriceId = (item: CartItem): string | null => {
-    if (item.type === "tutorial") {
-      if (Number(item.price) === 5.0) {
-        return "price_1QAdG0Lg43ij91cKrppnUtez";
-      } else if (Number(item.price) === 3.5) {
-        return "price_1Q9VnYLg43ij91cKsu8U9CE0";
-      }
-    }
-
-    if (item.type === "blog") {
-      if (Number(item.price) === 2.5) {
-        return "price_1QAdIlLg43ij91cKToTVoLHl";
-      }
-    }
-
-    return null;
+    if (item.type !== 'tutorial' && item.type !== 'blog') return null;
+    
+    const price = Number(item.price);
+    return (priceMapping[item.type] as Record<number, string>)[price] || null;
   };
+
 
   router.post(
     "/create-checkout-session-payment",
