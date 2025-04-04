@@ -62,7 +62,12 @@ export const LeftSideWrapper = styled.div`
 export const RightSideWrapper = styled.div`
   width: 50%;
   height: 100%;
-  background-color: ${colors.secondary};
+  // background-color: ${colors.secondary};
+   background-image: linear-gradient(
+      rgba(255, 175, 43, 0.75),
+      rgba(255, 175, 43, 1)
+    ),
+    url("https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/wave-effect-bg.webp");
   position: relative;
   user-select: none;
 
