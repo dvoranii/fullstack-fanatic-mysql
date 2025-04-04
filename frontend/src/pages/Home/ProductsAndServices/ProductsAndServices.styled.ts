@@ -65,46 +65,46 @@ export const ProductsAndServicesWrapperOuter = styled.section`
     padding: 0px 20px 40px 20px;
   }
 `;
+
 export const ProductsAndServicesWrapperInner = styled.div`
   max-width: 1800px;
-  justify-content: center;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, minmax(300px, 1fr));
+  gap: 2rem;
 
   @media screen and (max-width: 1100px) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 2.4rem;
-    grid-template-rows: 1fr 1fr;
-    grid-template-columns: 1fr 1fr;
-    row-gap: 5.4rem;
+
+    > div {
+      /* Calculate width to match exactly 2 cards per row */
+      width: calc(50% - 1.2rem); /* 50% minus half the gap */
+      max-width: 450px;
+      min-width: 300px;
+    }
 
     .consult-card {
-      grid-row: 2;
-      grid-column: span 2;
       margin: 0 auto;
-      width: clamp(300px, 50vw, 450px);
     }
   }
 
   @media screen and (max-width: 860px) {
-    grid-template-rows: repeat(3, 1fr);
-    grid-template-columns: 1fr;
+    display: grid;
+    grid-template-columns: minmax(300px, 1fr);
 
-    .consult-card {
-      grid-column: 1;
-      grid-row: 3;
-    }
-
-    .card {
-      width: clamp(300px, 60vw, 450px);
-      margin: 0 auto;
+    > div {
+      width: 100%;
+      max-width: 450px;
     }
   }
 `;
 
 export const CardWrapper = styled.div`
-  width: 85%;
-  margin: 0 auto;
+  width: 100%;
+  margin: 30px auto;
   position: relative;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
@@ -125,6 +125,7 @@ export const CardWrapper = styled.div`
 
   @media screen and (max-width: 1100px) {
     min-height: 450px;
+
   }
 `;
 export const Card = styled.div`

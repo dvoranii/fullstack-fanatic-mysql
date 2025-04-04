@@ -20,7 +20,7 @@ import {
   ForgotPasswordLinkWrapper,
   BtnWrapper,
 } from "./RegisterLoginForm.styled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 interface RegisterLoginFormProps {
@@ -45,6 +45,19 @@ const RegisterLoginForm: React.FC<RegisterLoginFormProps> = ({
     setIsTermsAccepted,
   } = useAuthForm(defaultToLogin);
 
+  const demoUsername = import.meta.env.VITE_DEMO_USER;
+  const demoPassword = import.meta.env.VITE_DEMO_PASSWORD;
+
+  useEffect(() => {
+    if (defaultToLogin) {
+      const usernameField = document.getElementById('login-username') as HTMLInputElement;
+      const passwordField = document.getElementById('login-password') as HTMLInputElement;
+      
+      if (usernameField) usernameField.value = demoUsername;
+      if (passwordField) passwordField.value = demoPassword;
+    }
+  }, [defaultToLogin]);
+  
   const handleGoogleRegisterClick = useGoogleLogin({
     onSuccess: handleGoogleRegister,
     onError: (error) => {

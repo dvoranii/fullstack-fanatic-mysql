@@ -137,13 +137,24 @@ export const NavLinkStyled = styled(NavLink)<NavLinkStyledProps>`
     transform: ${({ underlinewidth }) =>
       underlinewidth === "0%" ? "none" : "scaleX(1)"};
   }
-
   &.no-underline::after {
     content: none;
   }
 
   &:last-child {
     padding-right: 1.2rem;
+  }
+
+  @media screen and (max-width: 988px) {
+    padding-right: 0;
+
+    &:last-child {
+    padding-right: 0rem;
+   } 
+
+    &::after {
+      width: 100%;
+    }
   }
 `;
 

@@ -1,7 +1,12 @@
 import styled from "styled-components";
 
 export const ForgotPasswordWrapper = styled.div`
-  padding: 20px;
+  padding: 80px 0px;
+
+  @media screen and (max-width: 550px) {
+    padding: 140px 0px;
+  }
+
 `;
 
 export const Title = styled.h2`
@@ -29,6 +34,7 @@ export const Label = styled.label`
   padding-bottom: 8px;
   color: #14213d;
   margin: 0 auto;
+  text-align:center;
 `;
 
 export const Input = styled.input`
@@ -38,7 +44,7 @@ export const Input = styled.input`
   border-radius: 8px;
   outline: none;
   transition: border-color 0.3s ease-in-out;
-  width: 400px;
+  width: clamp(200px, 20vw,400px);
   margin: 0 auto;
 
   &:focus {
