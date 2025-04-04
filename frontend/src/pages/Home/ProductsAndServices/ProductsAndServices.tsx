@@ -149,6 +149,7 @@ const ProductsAndServices: React.FC = () => {
                 <img
                   src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/home/consult-card-image.svg"
                   alt="Consultation Image"
+                  className="consult-img"
                   width="360"
                   height="128"
                 />

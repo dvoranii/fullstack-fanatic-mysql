@@ -42,7 +42,7 @@ const Hero: React.FC = () => {
 
           <HeroTextWrapper className="mobile-title">
             <h1>Full&nbsp;Stack&nbsp;Fanatic</h1>
-            <h2>Full&nbsp;Stack.&nbsp;Full&nbsp;Potential.</h2>
+            <h2>Master full-stack development with premium tutorials, expert blogs, and a collaborative community.</h2>
           </HeroTextWrapper>
 
           <ElipseWrapper>
@@ -68,7 +68,7 @@ const Hero: React.FC = () => {
 
             <HeroTextWrapper className="desktop-title">
               <h1>Full&nbsp;Stack&nbsp;Fanatic</h1>
-              <h2>Full&nbsp;Stack.&nbsp;Full&nbsp;Potential.</h2>
+              <h2>Master full-stack development with <b>premium tutorials</b>, <b>expert blogs</b>, and a <b>collaborative community</b>.</h2>
             </HeroTextWrapper>
 
             <HeroLinkWrapper>

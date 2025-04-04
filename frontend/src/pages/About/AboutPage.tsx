@@ -19,6 +19,9 @@ const AboutPage: React.FC = () => {
     setCoreTenetsVisible(isVisible);
   };
 
+  console.log(coreTenetsVisible);
+  console.log(setVisible);
+
   return (
     <>
       <Helmet>
