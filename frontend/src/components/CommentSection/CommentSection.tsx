@@ -102,12 +102,16 @@ const CommentSection: React.FC<CommentSectionProps> = ({
 
   const waitForElementAndScroll = (
     elementId: string,
-    attempts = 5,
+    attempts = 10,
     interval = 300
   ) => {
     const element = document.getElementById(elementId);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      setTimeout(() => {
+        element.scrollIntoView({ behavior: "smooth" });
+        element.classList.add("highlight-comment");
+        setTimeout(() => element.classList.remove("highlight-comment"), 3000);
+      }, 100);
     } else if (attempts > 0) {
       setTimeout(() => {
         waitForElementAndScroll(elementId, attempts - 1, interval);
@@ -130,18 +134,21 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         currentOffset
       );
   
-      // Update state with new replies
       setComments(prev => addRepliesToCommentTree(prev, parentId, newReplies));
       setVisibleReplies(prev => ({
         ...prev,
         [parentId]: (prev[parentId] || 0) + newReplies.length
       }));
-  
-      // Check if target exists in this batch
+      
+      setAllRepliesVisible(prev => ({ ...prev, [parentId]: true }));
+
       const found = newReplies.some(reply => reply.id === targetId);
       
       if (found) return true;
-      if (hasMore) return loadRepliesUntilTarget(parentId, targetId, currentOffset + REPLY_BATCH_SIZE);
+      
+      if (hasMore) {
+        return await loadRepliesUntilTarget(parentId, targetId, currentOffset + REPLY_BATCH_SIZE);
+      }
       
       return false;
     } catch (error) {
@@ -153,36 +160,45 @@ const CommentSection: React.FC<CommentSectionProps> = ({
 
   useEffect(() => {
     if (!numericCommentId) return;
-
+  
     const loadReplyAndParent = async () => {
       try {
+        setLoadingTargetComment(true);
         const { parentChain, topLevelComment } = await fetchReplyAndParent(
           Number(numericCommentId)
         );
-
-        for (let i = parentChain.length - 1; i >= 0; i--) {
-          const parentId = parentChain[i].id;
-          const nextParentId = parentChain[i - 1]?.id;
-          
-          if (nextParentId) {
-            await loadRepliesUntilTarget(parentId, nextParentId);
-          } else {
-            await loadRepliesUntilTarget(parentId, numericCommentId);
+  
+        setParentCommentId(topLevelComment.id);
+        
+        if (parentChain.length > 0) {
+          for (let i = parentChain.length - 1; i >= 0; i--) {
+            const parentId = parentChain[i].id;
+            const nextParentId = parentChain[i - 1]?.id;
+            
+            if (nextParentId) {
+              await loadRepliesUntilTarget(parentId, nextParentId);
+            } else {
+              await loadRepliesUntilTarget(parentId, numericCommentId);
+            }
+            
+            setAllRepliesVisible(prev => ({ ...prev, [parentId]: true }));
           }
         }
-    
-        setParentCommentId(topLevelComment.id);
+  
         setLoadingParentAndReply(false);
-
         setLoadingTargetComment(false);
-        setHasMore(true);
         
-        waitForElementAndScroll(`comment-${numericCommentId}`, 10, 300);
+        setTimeout(() => {
+          waitForElementAndScroll(`comment-${numericCommentId}`, 10, 300);
+        }, 100);
+        
       } catch (error) {
         console.error("Failed to load reply chain:", error);
+        setLoadingParentAndReply(false);
+        setLoadingTargetComment(false);
       }
     };
-
+  
     loadReplyAndParent();
   }, [numericCommentId]);
 
