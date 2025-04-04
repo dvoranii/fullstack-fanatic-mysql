@@ -156,7 +156,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
 
     const loadReplyAndParent = async () => {
       try {
-        const { initialComment, parentChain, topLevelComment } = await fetchReplyAndParent(
+        const { parentChain, topLevelComment } = await fetchReplyAndParent(
           Number(numericCommentId)
         );
 

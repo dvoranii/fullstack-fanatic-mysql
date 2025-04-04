@@ -62,7 +62,6 @@ export const LeftSideWrapper = styled.div`
 export const RightSideWrapper = styled.div`
   width: 50%;
   height: 100%;
-  // background-color: ${colors.secondary};
    background-image: linear-gradient(
       rgba(255, 175, 43, 0.75),
       rgba(255, 175, 43, 1)
@@ -140,6 +139,7 @@ export const HeroTextWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 0 40px;
 
   &.mobile-title {
     display: none;
@@ -147,7 +147,7 @@ export const HeroTextWrapper = styled.div`
 
   h1 {
     font-family: "Anybody", sans-serif;
-    font-size: clamp(2rem, 3vw, 3.6rem);
+    font-size: clamp(2rem, 3.75vw, 3.6rem);
     text-transform: uppercase;
     color: ${colors.black};
     font-weight: 700;
@@ -155,12 +155,12 @@ export const HeroTextWrapper = styled.div`
   }
 
   h2 {
-    font-family: "Roboto", sans-serif;
-    color: #222;
-    font-weight: 600;
-    opacity: 0.9;
+    padding-top: 1rem;
+    font-family: "ZenKakuGothicNewRegular", sans-serif;
+    text-align: center;
+    font-weight: 500;
+    opacity: 1;
     font-size: clamp(1.2rem, 2vw, 1.6rem);
-    text-transform: uppercase;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
     margin-top: -16px;
   }

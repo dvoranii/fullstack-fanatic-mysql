@@ -75,7 +75,6 @@ const NewChatDropdown: React.FC<NewChatDropdownProps> = ({
       <Dropdown isVisible={isVisible} width="220px">
         <SearchBar
           width="100%"
-          paddingLeft="0px"
           onChange={(value) => setSearchTerm(value)}
         />
         <UserItemsWrapper>

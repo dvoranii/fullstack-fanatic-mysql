@@ -193,9 +193,17 @@ export const CardImagesWrapper = styled.div`
   justify-content: center;
   user-select: none;
 
-  img {
-    width: 90%;
+  .ratings-img {
+    width: 95%;
     height: auto;
+  }
+
+  .blogs-img {
+    width: 65%;
+  }
+
+  .consult-img {
+    width: 85%;
   }
 
   @media screen and (max-width: 759px) {
