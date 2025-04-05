@@ -32,7 +32,7 @@ const SubscriptionSection: React.FC = () => {
             frequency="Month"
             buttonLabel="SUBSCRIBE"
             className="first-card"
-            priceId="price_1QCT2ZLg43ij91cKvrdh8tZJ"
+            priceId={import.meta.env.VITE_STARTER_SUBSCRIPTION_PRICEID}
           >
             <li>
               <strong>Cheap:</strong> Only $7 for access to all premium basic
@@ -54,7 +54,7 @@ const SubscriptionSection: React.FC = () => {
             buttonLabel="SUBSCRIBE"
             highlighted
             className="premium"
-            priceId="price_1QAEHFLg43ij91cKJ9Ofrpt5"
+            priceId={import.meta.env.VITE_PREMIUM_SUBSCRIPTION_PRICEID}
           >
             <li>
               <strong>Best Value:</strong> Save more with our yearly
@@ -75,7 +75,7 @@ const SubscriptionSection: React.FC = () => {
             frequency="Month"
             buttonLabel="SUBSCRIBE"
             className="third-card"
-            priceId="price_1QAEHFLg43ij91cKjwxB2FCZ"
+            priceId={import.meta.env.VITE_CASUALPRO_SUBSCRIPTION_PRICEID}
           >
             <li>
               <strong>Unlimited Access:</strong> Get access to all tutorials.
