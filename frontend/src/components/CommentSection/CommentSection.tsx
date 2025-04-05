@@ -317,7 +317,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     callback?: () => void
   ) => {
     const currentVisibleCount = visibleReplies[parentCommentId] || 0;
-
+  
     try {
       const { comments: newReplies, hasMore } = await fetchReplies(
         parentCommentId,
@@ -326,18 +326,18 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         REPLY_BATCH_SIZE,
         currentVisibleCount
       );
-
+  
       const repliesToAdd = Array.isArray(newReplies) ? newReplies : [];
-
+  
       setComments((prevComments) =>
         addRepliesToCommentTree(prevComments, parentCommentId, repliesToAdd)
       );
-
+  
       setVisibleReplies((prev) => ({
         ...prev,
         [parentCommentId]: currentVisibleCount + repliesToAdd.length,
       }));
-
+  
       if (!hasMore) {
         setComments((prevComments) =>
           prevComments.map((comment) =>
@@ -346,8 +346,10 @@ const CommentSection: React.FC<CommentSectionProps> = ({
               : comment
           )
         );
+        
+        setAllRepliesVisible(prev => ({ ...prev, [parentCommentId]: true }));
       }
-
+  
       if (callback) {
         callback();
       }
