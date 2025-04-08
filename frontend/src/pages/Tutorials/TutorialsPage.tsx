@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useMemo } from "react";
 import Pagination from "../../components/Pagination/Pagination";
 import {
   TutorialList,
@@ -15,7 +15,8 @@ import {
   DifficultyStarsWrapper,
   BottomIconsWrapper,
   TutorialListOuter,
-  StyledSearchBar
+  StyledSearchBar,
+  FreeIconWrapper
 } from "./TutorialsPage.styled";
 
 import { CartItem } from "../../types/CartItem";
@@ -28,6 +29,11 @@ import { tutorialContent } from "../../assets/tutorialContent";
 import { UserContext } from "../../context/UserContext";
 import { mapTutorialToCartItem } from "../../utils/cartUtils";
 
+import {tutorialTags} from "../../assets/tutorialTags";
+import { TagFilterSection } from "../../components/TagFilterSection/TagFilterSection";
+import { TutorialTag } from "../../types/Tutorial/Tutorial";
+import { TagFilterDropdown } from "../../components/TagFilterDropdown/TagFilterDropdown";
+
 const TutorialsPage: React.FC = () => {
   const {
     profile,
@@ -37,21 +43,71 @@ const TutorialsPage: React.FC = () => {
     addItemToCart = () => {},
     purchasedItems,
   } = useContext(UserContext) || {};
+  
   const [searchText, setSearchText] = useState("");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [filterMode, setFilterMode] = useState<"AND" | "OR">("OR");
+
   const [flipped, setFlipped] = useState<{ [key: string]: boolean }>({});
   const [currentPage, setCurrentPage] = useState(1);
   const tutorialsPerPage = 8;
-  const filteredTutorials = tutorialContent.filter((tutorial) =>
-    tutorial.title.toLowerCase().includes(searchText.toLowerCase())
-  );
+  // const filteredTutorials = tutorialContent.filter((tutorial) =>
+  //   tutorial.title.toLowerCase().includes(searchText.toLowerCase())
+  // );
+
+  const tagCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    tutorialContent.forEach(tutorial => {
+      tutorial.tags.forEach(tagId => {
+        counts[tagId] = (counts[tagId] || 0) +1;
+      })
+    })
+    return counts;
+  }, []);
+
+  const availableTags = useMemo(() => {
+    const allTagIds = Array.from(new Set(tutorialContent.flatMap(t => t.tags)));
+    return allTagIds.map(tagId => tutorialTags[tagId]).filter((tag): tag is TutorialTag => !!tag);
+  },[]);
+
+  const filteredTutorials = useMemo(() => {
+    return tutorialContent.filter(tutorial => {
+      const searchMatch = 
+        tutorial.title.toLowerCase().includes(searchText.toLowerCase()) || 
+        tutorial.description.toLowerCase().includes(searchText.toLowerCase());
+
+      const tagMatch = selectedTags.length === 0 || 
+        (filterMode === "AND" 
+          ? selectedTags.every(tag => tutorial.tags.includes(tag)) 
+          : selectedTags.some(tag => tutorial.tags.includes(tag)));
+
+
+      return searchMatch && tagMatch;
+    })
+  }, [searchText, selectedTags, filterMode]);
+
+  const handleTagToggle = (tagId: string) => {
+    setSelectedTags(prev => prev.includes(tagId) ? prev.filter(t => t !== tagId) : [...prev, tagId])
+  }
+
+
   const totalTutorials = filteredTutorials.length;
   const totalPages = Math.ceil(totalTutorials / tutorialsPerPage);
 
+  // useEffect(() => {
+  //   if (currentPage > totalPages) {
+  //     setCurrentPage(1);
+  //   }
+  // }, [searchText, totalPages]);
   useEffect(() => {
     if (currentPage > totalPages) {
       setCurrentPage(1);
     }
-  }, [searchText, totalPages]);
+  }, [totalPages, totalPages]);
+
+  const handleClearAllTags = () => {
+    setSelectedTags([]); 
+  };
 
   const isTutorialPurchased = (tutorialId: number) => {
     return purchasedItems?.some(
@@ -127,6 +183,7 @@ const TutorialsPage: React.FC = () => {
     e.preventDefault();
   };
 
+
   return (
     <>
       <Helmet>
@@ -144,6 +201,14 @@ const TutorialsPage: React.FC = () => {
       <TutorialListOuter>
         <StyledSearchBar
           onChange={(value) => setSearchText(value)}
+        />
+          <TagFilterDropdown
+            availableTags={availableTags}
+            selectedTags={selectedTags}
+            onTagToggle={handleTagToggle}
+            onClearAll={handleClearAllTags}
+            filterMode={filterMode}
+            onFilterModeChange={setFilterMode}
         />
         <img
           src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/SquaresAndTriangles.svg"
@@ -174,7 +239,7 @@ const TutorialsPage: React.FC = () => {
               canAccessTutorial(profile?.premiumLevel, tutorial.premiumLevel);
 
             const cartItem: CartItem = mapTutorialToCartItem(tutorial);
-
+            
             return (
               <TutorialItemWrapper key={tutorial.id}>
                 <CardInner className={flipped[tutorial.id] ? "is-flipped" : ""}>
@@ -209,6 +274,8 @@ const TutorialsPage: React.FC = () => {
                         >
                           <h2 title={tutorial.title}>{tutorial.title}</h2>
                           <img src={tutorial.image} alt={tutorial.title} />
+
+                         
                           <PremiumBanner>
                             <p>Premium</p>
                             <img
@@ -265,6 +332,9 @@ const TutorialsPage: React.FC = () => {
                           title="Read more"
                         />
                       </FlipIconWrapper>
+
+                        
+                      {tutorial.accessLevel === "free" ? <FreeIconWrapper><img src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/tutorials/free.png"/></FreeIconWrapper> : ""}
                     </BottomIconsWrapper>
                   </CardFace>
                   <CardFace back>

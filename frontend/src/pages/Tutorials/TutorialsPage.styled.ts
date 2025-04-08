@@ -271,3 +271,56 @@ export const BottomIconsWrapper = styled.div`
 export const StyledSearchBar = styled(SearchBar)`
 padding-left: 60px;
 `;
+
+export const FreeIconWrapper = styled.div`
+  padding: 4px 8px;
+  img {
+    width: 32px;
+  }
+
+`;
+
+// Add to TutorialsPage.styled.ts
+export const FilterControls = styled.div`
+  margin: 20px 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+`;
+
+export const FilterModeToggle = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  align-items: center;
+
+  button {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &.active {
+      background: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+  }
+`;
+
+export const ClearFiltersButton = styled.button`
+  margin-top: 15px;
+  padding: 8px 16px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #bb2d3b;
+  }
+`;
