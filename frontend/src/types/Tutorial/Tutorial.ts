@@ -14,6 +14,26 @@ export interface Tutorial {
   description: string;
 }
 
+// types/Tutorial/Tutorial.ts
+export type TutorialTag = {
+  id: string;
+  label: string;
+  color?: string;
+  category?: 
+    | "domain" 
+    | "security" 
+    | "level" 
+    | "technology" 
+    | "ui" 
+    | "infrastructure" 
+    | "methodology" 
+    | "platform" 
+    | "development" 
+    | "phase"; 
+  description?: string; 
+};
+
 export interface TutorialContentItem extends Tutorial {
   steps: Step[];
+  tags: string[];
 }

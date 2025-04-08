@@ -22,6 +22,7 @@ export const tutorialContent: TutorialContentItem[] = [
     accessLevel: "free",
     difficulty: "beginner",
     description: "Learn how to set up and deploy your server step by step.",
+    tags: ["devops", "deployment", "server", "backend", "beginner"]
   },
   {
     id: 2,
@@ -45,6 +46,7 @@ export const tutorialContent: TutorialContentItem[] = [
     difficulty: "beginner",
     description:
       "Master CSRF protection techniques to secure your web applications.",
+    tags: ["security", "web", "csrf", "backend", "beginner"],
   },
   {
     id: 3,
@@ -70,6 +72,7 @@ export const tutorialContent: TutorialContentItem[] = [
     difficulty: "intermediate",
     description:
       "Learn how JavaScript interacts with APIs using GET and POST requests.",
+      tags: ["javascript", "api", "frontend", "networking", "intermediate"]
   },
   {
     id: 4,
@@ -95,7 +98,8 @@ export const tutorialContent: TutorialContentItem[] = [
     difficulty: "advanced",
     description:
       "Learn the fundamentals of web application security, including OWASP guidelines and building secure apps.",
-  },
+    tags: ["security", "owasp", "web", "best-practices", "advanced"]
+    },
   {
     id: 5,
     title: "Forms in Depth",
@@ -120,7 +124,8 @@ export const tutorialContent: TutorialContentItem[] = [
     difficulty: "intermediate",
     description:
       "Dive deep into form handling in web development, from validation to security best practices.",
-  },
+      tags: ["forms", "frontend", "validation", "security", "intermediate"]
+    },
   {
     id: 6,
     title: "DNS 101: Let's deploy and configure an app!",
@@ -145,6 +150,7 @@ export const tutorialContent: TutorialContentItem[] = [
     difficulty: "intermediate",
     description:
       "Master DNS configuration and deploy your application with ease, ensuring optimal performance.",
+      tags: ["dns", "devops", "deployment", "networking", "intermediate"]
   },
   {
     id: 7,
@@ -168,6 +174,7 @@ export const tutorialContent: TutorialContentItem[] = [
     difficulty: "beginner",
     description:
       "Get started with frontend development, building projects using HTML, CSS, and JavaScript.",
+      tags: ["frontend", "html", "css", "javascript", "beginner"]
   },
   {
     id: 8,
@@ -191,6 +198,8 @@ export const tutorialContent: TutorialContentItem[] = [
     difficulty: "beginner",
     description:
       "Improve your website’s performance by optimizing images, reducing load times, and enhancing user experience.",
+      tags: ["responsive", "css", "frontend", "mobile", "intermediate"]
+      
   },
   {
     id: 9,
@@ -214,5 +223,6 @@ export const tutorialContent: TutorialContentItem[] = [
     difficulty: "intermediate",
     description:
       "Make your web applications fully responsive with CSS techniques and media queries.",
+      tags: ["responsive", "css", "frontend", "mobile", "intermediate"]
   },
 ];
