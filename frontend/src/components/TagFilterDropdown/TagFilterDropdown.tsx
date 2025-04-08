@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { TagPill } from '../TagPill/TagPill';
-import { TutorialTag } from '../../types/Tutorial/Tutorial';
+import { FilterTag } from '../../types/FilterTag';
 import { 
     DropdownContainer,
     DropdownToggle,
@@ -12,14 +11,16 @@ import {
     ClearButton,
     SelectedTagsHeader
   } from './TagFilterDropdown.styled';
+import { TagPill } from '../TagPill/TagPill';
 
 interface TagFilterDropdownProps {
-  availableTags: TutorialTag[];
+  availableTags: FilterTag[];
   selectedTags: string[];
   onTagToggle: (tagId: string) => void;
   onClearAll: () => void;
   filterMode: 'AND' | 'OR';
   onFilterModeChange: (mode: 'AND' | 'OR') => void;
+  className?: string;
 }
 
 export const TagFilterDropdown: React.FC<TagFilterDropdownProps> = ({
@@ -29,11 +30,12 @@ export const TagFilterDropdown: React.FC<TagFilterDropdownProps> = ({
   onClearAll,
   filterMode,
   onFilterModeChange,
+  className
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <DropdownContainer>
+    <DropdownContainer className={className}>
       <DropdownToggle onClick={() => setIsOpen(!isOpen)}>
         <span>
           {selectedTags.length > 0 

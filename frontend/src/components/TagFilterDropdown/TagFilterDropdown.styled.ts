@@ -4,8 +4,11 @@ export const DropdownContainer = styled.div`
   position: relative;
   margin-bottom: 20px;
   width: 350px;
-  padding-left: 60px;
   padding-top: 12px;
+
+  &.tutorial-filter-dropdown {
+  padding-left: 60px;
+}
 `;
 
 export const DropdownToggle = styled.button`
@@ -39,7 +42,6 @@ export const Arrow = styled.span`
 export const DropdownContent = styled.div`
   position: absolute;
   top: 100%;
-  left: 60px;
   right: 0;
   background: white;
   border: 1px solid #ddd;
@@ -49,6 +51,10 @@ export const DropdownContent = styled.div`
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   max-height: 400px;
   overflow-y: auto;
+
+  .tutorial-filter-dropdown & {
+  margin-left: 60px;
+  }
 `;
 
 export const FilterModeToggle = styled.div`

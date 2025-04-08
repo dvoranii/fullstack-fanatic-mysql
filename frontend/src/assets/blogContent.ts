@@ -20,6 +20,7 @@ export const blogContent: BlogContentItem[] = [
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
+    tags: ["frontend", "react", "javascript"],
   },
   {
     id: 2,
@@ -40,6 +41,7 @@ export const blogContent: BlogContentItem[] = [
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
+    tags: ["backend", "nodejs", "javascript"],
   },
   {
     id: 3,
@@ -60,6 +62,7 @@ export const blogContent: BlogContentItem[] = [
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
+    tags: ["frontend", "css", "styling"],
   },
   {
     id: 4,
@@ -80,6 +83,7 @@ export const blogContent: BlogContentItem[] = [
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
+    tags: ["typescript", "programming", "tools"],
   },
   {
     id: 5,
@@ -95,6 +99,7 @@ export const blogContent: BlogContentItem[] = [
     availableForPurchase: true,
     price: 2.5,
     accessLevel: "premium",
+    tags: ["graphql", "api", "backend"],
   },
   {
     id: 6,
@@ -110,6 +115,7 @@ export const blogContent: BlogContentItem[] = [
     availableForPurchase: true,
     price: 2.5,
     accessLevel: "premium",
+    tags: ["kubernetes", "devops", "microservices"],
   },
   {
     id: 7,
@@ -125,6 +131,7 @@ export const blogContent: BlogContentItem[] = [
     availableForPurchase: true,
     price: 2.5,
     accessLevel: "premium",
+    tags: ["webassembly", "performance", "web"],
   },
   {
     id: 8,
@@ -140,5 +147,6 @@ export const blogContent: BlogContentItem[] = [
     availableForPurchase: true,
     price: 2.5,
     accessLevel: "premium",
+    tags: ["aws", "serverless", "cloud"],
   },
 ];

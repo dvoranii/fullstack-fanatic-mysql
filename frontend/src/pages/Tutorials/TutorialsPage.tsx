@@ -29,8 +29,8 @@ import { tutorialContent } from "../../assets/tutorialContent";
 import { UserContext } from "../../context/UserContext";
 import { mapTutorialToCartItem } from "../../utils/cartUtils";
 
-import {tutorialTags} from "../../assets/tutorialTags";
-import { TutorialTag } from "../../types/Tutorial/Tutorial";
+import {filterTags} from "../../assets/filterTags";
+import { FilterTag } from "../../types/FilterTag";
 import { TagFilterDropdown } from "../../components/TagFilterDropdown/TagFilterDropdown";
 
 const TutorialsPage: React.FC = () => {
@@ -50,9 +50,6 @@ const TutorialsPage: React.FC = () => {
   const [flipped, setFlipped] = useState<{ [key: string]: boolean }>({});
   const [currentPage, setCurrentPage] = useState(1);
   const tutorialsPerPage = 8;
-  // const filteredTutorials = tutorialContent.filter((tutorial) =>
-  //   tutorial.title.toLowerCase().includes(searchText.toLowerCase())
-  // );
 
   const tagCounts = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -66,7 +63,7 @@ const TutorialsPage: React.FC = () => {
 
   const availableTags = useMemo(() => {
     const allTagIds = Array.from(new Set(tutorialContent.flatMap(t => t.tags)));
-    return allTagIds.map(tagId => tutorialTags[tagId]).filter((tag): tag is TutorialTag => !!tag);
+    return allTagIds.map(tagId => filterTags[tagId]).filter((tag): tag is FilterTag => !!tag);
   },[]);
 
   const filteredTutorials = useMemo(() => {
@@ -203,6 +200,7 @@ const TutorialsPage: React.FC = () => {
             onClearAll={handleClearAllTags}
             filterMode={filterMode}
             onFilterModeChange={setFilterMode}
+            className={"tutorial-filter-dropdown"}
         />
         <img
           src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/SquaresAndTriangles.svg"

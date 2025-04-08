@@ -198,7 +198,7 @@ export const tutorialContent: TutorialContentItem[] = [
     difficulty: "beginner",
     description:
       "Improve your website’s performance by optimizing images, reducing load times, and enhancing user experience.",
-      tags: ["responsive", "css", "frontend", "mobile", "intermediate"]
+      tags: ["responsive", "css", "frontend", "mobile"]
       
   },
   {
