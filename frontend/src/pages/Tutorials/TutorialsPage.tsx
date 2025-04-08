@@ -30,7 +30,6 @@ import { UserContext } from "../../context/UserContext";
 import { mapTutorialToCartItem } from "../../utils/cartUtils";
 
 import {tutorialTags} from "../../assets/tutorialTags";
-import { TagFilterSection } from "../../components/TagFilterSection/TagFilterSection";
 import { TutorialTag } from "../../types/Tutorial/Tutorial";
 import { TagFilterDropdown } from "../../components/TagFilterDropdown/TagFilterDropdown";
 
@@ -94,11 +93,6 @@ const TutorialsPage: React.FC = () => {
   const totalTutorials = filteredTutorials.length;
   const totalPages = Math.ceil(totalTutorials / tutorialsPerPage);
 
-  // useEffect(() => {
-  //   if (currentPage > totalPages) {
-  //     setCurrentPage(1);
-  //   }
-  // }, [searchText, totalPages]);
   useEffect(() => {
     if (currentPage > totalPages) {
       setCurrentPage(1);
