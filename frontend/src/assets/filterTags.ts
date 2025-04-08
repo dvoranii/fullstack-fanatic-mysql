@@ -1,6 +1,6 @@
-import { TutorialTag } from "../types/Tutorial/Tutorial";
+import { FilterTag } from "../types/FilterTag";
 
-export const tutorialTags: Record<string, TutorialTag> = {
+export const filterTags: Record<string, FilterTag> = {
   // Domain Tags
   "frontend": { 
     id: "frontend", 

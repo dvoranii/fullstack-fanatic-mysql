@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useMemo } from "react";
 import Title from "../../components/Title/Title";
 import {
   BlogList,
@@ -25,6 +25,10 @@ import { UserContext } from "../../context/UserContext";
 import { blogContent } from "../../assets/blogContent";
 import { mapBlogToCartItem } from "../../utils/cartUtils";
 
+import { TagFilterDropdown } from "../../components/TagFilterDropdown/TagFilterDropdown";
+import { filterTags } from "../../assets/filterTags"; 
+import { FilterTag } from "../../types/FilterTag";
+
 const BlogsPage: React.FC = () => {
   const {
     profile,
@@ -37,18 +41,59 @@ const BlogsPage: React.FC = () => {
 
   const [visibleBlogs, setVisibleBlogs] = useState<number>(4);
   const [searchText, setSearchText] = useState<string>("");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [filterMode, setFilterMode] = useState<"AND" | "OR">("OR");
+
+  const tagCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    blogContent.forEach(blog => {
+      blog.tags.forEach(tagId => {
+        counts[tagId] = (counts[tagId] || 0) + 1;
+      })
+    })
+    return counts;
+  },[]);
+
+  const availableTags = useMemo(() => {
+    const allTagIds = Array.from(new Set(blogContent.flatMap(b=> b.tags)));
+    return allTagIds.map(tagId=> filterTags[tagId]).filter((tag): tag is FilterTag => !!tag)
+  },[])
+
+
+  const filteredBlogs = useMemo(() => {
+    return blogContent.filter(blog => {
+      const searchMatch = 
+        blog.title.toLowerCase().includes(searchText.toLowerCase()) ||
+        blog.tags.some(tag => tag.toLowerCase().includes(searchText.toLowerCase()));
+  
+      const tagMatch = selectedTags.length === 0 || 
+        (filterMode === "AND"
+          ? selectedTags.every(tag => blog.tags.includes(tag))
+          : selectedTags.some(tag => blog.tags.includes(tag)));
+  
+      return searchMatch && tagMatch;
+    });
+  }, [searchText, selectedTags, filterMode]);
+
+  const handleTagToggle = (tagId: string) => {
+    setSelectedTags(prev => 
+      prev.includes(tagId) ? prev.filter(t => t !== tagId) : [...prev, tagId]
+    );
+  };
+  
+  const handleClearAllTags = () => {
+    setSelectedTags([]);
+  };
+  
 
   useEffect(() => {
     setVisibleBlogs(4);
-  }, [searchText]);
+  }, [searchText, selectedTags, filterMode]);
 
   const handleSeeMore = () => {
     setVisibleBlogs((prevVisibleBlogs) => prevVisibleBlogs + 4);
   };
 
-  const filteredBlogs = blogContent.filter((blog) =>
-    blog.title.toLowerCase().includes(searchText.toLowerCase())
-  );
 
   const canAccessBlog = (blogId: number) => {
     return (
@@ -83,6 +128,15 @@ const BlogsPage: React.FC = () => {
           <StyledSearchBar
             onChange={(value) => setSearchText(value)}
           />
+             <TagFilterDropdown
+              availableTags={availableTags}
+              selectedTags={selectedTags}
+              onTagToggle={handleTagToggle}
+              onClearAll={handleClearAllTags}
+              filterMode={filterMode}
+              onFilterModeChange={setFilterMode}
+            />
+
           <img
             src="https://fsf-assets.tor1.cdn.digitaloceanspaces.com/assets/static/images/bg-images/SquaresAndTriangles.svg"
             className="squares-and-triangles"

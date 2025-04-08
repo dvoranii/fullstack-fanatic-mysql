@@ -10,6 +10,7 @@ export interface Blog {
   availableForPurchase: boolean;
   accessLevel: "free" | "premium";
   price?: number;
+  tags: string[];
 }
 
 export interface BlogContentItem extends Blog {
