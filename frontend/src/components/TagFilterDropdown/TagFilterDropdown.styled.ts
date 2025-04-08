@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const DropdownContainer = styled.div`
   position: relative;
   margin-bottom: 20px;
-  width: 250px;
+  width: 350px;
   padding-left: 60px;
   padding-top: 12px;
 `;
@@ -39,7 +39,7 @@ export const Arrow = styled.span`
 export const DropdownContent = styled.div`
   position: absolute;
   top: 100%;
-  left: 0;
+  left: 60px;
   right: 0;
   background: white;
   border: 1px solid #ddd;

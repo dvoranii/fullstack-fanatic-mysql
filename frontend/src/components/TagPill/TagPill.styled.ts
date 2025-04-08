@@ -20,3 +20,20 @@ export const Pill = styled.span<{ color: string; isActive: boolean }>`
     transform: translateY(-1px);
   }
 `;
+
+export const RemoveButton = styled.button`
+  margin-left: 6px;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 0 0 4px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  
+  &:hover {
+    opacity: 1;
+  }
+`;
