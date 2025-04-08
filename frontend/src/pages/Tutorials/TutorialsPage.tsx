@@ -200,6 +200,7 @@ const TutorialsPage: React.FC = () => {
             onClearAll={handleClearAllTags}
             filterMode={filterMode}
             onFilterModeChange={setFilterMode}
+            tagCounts={tagCounts}
             className={"tutorial-filter-dropdown"}
         />
         <img

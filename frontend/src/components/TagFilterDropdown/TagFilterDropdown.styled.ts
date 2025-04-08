@@ -4,11 +4,12 @@ export const DropdownContainer = styled.div`
   position: relative;
   margin-bottom: 20px;
   width: 350px;
-  padding-top: 12px;
+
 
   &.tutorial-filter-dropdown {
-  padding-left: 60px;
-}
+    padding-left: 60px;
+    padding-top: 12px;
+  }
 `;
 
 export const DropdownToggle = styled.button`
