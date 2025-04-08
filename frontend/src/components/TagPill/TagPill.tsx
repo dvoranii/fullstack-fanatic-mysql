@@ -1,17 +1,21 @@
 import { TutorialTag } from "../../types/Tutorial/Tutorial";
-import {Pill} from "./TagPill.styled";
+import {Pill, RemoveButton} from "./TagPill.styled";
 
 interface TagPillProps {
     tag: TutorialTag;
     isActive?: boolean;
     onClick?: () => void;
     children?: React.ReactNode;
+    onRemove?: () => void;
+    showRemove?: boolean;
 }
 
 export const TagPill: React.FC<TagPillProps> = ({
     tag,
     isActive = false,
     onClick,
+    onRemove,
+    showRemove,
     children
 }) => {
 
@@ -27,6 +31,17 @@ export const TagPill: React.FC<TagPillProps> = ({
         title={tag.label}
         >
         {children || tag.label}
+        {showRemove && (
+            <RemoveButton
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onRemove?.();
+                }}
+                aria-label={`Remove ${tag.label} filter`}
+            >
+                ×
+            </RemoveButton>
+        )}
         </Pill>
     )
 }

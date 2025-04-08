@@ -76,6 +76,8 @@ export const TagFilterDropdown: React.FC<TagFilterDropdownProps> = ({
                       tag={tag}
                       isActive={true}
                       onClick={() => onTagToggle(tagId)}
+                      showRemove={true}
+                      onRemove={() => onTagToggle(tagId)}
                     />
                   ) : null;
                 })}
