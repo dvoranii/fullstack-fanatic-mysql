@@ -20,6 +20,7 @@ interface TagFilterDropdownProps {
   onClearAll: () => void;
   filterMode: 'AND' | 'OR';
   onFilterModeChange: (mode: 'AND' | 'OR') => void;
+  tagCounts: Record<string, number>;
   className?: string;
 }
 
@@ -30,6 +31,7 @@ export const TagFilterDropdown: React.FC<TagFilterDropdownProps> = ({
   onClearAll,
   filterMode,
   onFilterModeChange,
+  tagCounts,
   className
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -80,7 +82,9 @@ export const TagFilterDropdown: React.FC<TagFilterDropdownProps> = ({
                       onClick={() => onTagToggle(tagId)}
                       showRemove={true}
                       onRemove={() => onTagToggle(tagId)}
-                    />
+                    >
+                      {tag.label} ({tagCounts[tag.id] || 0})
+                    </TagPill>
                   ) : null;
                 })}
               </TagList>
@@ -98,7 +102,9 @@ export const TagFilterDropdown: React.FC<TagFilterDropdownProps> = ({
                     tag={tag}
                     isActive={false}
                     onClick={() => onTagToggle(tag.id)}
-                  />
+                  >
+                    {tag.label} ({tagCounts[tag.id] || 0})
+                  </TagPill>
                 ))}
             </TagList>
           </TagSection>

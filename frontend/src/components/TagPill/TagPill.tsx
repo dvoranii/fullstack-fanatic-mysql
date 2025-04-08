@@ -1,8 +1,8 @@
-import { TutorialTag } from "../../types/Tutorial/Tutorial";
+import { FilterTag } from "../../types/FilterTag";
 import {Pill, RemoveButton} from "./TagPill.styled";
 
 interface TagPillProps {
-    tag: TutorialTag;
+    tag: FilterTag;
     isActive?: boolean;
     onClick?: () => void;
     children?: React.ReactNode;

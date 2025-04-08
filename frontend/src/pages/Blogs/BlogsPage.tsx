@@ -129,12 +129,13 @@ const BlogsPage: React.FC = () => {
             onChange={(value) => setSearchText(value)}
           />
              <TagFilterDropdown
-              availableTags={availableTags}
-              selectedTags={selectedTags}
-              onTagToggle={handleTagToggle}
-              onClearAll={handleClearAllTags}
-              filterMode={filterMode}
-              onFilterModeChange={setFilterMode}
+                availableTags={availableTags}
+                selectedTags={selectedTags}
+                onTagToggle={handleTagToggle}
+                onClearAll={handleClearAllTags}
+                filterMode={filterMode}
+                onFilterModeChange={setFilterMode}
+                tagCounts={tagCounts}
             />
 
           <img
