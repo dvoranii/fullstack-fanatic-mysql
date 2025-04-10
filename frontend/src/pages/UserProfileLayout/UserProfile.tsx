@@ -31,6 +31,8 @@ import {
 import { UserContext } from "../../context/UserContext";
 import MessageModalButton from "../../components/MessageModalButton/MessageModalButton";
 import AccountActivity from "./AccountActivity/AccountActivity";
+import BlockButton from "../../components/BlockButton/BlockButton";
+
 
 const UserProfilePage: React.FC<UserProfilePageProps> = ({
   profile,
@@ -144,6 +146,10 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
               setFollowersCount={setFollowersCount}
             />
           )}
+        <br/>
+        {!isEditable && loggedInUser && (
+          <BlockButton userId={profile.id} />
+        )}
         </ProfileInfoColumn1>
         <ProfileInfoColumn2>
           <BioContentWrapper>

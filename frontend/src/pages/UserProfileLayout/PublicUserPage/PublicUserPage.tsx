@@ -11,6 +11,7 @@ import { Blog } from "../../../types/Blog/Blog";
 import { Tutorial } from "../../../types/Tutorial/Tutorial";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 
+
 const PublicUserPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();

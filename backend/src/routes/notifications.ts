@@ -31,15 +31,29 @@ router.get(
       LEFT JOIN users u ON n.sender_id = u.id
       LEFT JOIN comments c ON n.comment_id = c.id
       WHERE n.user_id = ?
+        AND n.is_hidden = 0
+        AND NOT EXISTS (
+          SELECT 1 FROM blocked_users
+          WHERE blocker_id = n.sender_id AND blocked_id = ?
+        )
       ORDER BY n.created_at DESC
       LIMIT ? OFFSET ?
     `,
-        [userId, limit, offset]
+        [userId, userId, limit, offset]
       );
 
       const [totalCountResult] = await connection.query<RowDataPacket[]>(
-        "SELECT COUNT(*) as total FROM notifications WHERE user_id = ?",
-        [userId]
+        `SELECT COUNT(*) as total 
+        FROM notifications n 
+        WHERE n.user_id = ?
+          AND n.is_hidden = 0
+          AND NOT EXISTS (
+            SELECT 1 FROM blocked_users
+            WHERE (blocker_id = ? AND blocked_id = n.sender_id)
+            OR (blocked_id = ? AND blocker_id = n.sender_id)
+          )
+        `,
+        [userId, userId, userId]
       );
       const totalCount = totalCountResult[0]?.total || 0;
       const hasMore = page * limit < totalCount;
@@ -95,10 +109,18 @@ router.get(
       const connection = await connectionPromise;
 
       const [result] = await connection.query<RowDataPacket[]>(
-        `SELECT COUNT(*) AS unreadCount
-       FROM notifications
-       WHERE user_id = ? AND is_read = FALSE`,
-        [userId]
+        `
+        SELECT COUNT(*) AS unreadCount
+        FROM notifications n
+        WHERE n.user_id = ? 
+          AND n.is_read = 0
+          AND n.is_hidden = 0
+          AND NOT EXISTS (
+            SELECT 1 FROM blocked_users 
+            WHERE blocker_id = n.sender_id AND blocked_id = ?
+          )
+        `,
+        [userId, userId]
       );
 
       const unreadCount = result[0]?.unreadCount || 0;

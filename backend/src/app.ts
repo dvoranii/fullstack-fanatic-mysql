@@ -17,6 +17,7 @@ import networkRoutes from "./routes/network";
 import purchasesRoutes from "./routes/purchases";
 import csrfRoutes from "./routes/csrf";
 import authRoutes from "./routes/auth";
+import blockRoutes from "./routes/block";
 import { Server } from "socket.io";
 import http from "http";
 import cookieParser from "cookie-parser";
@@ -81,6 +82,7 @@ app.use("/api/network", networkRoutes);
 app.use("/api/purchases", purchasesRoutes);
 app.use("/api/csrf", csrfRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/block", blockRoutes);
 
 // Rate limited
 // app.use("/api/users", authRateLimiter, userRoutes);
