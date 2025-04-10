@@ -54,6 +54,12 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
   const [followingCount, setFollowingCount] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
 
+  const [isBlocked, setIsBlocked] = useState(false);
+
+  const handleBlockStatusChange = (blocked: boolean) => {
+    setIsBlocked(blocked);
+  }
+
   useEffect(() => {
     setBannerImage(profile.banner_image);
     setProfilePicture(profile.profile_picture);
@@ -144,11 +150,18 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
               isFollowing={isFollowing}
               setIsFollowing={setIsFollowing}
               setFollowersCount={setFollowersCount}
+              isBlocked={isBlocked}
             />
           )}
         <br/>
         {!isEditable && loggedInUser && (
-          <BlockButton userId={profile.id} />
+          <BlockButton 
+            userId={profile.id}
+            isFollowing={isFollowing}
+            setIsFollowing={setIsFollowing}
+            setFollowersCount={setFollowersCount}
+            onBlockStatusChange={handleBlockStatusChange}
+          />
         )}
         </ProfileInfoColumn1>
         <ProfileInfoColumn2>

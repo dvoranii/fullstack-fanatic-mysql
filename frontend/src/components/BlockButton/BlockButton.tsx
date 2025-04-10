@@ -6,10 +6,19 @@ import {Button} from "./BlockButton.styled"
 interface BlockButtonProps {
   userId: number;
   onBlockStatusChange?: (isBlocked: boolean) => void;
+  setIsFollowing?: React.Dispatch<React.SetStateAction<boolean>>;
+  setFollowersCount?:React.Dispatch<React.SetStateAction<number>>;
+  isFollowing?: boolean;
 }
 
 
-const BlockButton: React.FC<BlockButtonProps> = ({ userId, onBlockStatusChange }) => {
+const BlockButton: React.FC<BlockButtonProps> = ({ 
+  userId, 
+  onBlockStatusChange, 
+  setIsFollowing,
+  setFollowersCount,
+  isFollowing
+ }) => {
   const csrfToken = useCsrfToken();
   const [isBlocked, setIsBlocked] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -37,6 +46,18 @@ const BlockButton: React.FC<BlockButtonProps> = ({ userId, onBlockStatusChange }
         await unblockUser(userId, csrfToken);
         setIsBlocked(false);
       } else {
+
+        isFollowing && setIsFollowing?.(false);
+        isFollowing && setFollowersCount?.(prev => Math.max(0, prev - 1));
+
+        // if (setIsFollowing) {
+        //   setIsFollowing(false);
+        // }
+
+        // if (setFollowersCount) {
+        //   setFollowersCount(prevCount => Math.max(0, prevCount - 1))
+        // }
+        
         await blockUser(userId, csrfToken);
         setIsBlocked(true);
       }
@@ -45,6 +66,11 @@ const BlockButton: React.FC<BlockButtonProps> = ({ userId, onBlockStatusChange }
       }
     } catch (error) {
       console.error("Error toggling block status:", error);
+
+      if (!isBlocked && isFollowing) {
+        setIsFollowing?.(true);
+        setFollowersCount?.(prev => prev + 1);
+      }
     } finally {
       setIsLoading(false);
     }
