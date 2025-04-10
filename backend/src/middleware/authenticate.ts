@@ -13,6 +13,7 @@ export const authenticate = (
   res: Response,
   next: NextFunction
 ) => {
+
   const authHeader = req.headers["authorization"] as string | undefined;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {

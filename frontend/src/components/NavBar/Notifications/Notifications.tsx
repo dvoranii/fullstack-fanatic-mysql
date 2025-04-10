@@ -27,9 +27,10 @@ const Notifications: React.FC = () => {
   const csrfToken = useCsrfToken();
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { notifications, setNotifications, loading } = useNotifications();
+  const { notifications, setNotifications, loading} = useNotifications();
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const { unreadNotificationCount, setUnreadNotificationCount } = useContext(
     UserContext
@@ -42,10 +43,16 @@ const Notifications: React.FC = () => {
       if (!prev) {
         setPage(1);
         setHasMore(true);
-        loadMoreNotifications();
+        setNotifications([]);
+
+        setTimeout(() => {
+          loadMoreNotifications(1);
+        }, 0)
       }
+
       return !prev;
-    });
+    })
+
   }, []);
 
   const markAsRead = useCallback(
@@ -64,7 +71,7 @@ const Notifications: React.FC = () => {
         await markNotificationAsRead(notificationId, csrfToken);
       } catch (error) {
         console.error("Failed to mark notification as read:", error);
-        // Revert changes on error
+
         setUnreadNotificationCount((prevCount) => prevCount + 1);
         setNotifications((prevNotifications) =>
           prevNotifications.map((notification) =>
@@ -78,25 +85,36 @@ const Notifications: React.FC = () => {
     [setUnreadNotificationCount, setNotifications, csrfToken]
   );
 
-  const loadMoreNotifications = useCallback(async () => {
+  const loadMoreNotifications = useCallback(async (pageToLoad = page) => {
     try {
+      setIsLoadingMore(true);
       const { notifications: fetchedNotifications, hasMore: newHasMore } =
-        await fetchNotifications(page);
+        await fetchNotifications(pageToLoad);
 
-      setNotifications((prevNotifications) => [
-        ...prevNotifications,
-        ...fetchedNotifications.filter(
-          (newNotification) =>
-            !prevNotifications.some(
-              (notification) => notification.id === newNotification.id
-            )
-        ),
-      ]);
+      if (pageToLoad === 1) {
+        setNotifications(fetchedNotifications);
+      } else {
+        setNotifications((prevNotifications) => [
+          ...prevNotifications,
+          ...fetchedNotifications.filter(
+            (newNotification) =>
+              !prevNotifications.some(
+                (notification) => notification.id === newNotification.id
+              )
+          ),
+        ]);
+      }
 
       setHasMore(newHasMore);
-      setPage((prevPage) => prevPage + 1);
+
+      if (fetchedNotifications.length > 0 && newHasMore) {
+        setPage(pageToLoad + 1);
+      }
     } catch (error) {
       console.error("Failed to fetch notifications:", error);
+      setHasMore(false);
+    } finally {
+      setIsLoadingMore(false);
     }
   }, [page, setNotifications]);
 
@@ -147,8 +165,15 @@ const Notifications: React.FC = () => {
                   dataLength={notifications.length}
                   next={loadMoreNotifications}
                   hasMore={hasMore}
-                  loader={<LoadingSpinner width="30px" color="#3498db" />}
+                  loader={isLoadingMore ? <LoadingSpinner width="30px" color="#3498db" /> : null}
                   scrollableTarget="scrollableDiv"
+                  endMessage={
+                    notifications.length > 0 && !hasMore && (
+                      <p style={{ textAlign: "center", padding: "10px" }}>
+                        No more notifications
+                      </p>
+                    )
+                  }
                 >
                   {notificationList}
                 </InfiniteScroll>

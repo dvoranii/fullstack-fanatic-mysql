@@ -13,7 +13,7 @@ import {
   deleteComment,
   fetchCommentLikes,
   fetchTotalComments,
-  findTopLevelComment,
+  // findTopLevelComment,
 } from "../services/commentService";
 import { getUserIdFromToken } from "../utils/getUserIdFromToken";
 

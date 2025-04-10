@@ -47,7 +47,8 @@ const MessageUserModalButton: React.FC<MessageModalButtonProps> = ({
       ) : (
         <SimpleButton onClick={handleOpenMessageModal}>{text}</SimpleButton>
       )}
-</BtnWrapper>
+    </BtnWrapper>
+    
       {isModalOpen && (
         <MessageUserModal
           isOpen={isModalOpen}

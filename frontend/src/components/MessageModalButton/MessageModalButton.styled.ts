@@ -1,7 +1,5 @@
-// MessageModalButton.styled.ts
 import styled from "styled-components";
 
-// Simple button styling
 export const SimpleButton = styled.button`
   background-color: #007bff;
   color: white;
@@ -17,7 +15,6 @@ export const SimpleButton = styled.button`
   }
 `;
 
-// Button text styling
 export const ButtonText = styled.span`
   position: relative;
   z-index: 1;
@@ -27,7 +24,6 @@ export const ButtonText = styled.span`
   color: #ffa000;
 `;
 
-// Icon container with sliding animation
 export const ButtonIcon = styled.div`
   background-color: #ffa000;
   width: 60px;
@@ -60,7 +56,6 @@ export const ButtonIcon = styled.div`
   }
 `;
 
-// Custom icon styling
 export const CustomIcon = styled.i`
   position: absolute;
   right: 25px;
@@ -68,7 +63,6 @@ export const CustomIcon = styled.i`
   color: #fff;
 `;
 
-// Complex button styling for "publicUser" variant
 export const StyledButton = styled.a`
   width: clamp(170px, 3vw, 100%);
   height: 45px;
@@ -80,11 +74,12 @@ export const StyledButton = styled.a`
   font-size: 18px;
   padding: 9px 0;
   padding-right: 8px;
-  margin: 20px 5px;
+  margin: 12px 4px;
   transition: all 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   color: #ffa000;
   overflow: hidden;
+
 
   &:hover {
     color: #fff;
