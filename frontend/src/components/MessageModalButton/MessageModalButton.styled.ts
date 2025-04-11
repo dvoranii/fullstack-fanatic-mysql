@@ -1,31 +1,31 @@
 import styled from "styled-components";
 
-export const SimpleButton = styled.button`
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s;
+interface BlockedProps {
+  $isBlocked?: boolean;
+}
 
-  &:hover {
-    background-color: #0056b3;
-  }
+export const BtnWrapper = styled.div`
+  width: 100%;
 `;
 
-export const ButtonText = styled.span`
+export const CustomIcon = styled.i`
+  position: absolute;
+  right: 25px;
+  top: 15px;
+  color: #fff;
+`;
+
+export const ButtonText = styled.span<BlockedProps>`
   position: relative;
   z-index: 1;
   font-family: "Alata";
   text-transform: uppercase;
   transition: color 0.3s ease;
-  color: #ffa000;
+  color: ${props => props.$isBlocked ? "#adb5bd" : "#ffa000"};
 `;
 
-export const ButtonIcon = styled.div`
-  background-color: #ffa000;
+export const ButtonIcon = styled.div<BlockedProps>`
+  background-color: ${props => props.$isBlocked ? "#e9ecef" : "#ffa000"};
   width: 60px;
   height: 100%;
   position: absolute;
@@ -39,36 +39,20 @@ export const ButtonIcon = styled.div`
     content: "";
     width: 0;
     height: 0;
-    border-top: 45px solid #fcfcfc;
+    border-top: 45px solid ${props => props.$isBlocked ? "#e9ecef" : "#fcfcfc"};
     border-right: 40px solid transparent;
     position: absolute;
     top: 0;
     left: 0;
   }
-
-  &:hover {
-    width: 100%;
-    border-radius: 30px;
-  }
-
-  &:hover::after {
-    display: none;
-  }
 `;
 
-export const CustomIcon = styled.i`
-  position: absolute;
-  right: 25px;
-  top: 15px;
-  color: #fff;
-`;
-
-export const StyledButton = styled.a`
+export const StyledButton = styled.a<BlockedProps>`
   width: clamp(170px, 3vw, 100%);
   height: 45px;
   display: inline-block;
   position: relative;
-  background-color: #fcfcfc;
+  background-color: ${props => props.$isBlocked ? "#e9ecef" : "#fcfcfc"};
   border-radius: 30px;
   text-align: center;
   font-size: 18px;
@@ -76,25 +60,42 @@ export const StyledButton = styled.a`
   padding-right: 8px;
   margin: 12px 4px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  color: #ffa000;
+  box-shadow: ${props => props.$isBlocked ? "none" : "0 4px 8px rgba(0, 0, 0, 0.2)"};
+  color: ${props => props.$isBlocked ? "#adb5bd" : "#ffa000"};
   overflow: hidden;
-
+  cursor: ${props => props.$isBlocked ? "not-allowed" : "pointer"};
+  opacity: ${props => props.$isBlocked ? 0.7 : 1};
 
   &:hover {
-    color: #fff;
-    cursor: pointer;
-  }
+    color: ${props => props.$isBlocked ? "#adb5bd" : "#fff"};
+    
+    ${ButtonText} {
+      color: ${props => props.$isBlocked ? "#adb5bd" : "#fff"};
+    }
 
-  &:hover ${ButtonIcon} {
-    width: 130%;
-  }
-
-  &:hover ${ButtonText} {
-    color: #fff;
+    ${ButtonIcon} {
+      width: ${props => props.$isBlocked ? "60px" : "130%"};
+      background-color: ${props => props.$isBlocked ? "#e9ecef" : "#ffa000"};
+      
+      &::after {
+        display: ${props => props.$isBlocked ? "block" : "none"};
+      }
+    }
   }
 `;
 
-export const BtnWrapper = styled.div`
-width: 100%;
+export const SimpleButton = styled.button<BlockedProps>`
+  background-color: ${props => props.$isBlocked ? "#6c757d" : "#007bff"};
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: ${props => props.$isBlocked ? "not-allowed" : "pointer"};
+  font-size: 14px;
+  transition: all 0.3s;
+  opacity: ${props => props.$isBlocked ? 0.7 : 1};
+
+  &:hover {
+    background-color: ${props => props.$isBlocked ? "#6c757d" : "#0056b3"};
+  }
 `;

@@ -1,5 +1,6 @@
 import { User } from "../types/User/User";
 import { apiCall } from "../utils/apiUtils";
+import { getAuthToken } from "./tokenService";
 
 export interface FollowersState {
   isFollowing: boolean;
@@ -105,3 +106,21 @@ export const fetchFollowing = async (userId: number): Promise<User[]> => {
     throw new Error("Failed to fetch following");
   }
 };
+
+export const fetchFollowingWithoutBlocked = async (userId: number): Promise<User[]> => {
+  const endpoint = `/users/${userId}/following-list`;
+  const token = getAuthToken();
+
+  try {
+    const {data} = await apiCall<{ following: User[] }>(endpoint, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return data.following;
+  } catch (error) {
+    console.error("Error fetching non-blocked following:", error);
+    throw new Error("Failed to fetch non-blocked following");
+  }
+}

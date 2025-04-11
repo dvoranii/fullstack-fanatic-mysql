@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   ConversationWrapper,
   ProfilePictureWrapper,
   ConversationDetailsWrapper,
   SubjectPreview,
   DeleteConvoButtonWrapper,
+  BlockedBadge
 } from "./ConversationItem.styled";
 import ProfilePicture from "../../../../../components/ProfilePicture/ProfilePicture";
 import { Conversation } from "../../../../../types/Conversations";
+import { checkBlockStatus } from "../../../../../services/blockService";
 
 interface ConversationItemProps {
   conversation: Conversation;
@@ -22,7 +24,11 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
   onSelect,
   onDelete,
 }) => {
+
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const isUser1 = conversation.user1_id === loggedInUserId;
+  const otherUserId = isUser1 ? conversation.user2_id : conversation.user1_id;
   const otherUserName = isUser1
     ? conversation.user2_name
     : conversation.user1_name;
@@ -30,8 +36,27 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
     ? conversation.user2_picture
     : conversation.user1_picture;
 
+    useEffect(() => {
+      const fetchBlockStatus = async () => {
+        setIsLoading(true);
+        try {
+          const blocked = await checkBlockStatus(otherUserId);
+          setIsBlocked(blocked);
+        } catch (error) {
+          console.error("Error checking block status:", error);
+          setIsBlocked(false); 
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      
+      fetchBlockStatus();
+    }, [conversation, otherUserId]);
+
   const handleSelect = () => {
-    onSelect(conversation.id);
+    if (!isBlocked) {
+      onSelect(conversation.id);
+    }
   };
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -40,7 +65,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
   };
 
   return (
-    <ConversationWrapper onClick={handleSelect}>
+    <ConversationWrapper onClick={handleSelect} $isBlocked={isBlocked}>
       <ProfilePictureWrapper>
         <ProfilePicture
           src={
@@ -51,12 +76,19 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
           width="45px"
           border="2px solid #ccc"
           bg="#ffffff"
+          // $grayscale={isBlocked}
         />
       </ProfilePictureWrapper>
 
       <ConversationDetailsWrapper>
-        <p>{otherUserName || "Unknown User"}</p>
-        <SubjectPreview>{conversation.subject || "No subject"}</SubjectPreview>
+        <p>
+          {otherUserName || "Unknown User"}
+          {isBlocked && <BlockedBadge>(Blocked)</BlockedBadge>}
+        </p>
+        <SubjectPreview>
+          {conversation.subject || "No subject"}
+          {isBlocked && " (Blocked)"}
+          </SubjectPreview>
       </ConversationDetailsWrapper>
 
       <DeleteConvoButtonWrapper>

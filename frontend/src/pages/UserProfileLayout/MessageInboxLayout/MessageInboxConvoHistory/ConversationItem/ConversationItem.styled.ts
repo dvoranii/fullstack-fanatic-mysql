@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
-export const ConversationWrapper = styled.div`
+export const ConversationWrapper = styled.div<{ $isBlocked?: boolean }>`
+  cursor: ${props => props.$isBlocked ? 'not-allowed' : 'pointer'};
+  opacity: ${props => props.$isBlocked ? 0.7 : 1};
   border: 1px solid grey;
   border-radius: 4px;
   padding: 10px;
@@ -8,7 +10,6 @@ export const ConversationWrapper = styled.div`
   position: relative;
 
   &:hover {
-    cursor: pointer;
     background-color: #eee;
   }
 
@@ -86,4 +87,10 @@ export const DeleteConvoButtonWrapper = styled.div`
       bottom: 0;
     }
   }
+`;
+
+export const BlockedBadge = styled.span`
+  color: #ff4d4f;
+  font-size: 0.8em;
+  margin-left: 8px;
 `;

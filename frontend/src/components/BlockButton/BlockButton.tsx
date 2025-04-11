@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { isUserBlocked, blockUser, unblockUser } from "../../services/blockService";
 import { useCsrfToken } from "../../hooks/useCsrfToken";
 import {Button} from "./BlockButton.styled"
+import { UserContext } from "../../context/UserContext";
 
 interface BlockButtonProps {
   userId: number;
@@ -22,6 +23,8 @@ const BlockButton: React.FC<BlockButtonProps> = ({
   const csrfToken = useCsrfToken();
   const [isBlocked, setIsBlocked] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const { refreshBlockStatus } = useContext(UserContext);
 
   useEffect(() => {
     const checkBlockStatus = async () => {
@@ -50,15 +53,8 @@ const BlockButton: React.FC<BlockButtonProps> = ({
         isFollowing && setIsFollowing?.(false);
         isFollowing && setFollowersCount?.(prev => Math.max(0, prev - 1));
 
-        // if (setIsFollowing) {
-        //   setIsFollowing(false);
-        // }
-
-        // if (setFollowersCount) {
-        //   setFollowersCount(prevCount => Math.max(0, prevCount - 1))
-        // }
         
-        await blockUser(userId, csrfToken);
+        await blockUser(userId, csrfToken, refreshBlockStatus);
         setIsBlocked(true);
       }
       if (onBlockStatusChange) {

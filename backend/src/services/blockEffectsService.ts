@@ -38,6 +38,17 @@ export const executeBlockActions = async (blockerId: number, blockedId: number):
                 OR (user_id = ? AND sender_id = ? AND type = 'follow')`,
             [blockedId, blockerId, blockerId, blockedId]
         );
+
+        // CONVERSATION
+        await connection.execute(
+            `UPDATE conversations 
+             SET is_deleted_user1 = CASE WHEN user1_id = ? THEN 1 ELSE is_deleted_user1 END,
+                 is_deleted_user2 = CASE WHEN user2_id = ? THEN 1 ELSE is_deleted_user2 END
+             WHERE (user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)`,
+            [blockedId, blockedId, blockerId, blockedId, blockedId, blockerId]
+        );
+
+
         await connection.commit();
     } catch (error) {
         await connection.rollback();

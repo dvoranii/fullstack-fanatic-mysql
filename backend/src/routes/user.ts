@@ -629,19 +629,36 @@ router.get("/:id/followers-list", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/:id/following-list", async (req: Request, res: Response) => {
+
+router.get("/:id/following-list", authenticate, async (req: Request, res: Response) => {
   const { id } = req.params;
+  const currentUserId = req.user?.userId; 
+  const excludeBlocked = req.query.excludeBlocked === 'true';
 
   try {
     const connection = await connectionPromise;
 
-    const [following] = await connection.execute<RowDataPacket[]>(
-      `SELECT u.id, u.name, u.profile_picture, u.profession
-       FROM followers f
-       JOIN users u ON f.followed_id = u.id
-       WHERE f.follower_id = ?`,
-      [id]
-    );
+    let query = `
+      SELECT u.id, u.name, u.profile_picture, u.profession
+      FROM followers f
+      JOIN users u ON f.followed_id = u.id
+      WHERE f.follower_id = ?
+    `;
+
+    const params: any[] = [id];
+
+    if (excludeBlocked && currentUserId) {
+      query += `
+        AND NOT EXISTS (
+          SELECT 1 FROM blocked_users 
+          WHERE (blocker_id = ? AND blocked_id = u.id)
+             OR (blocker_id = u.id AND blocked_id = ?)
+        )
+      `;
+      params.push(currentUserId, currentUserId);
+    }
+
+    const [following] = await connection.execute<RowDataPacket[]>(query, params);
 
     res.status(200).json({ following });
   } catch (error) {
