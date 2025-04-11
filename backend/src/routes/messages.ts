@@ -17,6 +17,18 @@ router.post(
     try {
       const connection = await connectionPromise;
 
+      const [blockCheck] = await connection.execute<RowDataPacket[]>(
+          `SELECT * FROM blocked_users 
+           WHERE (blocker_id = ? AND blocked_id = ?) 
+            OR (blocker_id = ? AND blocked_id = ?)`,
+        [sender_id, receiver_id, receiver_id, sender_id]
+      );
+
+      if (blockCheck.length > 0) {
+        res.status(403).json({error: "Message not sent. You cannot communicate with a blocked user."});
+        return;
+      }
+
       const [conversation] = await connection.execute<RowDataPacket[]>(
         "SELECT user1_id, user2_id, is_deleted_user1, is_deleted_user2 FROM conversations WHERE id = ?",
         [conversation_id]
@@ -30,14 +42,24 @@ router.post(
       const { user1_id, user2_id, is_deleted_user1, is_deleted_user2 } =
         conversation[0];
 
+        if (
+          (receiver_id === user1_id && is_deleted_user1 === 1) ||
+          (receiver_id === user2_id && is_deleted_user2 === 1)
+        ) {
+          res.status(403).json({
+            error: "Message not sent. The recipient has deleted this conversation."
+          })
+          return;
+        }
+
       if (receiver_id === user1_id && is_deleted_user1) {
         await connection.execute<ResultSetHeader>(
-          "UPDATE conversations SET is_deleted_user1 = FALSE WHERE id = ?",
+          "UPDATE conversations SET is_deleted_user1 = 0 WHERE id = ?",
           [conversation_id]
         );
       } else if (receiver_id === user2_id && is_deleted_user2) {
         await connection.execute<ResultSetHeader>(
-          "UPDATE conversations SET is_deleted_user2 = FALSE WHERE id = ?",
+          "UPDATE conversations SET is_deleted_user2 = 0 WHERE id = ?",
           [conversation_id]
         );
       }
@@ -59,8 +81,8 @@ router.post(
       if (sender_id !== receiver_id) {
         const updateQuery =
           receiver_id === user1_id
-            ? "UPDATE conversations SET is_read_user1 = FALSE WHERE id = ?"
-            : "UPDATE conversations SET is_read_user2 = FALSE WHERE id = ?";
+            ? "UPDATE conversations SET is_read_user1 = 0 WHERE id = ?"
+            : "UPDATE conversations SET is_read_user2 = 0 WHERE id = ?";
 
         await connection.execute<ResultSetHeader>(updateQuery, [
           conversation_id,
@@ -130,8 +152,8 @@ router.get("/:conversationId", authenticate, async (req, res) => {
     ]);
     await connection.execute<ResultSetHeader>(
       `UPDATE conversations
-       SET is_read_user1 = CASE WHEN user1_id = ? THEN TRUE ELSE is_read_user1 END,
-           is_read_user2 = CASE WHEN user2_id = ? THEN TRUE ELSE is_read_user2 END
+       SET is_read_user1 = CASE WHEN user1_id = ? THEN 1 ELSE is_read_user1 END,
+           is_read_user2 = CASE WHEN user2_id = ? THEN 1 ELSE is_read_user2 END
        WHERE id = ?`,
       [userId, userId, conversationId]
     );

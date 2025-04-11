@@ -13,16 +13,21 @@ interface MessageModalButtonProps {
   userId: string;
   variant?: "publicUser" | "simple";
   text?: string;
+  isBlocked?: boolean;
 }
 
 const MessageUserModalButton: React.FC<MessageModalButtonProps> = ({
   userId,
   variant = "simple",
   text = "Message",
+  isBlocked = false
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, _setIsLoading] = useState(false);
 
   const handleOpenMessageModal = () => {
+
+    if (isBlocked) return;
     setIsModalOpen(true);
   };
 
@@ -38,9 +43,12 @@ const MessageUserModalButton: React.FC<MessageModalButtonProps> = ({
     <>
     <BtnWrapper>
       {variant === "publicUser" ? (
-        <StyledButton onClick={handleOpenMessageModal}>
-          <ButtonText>{text}</ButtonText>
-          <ButtonIcon>
+        <StyledButton 
+        onClick={handleOpenMessageModal}
+        $isBlocked={isBlocked}
+        >
+        <ButtonText $isBlocked={isBlocked}>{text}</ButtonText>
+        <ButtonIcon $isBlocked={isBlocked}>
             <CustomIcon />
           </ButtonIcon>
         </StyledButton>

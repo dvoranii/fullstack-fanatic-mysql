@@ -8,7 +8,7 @@ import Dropdown from "../../../../components/Dropdown/Dropdown";
 import SearchBar from "../../../../components/SearchBar/SearchBar";
 import {
   fetchFollowers,
-  fetchFollowing,
+  fetchFollowingWithoutBlocked,
 } from "../../../../services/followService";
 import { UserContext } from "../../../../context/UserContext";
 import { User } from "../../../../types/User/User";
@@ -38,7 +38,7 @@ const NewChatDropdown: React.FC<NewChatDropdownProps> = ({
       try {
         const [followers, following] = await Promise.all([
           fetchFollowers(loggedInUserId),
-          fetchFollowing(loggedInUserId),
+          fetchFollowingWithoutBlocked(loggedInUserId),
         ]);
 
         const combinedList = [

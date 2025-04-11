@@ -34,6 +34,8 @@ export interface UserContextType {
   setIsReadNotificationUIUpdate: React.Dispatch<
     React.SetStateAction<Record<number, boolean>>
   >;
+  blockStatusVersion: number;
+  refreshBlockStatus: () => void;
   loading: boolean;
   error: string | null;
 }

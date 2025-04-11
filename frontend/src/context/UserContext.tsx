@@ -17,9 +17,37 @@ import { CartItem } from "../types/CartItem";
 import { useCsrfToken } from "../hooks/useCsrfToken";
 import { getUserProfile } from "../services/profileService";
 
-export const UserContext = createContext<UserContextType | undefined>(
-  undefined
-);
+export const UserContext = createContext<UserContextType>({
+  profile: null,
+  setProfile: () => {},
+  fetchProfile: async () => {},
+  favouriteTutorials: [],
+  setFavouriteTutorials: () => {},
+  favouriteBlogs: [],
+  setFavouriteBlogs: () => {},
+  purchasedItems: [],
+  setPurchasedItems: () => {},
+  toggleFavourite: async () => {},
+  comments: [],
+  setComments: () => {},
+  cartItems: [],
+  setCartItems: () => {},
+  addItemToCart: () => {},
+  removeItemFromCart: () => {},
+  clearCart: () => {},
+  subscriptionItem: null,
+  setSubscriptionItem: () => {},
+  addSubscriptionToCart: () => {},
+  removeSubscriptionFromCart: () => {},
+  unreadNotificationCount: 0,
+  setUnreadNotificationCount: () => {},
+  isReadNotificationUIUpdate: {},
+  setIsReadNotificationUIUpdate: () => {},
+  blockStatusVersion: 0,
+  refreshBlockStatus: () => {},
+  loading: false,
+  error: null
+});
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const csrfToken = useCsrfToken();
@@ -30,6 +58,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [comments, setComments] = useState<CommentType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [blockStatusVersion, setBlockStatusVersion] = useState(0);
   const [unreadNotificationCount, setUnreadNotificationCount] =
     useState<number>(0);
   const [isReadNotificationUIUpdate, setIsReadNotificationUIUpdate] = useState<
@@ -56,6 +85,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       console.error("Failed to fetch user profile:", error);
     }
   };
+
+  const refreshBlockStatus = useCallback(() => {
+    setBlockStatusVersion(prev => prev + 1);
+  }, []);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -205,6 +238,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         setUnreadNotificationCount,
         isReadNotificationUIUpdate,
         setIsReadNotificationUIUpdate,
+        blockStatusVersion,
+        refreshBlockStatus,
         loading,
         error,
       }}

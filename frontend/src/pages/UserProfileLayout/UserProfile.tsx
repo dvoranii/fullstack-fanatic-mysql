@@ -142,6 +142,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
             <MessageModalButton
               userId={profile.id.toString()}
               variant="publicUser"
+              isBlocked={isBlocked}
             />
           )}
           {!isEditable && loggedInUser && (

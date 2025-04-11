@@ -43,6 +43,17 @@ router.post(
     try {
       const connection = await connectionPromise;
 
+      const [blockCheck] = await connection.execute<RowDataPacket[]>(
+        `SELECT * FROM blocked_users
+         WHERE (blocker_id = ? AND blocked_id = ?)
+          OR (blocker_id = ? AND blocked_id = ?)`,
+      [user1_id, user2_id, user2_id, user1_id]
+      );
+
+      if (blockCheck.length > 0) {
+        return res.status(403).json({error: "Cannot create conversations with a blocked user."});
+      }
+
       const [result] = await connection.execute<ResultSetHeader>(
         "INSERT INTO conversations (user1_id, user2_id, subject, created_at, is_read_user1, is_read_user2) VALUES (?, ?, ?, NOW(), TRUE, FALSE)",
         [user1_id, user2_id, subject]

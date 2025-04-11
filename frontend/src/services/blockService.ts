@@ -4,7 +4,7 @@ import { getAuthToken } from "./tokenService";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
-export const blockUser = async (userId: number, csrfToken: string): Promise<number> => {
+export const blockUser = async (userId: number, csrfToken: string, refreshBlockStatus: () => void): Promise<number> => {
   try {
     const token = getAuthToken();
 
@@ -18,6 +18,7 @@ export const blockUser = async (userId: number, csrfToken: string): Promise<numb
       credentials: "include",
     });
 
+    refreshBlockStatus();
     return response.status;
   } catch (error) {
     console.error("Error blocking user:", error);
@@ -92,6 +93,30 @@ export const fetchBlockedUsers = async (): Promise<User[]> => {
     return data.users;
   } catch (error) {
     console.error("Error fetching blocked users:", error);
+    throw error;
+  }
+};
+
+export const checkBlockStatus = async (otherUserId: number): Promise<boolean> => {
+  try {
+    const token = getAuthToken();
+    
+    const response = await fetch(`${BASE_URL}/block/is-blocked/${otherUserId}`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to check block status");
+    }
+
+    const data = await response.json();
+    return data.isBlocked;
+  } catch (error) {
+    console.error("Error checking block status:", error);
     throw error;
   }
 };
