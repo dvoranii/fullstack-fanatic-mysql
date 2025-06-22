@@ -38,20 +38,25 @@ const SocialLinksEditor: React.FC<SocialLinksEditorProps> = ({
 
   const handleDeleteSocialLink = async (platform: string) => {
     const token = await handleTokenExpiration();
+    if (!token) throw new Error("User not authenticated");
 
-    if (!token) {
-      throw new Error("User not authenticated");
-    }
+    const previousLinks = {...socialLinks};
+    const updatedLinks = {...socialLinks};
+    delete updatedLinks[platform];
+    setSocialLinks(updatedLinks);
+    markSocialLinksChanged();
+
     try {
       await deleteSocialLink(platform, token, csrfToken);
+      // const updatedLinks = { ...socialLinks };
+      // delete updatedLinks[platform];
 
-      const updatedLinks = { ...socialLinks };
-      delete updatedLinks[platform];
-
-      setSocialLinks(updatedLinks);
-      markSocialLinksChanged();
+      // setSocialLinks(updatedLinks);
+      // markSocialLinksChanged();
     } catch (error) {
-      console.error(error);
+      setSocialLinks(previousLinks);
+      markSocialLinksChanged();
+      console.error(`Failed to delete social link: ${error}`);
     }
   };
 

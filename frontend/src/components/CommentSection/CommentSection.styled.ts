@@ -121,3 +121,15 @@ export const RepliesWrapper = styled.div`
     margin-left: 0;
   }
 `;
+
+
+// Add this to your CommentSection.styled.ts file
+export const BlockedCommentMessage = styled.div`
+  padding: 12px;
+  margin: 10px 0;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  color: #777;
+  font-style: italic;
+  font-size: 0.9rem;
+`;

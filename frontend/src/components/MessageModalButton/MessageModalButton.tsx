@@ -23,7 +23,6 @@ const MessageUserModalButton: React.FC<MessageModalButtonProps> = ({
   isBlocked = false
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, _setIsLoading] = useState(false);
 
   const handleOpenMessageModal = () => {
 

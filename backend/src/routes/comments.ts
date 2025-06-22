@@ -19,7 +19,6 @@ import { getUserIdFromToken } from "../utils/getUserIdFromToken";
 
 const router = express.Router();
 
-
 router.get(
   "/:contentType/:contentId",
   async (req: Request, res: Response): Promise<void> => {
@@ -36,6 +35,8 @@ router.get(
       ? parseInt(req.query.parentCommentId as string, 10)
       : null;
 
+    console.log(contentId);
+
     try {
       const connection = await connectionPromise;
 
@@ -47,31 +48,40 @@ router.get(
         const offset = (page - 1) * topLevelLimit;
         commentsQuery = `
           SELECT c.*, u.name as user_name, u.profile_picture, 
-                 EXISTS (SELECT 1 FROM comments r WHERE r.parent_comment_id = c.id) as has_replies 
+                EXISTS (SELECT 1 FROM comments r WHERE r.parent_comment_id = c.id) as has_replies 
           FROM comments c 
           JOIN users u ON c.user_id = u.id 
-          WHERE c.content_type = ? AND c.content_id = ? AND c.parent_comment_id IS NULL
+          LEFT JOIN comment_visibility cv ON c.id = cv.comment_id AND cv.user_id = ?
+          WHERE c.content_type = ? 
+            AND c.content_id = ? 
+            AND c.parent_comment_id IS NULL
+            AND (cv.is_hidden IS NULL OR cv.is_hidden = FALSE)
           ORDER BY c.created_at DESC
           LIMIT ? OFFSET ?
         `;
-        params = [contentType, contentId, topLevelLimit, offset];
+        params = [userId, contentType, contentId, topLevelLimit, offset];
       } else {
         commentsQuery = `
-          SELECT c.*, u.name as user_name, u.profile_picture, 
-                 EXISTS (SELECT 1 FROM comments r WHERE r.parent_comment_id = c.id) as has_replies 
-          FROM comments c 
-          JOIN users u ON c.user_id = u.id 
-          WHERE c.content_type = ? AND c.content_id = ? AND c.parent_comment_id = ?
-          ORDER BY c.created_at ASC
-          LIMIT ? OFFSET ?
-        `;
-        params = [
-          contentType,
-          contentId,
-          parentCommentId,
-          replyLimit + 1, 
-          offset
-        ];
+        SELECT c.*, u.name as user_name, u.profile_picture, 
+               EXISTS (SELECT 1 FROM comments r WHERE r.parent_comment_id = c.id) as has_replies 
+        FROM comments c 
+        JOIN users u ON c.user_id = u.id 
+        LEFT JOIN comment_visibility cv ON c.id = cv.comment_id AND cv.user_id = ?
+        WHERE c.content_type = ? 
+          AND c.content_id = ? 
+          AND c.parent_comment_id = ?
+          AND (cv.is_hidden IS NULL OR cv.is_hidden = FALSE)
+        ORDER BY c.created_at ASC
+        LIMIT ? OFFSET ?
+      `;
+      params = [
+        userId,  // Add this as first param
+        contentType,
+        contentId,
+        parentCommentId,
+        replyLimit + 1, 
+        offset
+      ];
       }
 
       const [rows] = await connection.query<RowDataPacket[]>(

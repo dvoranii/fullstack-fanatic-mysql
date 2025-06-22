@@ -22,7 +22,7 @@ export const tutorialContent: TutorialContentItem[] = [
     accessLevel: "free",
     difficulty: "beginner",
     description: "Learn how to set up and deploy your server step by step.",
-    tags: ["devops", "deployment", "server", "backend", "beginner"]
+    tags: ["devops", "deployment", "server", "backend", "beginner", "free"]
   },
   {
     id: 2,
@@ -46,7 +46,7 @@ export const tutorialContent: TutorialContentItem[] = [
     difficulty: "beginner",
     description:
       "Master CSRF protection techniques to secure your web applications.",
-    tags: ["security", "web", "csrf", "backend", "beginner"],
+    tags: ["security", "web", "csrf", "backend", "beginner", "free"],
   },
   {
     id: 3,
@@ -72,7 +72,7 @@ export const tutorialContent: TutorialContentItem[] = [
     difficulty: "intermediate",
     description:
       "Learn how JavaScript interacts with APIs using GET and POST requests.",
-      tags: ["javascript", "api", "frontend", "networking", "intermediate"]
+      tags: ["javascript", "api", "frontend", "networking", "intermediate", "premium"]
   },
   {
     id: 4,
@@ -98,7 +98,7 @@ export const tutorialContent: TutorialContentItem[] = [
     difficulty: "advanced",
     description:
       "Learn the fundamentals of web application security, including OWASP guidelines and building secure apps.",
-    tags: ["security", "owasp", "web", "best-practices", "advanced"]
+    tags: ["security", "owasp", "web", "best-practices", "advanced", "premium"]
     },
   {
     id: 5,
@@ -124,7 +124,7 @@ export const tutorialContent: TutorialContentItem[] = [
     difficulty: "intermediate",
     description:
       "Dive deep into form handling in web development, from validation to security best practices.",
-      tags: ["forms", "frontend", "validation", "security", "intermediate"]
+      tags: ["forms", "frontend", "validation", "security", "intermediate", "premium"]
     },
   {
     id: 6,
@@ -150,7 +150,7 @@ export const tutorialContent: TutorialContentItem[] = [
     difficulty: "intermediate",
     description:
       "Master DNS configuration and deploy your application with ease, ensuring optimal performance.",
-      tags: ["dns", "devops", "deployment", "networking", "intermediate"]
+      tags: ["dns", "devops", "deployment", "networking", "intermediate", "premium"]
   },
   {
     id: 7,
@@ -174,7 +174,7 @@ export const tutorialContent: TutorialContentItem[] = [
     difficulty: "beginner",
     description:
       "Get started with frontend development, building projects using HTML, CSS, and JavaScript.",
-      tags: ["frontend", "html", "css", "javascript", "beginner"]
+      tags: ["frontend", "html", "css", "javascript", "beginner", "free"]
   },
   {
     id: 8,
@@ -198,7 +198,7 @@ export const tutorialContent: TutorialContentItem[] = [
     difficulty: "beginner",
     description:
       "Improve your website’s performance by optimizing images, reducing load times, and enhancing user experience.",
-      tags: ["responsive", "css", "frontend", "mobile"]
+      tags: ["responsive", "css", "frontend", "mobile", "free"]
       
   },
   {
@@ -223,6 +223,6 @@ export const tutorialContent: TutorialContentItem[] = [
     difficulty: "intermediate",
     description:
       "Make your web applications fully responsive with CSS techniques and media queries.",
-      tags: ["responsive", "css", "frontend", "mobile", "intermediate"]
+      tags: ["responsive", "css", "frontend", "mobile", "intermediate", "free"]
   },
 ];

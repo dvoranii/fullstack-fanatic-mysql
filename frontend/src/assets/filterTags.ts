@@ -77,6 +77,22 @@ export const filterTags: Record<string, FilterTag> = {
     description: "Advanced concepts"
   },
 
+  // Price
+  "free": {
+    id: "free",
+    label: "Free",
+    color: "#4CAF50",
+    category: "price",
+    description: "Free resources and content"
+  },
+
+  "premium": {
+    id: "premium",
+    label: "Premium",
+    color: "#9C27B0",
+    category: "price",
+    description: "Premium paid content"
+  },
   // Technology Tags
   "javascript": { 
     id: "javascript", 

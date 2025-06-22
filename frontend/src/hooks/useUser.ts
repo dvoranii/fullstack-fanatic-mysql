@@ -33,7 +33,9 @@ const useUser = (): UserContextType => {
       isReadNotificationUIUpdate: {},
       setIsReadNotificationUIUpdate: () => {},
       loading: true,  
-      error: null
+      error: null,
+      blockStatusVersion: 0,
+      refreshBlockStatus: () => {}
     };
   }
   return context;

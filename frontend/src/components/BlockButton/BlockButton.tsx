@@ -52,7 +52,6 @@ const BlockButton: React.FC<BlockButtonProps> = ({
 
         isFollowing && setIsFollowing?.(false);
         isFollowing && setFollowersCount?.(prev => Math.max(0, prev - 1));
-
         
         await blockUser(userId, csrfToken, refreshBlockStatus);
         setIsBlocked(true);

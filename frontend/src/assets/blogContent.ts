@@ -20,7 +20,7 @@ export const blogContent: BlogContentItem[] = [
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
-    tags: ["frontend", "react", "javascript"],
+    tags: ["frontend", "react", "javascript", "free"],
   },
   {
     id: 2,
@@ -41,7 +41,7 @@ export const blogContent: BlogContentItem[] = [
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
-    tags: ["backend", "nodejs", "javascript"],
+    tags: ["backend", "nodejs", "javascript", "free"],
   },
   {
     id: 3,
@@ -62,7 +62,7 @@ export const blogContent: BlogContentItem[] = [
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
-    tags: ["frontend", "css", "styling"],
+    tags: ["frontend", "css", "styling", "free"],
   },
   {
     id: 4,
@@ -83,7 +83,7 @@ export const blogContent: BlogContentItem[] = [
     isPremium: false,
     availableForPurchase: false,
     accessLevel: "free",
-    tags: ["typescript", "programming", "tools"],
+    tags: ["typescript", "programming", "tools", "free"],
   },
   {
     id: 5,
@@ -99,7 +99,7 @@ export const blogContent: BlogContentItem[] = [
     availableForPurchase: true,
     price: 2.5,
     accessLevel: "premium",
-    tags: ["graphql", "api", "backend"],
+    tags: ["graphql", "api", "backend",  "premium"],
   },
   {
     id: 6,
@@ -115,7 +115,7 @@ export const blogContent: BlogContentItem[] = [
     availableForPurchase: true,
     price: 2.5,
     accessLevel: "premium",
-    tags: ["kubernetes", "devops", "microservices"],
+    tags: ["kubernetes", "devops", "microservices", "premium"],
   },
   {
     id: 7,
@@ -131,7 +131,7 @@ export const blogContent: BlogContentItem[] = [
     availableForPurchase: true,
     price: 2.5,
     accessLevel: "premium",
-    tags: ["webassembly", "performance", "web"],
+    tags: ["webassembly", "performance", "web",  "premium"],
   },
   {
     id: 8,
@@ -147,6 +147,6 @@ export const blogContent: BlogContentItem[] = [
     availableForPurchase: true,
     price: 2.5,
     accessLevel: "premium",
-    tags: ["aws", "serverless", "cloud"],
+    tags: ["aws", "serverless", "cloud", "premium"],
   },
 ];

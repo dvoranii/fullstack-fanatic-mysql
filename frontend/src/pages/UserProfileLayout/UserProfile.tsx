@@ -49,12 +49,12 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
   const userContext = useContext(UserContext);
   const loggedInUser = userContext?.profile;
 
-  const socialLinks = profile.social_links || {};
   const [followersCount, setFollowersCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
-
   const [isBlocked, setIsBlocked] = useState(false);
+
+  const socialLinks = profile.social_links || {};
 
   const handleBlockStatusChange = (blocked: boolean) => {
     setIsBlocked(blocked);
