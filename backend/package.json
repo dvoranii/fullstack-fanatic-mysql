@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "dist/app.js",
   "scripts": {
-    "build": "tsc && copyfiles -u 1 public/**/* dist",
-    "start": "node dist/app.js",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 tsc && copyfiles -u 1 public/**/* dist",
+    "start": "node dist/src/app.js",
     "dev": "nodemon tsconfig-paths-bootstrap.js"
   },
   "overrides": {

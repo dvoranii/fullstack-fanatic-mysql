@@ -9,18 +9,9 @@ import {
 } from "./AboutPage.styled";
 import Title from "../../components/Title/Title";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import CoreTenets from "./CoreTenets/CoreTenets";
 
 const AboutPage: React.FC = () => {
-  const [coreTenetsVisible, setCoreTenetsVisible] = useState(false);
-
-  const setVisible = (isVisible: boolean) => {
-    setCoreTenetsVisible(isVisible);
-  };
-
-  console.log(coreTenetsVisible);
-  console.log(setVisible);
 
   return (
     <>

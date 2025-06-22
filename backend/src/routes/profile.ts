@@ -236,8 +236,9 @@ router.delete(
       return;
     }
 
+    let connection;
     try {
-      const connection = await connectionPromise;
+      connection = await connectionPromise.getConnection();
 
       await connection.beginTransaction();
 
@@ -247,6 +248,7 @@ router.delete(
       );
 
       if (!currentUser.length) {
+        await connection.release();
         res.status(404).json({ message: "User not found" });
         return;
       }

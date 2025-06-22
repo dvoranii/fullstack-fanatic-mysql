@@ -1,5 +1,6 @@
 import connectionPromise from "../db/db";
 
+
 export const executeBlockActions = async (blockerId: number, blockedId: number): Promise<void> => {
     const pool = await connectionPromise;
     const connection = await pool.getConnection();
@@ -11,7 +12,6 @@ export const executeBlockActions = async (blockerId: number, blockedId: number):
             [blockerId, blockedId]
         );
         
-
         // NOTIFICATIONS
         await connection.execute(
             `UPDATE notifications SET is_hidden = 1 WHERE sender_id = ? AND user_id = ?`, 
@@ -39,6 +39,7 @@ export const executeBlockActions = async (blockerId: number, blockedId: number):
             [blockedId, blockerId, blockerId, blockedId]
         );
 
+
         // CONVERSATION
         await connection.execute(
             `UPDATE conversations 
@@ -48,6 +49,25 @@ export const executeBlockActions = async (blockerId: number, blockedId: number):
             [blockedId, blockedId, blockerId, blockedId, blockedId, blockerId]
         );
 
+        // Comments
+        await connection.execute(
+            `INSERT INTO comment_visibility (comment_id, user_id, is_hidden)
+             SELECT c.id, ?, TRUE
+             FROM comments c
+             WHERE c.user_id = ?
+             ON DUPLICATE KEY UPDATE is_hidden = TRUE`,
+            [blockedId, blockerId]  // blocked user can't see blocker's comments
+          );
+          
+          // Hide blocked user's comments from blocker
+        //   await connection.execute(
+        //     `INSERT INTO comment_visibility (comment_id, user_id, is_hidden)
+        //      SELECT c.id, ?, TRUE
+        //      FROM comments c
+        //      WHERE c.user_id = ?
+        //      ON DUPLICATE KEY UPDATE is_hidden = TRUE`,
+        //     [blockerId, blockedId]  // blocker can't see blocked user's comments
+        //   );
 
         await connection.commit();
     } catch (error) {
@@ -80,6 +100,14 @@ export const executeUnblockActions = async (blockerId: number, blockedId: number
             [blockerId, blockedId]
         )
 
+        // Restore visibility when unblocking
+        await connection.execute(
+            `UPDATE comment_visibility 
+            SET is_hidden = FALSE
+            WHERE (user_id = ? AND comment_id IN (SELECT id FROM comments WHERE user_id = ?))
+                OR (user_id = ? AND comment_id IN (SELECT id FROM comments WHERE user_id = ?))`,
+            [blockedId, blockerId, blockerId, blockedId]
+        );
 
         await connection.commit();
     } catch (error) {

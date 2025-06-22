@@ -26,7 +26,6 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
 }) => {
 
   const [isBlocked, setIsBlocked] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const isUser1 = conversation.user1_id === loggedInUserId;
   const otherUserId = isUser1 ? conversation.user2_id : conversation.user1_id;
   const otherUserName = isUser1
@@ -38,15 +37,11 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
 
     useEffect(() => {
       const fetchBlockStatus = async () => {
-        setIsLoading(true);
         try {
           const blocked = await checkBlockStatus(otherUserId);
           setIsBlocked(blocked);
         } catch (error) {
           console.error("Error checking block status:", error);
-          setIsBlocked(false); 
-        } finally {
-          setIsLoading(false);
         }
       };
       

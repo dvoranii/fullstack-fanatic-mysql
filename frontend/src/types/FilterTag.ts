@@ -12,7 +12,8 @@ export type FilterTag = {
       | "infrastructure" 
       | "methodology" 
       | "platform" 
-      | "development";
+      | "development"
+      | "price";
     description?: string;
   };
   
